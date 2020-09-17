@@ -33,7 +33,7 @@ namespace ORDRA_API.Models
         public string UserSurname { get; set; }
         public string UserCell { get; set; }
         public string UserEmail { get; set; }
-        public Nullable<int> SessionID { get; set; }
+        public string SessionID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer_Order> Customer_Order { get; set; }

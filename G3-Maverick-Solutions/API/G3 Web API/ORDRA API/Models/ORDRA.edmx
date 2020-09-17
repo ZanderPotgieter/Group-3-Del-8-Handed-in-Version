@@ -247,6 +247,7 @@
           <Property Name="ProductCategoryID" Type="int" />
           <Property Name="ProdName" Type="varchar" MaxLength="50" />
           <Property Name="ProdDesciption" Type="varchar" MaxLength="255" />
+          <Property Name="Barcode" Type="int" />
           <Property Name="ProdReLevel" Type="int" />
         </EntityType>
         <EntityType Name="Product_Backlog">
@@ -380,7 +381,7 @@
           </Key>
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserTypeID" Type="int" />
-          <Property Name="SessionID" Type="int" />
+          <Property Name="SessionID" Type="varchar" MaxLength="75" />
           <Property Name="UserPassword" Type="varchar" MaxLength="50" />
           <Property Name="UserName" Type="varchar" MaxLength="25" />
           <Property Name="UserSurname" Type="varchar" MaxLength="35" />
@@ -1521,6 +1522,7 @@
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RetProdProduct" FromRole="Product" ToRole="Return_Product" />
           <NavigationProperty Name="Supplier_Order_Product" Relationship="Self.FK_SOPProduct" FromRole="Product" ToRole="Supplier_Order_Product" />
           <NavigationProperty Name="Suppliers" Relationship="Self.Product_Supplier" FromRole="Product" ToRole="Supplier" />
+          <Property Name="Barcode" Type="Int32" />
         </EntityType>
         <EntityType Name="Product_Backlog">
           <Key>
@@ -1682,7 +1684,7 @@
           <NavigationProperty Name="Sales" Relationship="Self.FK_SaleUser" FromRole="User" ToRole="Sale" />
           <NavigationProperty Name="User_Type" Relationship="Self.FK_UserType" FromRole="User" ToRole="User_Type" />
           <NavigationProperty Name="Shifts" Relationship="Self.User_Shift" FromRole="User" ToRole="Shift" />
-          <Property Name="SessionID" Type="Int32" />
+          <Property Name="SessionID" Type="String" MaxLength="75" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="User_Type">
           <Key>
@@ -2697,6 +2699,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="OrdraDBModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductCategoryID" ColumnName="ProductCategoryID" />
                 <ScalarProperty Name="ProdName" ColumnName="ProdName" />

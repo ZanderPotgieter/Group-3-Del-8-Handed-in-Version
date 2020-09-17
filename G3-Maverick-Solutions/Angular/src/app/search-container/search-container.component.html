@@ -1,0 +1,52 @@
+<body>
+    <h1>Search Container</h1>
+
+   <form>
+        <div class="card" *ngIf= "showSearch"> 
+            <p class="subheadinglabel">Enter Container Name To Search:</p>
+
+            <div class="divleft">
+                <label for="name">Name:</label>
+                <input  class="searchinput" class="Form-control" [(ngModel)]="name"  type="text" id="name" name="name" required>
+            </div>
+        
+            <div class="divleft">
+                <button type="submit" (click)="Search()">Search</button>
+                <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+        </div>
+    
+    </form>
+
+    <br><br>
+  <form>
+         <div class="card" *ngIf= "showResults">
+            <div class="divleft">
+                <label class="subheadinglabel">Searched Container Details:</label>
+            </div>
+
+            
+            <br>
+            <div class="divleft">
+                <label for="ConName">Name:</label><input  type="text" class="form-control" [(ngModel)]="container.ConName" id="ConName" name="ConName" required [readonly] = "this.inputEnabled">
+            </div>    
+            
+            <br>
+            <div class="divleft">
+                <label for="ConDescription">Description:</label><input type="text" class="form-control" [(ngModel)]="container.ConDescription" id="ConDescription" name="ConDescription" required [readonly] = "this.inputEnabled"> 
+           </div>
+        
+            <div class="divleft" *ngIf="showButtons">
+                <!--label for Alt Step 10(Update Container)-->
+                <!--label for Alt Step 8(Search Container)-->
+                 <button type="submit" (click)="Update()"  >Update</button>
+                <button type="submit" (click)="Delete()" > Delete</button>
+            </div>
+            <div class="divleft" *ngIf="showSave">
+                 <button type="submit" (click)="Save()" >Save</button>
+                 <button type="submit" (click)="cancel()" >Cancel</button>
+            </div>
+         </div>
+     </form>  
+</body>
+

@@ -1,0 +1,74 @@
+
+
+<body>
+    <h1>Generate marked off product report</h1>
+       <form>
+           
+           <div class="card" id="customerOrder">
+               <div class="divleft">
+               <label class="subheadinglabel">Please select the report criteria </label>
+              <br><br>
+               <label>Product category name</label>
+               <input type="text" name="customerOrderStatus">
+               <button type="submit" (click)="clickMethod('example')" >generate report</button>
+       
+               </div>
+            </div>
+            
+           
+           <br>
+           <button type="submit" (click)="clickMethod('example')" >Download Report</button>
+           <button type="submit" (click)="clickMethod('example')" >Print Report</button>
+           <button type="submit" (click)="clickMethod('example')" >Cancel</button>
+           <br>
+   
+       <div class="card"><p>report will display here</p><br><br><br><br><br><br><br></div>
+           
+           <!-- <div class="card" id="creditor">
+               <div style="text-align: left;">
+                   <label><span style="white-space: nowrap; text-align: left;">This report shows information about orders placed by customers</span></label>
+                   </div>  <br>
+               
+               <table title="Customers with orders">
+                   <th>Name </th>
+                   <th>Surname</th>
+                   <th>Email</th>
+                   <th>Cell number (R)</th>
+                   <th>Order number (R)</th>
+                   
+                   <tr>
+                       <td>Phoenix </td>
+                       <td>Peer</td>
+                       <td>pheonixpeer@gmail.com</td>
+                       <td>0928374173</td>
+                       <td>2363</td>
+                       
+                   </tr>
+                   
+               </table> 
+               
+               
+           </div> -->
+           <!-- <br><br>
+           <div>
+               <table title="Products ordered">
+                   <th>Product Name </th>
+                   <th>Total ordered Quantity</th>
+                   
+                   
+                   <tr>
+                       <td>Top white m/meal 50kg </td>
+                       <td>24</td>
+                       
+                   </tr>
+                   
+               </table> 
+           </div> -->
+   
+       </form>
+   <router-outlet></router-outlet>
+</body>
+
+
+
+

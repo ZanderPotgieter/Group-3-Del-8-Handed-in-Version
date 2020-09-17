@@ -1,0 +1,41 @@
+<body>
+    <h1>Add Creditor Payment</h1>
+    <form > 
+        
+        <div class="card" id="creditor">
+  
+          <div class="subheadinglabel" id="creditor">Enter Payment Details:</div>
+            <br>
+            <div class="divleft">
+              <div class="divleft" >
+                <label for="CreditorID">Creditor:  </label>
+                <input type="number" class="form-control" [(ngModel)]="creditorpayment.CreditorID" id="CreditorID" name="CreditorID" required>
+                <select required>
+                  <option value="0">--Select--</option>
+                  <option [value]="type" *ngFor= "let supplier of suppliers">{{supplier.SupName}}</option>
+                </select>
+            </div> 
+            <br/>
+            <div class="divleft" >
+              <label for="CredPaymentDate">Date of Payment:  </label>
+              <input type="date" class="form-control" [(ngModel)]="creditorpayment.CredPaymentDate" id="CredPaymentDate" name="CredPaymentDate" required>
+          </div>
+  
+          <div class="divleft" >
+            <label for="CredPaymentAmount">Amount:  </label>
+            <input type="text" class="form-control" [(ngModel)]="creditorpayment.CredPaymentAmount" id="CredPaymentAmount" name="CredPaymentAmount" required>
+        </div>
+  
+            
+        <button type="submit" (click)="addCreditorPayment()">Add Creditor Payment</button> 
+        <button type="submit">Cancel</button>
+          </div>
+            
+        </div>
+        <br><br>
+  
+    
+    </form>
+  
+  </body>
+  

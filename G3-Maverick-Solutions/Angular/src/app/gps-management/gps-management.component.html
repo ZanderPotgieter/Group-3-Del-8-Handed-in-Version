@@ -1,0 +1,51 @@
+<body>
+    <h1>GPS Management</h1>
+    <form>
+        <br/>
+        <div class="card" id="location">
+
+            <label>Location</label>
+            <br>
+            <button routerLink="/create-location" type="submit" >Add Location</button>
+           
+            <button routerLink="/search-location" type="submit">Search Location</button>
+           
+            <button routerLink="/search-location" type="submit">Update Location</button>
+            
+            
+        </div>
+        <br><br>
+        <div class="card" id="area ">
+            <label>Area</label>
+            <br>
+            <button routerLink="/createarea" type="submit">Add Area</button>
+            
+            <button routerLink="/searcharea" type="submit">Search Area</button>
+            
+            <button routerLink="/searcharea" type="submit">Update Area</button>
+           
+            <button routerLink="/searchArea" type="submit">Remove Area</button>
+            
+            
+        </div>
+        <br><br>
+        <div class="card" id="province ">
+            <label>Province </label>
+            <br>
+            <button routerLink="/add-province" type="submit">Add Province</button>
+            
+            <button routerLink="/search-province" type="submit">Search Province</button>
+            
+            <button routerLink="/update-province" type="submit">Update Province </button>
+           
+            <button routerLink="/search-province" type="submit">Remove Province </button>
+            
+            
+        </div>
+
+    
+    </form>
+
+    <router-outlet></router-outlet>
+</body>
+

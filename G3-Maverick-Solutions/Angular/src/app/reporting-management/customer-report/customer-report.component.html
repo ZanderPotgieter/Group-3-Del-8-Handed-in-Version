@@ -1,0 +1,48 @@
+
+<body>
+    <h1>Generate customer order report</h1>
+<form>
+    
+    <div class="card" id="customerOrder">
+        <div class="divleft">
+        <label class="subheadinglabel">Please select the report criteria </label>
+       <br><br>
+        <label>Customer order status</label>
+        <input type="text" name="customerOrderStatus">
+        <button type="submit" (click)="clickMethod('example')" >generate report</button>
+        
+   
+        
+         </div>
+     </div>
+     
+    
+    <br>
+    <button type="submit" (click)="clickMethod('example')" >Download Report</button>
+    <button type="submit" (click)="clickMethod('example')" >Print Report</button>
+    <button type="submit" (click)="clickMethod('example')" >Cancel</button>
+    <br>
+    
+    <div class="card"><p>report will display here</p><br><br><br><br><br><br><br></div>
+
+    <!-- <br><br>
+    <div>
+        <table title="Products ordered">
+            <th>Product Name </th>
+            <th>Total ordered Quantity</th>
+            
+            
+            <tr>
+                <td>Top white m/meal 50kg </td>
+                <td>24</td>
+                
+            </tr>
+            
+        </table> 
+    </div> -->
+
+</form>
+
+<router-outlet></router-outlet>
+</body>
+

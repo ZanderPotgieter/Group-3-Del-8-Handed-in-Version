@@ -1,0 +1,68 @@
+<body>
+    <h1>Add Supplier</h1>
+    <form>
+        
+        <br>
+        <div class="card">
+            <div class = "divleft">
+            <br><br>
+            <label class="subheadinglabel">Enter supplier Details:</label>
+        <br><br>
+        <div class="divleft" >
+            <label for="SupName">Name:       </label>
+            <input type="text" class="form-control" [(ngModel)]="supplier.SupName" id="SupName" name="SupName" required>
+        </div>
+
+
+        <br>
+        <div class="divleft" >
+            <label for="SupCell">Cell Number:  </label>
+            <input type="text" class="form-control" [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" required>
+        </div>
+
+        <br>
+        <div class="divleft"  >
+            <label for="SupEmail">Email:      </label>
+            <input type="text" class="form-control" [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" required>
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="SupStreetNr">Street No: </label>
+            <input type="text" class="form-control" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required> 
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="SupStreet">Street:    </label>
+            <input type="text" class="form-control" [(ngModel)]="supplier.SupStreet" id="SupStreet" name="SupStreet" required> 
+        </div>
+        
+        <br>
+        <div class="divleft" >
+            <label for="SupCode">Postal Code:   </label>
+            <input type="text" class="form-control" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required> 
+        </div>
+ 
+        <br>
+        <div class="divleft" >
+            <label for="SupSuburb">Suburb:   </label>
+            <input type="text"  class="form-control" [(ngModel)]="supplier.SupSuburb" id="SupSuburb" name="SupSuburb" placeholder="Example: Hatfield" required> 
+        </div>
+        <br><br>
+        <div class="divleft" >
+            <button type="submit" (click)="addSupplier()">Save</button> 
+            <button type="submit" (click)="gotoSupplierManagement()">Cancel</button>
+         </div>
+         <br><br>
+        </div>
+    </div>
+      
+        
+
+        
+    </form>
+</body>
+
+
+

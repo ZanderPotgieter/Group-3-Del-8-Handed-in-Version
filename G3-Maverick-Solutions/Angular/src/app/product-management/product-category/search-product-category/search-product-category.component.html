@@ -1,0 +1,43 @@
+<body>
+    <h1>Search Product Category</h1>
+
+   <form>
+        <div class="card" *ngIf= "showSearch"> 
+            <p class="subheadinglabel">Enter Product Category Name To Search:</p>
+
+            <div class="divleft">
+                <label for="name">Name:</label>
+                <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
+            </div>
+        
+            <div class="divleft">
+                <button type="submit" (click)="Search()">Search</button>
+                <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+        </div>
+
+    <br><br>
+        <div class="card" *ngIf = "showResults">
+            <div class="divleft">
+                <label class="subheadinglabel">Searched Product Category Details:</label>
+                <br>
+                <label for="PCatName">Name:</label><input type="text" class="form-control" [(ngModel)]="productCategory.PCatName"  id="PCatName"  name ="PCatName" required [readonly] = "this.inputEnabled">
+                <br>
+                <label for="PCatDescription">Description:</label><input type="text" class="form-control" [(ngModel)]="productCategory.PCatDescription"  id="PCatDescription" name="PCatDescription" required [readonly] = "this.inputEnabled"> 
+            </div>
+        
+            <div class="divleft" *ngIf="showButtons">
+                <!--label for Alt Step 10(Update Container)-->
+                <!--label for Alt Step 8(Search Container)-->
+                 <button type="submit" (click)="Update()"  >Update</button>
+                <button type="submit" (click)="Delete()" > Delete</button>
+            </div>
+
+            <div class="divleft" *ngIf="showSaves">
+                 <button type="submit" (click)="Save()" >Save</button>
+                 <button type="submit" (click)="cancel()" >Cancel</button>
+            </div>
+        </div>
+    </form>
+</body>
+

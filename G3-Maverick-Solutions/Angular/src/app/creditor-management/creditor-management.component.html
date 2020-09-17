@@ -1,0 +1,36 @@
+<body>
+    <h1>Creditor Management</h1>
+<form>
+    
+    <div class="card" id="creditor">
+
+        <label><span style="white-space: nowrap;">Creditor</span></label>
+        <br>
+        <button routerLink="/add-creditor" type="submit" >Add Creditor</button>
+       
+        <button routerLink="/search-creditor" type="submit">Search Creditor</button>
+       
+        <button routerLink="/search-creditor" type="submit">Update Creditor</button>
+        
+        <button routerLink="/search-creditor" type="submit">Remove Creditor</button>
+        
+        
+    </div>
+    <br><br>
+    <div class="card" id="creditorPayment">
+        <label><span style="white-space: nowrap;">Creditor Payment</span></label>
+        <br>
+        <button routerLink="/add-payment" type="submit">Add Creditor Payment</button>
+        
+        <button routerLink="/search-payment" type="submit">Search Creditor Payment</button>
+        
+        <button routerLink="/search-creditor-payment" type="submit">Update Creditor Payment</button>
+
+        </div>
+
+</form>
+<router-outlet></router-outlet>
+</body>
+
+
+

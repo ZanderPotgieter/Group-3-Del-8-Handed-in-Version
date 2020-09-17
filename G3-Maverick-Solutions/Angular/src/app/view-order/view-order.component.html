@@ -1,0 +1,114 @@
+<body>
+    
+    <h1>View Customer Order</h1>
+<form>
+    <div class="card">
+
+      
+    
+        <div  class="divleft" >
+            <br>
+            <label class="subheadinglabel">Customer Order Details:</label><br>
+            <label for="cusOrdNo">Order Number:      </label>
+            <label class="displaylabel"  id="cusOrdNo" name="cusOrdNo">54</label>
+    
+            <label for="OrdDate">Date Ordered:      </label>
+            <label class="displaylabel" id="OrdDate" name="OrdDate">19/07/2020</label>
+    
+           
+                <label for="OrdStatus">Order Status:      </label>
+                <label class="displaylabel" id="OrdStatus" name="OrdStatus">Fulfilled</label>
+          
+    
+        </div>
+           
+    
+        <br>
+        <div class="divleft"  >
+            <label for="cusName">Name:       </label>
+            <label class="displaylabel" id="cusName" name="cusName" >Tinashe</label>
+            <label for="cusName">Surname:       </label>
+            <label class="displaylabel" id="cusSurname" name="cusSurname">Buso</label>
+        </div>
+        <div class="divleft"  >
+            <label for="cusCell">Cell:       </label>
+            <label class="displaylabel" id="cusCell" name="cusCell" >082675531</label>
+            <label for="cusCell">Email:       </label>
+            <label class="displaylabel" id="cusCell" name="cusCell" >Bob@gmail.com</label>
+    
+        </div>
+    
+        <!--<div *ngIf="showTable" class= "ViewTable">
+            <table class="table" id="Table">-->
+        <br>  
+        <div   >
+            <table>    
+                <tr>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                </tr>
+             
+                <!--<tr *ngFor="let item of products">-->
+                <tr>
+                    <td>HB Pencil</td>
+                    <td>Steadler, Graphite</td>
+                    <td> 7</td>
+                    <td>R2.50</td>
+                    <td>R17.50</td>
+                </tr>
+    
+                <tr>
+                    <td>Gel Pen</td>
+                    <td>Bic, Blue </td>
+                    <td>2</td>
+                    <td>R4.50</td>
+                    <td>R9.00</td>
+                </tr>
+    
+                <tr >
+                        
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Order Subtotal:</th>
+                    <th>R23.04</th>
+                </tr>
+
+                <tr>
+                    
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Vat:</th>
+                    <th>R3.46</th>
+                </tr>
+            
+                <tr>
+                    
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Order TOTAL:</th>
+                    <th>R26.50</th>
+                </tr>
+        
+            </table>
+            <br><br>
+        </div>
+        <div class="divleft">
+        <button  type="submit">Collect Order</button>
+        <button type="submit">Cancel Order</button>
+        <button  type="submit">Return To Search</button>
+       
+          
+       
+    </div>
+       
+        </div>
+
+</form>
+</body>
+

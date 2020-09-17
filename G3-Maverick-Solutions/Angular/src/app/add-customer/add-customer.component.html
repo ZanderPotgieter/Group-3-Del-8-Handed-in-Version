@@ -1,0 +1,73 @@
+<body>
+    <h1>Add Customer</h1>
+    <form>
+        
+        <br>
+        <div class="card">
+            <div class = "divleft">
+            <br><br>
+            <label class="subheadinglabel">Enter Customer Details:</label>
+        <br><br>
+        <div class="divleft" >
+            <label for="CusName">Name:       </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusName" id="CusName" name="CusName" required>
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusSurname">Surname:   </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusSurname" id="CusSurname" name="CusSurname" required>
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusCell">Cell Number:  </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusCell" id="CusCell" name="CusCell" required>
+        </div>
+
+        <br>
+        <div class="divleft"  >
+            <label for="CusEmail">Email:      </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusEmail" id="CusEmail" name="CusEmail" required>
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusStreetNr">Street No: </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusStreetNr" id="CusStreetNr" name="CusStreetNr" required> 
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusStreet">Street:    </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusStreet" id="CusStreet" name="CusStreet" required> 
+        </div>
+        
+        <br>
+        <div class="divleft" >
+            <label for="CusCode">Postal Code:   </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusCode" id="CusCode" name="CusCode" placeholder="0000" required> 
+        </div>
+ 
+        <br>
+        <div class="divleft" >
+            <label for="CusSuburb">Suburb:   </label>
+            <input type="text"  class="form-control" [(ngModel)]="customer.CusSuburb" id="CusSuburb" name="CusSuburb" placeholder="Example: Hatfield" required> 
+        </div>
+        <br><br>
+        <div class="divleft" >
+            <button type="submit" (click)="addCustomer()">Save</button> 
+            <button type="submit" (click)="gotoCustomerManagment()">Cancel</button>
+         </div>
+         <br><br>
+        </div>
+    </div>
+      
+        
+
+        
+    </form>
+</body>
+
+
+

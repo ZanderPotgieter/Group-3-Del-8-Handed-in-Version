@@ -1,0 +1,133 @@
+
+    <h1>Search Manager Profile</h1>
+    <form>
+    <div *ngIf = "showSearch" class="card" >
+            
+        <div  class="divleft" >
+            <br>
+            <label class="subheadinglabel" >Enter Manager Name and Surname To search:</label>
+        <br>
+        <label for="name">Name:       </label>
+        <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
+   
+        <label for="cusSurname">Surname:   </label>
+        <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
+        
+            <div class="divleft">
+                <button type="submit" (click) ="searchManager()">Search</button>
+                <button type="submit" (click)="gotoManagerManagement()">Cancel</button>
+            </div>
+    </div>
+    </div>
+
+     
+
+        
+    <br><br>
+        <div *ngIf = "showResults" class="card">
+            <div class="divleft">
+     
+        <div class="divleft">
+            <br>
+            <label class="subheadinglabel">Manager General Details:</label>
+            <br>   
+            <div class="divleft" >
+                <label for="UserName">Name:       </label>
+                <input class="searchinput" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
+            
+                <label for="UserSurname">Surname:   </label>
+                <input class="searchinput" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
+            </div>
+    
+            <br><br>
+            <div class="divleft" >
+                <label for="UserCell">Cell Number:  </label>
+                <input class="searchinput" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled"d>
+         
+                <label for="UserEmail">Email:      </label>
+                <input class="searchinput" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputEnabled">
+            </div>
+    
+        <br>
+        <div class="divleft" >
+            <label for="EmployeeStartDate">Work Start Date: </label>
+            <input class="searchinput" [(ngModel)]="employee.EmployeeStartDate"  type="text" id="EmployeeStartDate" name="EmployeeStartDate" required [readonly] = "this.inputEnabled">
+           
+            <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
+            <input class="searchinput" [(ngModel)]="employee.EmployeeShiftsCompleted" type="text" id="EmployeeShiftsCompleted" name="EmployeeShiftsCompleted" required [readonly] = "this.inputEnabled">
+        </div>
+
+
+    <div  class ="divleft">
+        <label class="subheadinglabel">Select Containers Managed:</label> 
+    <br>
+        <label for="containers">Container: </label>
+        <select required name="selection" [(ngModel)]="selection" (ngModelChange)="addContainer($event)">
+            <option value="0">--select--</option>
+            <option *ngFor="let container of containers" [ngValue]="container">{{container.ConName}}</option>
+        </select>
+    </div>
+
+    <div *ngIf ="showTable">
+        <table  class="table" id="Table">
+    
+            
+            <tr>
+                <th>Containers Managed</th>
+            </tr>
+
+            <tr *ngFor="let item of  selectedContainers">
+                <td>{{item.ConName}}</td>
+            </tr>
+        </table>
+        </div>
+
+    <br>
+    <div class="divleft">
+        <br>
+    <label class="subheadinglabel" >Enter Manager Profile Details</label>
+<br>
+        <label for="ManQualification">Qualification:       </label>
+        <input type="text" [(ngModel)]="manager.ManQualification" id="ManQualification" name="ManQualification" required [readonly] = "this.allowEdit">
+    </div>
+
+    <div class="divleft">
+        <label for="ManNationality">Nationality:       </label>
+        <input type="text" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" required  [readonly] = "this.allowEdit">
+    </div>
+
+    <div class="divleft">
+        <label for="ManIDNumber">ID Number:       </label>
+        <input type="text" [(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" required  [readonly] = "this.allowEdit">
+    </div>
+    <br>
+
+   
+    <div class="divleft">
+        <label class="subheadinglabel">Enter Next Of Keen Details:</label>
+        <br>
+        <label for="ManNextOfKeenFName">Full Name:       </label>
+        <input type="text" [(ngModel)]="manager.ManNextOfKeenFName" id="ManNextOfKeenFName" name="ManNextOfKeenFName" required  [readonly] = "this.allowEdit">
+    </div>
+
+    <div class="divleft">
+        <label for="ManNextOfKeenCell">Cell Number:       </label>
+        <input type="text" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required  [readonly] = "this.allowEdit">
+    </div>
+    <br>
+  
+    <br><br>
+    <div class="divleft" *ngIf="showButtons">
+       <button type="submit" (click)="updateManager()">Update</button>
+       <button type="submit" (click)="deleteManager()">Delete</button>
+    </div>
+
+    <div class="divleft" *ngIf="showSave" >
+        <button type="submit" (click)="updateManager()">Save</button>
+        <button type="submit" (click)="cancel()">Cancel</button>
+       </div>
+    
+</div>
+
+
+

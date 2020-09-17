@@ -1,0 +1,27 @@
+<body>
+    <h1>Create Container</h1>
+
+    <form>
+        <div class="card">
+         <p class="subheadinglabel">Enter Container Details:</p>
+
+            
+            <div class="divleft">
+                <label for="ConName">Name:</label>
+                <input type="text"  class="form-control" [(ngModel)]="container.ConName" id="ConName" name="ConName" required>
+            </div>    
+            <br>
+            <div class="divleft"> 
+                <label for="ConDescription">Description:</label>
+                <input type="text" class="form-control" [(ngModel)]="container.ConDescription" id="ConDescription" name="ConDescription" required>
+            
+            </div>
+        
+         <div class="divleft">
+            <!--label for Alt Step 8-->
+            <button type="submit" (click)="Save()">Save</button>
+            <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+        </div>
+    </form>
+</body>

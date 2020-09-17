@@ -1,0 +1,113 @@
+<body>
+    <h1>Update Manager Profile</h1>
+    <form>
+
+    
+
+        <div class="card">
+        <div class="divleft">
+            <label class="subheadinglabel">Manager Details:</label>
+        <br><br>
+        
+        
+        <div class="divleft" >
+            <label for="manName">Name:       </label>
+            <input class="searchinput"  type="text" id="manName" name="manName" required>
+        
+            <label for="manSurname">Surname:   </label>
+            <input class="searchinput"  type="text" id="manSurname" name="manSurname" required>
+        </div>
+
+        <br><br>
+        <div class="divleft" >
+            <label for="manCell">Cell Number:  </label>
+            <input class="searchinput"  type="text" id="manCell" name="manCell" required>
+     
+            <label for="manEmail">Email:      </label>
+            <input class="searchinput"  type="text" id="manEmail" name="manEmail">
+        </div>
+
+    <br>
+    <div class="divleft" >
+        <label for="manStart">Work Start Date: </label>
+        <input class="searchinput"  type="text" id="manStart" name="manStart">
+       
+        <label for="manShifts">Shifts Completed:    </label>
+        <input class="searchinput"  type="text" id="manShifts" name="manShifts">
+    </div>
+
+    <br>
+    <div class="divleft" >
+        <label for="manQua">Qualification:       </label>
+        <input class="searchinput"  type="text" id="manQua" name="manQua" required>
+   
+        <label for="manNation">Nationality:       </label>
+        <input class="searchinput"  type="text" id="manNation" name="manNation" required>
+    </div>
+
+    <br>
+    <div class="divleft" >
+        <label for="manID">ID Number:       </label>
+        <input class="searchinput"  type="text" id="manID" name="manID" required >
+   
+    </div>
+    <br><br>
+        
+    
+        <div class ="divleft">
+            <label class="subheadinglabel">Containers Managed:</label> 
+        </div>
+        <br><br>
+        <table style="width: 50%;">
+        <tr>
+            <th >Container Name</th>
+            <th >Action</th>
+        </tr>
+        
+        <tr>
+            <td> Alpha Hatfield</td>
+            <td><button class="btntable"  type="submit">Remove</button></td>
+        </tr>
+            
+        </table>
+        <div class ="divleft">
+            
+            <br>
+                <label for="manContainer">Container: </label>
+                <select class="smallselect" name="manContainer" required id="manContainer">
+                    <option>Beta Mamelodi</option>
+                    <option>Alpha Hatfield</option>
+                   
+                </select>
+                <button type="submit">Add Container</button>
+            </div>
+          
+    <br>
+
+    <label class="subheadinglabel">Next Of Keen Details:</label>
+    <br>
+    <div class="divleft" >
+        <label for="keenName">Full Name:       </label>
+        <input class="searchinput"  type="text" id="keenName" name="keenName" required>
+  
+        <label for="keenCell">Cell Number:       </label>
+        <input class="searchinput"  type="text" id="keenCell" name="keenCell" required>
+
+        
+    </div>
+    <br>
+    <br><br>
+      
+</div>
+
+<div class="divleft">
+    <button type="submit">Save</button>
+    <button type="submit" (click)="gotoManagerManagement()">Cancel</button>
+  
+ </div>
+</div>
+  
+</form>
+</body>
+
+

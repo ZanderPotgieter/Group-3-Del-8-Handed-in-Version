@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<body>
+  <h1>Make Sale</h1>
+  <br>
+  <form>
+      
+      <div class="card" id="makesale">
+        <div class="divleft">
+        <div class="subheadinglabel" id="product">Enter Product Name:</div>
+        <br>
+        <input type="text" name="search" placeholder="Enter Product... 🔎" style="width: 180px;"> 
+          <br>     
+        </div>   
+          <br/>
+
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Quantity</th>
+              <th>Product</th>
+              <th>Unit Price</th>
+              <th>Cost Price</th>
+              <th>Subtotal</th>
+            </tr>
+            </thead>  
+          
+          </table>
+        <br/>
+        <br/>
+
+        <label>Total: </label>
+        <input class="searchinput" type ="text" id="Totalid" name="SaleTotal" required style="width:180px"> <br/>
+
+        <label>VAT:</label>
+        <input class="searchinput" type ="text" id="VATid" name="totalVAT" required style="width:180px"> <br/>
+          
+          <br/>
+          <div class="divleft">
+            <button routerLink="/payment-select" type="submit">Proceed to Payment</button>
+            <button routerLink="/sales-management" type="submit">Cancel Sale</button>
+        </div>
+          
+      </div>
+      <br><br>
+
+  
+  </form>
+
+</body>
+

@@ -1,0 +1,25 @@
+<body>
+    <h1>Add Product Category</h1>
+
+    <form >
+        <div class="card">
+         <p class="sublabel">Enter Product Category Details:</p>
+
+            
+            <div class="divleft">
+                <label for="PCatName">Name:</label>
+                <input type="text"  class="form-control" [(ngModel)]="productCategory.PCatName" id="PCatName" name="PCatName" required>
+                <br>
+                <label for="PCatDescription">Description:</label>
+                <input type="text"  class="form-control" [(ngModel)]="productCategory.PCatDescription" id="PCatDescription" name="PCatDescription" required>
+            
+            </div>
+        
+         <div class="divleft">
+            <!--label for Alt Step 8--> 
+            <button type="submit" (click)="Save()">Save</button>
+            <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+        </div>
+    </form>
+</body>

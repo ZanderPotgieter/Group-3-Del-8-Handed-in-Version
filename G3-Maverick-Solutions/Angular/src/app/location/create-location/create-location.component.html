@@ -1,0 +1,34 @@
+<body>
+    <h1>Create Location</h1>
+    <form>
+    <br>
+        
+        <div class="card">
+  <div class="divleft">
+          <div class="subheadinglabel" id="location">Enter Location Details:</div>
+            <br>
+            <div class="divleft" >
+              <label for="LocName">Location Name:   </label>
+              <input type="text" class="form-control" [(ngModel)]="location.LocName" id="LocName" name="LocName"  required> 
+          </div>
+  <div class="divleft" >
+    <label for="LocationStatusID">Location Status:   </label>
+    <input type="text" class="form-control" [(ngModel)]="location.LocationStatusID" id="LocationStatusID" name="LocationStatusID"  required> 
+</div>
+
+<div class="divleft" >
+  <label for="AreaID">Area:   </label>
+  <input type="text" class="form-control" [(ngModel)]="location.AreaID" id="AreaID" name="AreaID"  required> 
+</div>
+
+<div class="divleft" >
+  <label for="ContainerID">Container:   </label>
+  <input type="text" class="form-control" [(ngModel)]="location.ContainerID" id="ContainerID" name="ContainerID"  required> 
+</div>    
+            <button type="button" (click)="addLocation()">Create Location</button> 
+            <button type="button" (click)="gotoGPSManagement()">Cancel</button>
+          </div>
+        </div>
+      </form>
+  </body>
+  

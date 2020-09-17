@@ -1,0 +1,48 @@
+<body>
+    <h1>Search Supplier Order</h1>
+    <br>
+    <form>
+        
+        <div class="card" id="creditor">
+  
+          <div class="subheadinglabel" id="creditor">Enter Product and Supplier Details or Status:</div>
+            <br>
+  <div class="divleft">
+            <label>Product:</label>
+            <input class="searchinput" type ="text" id="LocNameid" name="LocName" required style="width:580px"> <br>
+  
+            <label>Supplier:</label>
+            <input class="searchinput" type ="text" id="LocNameid" name="LocName" required style="width:580px"> <br/>
+  
+            <label for="credpayment">Status:</label>
+                <select class="smallselect" name="Creditor" required id="Creditor" required style="width:580px">
+                  <option>---</option>
+                    <option>Ordered</option>
+                    <option>Received</option>
+                </select> <br>
+  
+            
+            <button type="submit">Search</button>
+            <button routerLink="/supplier-order-management" type="submit" >Cancel</button><br>
+          </div>
+        </div>
+        <div class="card" id="creditor">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Product</th>
+      <th>Supplier</th>
+      <th>Quantity</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+  </table>
+            
+        </div>
+        <br><br>
+  
+    
+    </form>
+  
+  </body>

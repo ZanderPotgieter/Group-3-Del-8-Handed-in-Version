@@ -1,0 +1,100 @@
+<body>
+    <h1>Customer Details</h1>
+    <form>
+        <div class="card" *ngIf = "showSearch">
+            <br>
+        <div class="divleft"  >
+            <label class="subheadinglabel" >Enter Name and Surname To search </label>
+        <br>
+            <label for="name">Customer Name:       </label>
+            <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
+       
+            <label for="cusSurname">Customer Surname:   </label>
+            <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
+        </div>
+        <br>
+
+        <div class="divleft">
+            <button type="submit"(click)="searchCustomer()">Search</button>
+            <button type="submit" (click)="gotoCustomerManagment()">Cancel</button>
+        </div>
+
+    </div>
+    <br>
+
+    <div class="card" *ngIf = "showResults">
+       
+
+        <br>
+        <div class="divleft" >
+            <label class="subheadinglabel"> Searched Customer Details:</label>
+        </div>
+    
+        <div class="divleft" >
+            <label for="CusName">Name:       </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusName" id="CusName" name="CusName" required [readonly] = "this.inputEnabled">
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusSurname">Surname:   </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusSurname" id="CusSurname" name="CusSurname" required [readonly] = "this.inputEnabled">
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusCell">Cell Number:  </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusCell" id="CusCell" name="CusCell" required [readonly] = "this.inputEnabled">
+        </div>
+
+        <br>
+        <div class="divleft"  >
+            <label for="CusEmail">Email:      </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusEmail" id="CusEmail" name="CusEmail" required [readonly] = "this.inputEnabled">
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusStreetNr">Street No: </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusStreetNr" id="CusStreetNr" name="CusStreetNr" required [readonly] = "this.inputEnabled"> 
+        </div>
+
+        <br>
+        <div class="divleft" >
+            <label for="CusStreet">Street:    </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusStreet" id="CusStreet" name="CusStreet" required [readonly] = "this.inputEnabled"> 
+        </div>
+        
+        <br>
+        <div class="divleft" >
+            <label for="CusCode">Postal Code:   </label>
+            <input type="text" class="form-control" [(ngModel)]="customer.CusCode" id="CusCode" name="CusCode" placeholder="0000" required [readonly] = "this.inputEnabled"> 
+        </div>
+ 
+        <br>
+        <div class="divleft" >
+            <label for="CusSuburb">Suburb:   </label>
+            <input type="text"  class="form-control" [(ngModel)]="customer.CusSuburb" id="CusSuburb" name="CusSuburb" placeholder="Example: Hatfield" required [readonly] = "this.inputEnabled"> 
+        </div>
+        <br><br>
+
+        <div class="divleft" *ngIf="showButtons">
+            <button type="submit" (click)="enableInputs()">Update</button>
+            <button type="submit" (click)="deleteCustomer()">Delete</button>
+            <button type="submit" (click)="gotoPlaceOrder()">Place Order</button>
+         </div>
+
+         <div class="divleft" *ngIf="showSave" >
+         <button type="submit" (click)="updateCustomer()">Save</button>
+         <button type="submit" (click)="cancel()">Cancel</button>
+        </div>
+        
+    </div>
+    
+    </form>
+</body>
+
+
+
+
+

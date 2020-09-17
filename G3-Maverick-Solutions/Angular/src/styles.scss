@@ -1,0 +1,516 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ORDRA-primary: mat-palette($mat-indigo);
+$ORDRA-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ORDRA-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ORDRA-theme: mat-light-theme((
+  color: (
+    primary: $ORDRA-primary,
+    accent: $ORDRA-accent,
+    warn: $ORDRA-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ORDRA-theme);
+
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+/*--------Variable Declerations---------*/
+//webisteColours
+$Websitecolor: white;
+$ComplementoryColour: rgba(251,113,0,1);
+$extra-colour: rgb(124, 123, 120);
+$card-colour: rgb(255, 251, 230);
+
+
+
+//display sizes
+$full-width: 100%;
+$full-height: 100%;
+
+//form
+$form-display: inline-block;
+$form-width: 80%;
+
+//variables for table th and td
+$text-align: left;
+$height: 20px;
+$td-width: 25%;
+$table-vertical-align: bottom;
+$padding: 10px;
+
+
+//table size
+$table_size: 100%;
+$border-width: thin;
+$table-layout: fixed;
+
+
+//Text
+$text-FontSize: 20px;
+$text-align: center;
+$text-font: Arial, Helvetica, sans-serif;
+$text-colour: black;
+$text-underline: underline;
+
+
+//Headings
+$heading-fontstyle: oblique;
+$heading-fontsize: 25px;
+$heading_align: center;
+$heading_height: 40px;
+$heading_padding: 50px;
+
+
+//inputs
+
+$input-border: none;
+$boarder-style: solid;
+$input-size: 30px;
+$input-width: 50%;
+
+//button
+$button-padding: 0px;
+$button-display: inline-block;
+$button-overflow: auto;
+$button-margin: 20px;
+$button-width: 15%;
+$button-height: 45px;
+$button-fontsize: 100%;
+$menu-button-width: 50%;
+$menu-button-height: 65px;
+$menu-button-fontsize: 100%;
+$menu-button-padding: 10px 25px;
+
+
+
+//label
+$label-font: 20px;
+$label-width: 130px;
+$subheadinglabel-width: 50%;
+
+//select
+$select-height: 28px;
+
+
+/*------Assigning Styles to varriables-----------*/
+body {
+    background-color: $Websitecolor;
+}
+
+//h1 with class="menuheading" for all pages were you want the heading to be centered
+//use for menu pages or pages with just buttons
+/*.menuheading{
+
+    font-size: $heading-fontsize;
+    font-style: $heading-fontstyle;
+    background-color:$ComplementoryColour;
+    color: $text-colour;
+    text-align: center;
+    padding-left: $heading_padding;
+    padding: $padding;
+    vertical-align:$heading_align;
+    width:80%;
+    height:$heading_height;
+    border-bottom: $extra-colour;
+    
+}*/
+
+//heading on input/ form display pages
+h1 {
+    font-size: $heading-fontsize;
+    font-style: $heading-fontstyle;
+    background-color: $extra-colour;
+    color: $Websitecolor;
+    text-align: center;
+    padding-left: $heading_padding;
+    padding: $padding;
+    vertical-align: $heading_align;
+    width: $full-width;
+    height: $heading_height;
+    border-bottom: $extra-colour;
+}
+
+//deafault, will center elements on your page that are in a div
+div {
+    text-align: $text-align;
+    width: $full-width;
+}
+
+
+form {
+    display: $form-display;
+    width: $full-width;
+    text-align: center;
+}
+
+table {
+    background-color: $card-colour;
+    table-layout: $table-layout;
+    width: $full-width;
+    font-size: $label-font;
+    font-family: $text-font;
+    color: $text-colour;
+    //display: inline-block;
+    border-bottom: 1px solid $extra-colour;
+    border-top: 1px solid $extra-colour;
+    //border-style: solid;
+}
+
+
+td {
+    //width:$td-width ;
+    border-bottom: 1px dotted $extra-colour;
+    word-wrap: break-word;
+    padding: $padding;
+    width: max-content;
+}
+
+
+th {
+    background-color: $card-colour;
+    height: $height;
+    padding: $padding;
+    width: $full-width;
+    color: $text-colour;
+    border-bottom: 1px solid $extra-colour;
+    border: $Websitecolor;
+}
+
+tr {
+    height: $height;
+    padding: $padding;
+    width: $td-width;
+}
+
+
+
+button {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: 1px $boarder-style $extra-colour;
+    background-color: $extra-colour;
+    color: $Websitecolor;
+    padding: $button-padding;
+    text-align: $text-align;
+    font-size: $button-fontsize;
+    width: $button-width;
+    font-family: $text-font;
+    margin: $button-margin;
+    height: $button-height;
+}
+//action buttons inside a table
+.btntable{
+  
+    border: 1px $boarder-style $extra-colour;
+    background-color: $extra-colour;
+    color:$Websitecolor;
+    text-align:center;
+    font-size: $button-fontsize;
+    font-family: $text-font;
+    width: 100px;
+    padding: $button-padding;
+
+ 
+
+}
+
+//style for buttons on a menu page or any screen with just buttons
+.menubutton {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+    border: 3px $boarder-style $card-colour;
+    background-color: $card-colour;
+    color: $text-colour;
+    padding: $menu-button-padding;
+    text-align: $text-align;
+    font-size: $menu-button-fontsize;
+    width: $menu-button-width;
+    font-family: $text-font;
+    margin: $button-margin;
+    height: $menu-button-height;
+}
+
+//for label+input divs on input/details pages
+//use for any elemts you wish to align on the left of your page
+.divleft {
+    padding: 2px 16px;
+    text-align: left;
+    width: $full-width;
+}
+
+//card class for menu
+.cardmenu {
+    box-shadow: 0 8px 10px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    background-color: $extra-colour;
+    width: 50%;
+    display: inline-block;
+    padding: $padding;
+    padding-right: $padding;
+}
+
+.card {
+    box-shadow: 0 8px 10px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    background-color: $card-colour;
+    width: 80%; //adjust if necessary
+    display: inline-block;
+    padding: $padding;
+    padding-right: $padding;
+}
+
+//This if for any subheading on your forms
+.subheadinglabel {
+    font-size: $label-font;
+    font-family: $text-font;
+    color: $ComplementoryColour;
+    text-decoration: $text-underline;
+    text-align: left;
+    padding: $padding;
+    width: $subheadinglabel-width;
+}
+
+// for input  fields to search at the top of a page
+//also use this class if you to have two want input in the same line
+.searchinput {
+    border: none;
+    size: $input-size;
+    border-bottom: 1px $boarder-style $ComplementoryColour;
+    font-size: $text-FontSize;
+    width: 20%;
+    height: $height;
+    background-color: $card-colour;
+    color: $text-colour;
+}
+
+input {
+    border: none;
+    size: $input-size;
+    border-bottom: 1px $boarder-style $ComplementoryColour;
+    font-size: $text-FontSize;
+    width: $input-width;
+    height: $height;
+    background-color: $card-colour;
+    color: $text-colour;
+}
+
+label {
+    font-size: $label-font;
+    font-family: $text-font;
+    color: $text-colour;
+    text-align: left;
+    padding: $padding;
+    width: $label-width;
+    display: inline-block;
+    padding-left: 20px;
+}
+
+.displaylabel {
+    font-size: $label-font;
+    font-family: $text-font;
+    color: $ComplementoryColour;
+    text-align: center;
+    padding: $padding;
+    display: inline-block;
+}
+
+select {
+    border: none;
+    border-bottom: 2px $boarder-style $ComplementoryColour;
+    font-size: $text-FontSize;
+    width: $input-width;
+    height: $select-height;
+    background-color: $Websitecolor;
+    color: $text-colour;
+}
+
+ // use if you want a select with half the width of the default
+ .smallselect{
+    border:none;
+    border-bottom: 1px $boarder-style $ComplementoryColour;
+    font-size: $text-FontSize;
+    width: 15%;
+    height: $select-height;
+    background-color: $Websitecolor;
+    color: $text-colour;
+    background-color: $card-colour;
+
+  }
+  .list{
+      font-size: $text-FontSize;
+      font-family: $text-font;
+      
+
+  }
+
+body {
+    background-color: white;
+}
+
+.wrapper {
+    display: flex;
+    position: relative;
+}
+
+.wrapper .sidebar {
+    width: 200px;
+    height: 100%;
+    background: rgb(255, 251, 230);
+    padding: 30px 0px;
+    position: fixed;
+}
+
+.wrapper .sidebar h2 {
+    color: rgb(255, 251, 230);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.wrapper .sidebar ul li {
+    font-size: 12.5px;
+    padding: 15px;
+    border-bottom: 1px solid #bdb8d7;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.wrapper .sidebar ul li a {
+    color: #000000;
+    display: block;
+}
+
+.wrapper .sidebar ul li a .fas {
+    width: 25px;
+}
+
+.wrapper .sidebar ul li:hover {
+    background-color: rgb(124, 123, 120);
+}
+
+.wrapper .sidebar ul li:hover a {
+    color: #fff;
+}
+
+.wrapper .sidebar .social_media {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+
+.wrapper .main_content {
+    width: 100%;
+    margin-left: 200px;
+}
+
+.wrapper .main_content .header {
+    padding: 53px;
+    background: rgb(124, 123, 120);
+    border-bottom: 1px solid #e0e4e8;
+}
+
+.wrapper .main_content .info {
+    margin: 20px;
+    color: white;
+    line-height: 25px;
+}
+
+.wrapper .main_content .info div {
+    margin-bottom: 20px;
+}
+
+div.scroll {
+    margin: 4px, 4px;
+    padding: 4px;
+    background-color: rgb(255, 251, 230);
+    width: auto;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+}
+
+html {
+    overflow: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
+.header-section {
+    font-size: 21px;
+    display: flex;
+    padding: 37px;
+    background: rgb(124, 123, 120);
+    border-bottom: 1px solid rgb(124, 123, 120);
+    text-align: center;
+    vertical-align: top;
+    color: white;
+}
+
+.header-section > div {
+    width: 90%;
+}
+
+@media (max-width: 5000px) {
+    .header-section > div {
+        width: 500%;
+    }
+}
+
+//styles for login 
+
+/*for tab control*/
+.tabs{
+    height: 65px;
+  }
+  .tabs .tab{
+    text-transform : none !important;
+    line-height: 65px;
+    height: 65px;
+  }
+  .tabs .tab a{
+    font-size: 25px;
+    color: grey !important;
+  }
+  
+  .tabs .tab a.active{
+    background-color: #fff !important;
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

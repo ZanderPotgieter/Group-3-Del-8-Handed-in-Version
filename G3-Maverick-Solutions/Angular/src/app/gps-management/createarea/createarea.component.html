@@ -1,0 +1,39 @@
+<h1>Create Area</h1>
+<br>
+<div class="card">
+    <p style="text-align: left;color: orange;"><u>Enter Area Details:</u></p>
+    <br>
+    <form class="col s12 white" style="align-content: left;">
+        <div class="row">
+          <div class="input-field col s6">
+            <label>Area Name:</label>
+            <input type="text" name="Areaname">
+          </div>
+          <div class="input-field col s6">
+            <label>Province:</label>
+            <select name="PovinceID" class="form-control" style="background-color: rgba(0,0,0,0);">
+            <option value="0" >-- Select --</option>
+            <option value=""> Gauteng </option>
+          </select>
+          </div>
+          <div class="input-field col s6">
+            <label>Postal Code:</label>
+            <input type="text" name="postalcode">
+          </div>
+          <div class="input-field col s6">
+            <label>Area Status:</label>
+            <select name="AreaStatusID" class="form-control"  style="background-color: rgba(0,0,0,0);">
+                <option value="0" >-- Select --</option>
+                <option value=""> InUse </option>
+              </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <button class="btn-large btn-submit" type="submit">Create Area</button>
+            <button class="btn-large btn-submit" type="submit">Cancel</button>
+          </div>
+        </div>
+    </form>
+
+    </div>

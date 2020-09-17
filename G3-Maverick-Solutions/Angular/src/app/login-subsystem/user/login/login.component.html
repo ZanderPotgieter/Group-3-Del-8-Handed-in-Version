@@ -1,0 +1,25 @@
+<h1>Login</h1>
+<br>
+<form  class="col s12 white">
+   <div class="row">
+     <div class="input-field col s12">
+       <input type="text" name="UserName" placeholder="Username" required>
+     </div>
+   </div>
+   <div class="row">
+      <div class="input-field col s12">
+        <input type="password"  name="Password" placeholder="Password" required>
+      </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+          <button  class="btn-large btn-submit" type="submit">Login</button>
+        </div>
+      </div>
+  </form>
+  <div class="row">
+    <div class="input-field col s12">
+      <button  class="btn-large btn-submit" type="submit" routerLink='/register' routerLinkActive='active'>Register</button>
+      <button  class="btn-large btn-submit" type="submit"  routerLink='/resetpassword' routerLinkActive='active'>Reset Password</button>
+    </div>
+  </div>

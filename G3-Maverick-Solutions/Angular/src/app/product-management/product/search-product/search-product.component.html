@@ -1,0 +1,55 @@
+<body>
+    <h1>Search Product</h1>
+
+   <form>
+        <div class="card"> 
+            <p class="subheadinglabel">Select Product Category To Search:</p>
+
+            <div class="divleft">
+                <label for="ProductCategoryID">Product Category:</label><select  required>
+                    <option value="0">--Select--</option>  
+                    <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
+                  </select>
+            </div>
+        
+         <div class="divleft">
+                <button type="submit" (click)="Search()">Search</button>
+                <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+        </div>
+
+    <br><br>
+ 
+        <div class="card">
+            <div class="divleft">
+                <label class="subheadinglabel">Searched Product Category Results:</label>
+                <br>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+
+
+                    <tr>
+                        <td>Bic Pen</td>
+                        <td>Item used for writing</td>
+                        <td><button type="submit" (click)="View()">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>Staedtler Pen</td>
+                        <td>Item used for writing</td>
+                        <td><button type="submit" (click)="View()">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>Pritt Glue Stick</td>
+                        <td>Item used to glue paper together</td>
+                        <td><button type="submit" (click)="View()">View</button></td>
+                    </tr>
+                </table>  
+           </div>
+         </div>
+     </form>  
+</body>
+

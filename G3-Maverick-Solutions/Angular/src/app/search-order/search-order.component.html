@@ -1,0 +1,86 @@
+<body>
+    <h1>Search Customer Order</h1>
+   <form>
+    <div class="card"> 
+        <div class="divleft">
+            <label class="subheadinglabel">Select Search Criteria</label><br>
+            <button type="submit">Search By OrderNo</button>
+             <button type="submit">Search By Cell</button>
+        </div>
+    </div>
+
+        <br><br>
+        <div class="card">
+        <div class="divleft">
+            <label class="subheadinglabel">Enter Search Details:</label><br>
+            <div hidden="true" class="divleft"  >
+                <label for="ordNo">Order Number:      </label>
+                <input class="searchinput" type="text" id="ordNo" name="ordNo" required>
+            </div>
+            <div   class="divleft"  >
+                <label for="ordNo">Cell Number:      </label>
+                <input class="searchinput" type="text" id="ordNo" name="ordNo" required>
+            </div>
+            <div class="divleft">
+            <button type="submit">Search</button>
+            <button type="submit">Cancel</button>
+            <br><br>
+            </div>
+        </div>
+
+    </div>
+    <br><br>
+    <!--<div *ngIf="showTable">-->
+    
+        <div class="card">
+            
+            <div class="divleft">
+                <br>  <label class="subheadinglabel" >Orders:</label><br>
+                <table>   
+               
+                    <tr>
+                        <th>OrderNo</th>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Action</th>
+                        
+                    </tr>
+          
+                 
+                    <!--<tr *ngFor="let item of products">-->
+                    
+                 
+               
+                    <tr>
+                        <td>88</td>
+                        <td>18/07/2020</td>
+                        <td>George</td>
+                        <td>sadoka</td>
+                        <td><button class="btntable" (click)="gotoViewOrder()"  type="submit">View</button></td>
+                        
+                  
+                       
+                    </tr>
+        
+                    <tr>
+                        <td>66</td>
+                        <td>20/07/2020</td>
+                        <td>George</td>
+                        <td>sadoka</td>
+                        <td><button class="btntable"  type="submit">View</button></td>
+                        
+                        
+                        
+                    </tr>
+                
+            
+                </table>
+            </div>
+            <br><br>
+         </div>
+
+
+   </form>
+</body>
+

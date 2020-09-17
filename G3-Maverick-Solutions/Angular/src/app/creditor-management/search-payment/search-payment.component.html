@@ -1,0 +1,36 @@
+<body>
+  <h1>Creditor Payment Details</h1>
+  <form>
+      <div class="card" >
+          
+        <div class="conatiner" style="padding-top:20px;">  
+          <div class="col-sm-5" style="padding-top:20px;padding-bottom:20px;" >  
+               <input class="form-control" type="text" placeholder="Search..."  >        
+          </div>  
+        </div>  
+          <table class="table table-striped">  
+            <thead class="thead-dark">  
+              <tr>  
+                <th>ID</th>  
+                <th>Creditor</th>  
+                <th>Date</th>  
+                <th>Amount</th> 
+              </tr>  
+            </thead>  
+            <tbody>  
+              <tr *ngFor="let creditorpayment of allPayments | async">  
+                <td>{{creditorpayment.PaymentID}}</td>  
+                <td>{{creditorpayment.CreditorID}}</td>  
+                <td>{{creditorpayment.CredPaymentDate}}</td>  
+                <td>{{creditorpayment.CredPaymentAmount}}</td> 
+              </tr>  
+            </tbody>
+          </table>  
+
+        <br>
+        </div>
+    
+    </form>
+  
+  </body>
+  

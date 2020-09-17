@@ -380,6 +380,7 @@
           </Key>
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserTypeID" Type="int" />
+          <Property Name="SessionID" Type="int" />
           <Property Name="UserPassword" Type="varchar" MaxLength="50" />
           <Property Name="UserName" Type="varchar" MaxLength="25" />
           <Property Name="UserSurname" Type="varchar" MaxLength="35" />
@@ -1681,6 +1682,7 @@
           <NavigationProperty Name="Sales" Relationship="Self.FK_SaleUser" FromRole="User" ToRole="Sale" />
           <NavigationProperty Name="User_Type" Relationship="Self.FK_UserType" FromRole="User" ToRole="User_Type" />
           <NavigationProperty Name="Shifts" Relationship="Self.User_Shift" FromRole="User" ToRole="Shift" />
+          <Property Name="SessionID" Type="Int32" />
         </EntityType>
         <EntityType Name="User_Type">
           <Key>
@@ -2833,6 +2835,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="OrdraDBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
                 <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />

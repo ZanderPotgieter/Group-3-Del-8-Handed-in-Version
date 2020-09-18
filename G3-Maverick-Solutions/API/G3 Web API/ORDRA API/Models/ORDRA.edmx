@@ -381,8 +381,8 @@
           </Key>
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserTypeID" Type="int" />
-          <Property Name="SessionID" Type="varchar" MaxLength="50" />
-          <Property Name="UserPassword" Type="varchar" MaxLength="50" />
+          <Property Name="SessionID" Type="varchar" MaxLength="75" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="100" />
           <Property Name="UserName" Type="varchar" MaxLength="25" />
           <Property Name="UserSurname" Type="varchar" MaxLength="35" />
           <Property Name="UserCell" Type="varchar" MaxLength="10" />
@@ -1522,7 +1522,6 @@
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RetProdProduct" FromRole="Product" ToRole="Return_Product" />
           <NavigationProperty Name="Supplier_Order_Product" Relationship="Self.FK_SOPProduct" FromRole="Product" ToRole="Supplier_Order_Product" />
           <NavigationProperty Name="Suppliers" Relationship="Self.Product_Supplier" FromRole="Product" ToRole="Supplier" />
-          <Property Name="Barcode" Type="Int32" />
           <Property Name="ProdBarcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Product_Backlog">
@@ -1672,7 +1671,7 @@
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserTypeID" Type="Int32" />
-          <Property Name="UserPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="UserName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="UserSurname" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="UserCell" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -1685,7 +1684,7 @@
           <NavigationProperty Name="Sales" Relationship="Self.FK_SaleUser" FromRole="User" ToRole="Sale" />
           <NavigationProperty Name="User_Type" Relationship="Self.FK_UserType" FromRole="User" ToRole="User_Type" />
           <NavigationProperty Name="Shifts" Relationship="Self.User_Shift" FromRole="User" ToRole="Shift" />
-          <Property Name="SessionID" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="SessionID" Type="String" MaxLength="75" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="User_Type">
           <Key>

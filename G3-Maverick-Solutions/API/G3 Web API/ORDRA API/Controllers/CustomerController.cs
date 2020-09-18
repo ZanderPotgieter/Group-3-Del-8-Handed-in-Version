@@ -32,9 +32,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Customers.ToList();
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong" + error.Message;
+                toReturn.Error = "Search Interrupted. Retry";
             }
            
                 return toReturn;
@@ -58,7 +58,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectCustomer == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Customer Not Found";
                 }
                 else
                 {
@@ -67,9 +67,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -99,14 +99,14 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Customer Not Found";
                     
                 }
             }
 
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -125,9 +125,9 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                foundCustomer = searchCustomer(newcustomer.CusName, newcustomer.CusName);
+                var customer = db.Customers.Where((x => (x.CusName == newcustomer.CusName && x.CusSurname == newcustomer.CusSurname))).FirstOrDefault();
 
-                if (foundCustomer.Message == null)
+                if (customer == null)
                 {
 
                     db.Customers.Add(newcustomer);
@@ -136,10 +136,10 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Duplicate Record Found";
+                    toReturn.Message = "Customer Already Exists";
                 }
             }
-            catch (Exception)
+            catch
             {
                 toReturn.Message = "Add UnSuccessful";
                
@@ -181,7 +181,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Customer Not Found";
                 }
             }
 
@@ -211,7 +211,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectCustomer == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Customer Not Found";
                 }
                 else
                 {
@@ -221,9 +221,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Error = "Delete Unsuccessful";
             }
 
             return toReturn;

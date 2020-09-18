@@ -42,12 +42,10 @@ import { NgModule } from '@angular/core';
     //-----Province subsytem Imports----//
     import { AddProvinceComponent } from './Province/add-province/add-province.component';
     import { SearchProvinceComponent } from './Province/search-province/search-province.component';
-    import { UpdateProvinceComponent } from './Province/update-province/update-province.component';
     
     //-----Creditor subsytem Imports----//
     import { AddCreditorComponent } from './creditor-management/add-creditor/add-creditor.component';
     import { SearchCreditorComponent } from './creditor-management/search-creditor/search-creditor.component';
-    import { UpdateCreditorComponent } from './creditor-management/update-creditor/update-creditor.component';
     
     import { MakeSaleComponent } from './sales-management/make-sale/make-sale.component';
     import { PaymentSelectComponent } from './sales-management/payment-select/payment-select.component';
@@ -271,12 +269,10 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
         //---Province Subsystem Routing---//
         { path: 'add-province', component: AddProvinceComponent },
         { path: 'search-province', component: SearchProvinceComponent },
-        { path: 'update-province', component: UpdateProvinceComponent },
 
         //---Creditor Subsystem Routing---//
         { path: 'add-creditor', component: AddCreditorComponent },
         { path: 'search-creditor', component: SearchCreditorComponent },
-        { path: 'update-creditor', component: UpdateCreditorComponent },
         { path: 'add-payment', component: AddPaymentComponent },
         { path: 'search-payment', component: SearchPaymentComponent },
         

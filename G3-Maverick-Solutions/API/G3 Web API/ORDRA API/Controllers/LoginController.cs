@@ -17,16 +17,18 @@ using System.Text;
 
 namespace ORDRA_API.Controllers
 {
+
+
     [EnableCors(origins: "*", headers: "*", methods: "*")]
 
     [RoutePrefix("Api/Login")]
 
     public class LoginController : ApiController
     {
-        
+
         OrdraDBEntities db = new OrdraDBEntities();
 
-        
+
         [Route("registerUser")]
         [HttpPost]
         public object registerUser(User user)
@@ -39,24 +41,24 @@ namespace ORDRA_API.Controllers
             {
 
                 User newUser = new User();
-               
+
 
                 var hash = GenerateHash(ApplySalt(user.UserPassword));
 
-                User foundUser = db.Users.Where(x => x.UserEmail ==  user.UserEmail).FirstOrDefault();
+                User foundUser = db.Users.Where(x => x.UserEmail == user.UserEmail).FirstOrDefault();
 
 
                 if (foundUser == null)
                 {
 
-                newUser.UserName = user.UserName;
-                newUser.UserSurname = user.UserSurname;
-                newUser.UserPassword = hash;
-                newUser.UserCell = user.UserCell;
-                newUser.UserEmail = user.UserEmail;
-                Guid guid = Guid.NewGuid();
-                newUser.SessionID = guid.ToString();
-                newUser.UserTypeID = 2;
+                    newUser.UserName = user.UserName;
+                    newUser.UserSurname = user.UserSurname;
+                    newUser.UserPassword = hash;
+                    newUser.UserCell = user.UserCell;
+                    newUser.UserEmail = user.UserEmail;
+                    Guid guid = Guid.NewGuid();
+                    newUser.SessionID = guid.ToString();
+                    newUser.UserTypeID = 2;
 
                 }
                 else if (foundUser != null)
@@ -66,19 +68,19 @@ namespace ORDRA_API.Controllers
                 }
 
                 toReturn.Message = "Registration Successful";
-               
+
 
                 db.Users.Add(newUser);
                 db.SaveChanges();
 
-                
-           }
+
+            }
             catch
             {
-                toReturn.Error ="Registration Unsuccesful";
+                toReturn.Error = "Registration Unsuccesful";
             }
 
-            return toReturn; 
+            return toReturn;
         }
 
         [Route("loginUser")]
@@ -105,7 +107,7 @@ namespace ORDRA_API.Controllers
 
                     db.SaveChanges();
                     toReturn.sessionID = guid.ToString();
-                  
+
 
                 }
                 else
@@ -147,7 +149,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     toReturn.Error = "Invalid User Token";
-                    
+
                 }
             }
             catch
@@ -168,7 +170,7 @@ namespace ORDRA_API.Controllers
             {
                 List<Container> containers = db.Containers.ToList();
                 toReturn = containers;
-            
+
             }
             catch
             {
@@ -214,4 +216,3 @@ namespace ORDRA_API.Controllers
         }
     }
 }
-

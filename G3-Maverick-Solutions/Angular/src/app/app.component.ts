@@ -15,12 +15,12 @@ export class AppComponent {
   title = 'ORDRA';
   dateVal = new Date();
 
-  constructor(private router: Router) { }
+  // constructor(private router: Router) { }
 
-  logout()
-  {
-    localStorage.removeItem("accessToken");
-    this.router.navigate(["login"]);
-  }
+  // logout()
+  // {
+  //   localStorage.removeItem("accessToken");
+  //   this.router.navigate(["login"]);
+  // }
 
 }

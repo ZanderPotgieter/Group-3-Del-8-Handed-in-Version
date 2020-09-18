@@ -208,6 +208,42 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        //resetting password
+        [HttpPut]
+        [Route("resetPassword")]
+        public object resetPassword(User userInput)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //hashing new password
+                var hash = GenerateHash(ApplySalt(userInput.UserPassword));
+                User user = db.Users.Where(x => x.UserEmail == userInput.UserEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.UserPassword = hash;
+                    db.SaveChanges();
+                    toReturn.Message = "Update Successful";
+                }
+                else
+                {
+                    toReturn.Message = "Record Not Found";
+                }
+            }
+
+            catch (Exception)
+            {
+                toReturn.Message = "Update Unsuccessful";
+
+            }
+
+            return toReturn;
+        }
+
+
 
         //--------------------Hashing Password-------------------------//
 

@@ -24,9 +24,98 @@ namespace ORDRA_API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
 
     [RoutePrefix("Api/Login")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+
+    [RoutePrefix("API/Customer")]
 
     public class LoginController : ApiController
     {
+        
+        OrdraDBEntities db = new OrdraDBEntities();
+
+        
+        [Route("registerUser")]
+        [HttpPost]
+        public object registerUser(User user)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+
+                User newUser = new User();
+               
+
+                var hash = GenerateHash(ApplySalt(user.UserPassword));
+
+                User_Type user_Type = db.User_Type.Where(x => x.UTypeDescription == "Employee").FirstOrDefault();
+
+                newUser.UserName = user.UserName;
+                newUser.UserPassword = hash;
+                newUser.UserCell = user.UserCell;
+                newUser.UserEmail = user.UserEmail;
+                Guid guid = Guid.NewGuid();
+                //newUser.SessionID = guid.ToString();
+
+                if (user_Type != null)
+                {
+
+                    newUser.User_Type = user.User_Type;
+
+                }
+                else
+                {
+                    toReturn.Error = "Registration Unsuccesful: User Type Not Assigned";
+                }
+
+
+                db.Users.Add(newUser);
+                db.SaveChanges();
+
+                toReturn = newUser;
+            }
+            catch
+            {
+                toReturn.Error = "Registration Unsuccesful";
+            }
+
+            return toReturn; 
+        }
+
+        [Route("loginUser")]
+        [HttpPost]
+
+        public object loginUser(User userInput)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+
+                var hash = GenerateHash(ApplySalt(userInput.UserPassword));
+                User user = db.Users.Where(x => x.UserName == userInput.UserName && x.UserPassword == hash).FirstOrDefault();
+
+                if (user != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    user.SessionID = guid.ToString();
+
+                    db.Entry(user).State = EntityState.Modified; // Checks if anything from the user here is diffent from the user in the db
+
+                    db.SaveChanges();
+                    toReturn.sessionID = guid.ToString();
+                  
+
+                }
+                else
+                {
+                    toReturn.Error = "Incorrect Username or Password";
+
+                }
 
         OrdraDBEntities db = new OrdraDBEntities();
 
@@ -214,6 +303,42 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        //resetting password
+        [HttpPut]
+        [Route("resetPassword")]
+        public object resetPassword(User userInput)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //hashing new password
+                var hash = GenerateHash(ApplySalt(userInput.UserPassword));
+                User user = db.Users.Where(x => x.UserEmail == userInput.UserEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.UserPassword = hash;
+                    db.SaveChanges();
+                    toReturn.Message = "Update Successful";
+                }
+                else
+                {
+                    toReturn.Message = "Record Not Found";
+                }
+            }
+
+            catch (Exception)
+            {
+                toReturn.Message = "Update Unsuccessful";
+
+            }
+
+            return toReturn;
+        }
+
+
 
         //--------------------Hashing Password-------------------------//
 
@@ -248,3 +373,4 @@ namespace ORDRA_API.Controllers
         }
     }
 }
+

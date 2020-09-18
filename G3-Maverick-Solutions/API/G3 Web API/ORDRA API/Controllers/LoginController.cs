@@ -15,6 +15,8 @@ using ORDRA_API.Models;
 using System.Security.Cryptography;
 using System.Text;
 
+using System.Net.Mail;
+
 namespace ORDRA_API.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -174,7 +176,37 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        //send email
+        [Route("sendEmail")]
+        [HttpPost]
+        public object sendEmail(string email)
+        {
+            dynamic toReturn = new ExpandoObject();
 
+            try { 
+                using (MailMessage mail = new MailMessage())
+                {
+                 mail.From = new MailAddress("Place senders email here");
+                 mail.To.Add(email);
+                 mail.Subject = "Testing";
+                 mail.Body = "<h1>Testing</h1>";
+                 mail.IsBodyHtml = true;
+
+                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                 {
+                    smtp.Credentials = new System.Net.NetworkCredential("Place senders email here", "Place senders password here");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                    toReturn.Message = "Mail sent";
+                  }
+                }
+            }
+            catch 
+            {
+                toReturn.Message = "Mail unscuuessfully sent";
+            }
+            return toReturn;
+        }
 
 
         //--------------------Hashing Password-------------------------//

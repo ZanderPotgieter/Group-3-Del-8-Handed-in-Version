@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';  
 import { Observable } from 'rxjs'; 
 import { DonationRecipient } from './donation-recipient';
+import { DonationStatus } from './donation-status';
+import { Donation } from './donation';
+import { DonatedProduct } from './donated-product';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +16,9 @@ export class DonationService {
 
   //donation recipient url
   url = 'https://localhost:44399/API/DonationRecipient'
+
+  //donation url
+  Donurl = 'https://localhost:44399/api/Donation';  
 
   //get all donation recipient
   getAllDonationRecipients(): Observable<DonationRecipient[]> {  
@@ -49,5 +55,85 @@ export class DonationService {
     return this.http.delete<number>(this.url + '/DeleteDonationRecipient?id=' + Id,  
  httpOptions);  
   } 
+
+  //get all donations
+  getAllDonations(): Observable<Donation[]>
+  {
+    return this.http.get<Donation[]>(this.Donurl + '/getAllDonations');
+  }
+
+  //get all donation statuses
+  getDonationStatuses(): Observable<DonationStatus[]>
+  {
+    return this.http.get<DonationStatus[]>(this.Donurl + '/getDonationStatuses');
+  }
+
+  //get donation  by id
+  getDonationById(donationID: number): Observable<Donation>
+  {
+    return this.http.get<Donation>(this.Donurl + '/getDonationByID' + donationID);
+  }
+
+  //search donation 
+  searchDonations(cell: string): Observable<Donation[]>
+  {
+    return this.http.get<Donation[]>(this.Donurl + '/searchDonations?cell=' +cell);
+  }
+
+  //add donation
+  addDonation(donation: Donation): Observable<Donation>
+  {
+    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
+    return this.http.post<Donation>(this.Donurl + '/addDonation/', donation, httpOptions);
+  }
+
+  //update donation
+  updateDonation(donation: Donation): Observable<Donation>
+  {
+    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
+    return this.http.put<Donation>(this.Donurl + '/updateDonation/', donation, httpOptions);
+  }
+
+  //delete donation
+  deleteDonation(donationID: number): Observable<Donation>
+  {
+    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
+    return this.http.delete<Donation>(this.Donurl + '/deleteDonation?donationID=' + donationID, httpOptions);
+ 
+  }
+
+  getAllDonatedProducts(): Observable<any[]>
+  {
+    return this.http.get<any[]>(this.Donurl + '/getAllDonatedProducts');
+  }
+
+  addDonatedProduct(donatedProduct: DonatedProduct): Observable<DonatedProduct>
+  {
+    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
+    return this.http.post<DonatedProduct>(this.Donurl + '/addCDonation/', donatedProduct, httpOptions);
+  }
+
+  updateDonatedProduct(donatedProduct: DonatedProduct): Observable<DonatedProduct>
+  {
+    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
+    return this.http.put<DonatedProduct>(this.Donurl + '/updateDonatedProduct/', donatedProduct, httpOptions);
+  }
+
+  deleteDonatedProduct(donationID: number): Observable<Donation>
+  {
+    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
+    return this.http.delete<Donation>(this.Donurl + '/removeDonatedProduct?donationID=' + donationID, httpOptions);
+ 
+  }
+
+  searchDonDonationRecipient(cell: string): Observable<DonationRecipient>
+  {
+    return this.http.get<DonationRecipient>(this.Donurl + '/searchDonationRecipient?cell=' +cell);
+  }
+
+ /*  searchSupplier(name: string): Observable<any>
+  {
+    return this.http.get<Donation>(this.url + '/searchSupplier?name=' +name);
+  } */
 
 }

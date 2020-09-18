@@ -1,20 +1,24 @@
 <body>
     <h1>Add Province</h1>
     <br>
-    <form>
+    <form [formGroup]= "provinceForm">
         
-        <div class="card">
+        <div class="card" >
+            <label class="subheadinglabel">Enter the new province details:</label> 
             <div class="divleft">
-            <label class="subheadinglabel">Enter the new province details:</label>
-            <br><br>
+                <br><br>
+                <label for="Name">Name</label>
+                <input type = "text" formControlName="province.ProvName" id="ProvName" placeholder="Example: Gauteng" required name = "ProvName">     
+                <br><br>
 
-            <label for="Name">Name</label>
-            <input type = "text" id="provinceName" placeholder="Example: Gauteng" required>     
-            <br><br>
+            </div>
 
-            <button type="submit" (click)="clickMethod('example')" >Save</button>       
-            <button type="submit" (click)="clickMethod('confirmCancel')">Cancel</button>
-            </div>  
+            <div class="divleft">
+                <button type="submit" (click)="addProvince()" >Save</button>       
+                <button type="button" (click)="Cancel()">Cancel</button>
+             </div>    
+            
+
         </div>
 
 

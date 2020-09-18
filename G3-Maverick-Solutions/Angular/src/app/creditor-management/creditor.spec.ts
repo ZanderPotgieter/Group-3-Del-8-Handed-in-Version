@@ -1,7 +1,7 @@
-import { Supplier } from './supplier';
+import { Creditor } from './creditor';
 
 describe('Creditor', () => {
   it('should create an instance', () => {
-    expect(new Supplier()).toBeTruthy();
+    expect(new Creditor()).toBeTruthy();
   });
 });

@@ -34,7 +34,6 @@ namespace ORDRA_API.Models
         public string ProdName { get; set; }
         public string ProdDesciption { get; set; }
         public Nullable<int> ProdReLevel { get; set; }
-        public Nullable<int> Barcode { get; set; }
         public string ProdBarcode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

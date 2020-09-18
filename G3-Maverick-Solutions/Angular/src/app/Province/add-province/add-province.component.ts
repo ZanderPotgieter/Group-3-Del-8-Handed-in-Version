@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ProvinceService } from '../province.service';
+import { Province } from '../province';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-province',
@@ -7,42 +11,77 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddProvinceComponent implements OnInit {
 
-  constructor() { }
+ 
+
+  dataSaved = false;
+  provinceForm : any;
+  provinceIDUpdate = null;
+  message = null; 
+
+  
+
+  constructor(private provinceService: ProvinceService, private formBuilder: FormBuilder, private router: Router) { };
+
+  province : Province = new Province();
+  responseMessage: string = "Request Not Submitted";
+
+  showSave: boolean = false;
+  showButtons: boolean = true;
+  inputEnabled:boolean = true;
+  showSearch: boolean = true;
+  showResults: boolean = false;
+ // name : string;
 
   ngOnInit(): void {
-  }
-
-  clickMethod(name: string){
-    if(name == 'confirmCancel') {
-      if(window.confirm("Are you sure you wish to cancel?")) {
-        console.log("Implement cancel functionality here");
-      }
-    }
-
-    else if (name == 'fieldsIncomplete')
-    {
-      window.alert("Some of the input fields were not completed. Please return and correct") 
-    }
-
-    else if (name == 'invalidInputs')
-    {
-      window.alert("Some of the data input is invalid. Please return and correct") 
-    }
-
-    else if (name == 'duplicateRecord')
-    {
-      window.alert("The province being added already exist.")
-    }
-
-    else if (name == 'unsuccessfulAdd')
-    {
-      window.alert("The adding of a province was unsuccessful") 
-    }
     
-    else if (name == 'successfulAdd')
-    {
-      window.alert("The province has been successfully added") 
-    }
   }
+
+  
+
+addProvince()
+{
+   this.provinceService.addProvince(this.province).subscribe( (res:any)=> 
+  {
+    console.log(res);
+    if(res.Message)
+    {
+      this.responseMessage = res.Message;
+    }
+    alert(this.responseMessage)
+    this.router.navigate(["gps-management"])
+  }) 
+
+  
+
+
+  /*  if (this.provinceIDUpdate == null)
+  {
+    this.provinceService.addProvince(this.province).subscribe(
+      (res:any) => {
+        this.dataSaved = true;
+        this.provinceIDUpdate = null;
+        
+      }
+    );
+  }
+  else
+  {
+    this.province.ProvinceID = this.provinceIDUpdate;
+    this.provinceService.updateProvince(this.province).subscribe(
+      () => {
+        this.dataSaved = true;
+        this.provinceIDUpdate = null;
+      }
+    );
+  }  */
+
+}
+
+
+  Cancel(){
+    this.router.navigate(["gps-management"])
+  }
+
+
 
 }

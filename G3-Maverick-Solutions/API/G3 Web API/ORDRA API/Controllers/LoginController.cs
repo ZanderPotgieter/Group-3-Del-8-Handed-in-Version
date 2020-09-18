@@ -19,16 +19,18 @@ using System.Net.Mail;
 
 namespace ORDRA_API.Controllers
 {
+
+
     [EnableCors(origins: "*", headers: "*", methods: "*")]
 
-    [RoutePrefix("API/Customer")]
+    [RoutePrefix("Api/Login")]
 
     public class LoginController : ApiController
     {
-        
+
         OrdraDBEntities db = new OrdraDBEntities();
 
-        
+
         [Route("registerUser")]
         [HttpPost]
         public object registerUser(User user)
@@ -41,42 +43,46 @@ namespace ORDRA_API.Controllers
             {
 
                 User newUser = new User();
-               
+
 
                 var hash = GenerateHash(ApplySalt(user.UserPassword));
 
-                User_Type user_Type = db.User_Type.Where(x => x.UTypeDescription == "Employee").FirstOrDefault();
+                User foundUser = db.Users.Where(x => x.UserEmail == user.UserEmail).FirstOrDefault();
 
-                newUser.UserName = user.UserName;
-                newUser.UserPassword = hash;
-                newUser.UserCell = user.UserCell;
-                newUser.UserEmail = user.UserEmail;
-                Guid guid = Guid.NewGuid();
-                //newUser.SessionID = guid.ToString();
 
-                if (user_Type != null)
+                if (foundUser == null)
                 {
 
-                    newUser.User_Type = user.User_Type;
+                    newUser.UserName = user.UserName;
+                    newUser.UserSurname = user.UserSurname;
+                    newUser.UserPassword = hash;
+                    newUser.UserCell = user.UserCell;
+                    newUser.UserEmail = user.UserEmail;
+                    Guid guid = Guid.NewGuid();
+                    newUser.SessionID = guid.ToString();
+                    newUser.UserTypeID = 2;
 
                 }
-                else
+                else if (foundUser != null)
                 {
-                    toReturn.Error = "Registration Unsuccesful: User Type Not Assigned";
+                    toReturn.Error = "Email already Registered";
+                    return toReturn;
                 }
+
+                toReturn.Message = "Registration Successful";
 
 
                 db.Users.Add(newUser);
                 db.SaveChanges();
 
-                toReturn = newUser;
+
             }
             catch
             {
                 toReturn.Error = "Registration Unsuccesful";
             }
 
-            return toReturn; 
+            return toReturn;
         }
 
         [Route("loginUser")]
@@ -103,7 +109,7 @@ namespace ORDRA_API.Controllers
 
                     db.SaveChanges();
                     toReturn.sessionID = guid.ToString();
-                  
+
 
                 }
                 else
@@ -144,8 +150,8 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Invalid Token";
-                    
+                    toReturn.Error = "Invalid User Token";
+
                 }
             }
             catch
@@ -166,7 +172,7 @@ namespace ORDRA_API.Controllers
             {
                 List<Container> containers = db.Containers.ToList();
                 toReturn = containers;
-            
+
             }
             catch
             {
@@ -215,7 +221,7 @@ namespace ORDRA_API.Controllers
         //Add salt to password (long sting hard to guess)
         public static string ApplySalt(string saltInput)
         {
-            return saltInput + "HSINLOFJGKFJIDBOJNNLKDHFBHBJXXGGCDRSFIKLAGFDSDFUILMJNFCUGVDGGSIL";
+            return saltInput + "HSINLOFJGKFJHLOOMR";
         }
 
         //Transform to bytes
@@ -242,4 +248,3 @@ namespace ORDRA_API.Controllers
         }
     }
 }
-

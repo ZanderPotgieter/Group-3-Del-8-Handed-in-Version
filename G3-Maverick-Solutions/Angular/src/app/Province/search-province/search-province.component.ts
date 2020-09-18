@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { NgModule } from '@angular/core'
+//import { FormBuilder, Validators } from '@angular/forms';
+import { ProvinceService } from '../province.service';
+import { Province } from '../province';
+import { Observable, from } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-province',
@@ -7,41 +13,96 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchProvinceComponent implements OnInit {
 
-  constructor() { }
+  constructor(private provinceService: ProvinceService, private router: Router) { }
+  province : Province = new Province();
+  responseMessage: string = "Request Not Submitted";
+
+  showSave: boolean = false;
+  showButtons: boolean = true;
+  inputEnabled:boolean = true;
+  showSearch: boolean = true;
+  showResults: boolean = false;
+  name : string;
 
   ngOnInit(): void {
   }
 
-  clickMethod(name: string) {
-    if (name == 'confirmCancel')
+  gotoGPSManagement()
+  {
+    this.router.navigate(['gps-management']);
+  }
+
+  searchProvince()
+  {
+    this.provinceService.searchProvince(this.name).subscribe( (res:any) =>
     {
-      if(window.confirm("Are you sure you wish to cancel?")) {
-        console.log("Implement delete functionality here");
+      console.log(res);
+      if(res.Message != null)
+      {
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
       }
-    }
-    else if (name == 'fieldsIncomplete')
-    {
-      window.alert("Some of the input fields were not completed. Please return and correct") 
-    }
-    else if (name == 'invalidInputs')
-    {
-      window.alert("Some of the data input is invalid. Please return and correct") 
-    }
-    else if (name == 'duplicateRecord')
-    {
-      if(window.confirm("The province being added already exist. Would you like to add a new province")) {
-        console.log("Implement delete functionality here");
+      else
+      {
+        this.province.ProvinceID = res.ProvinceID;
+        this.province.ProvName = res.ProvName;
+        this.showSearch = true;
+        this.showResults = true;
       }
-    }
-    else if (name == 'recordNotFound')
+
+      
+
+    })
+  }
+
+  updateProvince(){
+    this.provinceService.updateProvince(this.province).subscribe( (res:any)=> 
     {
-      window.alert("Record not found") 
-    }
-    else if (name == 'successfulAdd')
-    {
-      window.alert("The province has been successfully added") 
-    }
+      console.log(res);
+      if(res.Message)
+      {
+        this.responseMessage = res.Message;
+      }
+      alert(this.responseMessage)
+      this.router.navigate(["gps-management"])
+    })
 
   }
+
+  removeProvince()
+  {
+    this.provinceService.removeProvince(this.province.ProvinceID).subscribe( (res:any)=> 
+    {
+      console.log(res);
+      if(res.Message)
+      {
+        this.responseMessage = res.Message;
+      }
+      alert(this.responseMessage)
+      this.router.navigate(["gps-management"])
+    })
+
+  }
+
+  enableInputs()
+  {
+    this.showSave = true;
+    this.inputEnabled = false;
+    this.showButtons = false;
+  }
+
+  cancel()
+  {
+    /* this.showSave = false;
+    this.inputEnabled = false;
+    this.showButtons = true;
+    
+    this.showSearch = true;
+    this.showResults = false; */
+
+    this.router.navigate(["gps-management"])
+  }
+
+
 
 }

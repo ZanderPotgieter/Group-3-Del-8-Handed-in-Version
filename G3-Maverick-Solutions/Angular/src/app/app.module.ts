@@ -68,10 +68,8 @@ import { StockTakeComponent } from './product-management/product/stock-take/stoc
 
 import { AddProvinceComponent } from './Province/add-province/add-province.component';
 import { SearchProvinceComponent } from './Province/search-province/search-province.component';
-import { UpdateProvinceComponent } from './Province/update-province/update-province.component';
 import { AddCreditorComponent } from './creditor-management/add-creditor/add-creditor.component';
 import { SearchCreditorComponent } from './creditor-management/search-creditor/search-creditor.component';
-import { UpdateCreditorComponent } from './creditor-management/update-creditor/update-creditor.component';
 import { CreditorsReportComponent } from './reporting-management/creditors-report/creditors-report.component';
 import { CustomerReportComponent } from './reporting-management/customer-report/customer-report.component';
 import { MarkedoffProductReportComponent } from './reporting-management/markedoff-product-report/markedoff-product-report.component';
@@ -134,7 +132,6 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
     SearchemployeeComponent,
     AddProvinceComponent,
     SearchProvinceComponent,
-    UpdateProvinceComponent,
     AddCreditorComponent,
     CreateManagerComponent,
     SearchManagerComponent,
@@ -166,7 +163,6 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
     
     
     SearchCreditorComponent,
-    UpdateCreditorComponent,
     CreditorsReportComponent,
     CustomerReportComponent,
     MarkedoffProductReportComponent,

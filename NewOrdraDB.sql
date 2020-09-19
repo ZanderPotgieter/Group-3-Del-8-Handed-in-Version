@@ -18,8 +18,8 @@ CREATE TABLE [User]
 (
 	UserID int Primary Key identity(1,1) Not Null,
 	UserTypeID int,
-	SessionID varChar(50) Null,
-	UserPassword varchar(50),
+	SessionID varChar(75) Null,
+	UserPassword varchar(100),
 	UserName varchar(25),
 	UserSurname varchar(35),
 	UserCell varchar(10),

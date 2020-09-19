@@ -43,4 +43,8 @@ export class LoginService {
   {
     return this.http.put(this.url + './resetPassword', user, this.httpOptions)
   }
+  getAllContainers(){
+    return this.http.get(this.url + '/getAllContainers')
+  }
+
 }

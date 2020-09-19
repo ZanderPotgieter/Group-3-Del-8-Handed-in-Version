@@ -10,6 +10,8 @@ import {Customer} from '../customer-management/customer';
 import {ProductCategory} from '../product-management/product-category';
 import {ProductOrderLine} from '../customer-order-management/product-order-line';
 import{map} from 'rxjs/operators';
+import {LoginService} from '../login.service';
+import {User} from '../user';
 
 
 
@@ -23,7 +25,7 @@ import{map} from 'rxjs/operators';
 })
 export class PlaceOrderComponent implements OnInit {
 
-  constructor(private api: CustomerOrderService, private router: Router) { }
+  constructor(private api: CustomerOrderService, private userapi:LoginService, private router: Router) { }
 
   customerID:number = 2;
   userID: number = 1; //Should be changed;
@@ -36,8 +38,10 @@ export class PlaceOrderComponent implements OnInit {
   showTable: boolean = false;
   name : string;
   surname : string;
- 
+  session: any;
 
+ 
+ user: User = new User();
   customer: Customer = new Customer();
 
   catSelection: number;
@@ -63,7 +67,7 @@ export class PlaceOrderComponent implements OnInit {
         console.log(customerID);
           if(customerID == null)
           {
-            alert('Customer For Order Not Selected');
+            alert('Customer Not Selected');
           }
           else 
           {
@@ -73,6 +77,15 @@ export class PlaceOrderComponent implements OnInit {
           
         }
       ); 
+
+      if(!localStorage.getItem("accessToken")){
+        this.router.navigate([""]);
+      }
+      else {
+        this.session = {"token" : localStorage.getItem("accessToken")}
+        this.userapi.getUserDetails(this.session).subscribe( (res:User) =>{
+          this.user = res;
+        })}
   }
 
 

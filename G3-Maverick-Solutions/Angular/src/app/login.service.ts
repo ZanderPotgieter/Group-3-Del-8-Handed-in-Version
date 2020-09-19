@@ -33,4 +33,14 @@ export class LoginService {
   getUserDetails(session: any){
     return this.http.post(this.url + '/getUserDetails',session, this.httpOptions)
   }
+
+  sendEmail(email: string)
+  {
+    return this.http.post(this.url + '/sendEmail', email, this.httpOptions);
+  }
+
+  resetPassword(user: User)
+  {
+    return this.http.put(this.url + './resetPassword', user, this.httpOptions)
+  }
 }

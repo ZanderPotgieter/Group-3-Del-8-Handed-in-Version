@@ -94,6 +94,7 @@ import { VatComponent } from './product-management/vat/vat.component';
 import { AddVatComponent } from './product-management/vat/add-vat/add-vat.component';
 import { UpdateVatComponent } from './product-management/vat/update-vat/update-vat.component';
 import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
+import { GenerateLinkComponent } from './login-subsystem/generate-link/generate-link.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +181,8 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
     VatComponent,
     AddVatComponent,
     UpdateVatComponent,
-    SupplierDetailComponent
+    SupplierDetailComponent,
+    GenerateLinkComponent
   ],
   imports: [
     BrowserModule,

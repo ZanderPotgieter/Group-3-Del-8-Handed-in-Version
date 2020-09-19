@@ -22,6 +22,7 @@ import { NgModule } from '@angular/core';
     import { CreateLocationComponent } from './location/create-location/create-location.component';
     import { SearchLocationComponent } from './location/search-location/search-location.component';
     import { ResetpasswordComponent} from './login-subsystem/user/resetpassword/resetpassword.component';
+    import { GenerateLinkComponent } from './login-subsystem/generate-link/generate-link.component';
 
     //-----gps subsystem Imports----//
     import { AreadetailsComponent} from './gps-management/areadetails/areadetails.component';
@@ -121,6 +122,7 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
         { path : '', redirectTo: '/user', pathMatch : 'full'},
         { path: 'user', component: UserComponent},       
         { path: 'resetpassword', component: ResetpasswordComponent},
+        { path: 'generate-link', component: GenerateLinkComponent},
 
        // GPS Routes
        { path: 'areadetails', component: AreadetailsComponent},

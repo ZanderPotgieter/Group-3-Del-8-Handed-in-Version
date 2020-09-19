@@ -1,0 +1,21 @@
+<h1>Generate Reset Password Link</h1>
+<br>
+<div class="card">
+    <div class="divleft">
+        <label class="subheadinglabel">Enter the registered email address:</label> 
+    </div>
+
+        <form  class="col s12 white">
+        
+            <div class="divleft">
+                <label for="Email">Email: </label>
+                <input type = "text" id="email"  class="EmailInput" class="form-control" [(ngModel)]="email" name="email" placeholder="example@gmail.com" required>
+            </div>
+        
+            <div class="input-field col s12">
+                <button  class="btn-large btn-submit" type="submit" click="sendEmail()" >Send Link</button>
+            </div>
+        
+        </form>
+    
+</div>

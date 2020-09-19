@@ -138,7 +138,7 @@ namespace ORDRA_API.Controllers
                 var user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
                 if (user != null)
                 {
-                    user.UserPassword = "This is classified information ;)";
+                    user.UserPassword = "This is classified information";
                     toReturn = user;
 
                 }
@@ -183,27 +183,45 @@ namespace ORDRA_API.Controllers
         {
             dynamic toReturn = new ExpandoObject();
 
-            try { 
-                using (MailMessage mail = new MailMessage())
-                {
-                 mail.From = new MailAddress("Place senders email here");
-                 mail.To.Add(email);
-                 mail.Subject = "Testing";
-                 mail.Body = "<h1>Testing</h1>";
-                 mail.IsBodyHtml = true;
+            try {
 
-                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
-                 {
-                    smtp.Credentials = new System.Net.NetworkCredential("Place senders email here", "Place senders password here");
-                    smtp.EnableSsl = true;
-                    smtp.Send(mail);
-                    toReturn.Message = "Mail sent";
-                  }
+                User user = db.Users.Where(z => Convert.ToString(z.UserEmail) == email).FirstOrDefault();
+                if (user!=null)
+                {
+
+                    //generating a reset password link
+                    Guid guid = Guid.NewGuid();
+                    user.SessionID = guid.ToString();
+                    var callbackUrl = string.Format("http://localhost:4200/resetpassword.com?userId={0}&code={1}", user.UserID, user.SessionID);
+
+                    //sending an email
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress("thobeka.mthethwa.338@gmail.com");
+                        mail.To.Add(email);
+                        mail.Subject = "Reset Password Link";
+                        mail.Body = "<h1>You can use the following link to reset your password:</h1>" + callbackUrl;
+                        mail.IsBodyHtml = true;
+
+                        using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            smtp.Credentials = new System.Net.NetworkCredential("thobeka.mthethwa.338@gmail.com", "0824433328");
+                            smtp.EnableSsl = true;
+                            smtp.Send(mail);
+                            toReturn.Message = "Mail sent";
+                        }
+                    }
                 }
+                else
+                {
+                    toReturn.Message = "User email not found";
+                }
+
+                
             }
             catch 
             {
-                toReturn.Message = "Mail unscuuessfully sent";
+                toReturn.Message = "Mail unsuccessfully sent";
             }
             return toReturn;
         }

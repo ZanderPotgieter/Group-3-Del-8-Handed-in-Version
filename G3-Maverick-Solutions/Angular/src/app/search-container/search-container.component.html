@@ -1,6 +1,38 @@
 <body>
     <h1>Search Container</h1>
 
+    <form>
+        <div class="card" > 
+            <p class="subheadinglabel">Search Container By:</p>
+            <div class="divleft">
+                <button type="submit" (click)="All()">All Containers</button>
+                <button type="submit" (click)="Input()">Input Criteria</button>
+            </div>
+        </div>
+    </form>
+
+    <form>
+        <div class="card" *ngIf= "showAll"> 
+            <p class="subheadinglabel">List of all the containers:</p>
+
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+
+
+                <tr *ngFor="let container of allContainers | async">
+                    <td>{{container.ConName}}</td>
+                    <td>{{container.ConDescription}}</td>
+                </tr>
+                
+            </table> 
+            <button type="submit" (click)="Cancel()">Cancel</button> 
+        </div>
+    
+    </form>
+
    <form>
         <div class="card" *ngIf= "showSearch"> 
             <p class="subheadinglabel">Enter Container Name To Search:</p>
@@ -19,7 +51,7 @@
     </form>
 
     <br><br>
-  <form>
+  <form [formGroup]="conForm">
          <div class="card" *ngIf= "showResults">
             <div class="divleft">
                 <label class="subheadinglabel">Searched Container Details:</label>
@@ -28,17 +60,27 @@
             
             <br>
             <div class="divleft">
-                <label for="ConName">Name:</label><input  type="text" class="form-control" [(ngModel)]="container.ConName" id="ConName" name="ConName" required [readonly] = "this.inputEnabled">
+                <label for="ConName">Name:</label><input  type="text" formControlName="ConName" class="form-control" [(ngModel)]="container.ConName" id="ConName" name="ConName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="conForm.get('ConName').errors && (conForm.get('ConName').touched || conForm.get('ConName').dirty)">
+                    <span *ngIf="conForm.get('ConName').errors.required">Name is required.</span>
+                    <span *ngIf="conForm.get('ConName').errors.minlength || conForm.get('ConName').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+                    <span *ngIf="conForm.get('ConName').errors.pattern">Only text characters.</span>
+                </span>
             </div>    
             
             <br>
             <div class="divleft">
-                <label for="ConDescription">Description:</label><input type="text" class="form-control" [(ngModel)]="container.ConDescription" id="ConDescription" name="ConDescription" required [readonly] = "this.inputEnabled"> 
+                <label for="ConDescription">Description:</label><input type="text" formControlName="ConDescription" class="form-control" [(ngModel)]="container.ConDescription" id="ConDescription" name="ConDescription" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="conForm.get('ConDescription').errors && (conForm.get('ConDescription').touched || conForm.get('ConDescription').dirty)">
+                    <span *ngIf="conForm.get('ConDescription').errors.required">Description is required.</span>
+                    <span *ngIf="conForm.get('ConDescription').errors.minlength">Description must be greater that 2 characters</span>
+                    <span *ngIf="conForm.get('ConDescription').errors.pattern">Only text characters.</span>
+                </span> 
            </div>
         
             <div class="divleft" *ngIf="showButtons">
-                <!--label for Alt Step 10(Update Container)-->
-                <!--label for Alt Step 8(Search Container)-->
                  <button type="submit" (click)="Update()"  >Update</button>
                 <button type="submit" (click)="Delete()" > Delete</button>
             </div>

@@ -210,6 +210,16 @@
           <Property Name="ReasonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MODescription" Type="varchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="One_Time_Pin">
+          <Key>
+            <PropertyRef Name="OTPID" />
+          </Key>
+          <Property Name="OTPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OTP" Type="varchar" MaxLength="5" />
+          <Property Name="ExpiryTime" Type="datetime" />
+          <Property Name="GenerationTime" Type="datetime" />
+          <Property Name="userID" Type="int" />
+        </EntityType>
         <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="PaymentID" />
@@ -700,6 +710,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OTPUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="One_Time_Pin" Type="Self.One_Time_Pin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="One_Time_Pin">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PaymentType">
           <End Role="Payment_Type" Type="Self.Payment_Type" Multiplicity="0..1" />
           <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
@@ -1011,6 +1033,7 @@
           <EntitySet Name="Manager_Container" EntityType="Self.Manager_Container" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marked_Off" EntityType="Self.Marked_Off" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marked_Off_Reason" EntityType="Self.Marked_Off_Reason" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="One_Time_Pin" EntityType="Self.One_Time_Pin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment_Type" EntityType="Self.Payment_Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Price" EntityType="Self.Price" Schema="dbo" store:Type="Tables" />
@@ -1128,6 +1151,10 @@
           <AssociationSet Name="FK_MOReason" Association="Self.FK_MOReason">
             <End Role="Marked_Off_Reason" EntitySet="Marked_Off_Reason" />
             <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OTPUser" Association="Self.FK_OTPUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="One_Time_Pin" EntitySet="One_Time_Pin" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentType" Association="Self.FK_PaymentType">
             <End Role="Payment_Type" EntitySet="Payment_Type" />
@@ -1685,6 +1712,7 @@
           <NavigationProperty Name="User_Type" Relationship="Self.FK_UserType" FromRole="User" ToRole="User_Type" />
           <NavigationProperty Name="Shifts" Relationship="Self.User_Shift" FromRole="User" ToRole="Shift" />
           <Property Name="SessionID" Type="String" MaxLength="75" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="One_Time_Pin" Relationship="OrdraDBModel.FK_OTPUser" FromRole="User" ToRole="One_Time_Pin" />
         </EntityType>
         <EntityType Name="User_Type">
           <Key>
@@ -2441,7 +2469,35 @@
             <End Role="Shift" EntitySet="Shifts" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="One_Time_Pin" EntityType="OrdraDBModel.One_Time_Pin" />
+          <AssociationSet Name="FK_OTPUser" Association="OrdraDBModel.FK_OTPUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="One_Time_Pin" EntitySet="One_Time_Pin" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="One_Time_Pin">
+          <Key>
+            <PropertyRef Name="OTPID" />
+          </Key>
+          <Property Name="OTPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OTP" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="ExpiryTime" Type="DateTime" Precision="3" />
+          <Property Name="GenerationTime" Type="DateTime" Precision="3" />
+          <Property Name="userID" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="OrdraDBModel.FK_OTPUser" FromRole="One_Time_Pin" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_OTPUser">
+          <End Type="OrdraDBModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.One_Time_Pin" Role="One_Time_Pin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="One_Time_Pin">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2891,6 +2947,17 @@
               <ScalarProperty Name="UserID" ColumnName="UserID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="One_Time_Pin">
+            <EntityTypeMapping TypeName="OrdraDBModel.One_Time_Pin">
+              <MappingFragment StoreEntitySet="One_Time_Pin">
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="GenerationTime" ColumnName="GenerationTime" />
+                <ScalarProperty Name="ExpiryTime" ColumnName="ExpiryTime" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="OTPID" ColumnName="OTPID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

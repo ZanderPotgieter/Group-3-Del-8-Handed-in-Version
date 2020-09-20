@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import {User} from './user';
 import {LoginService} from './login.service';
 import {Container} from './container-management/container';
-import {Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormControl} from '@angular/forms';
 
 
 
@@ -21,8 +22,8 @@ export class AppComponent  implements OnInit {
   title = 'ORDRA';
   dateVal = new Date();
 
-  constructor(private api : LoginService, private router: Router) { }
-  
+  constructor(private api : LoginService, private router: Router, private fb: FormBuilder) { }
+regForm: FormGroup;
 showLogin: boolean = true;
 showNav: boolean = false;
 showRegister: boolean = false;
@@ -47,10 +48,15 @@ showResetPassword: boolean = false;
   ngOnInit(){
     this.api.getAllContainers().subscribe((res:any) =>{
       console.log(res);
-      this.containers = res;
-      
+      this.containers = res; 
     })
 
+    this.regForm= this.fb.group({  
+      UserName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      UserSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
+      UserCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
+      UserEmail: ['', [Validators.required, Validators.email]],   
+    }); 
   }
 
   

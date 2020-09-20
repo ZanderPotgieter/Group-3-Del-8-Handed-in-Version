@@ -25,6 +25,7 @@
     "@material/list": "^7.0.0",
     "angular-material": "^1.2.0",
     "bootstrap": "^4.5.2",
+    "ng-bootstrap-form-validation": "^5.0.0",
     "ng2-search-filter": "^0.5.1",
     "ngx-pagination": "^5.0.0",
     "ngx-toastr": "^13.0.0",

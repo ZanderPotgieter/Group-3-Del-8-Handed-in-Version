@@ -1,6 +1,36 @@
 <body>
     <h1>Search Product Category</h1>
+    <form>
+        <div class="card" > 
+            <p class="subheadinglabel">Search Product Category By:</p>
+            <div class="divleft">
+                <button type="submit" (click)="All()">All Product Category</button>
+                <button type="submit" (click)="Input()">Input Criteria</button>
+            </div>
+        </div>
+    </form>
 
+    <form>
+        <div class="card" *ngIf= "showAll"> 
+            <p class="subheadinglabel">List of all the Product Categories:</p>
+
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+
+
+                <tr *ngFor="let category of allCategories | async">
+                    <td>{{category.PCatName}}</td>
+                    <td>{{category.PCatDescription}}</td>
+                </tr>
+                
+            </table> 
+            <button type="submit" (click)="Cancel()">Cancel</button> 
+        </div>
+    
+    </form>
    <form>
         <div class="card" *ngIf= "showSearch"> 
             <p class="subheadinglabel">Enter Product Category Name To Search:</p>
@@ -15,20 +45,31 @@
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>
-
+    </form>
     <br><br>
+    <form [formGroup]="pcatForm">
         <div class="card" *ngIf = "showResults">
             <div class="divleft">
                 <label class="subheadinglabel">Searched Product Category Details:</label>
                 <br>
-                <label for="PCatName">Name:</label><input type="text" class="form-control" [(ngModel)]="productCategory.PCatName"  id="PCatName"  name ="PCatName" required [readonly] = "this.inputEnabled">
+                <label for="PCatName">Name:</label><input type="text" formControlName="PCatName" class="form-control" [(ngModel)]="productCategory.PCatName"  id="PCatName"  name ="PCatName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
                 <br>
-                <label for="PCatDescription">Description:</label><input type="text" class="form-control" [(ngModel)]="productCategory.PCatDescription"  id="PCatDescription" name="PCatDescription" required [readonly] = "this.inputEnabled"> 
+                <span style="color:red" *ngIf="pcatForm.get('PCatName').errors && (pcatForm.get('PCatName').touched || pcatForm.get('PCatName').dirty)">
+                    <span *ngIf="pcatForm.get('PCatName').errors.required">Name is required.</span>
+                    <span *ngIf="pcatForm.get('PCatName').errors.minlength || pcatForm.get('PCatName').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+                    <span *ngIf="pcatForm.get('PCatName').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
+                <label for="PCatDescription">Description:</label><input type="text" formControlName="PCatDescription" class="form-control" [(ngModel)]="productCategory.PCatDescription"  id="PCatDescription" name="PCatDescription" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="pcatForm.get('PCatDescription').errors && (pcatForm.get('PCatDescription').touched || pcatForm.get('PCatDescription').dirty)">
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.required">Description is required.</span>
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.minlength">Description must be greater that 2 characters</span>
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.pattern">Only text characters.</span>
+                </span> 
             </div>
         
             <div class="divleft" *ngIf="showButtons">
-                <!--label for Alt Step 10(Update Container)-->
-                <!--label for Alt Step 8(Search Container)-->
                  <button type="submit" (click)="Update()"  >Update</button>
                 <button type="submit" (click)="Delete()" > Delete</button>
             </div>

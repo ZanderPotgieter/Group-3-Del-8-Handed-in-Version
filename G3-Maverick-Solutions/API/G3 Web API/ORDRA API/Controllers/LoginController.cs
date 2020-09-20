@@ -18,10 +18,16 @@ using System.Net.Mail;
 
 namespace ORDRA_API.Controllers
 {
+
+
     [EnableCors(origins: "*", headers: "*", methods: "*")]
+
     [RoutePrefix("Api/Login")]
+   
+
     public class LoginController : ApiController
     {
+        
         OrdraDBEntities db = new OrdraDBEntities();
 
         [Route("registerUser")]
@@ -127,10 +133,8 @@ namespace ORDRA_API.Controllers
 
         [Route("getUserDetails")]
         [HttpPost]
-
         public object getUserDetails(dynamic session)
         {
-
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             try
@@ -141,12 +145,10 @@ namespace ORDRA_API.Controllers
                 {
                     user.UserPassword = "This is classified information ;)";
                     toReturn = user;
-
                 }
                 else
                 {
                     toReturn.Error = "Invalid User Token";
-
                 }
             }
             catch
@@ -154,8 +156,8 @@ namespace ORDRA_API.Controllers
                 toReturn.Error = "User Not Found";
             }
             return toReturn;
-
         }
+
 
         public object getAllContainers()
         {
@@ -176,7 +178,6 @@ namespace ORDRA_API.Controllers
             }
             return toReturn;
         }
-
 
 
 

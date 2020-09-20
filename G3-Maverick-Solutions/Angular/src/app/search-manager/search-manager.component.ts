@@ -76,8 +76,8 @@ export class SearchManagerComponent implements OnInit {
 
         //Get Employee Details
         this.employee.EmployeeID = res.employee.EmployeeID;
-        this.employee.EmployeeShiftsCompleted = res.employee.EmpShiftsCompleted;
-        this.employee.EmployeeStartDate = res.employee.EmpStartDate;
+        this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
+        this.employee.EmpStartDate = res.employee.EmpStartDate;
 
         //Get list Of Containers
         this.containers = res.containers;

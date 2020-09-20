@@ -34,6 +34,22 @@ export class LoginService {
     return this.http.post(this.url + '/getUserDetails',session, this.httpOptions)
   }
 
+  sendEmail(email: string)
+  {
+    return this.http.post(this.url + '/sendEmail', email, this.httpOptions);
+  }
+
+  resetPassword(user: User)
+  {
+    return this.http.put(this.url + './resetPassword', user, this.httpOptions)
+  }
+
+  checkOTP(email: string)
+  {
+    return this.http.post(this.url + '/checkOTP', email, this.httpOptions);
+  }
+
+
   getAllContainers(){
     return this.http.get(this.url + '/getAllContainers')
   }

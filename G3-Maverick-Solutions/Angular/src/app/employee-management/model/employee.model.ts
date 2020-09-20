@@ -1,6 +1,9 @@
 export class Employee {
     EmployeeID: number;
-    EmployeeStartDate: Date;
-    EmployeeShiftsCompleted: number;
-    UserID: number;
+    EmpStartDate: Date;
+    EmpShiftsCompleted: number;
+    EmpName: string;
+    EmpSurname: string;
+    EmpEmail:string;
+    EmpCellNo: string;
 }

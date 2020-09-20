@@ -1,6 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+/*run npm i ngx-toastr */
+import { ToastrModule } from 'ngx-toastr';
+/*run npm i @angular/material - npm i @material/dialog*/
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeManagementComponent } from './employee-management/employee-management.component';
@@ -109,6 +114,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { StatusManagementComponent } from './status-management/status-management.component';
+import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/generate-otp.component';
 
 @NgModule({
   declarations: [
@@ -200,7 +206,8 @@ import { StatusManagementComponent } from './status-management/status-management
     UserAccessComponent,
     AdminComponent,
     UsertableComponent,
-    StatusManagementComponent
+    StatusManagementComponent,
+    GenerateOTPComponent
   ],
   imports: [
     BrowserModule,
@@ -209,6 +216,9 @@ import { StatusManagementComponent } from './status-management/status-management
     MatListModule,
     HttpClientModule,
     FormsModule,  
+    ToastrModule.forRoot({
+      progressBar: true
+    }),
     ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
   ],
   providers: [HttpClientModule, ProductCategoryService],

@@ -1,22 +1,32 @@
 <body>
     <h1>Add Product Category</h1>
 
-    <form >
+    <form [formGroup]="pcatForm">
         <div class="card">
          <p class="sublabel">Enter Product Category Details:</p>
 
             
             <div class="divleft">
                 <label for="PCatName">Name:</label>
-                <input type="text"  class="form-control" [(ngModel)]="productCategory.PCatName" id="PCatName" name="PCatName" required>
+                <input type="text" formControlName="PCatName"  class="form-control" [(ngModel)]="productCategory.PCatName" id="PCatName" name="PCatName" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="pcatForm.get('PCatName').errors && (pcatForm.get('PCatName').touched || pcatForm.get('PCatName').dirty)">
+                    <span *ngIf="pcatForm.get('PCatName').errors.required">Name is required.</span>
+                    <span *ngIf="pcatForm.get('PCatName').errors.minlength || pcatForm.get('PCatName').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+                    <span *ngIf="pcatForm.get('PCatName').errors.pattern">Only text characters.</span>
+                </span>
                 <br>
                 <label for="PCatDescription">Description:</label>
-                <input type="text"  class="form-control" [(ngModel)]="productCategory.PCatDescription" id="PCatDescription" name="PCatDescription" required>
-            
+                <input type="text" formControlName="PCatDescription" class="form-control" [(ngModel)]="productCategory.PCatDescription" id="PCatDescription" name="PCatDescription" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="pcatForm.get('PCatDescription').errors && (pcatForm.get('PCatDescription').touched || pcatForm.get('PCatDescription').dirty)">
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.required">Description is required.</span>
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.minlength">Description must be greater that 2 characters</span>
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.pattern">Only text characters.</span>
+                </span>
             </div>
         
-         <div class="divleft">
-            <!--label for Alt Step 8--> 
+         <div class="divleft"> 
             <button type="submit" (click)="Save()">Save</button>
             <button type="submit" (click)="Cancel()">Cancel</button>
             </div>

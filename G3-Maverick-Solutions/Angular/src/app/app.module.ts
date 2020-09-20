@@ -94,6 +94,21 @@ import { VatComponent } from './product-management/vat/vat.component';
 import { AddVatComponent } from './product-management/vat/add-vat/add-vat.component';
 import { UpdateVatComponent } from './product-management/vat/update-vat/update-vat.component';
 import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
+import { UserAccessComponent } from './user-access/user-access.component';
+import { MatTreeModule } from '@angular/material/tree';
+import { AdminComponent } from './admin/admin.component';
+import { UsertableComponent } from './usertable/usertable.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { StatusManagementComponent } from './status-management/status-management.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +195,12 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
     VatComponent,
     AddVatComponent,
     UpdateVatComponent,
-    SupplierDetailComponent
+    SupplierDetailComponent,
+    AdminDashboardComponent,
+    UserAccessComponent,
+    AdminComponent,
+    UsertableComponent,
+    StatusManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -189,7 +209,7 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
     MatListModule,
     HttpClientModule,
     FormsModule,  
-    ReactiveFormsModule
+    ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
   ],
   providers: [HttpClientModule, ProductCategoryService],
   bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 <body>
     <h1>Customer Details</h1>
-    <form>
+    <form [formGroup]="cusForm">
         <div class="card" *ngIf = "showSearch">
             <br>
         <div class="divleft"  >
@@ -30,51 +30,93 @@
             <label class="subheadinglabel"> Searched Customer Details:</label>
         </div>
     
+        <div class="divleft">
+            <label for="CusName">Name:     </label>
+                  <input type="text" formControlName="CusName" [(ngModel)]="customer.CusName" id="CusName" name="CusName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                  <br>
+                  <span style="color:red" *ngIf="cusForm.get('CusName').errors && (cusForm.get('CusName').touched || cusForm.get('CusName').dirty)">
+                      <span *ngIf="cusForm.get('CusName').errors.required">Name is required.<br></span>
+                      <span *ngIf="cusForm.get('CusName').errors.pattern">Only text characters.<br></span>
+                  </span>
+          </div>
+
+        <br>
         <div class="divleft" >
-            <label for="CusName">Name:       </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusName" id="CusName" name="CusName" required [readonly] = "this.inputEnabled">
+            <label for="CusSurname">Surname:</label>
+                <input type="text" formControlName="CusSurname" [(ngModel)]="customer.CusSurname" id="CusSurname" name="CusSurname" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="cusForm.get('CusSurname').errors && (cusForm.get('CusSurname').touched || cusForm.get('CusSurname').dirty)">
+                    <span *ngIf="cusForm.get('CusSurname').errors.required">Surname is required.<br></span>
+                    <span *ngIf="cusForm.get('CusSurname').errors.pattern">Only text characters.<br></span>
+                </span>
         </div>
 
         <br>
         <div class="divleft" >
-            <label for="CusSurname">Surname:   </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusSurname" id="CusSurname" name="CusSurname" required [readonly] = "this.inputEnabled">
+            <label for="CusCell">Cell:</label>
+                <input type="text" formControlName="CusCell" [(ngModel)]="customer.CusCell" id="CusCell" name="CusCell" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="cusForm.get('CusCell').errors && (cusForm.get('CusCell').touched || cusForm.get('CusCell').dirty)">
+                    <span *ngIf="cusForm.get('CusCell').errors.required">Cell is required.<br></span>
+                    <span *ngIf="cusForm.get('CusCell').errors.minlength">Cell must be 10 numbers</span>
+                    <span *ngIf="cusForm.get('CusCell').errors.maxlength">Cell must be 10 numbers</span>
+                    <span *ngIf="cusForm.get('CusCell').errors.pattern">Only numbers allowed.<br></span>
+                </span>
         </div>
-
-        <br>
-        <div class="divleft" >
-            <label for="CusCell">Cell Number:  </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusCell" id="CusCell" name="CusCell" required [readonly] = "this.inputEnabled">
-        </div>
-
         <br>
         <div class="divleft"  >
-            <label for="CusEmail">Email:      </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusEmail" id="CusEmail" name="CusEmail" required [readonly] = "this.inputEnabled">
+            <label for="CusEmail">Email:</label>
+              <input type="text" formControlName="CusEmail" [(ngModel)]="customer.CusEmail" id="CusEmail" name="CusEmail" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+              <br>
+              <span style="color:red" *ngIf="cusForm.get('CusEmail').errors && (cusForm.get('CusEmail').touched || cusForm.get('CusEmail').dirty)">
+                  <span *ngIf="cusForm.get('CusEmail').errors.required">Email is required.<br></span>
+                  <span *ngIf="cusForm.get('CusEmail').errors.email">Please enter in a valid email address.<br></span>
+              </span>
         </div>
 
         <br>
         <div class="divleft" >
-            <label for="CusStreetNr">Street No: </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusStreetNr" id="CusStreetNr" name="CusStreetNr" required [readonly] = "this.inputEnabled"> 
+            <label for="CusStreetNr">Street No:</label>
+                <input type="text" formControlName="CusStreetNr" [(ngModel)]="customer.CusStreetNr" id="CusStreetNr" name="CusStreetNr" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="cusForm.get('CusStreetNr').errors && (cusForm.get('CusStreetNr').touched || cusForm.get('CusStreetNr').dirty)">
+                    <span *ngIf="cusForm.get('CusStreetNr').errors.required">Street No is required.<br></span>
+                    <span *ngIf="cusForm.get('CusStreetNr').errors.maxlength">Max 8 numbers.</span>
+                    <span *ngIf="cusForm.get('CusStreetNr').errors.pattern">Only numbers allowed.<br></span>
+                </span>
         </div>
 
         <br>
         <div class="divleft" >
             <label for="CusStreet">Street:    </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusStreet" id="CusStreet" name="CusStreet" required [readonly] = "this.inputEnabled"> 
+                  <input type="text" formControlName="CusStreet" [(ngModel)]="customer.CusStreet" id="CusStreet" name="CusStreet" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                  <br>
+                  <span style="color:red" *ngIf="cusForm.get('CusStreet').errors && (cusForm.get('CusStreet').touched || cusForm.get('CusStreet').dirty)">
+                      <span *ngIf="cusForm.get('CusStreet').errors.required">Street is required.<br></span>
+                  </span>
         </div>
-        
         <br>
         <div class="divleft" >
-            <label for="CusCode">Postal Code:   </label>
-            <input type="text" class="form-control" [(ngModel)]="customer.CusCode" id="CusCode" name="CusCode" placeholder="0000" required [readonly] = "this.inputEnabled"> 
+            <label for="CusCode">Postal Code:</label>
+                <input type="text" formControlName="CusCode" [(ngModel)]="customer.CusCode" id="CusCode" name="CusCode" pattern="[0-9 ]*" required placeholder="0000" [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="cusForm.get('CusCode').errors && (cusForm.get('CusCode').touched || cusForm.get('CusCode').dirty)">
+                    <span *ngIf="cusForm.get('CusCode').errors.required">Postal Code is required.<br></span>
+                    <span *ngIf="cusForm.get('CusCode').errors.minlength">Postal Code is 4 digits.</span>
+                    <span *ngIf="cusForm.get('CusCode').errors.maxlength">Postal Code is 4 digits.</span>
+                    <span *ngIf="cusForm.get('CusCode').errors.pattern">Only numbers allowed.<br></span>
+                </span>
         </div>
  
         <br>
         <div class="divleft" >
-            <label for="CusSuburb">Suburb:   </label>
-            <input type="text"  class="form-control" [(ngModel)]="customer.CusSuburb" id="CusSuburb" name="CusSuburb" placeholder="Example: Hatfield" required [readonly] = "this.inputEnabled"> 
+            <label for="CusSuburb">Suburb:</label>
+                <input type="text" formControlName="CusSuburb" [(ngModel)]="customer.CusSuburb" id="CusSuburb" name="CusSuburb" pattern="[a-zA-Z ]*" required placeholder="Example: Hatfield" [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="cusForm.get('CusSuburb').errors && (cusForm.get('CusSuburb').touched || cusForm.get('CusSuburb').dirty)">
+                    <span *ngIf="cusForm.get('CusSuburb').errors.required">Suburb is required.<br></span>
+                    <span *ngIf="cusForm.get('CusSuburb').errors.pattern">Only text characters.<br></span>
+                </span> 
         </div>
         <br><br>
 

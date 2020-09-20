@@ -14,20 +14,29 @@
     <div class="wrapperlogin">
         <div class="wrapped-div-login">
     <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
-    <form class="mb-4"  #form='ngForm' autocomplete="off" >
+    <form   #form='ngForm' autocomplete="off" >
         <h2>Login</h2>
-      <div class="form-group">
+      <div class="form-group" [ngClass] ="{}">
         <label>Username:</label>
-        <input class="input"  name="UserName"  required>
+        <input class="input"  name="UserName" [(ngModel)]="user.UserName" pattern="[a-zA-Z]*" required>
       </div>
       <div class="form-group">
         <label >Password:</label>
-        <input type="password" class="input"   name="Password"  required>
+        <input type="password" class="input" [(ngModel)]="user.UserPassword"  name="Password"  required>
       </div>
+      <div class="form-group">
+      <label for="Product">Operating In Container: </label>
+                <select required name="conSelection" [(ngModel)]="conSelection" (ngModelChange)="selectContainer($event)">
+                    <option *ngFor="let con of containers" [ngValue]="con">{{con.ConName}}</option>
+                </select>
+      </div>
+      <span style="color:red" *ngIf="showError">
+        {{errorMessage}}</span>
+    
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid" (click)="login()">Login</button>
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid" (click)="register()">Register</button>
+          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="login()">Login</button>
+          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="register()">Register</button>
         </div>
       </div>
     </form>
@@ -42,33 +51,37 @@
     <form class="mb-4"  #form='ngForm' autocomplete="off" >
         <h2>Register</h2>
       <div class="form-group">
-        <label>Username:</label>
-        <input class="input" type="text" name="UserName"  required>
-      </div>
-      <div class="form-group">
         <label >Name:</label>
-        <input  class="input" type="text"  name="Name"  required>
+        <input  class="input" type="text"  name="Name" [(ngModel)]="user.UserName" pattern="[a-zA-Z]*" required>
       </div>
       <div class="form-group">
         <label >Surname:</label>
-        <input  class="input" type="text"  name="Surname"  required>
+        <input  class="input" type="text" [(ngModel)]="user.UserSurname"  name="Surname"  pattern="[a-zA-Z]*" required>
       </div>
       <div class="form-group">
         <label >Email:</label>
-        <input class="input" type="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
+        <input class="input" type="email" [(ngModel)]="user.UserEmail" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
       </div>
+
       <div class="form-group">
         <label >Password:</label>
-        <input  class="input"  type="password" name="Password" id="txtPassword" required>
+        <input  class="input"  type="password"  [(ngModel)]="user.UserPassword"name="Password" id="txtPassword" required>
       </div>
       <div class="form-group">
         <label >Confirm Password:</label>
-        <input  class="input"  type="password" name="ConfirmPassword" id="txtConfirmPassword" required>
+        <input  class="input"  type="password"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (change)="Validate()" required>
+      </div>
+      <span style="color:red" *ngIf="showInvalidPassword">
+        Passwords do not match
+      </span>
+      <div class="form-group">
+        <label >Cell:</label>
+        <input class="input" type="email" [(ngModel)]="user.UserCell" name="cell" required maxlength="10" minlength="10"/>
       </div>
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid" (click)="home()">Register</button>
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid">Cancel</button>
+          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"(click)="saveUser()">Register</button>
+          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" >Cancel</button>
         </div>
       </div>
     </form>
@@ -105,7 +118,7 @@
         <div class="header-section">
             <div class="header-section-1">
                 Operating from Container: 
-                <br>Betha Mamelodi
+                <br>{{currentContainer.ConName}}
             </div>
         
             <div class="header-section-2">
@@ -113,8 +126,8 @@
             </div>
         
             <div class="header-section-3">
-                Peter Smith <br> 
-                <i class="tiny material-icons">power_settings_new</i>
+                {{user.UserName}} {{user.UserSurname}} <br> 
+                <i class="tiny material-icons" ng-click="logout()">power_settings_new</i>
                 <!-- <button (click)="logout()"> </button> -->
             </div>
 

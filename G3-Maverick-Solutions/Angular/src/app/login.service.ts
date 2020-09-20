@@ -33,4 +33,9 @@ export class LoginService {
   getUserDetails(session: any){
     return this.http.post(this.url + '/getUserDetails',session, this.httpOptions)
   }
+
+  getAllContainers(){
+    return this.http.get(this.url + '/getAllContainers')
+  }
+
 }

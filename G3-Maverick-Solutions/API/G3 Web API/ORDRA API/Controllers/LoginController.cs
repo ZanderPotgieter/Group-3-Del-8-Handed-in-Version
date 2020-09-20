@@ -19,7 +19,7 @@ using System.Net.Mail;
 namespace ORDRA_API.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [RoutePrefix("Api/Login")
+    [RoutePrefix("Api/Login")]
     public class LoginController : ApiController
     {
         
@@ -38,23 +38,29 @@ namespace ORDRA_API.Controllers
                 if (user!=null)
                 {
 
-                    //generating a reset password link
-                    Guid guid = Guid.NewGuid();
-                    user.SessionID = guid.ToString();
-                    var callbackUrl = string.Format("http://localhost:4200/resetpassword.com?userId={0}&code={1}", user.UserID, user.SessionID);
+                    //generating a reset password one time pin
+                    Random rnd = new Random();
+                    string OTP = (rnd.Next(100000, 999999)).ToString();
+
+                    //getting the time of generation of the OTP
+                    DateTime genTime = DateTime.Now;
+
+                    //getting the expiry time of the OTP
+                    DateTime expiryTime = genTime.AddHours(3);
 
                     //sending an email
                     using (MailMessage mail = new MailMessage())
                     {
-                        mail.From = new MailAddress("thobeka.mthethwa.338@gmail.com");
+                        mail.From = new MailAddress("ordra@gmail.com");
                         mail.To.Add(email);
-                        mail.Subject = "Reset Password Link";
-                        mail.Body = "<h1>You can use the following link to reset your password:</h1>" + callbackUrl;
+                        mail.Subject = "Reset Password One Time Pin";
+                        mail.Body = "<h1>Your one time pin to reset your password is: </h1>" + OTP +
+                                    "<h1>The one time pin will expire in 3 hours. <h1>";
                         mail.IsBodyHtml = true;
 
                         using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                         {
-                            smtp.Credentials = new System.Net.NetworkCredential("thobeka.mthethwa.338@gmail.com", "0824433328");
+                            smtp.Credentials = new System.Net.NetworkCredential("ordra@gmail.com", "password");
                             smtp.EnableSsl = true;
                             smtp.Send(mail);
                             toReturn.Message = "Mail sent";
@@ -105,6 +111,7 @@ namespace ORDRA_API.Controllers
                 toReturn.Message = "Update Unsuccessful";
 
             }
+            return toReturn;
         }
 
 

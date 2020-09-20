@@ -48,6 +48,9 @@ namespace ORDRA_API.Controllers
                     //getting the expiry time of the OTP
                     DateTime expiryTime = genTime.AddHours(3);
 
+                    //Saving otp details in the db
+                    /* */
+
                     //sending an email
                     using (MailMessage mail = new MailMessage())
                     {
@@ -77,6 +80,26 @@ namespace ORDRA_API.Controllers
             catch 
             {
                 toReturn.Message = "Mail unsuccessfully sent";
+            }
+            return toReturn;
+        }
+
+        //checking the entered otp with the generated otp
+        [HttpPost]
+        [Route("checkOTP")]
+        public object checkOTP(string userOTP)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //receive Otp from db 
+
+                
+            }
+            catch (Exception error)
+            {
+                toReturn.Message = "Something went wrong:" + error;
             }
             return toReturn;
         }

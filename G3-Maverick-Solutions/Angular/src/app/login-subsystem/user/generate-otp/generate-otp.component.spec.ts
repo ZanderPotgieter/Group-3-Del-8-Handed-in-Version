@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GenerateLinkComponent } from './generate-link.component';
+import { GenerateOTPComponent } from './generate-otp.component';
 
-describe('GenerateLinkComponent', () => {
-  let component: GenerateLinkComponent;
-  let fixture: ComponentFixture<GenerateLinkComponent>;
+describe('GenerateOTPComponent', () => {
+  let component: GenerateOTPComponent;
+  let fixture: ComponentFixture<GenerateOTPComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GenerateLinkComponent ]
+      declarations: [ GenerateOTPComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GenerateLinkComponent);
+    fixture = TestBed.createComponent(GenerateOTPComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

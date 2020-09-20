@@ -4,11 +4,11 @@ import { LoginService } from 'src/app/login.service';
 import { User } from 'src/app/user';
 
 @Component({
-  selector: 'app-generate-link',
-  templateUrl: './generate-link.component.html',
-  styleUrls: ['./generate-link.component.scss']
+  selector: 'app-generate-otp',
+  templateUrl: './generate-otp.component.html',
+  styleUrls: ['./generate-otp.component.scss']
 })
-export class GenerateLinkComponent implements OnInit {
+export class GenerateOTPComponent implements OnInit {
 
   constructor(private api: LoginService, private router: Router) { }
   user : User = new User();
@@ -25,7 +25,6 @@ export class GenerateLinkComponent implements OnInit {
       this.responseMessage = res.Message;}
       alert(this.responseMessage)
     })
-
   }
 
 }

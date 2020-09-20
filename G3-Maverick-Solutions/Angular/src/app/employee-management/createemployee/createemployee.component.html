@@ -1,17 +1,23 @@
 <div *ngIf='main'>
   <h1>Create Employee Profile</h1>
 <br>
-<form class="mb-4"  #form='ngForm' autocomplete="off" (submit)="onSubmit(form)">
-<div class="card"> 
+<form [formGroup] = "employeeForm"  #form='ngForm' (submit)="onSubmit(form)">
+
+  <div class="card"> 
   <p style="text-align: left;color: orange;"><u>Enter Name and Surname to search:</u></p>
   <br>
-     <div class="row">
-      <div class="input-field col s6" >
-        <label>Employee Name:</label>
-        <input type="text"  #EmployeeName="ngModel" name="EmployeeName" [(ngModel)]="formModel.EmployeeName" required >
-      </div>
+  <div class="row">
+    <div class="mb-4">
+      <label>Employee Name:</label>
+      <input type="text" formControlName="EmpName" #EmployeeName="ngModel" name="EmployeeName" [(ngModel)]="formModel.EmployeeName" pattern="[a-zA-Z]*" required>
+       <span style="color:red" *ngIf="employeeForm.get('EmpName').errors && (employeeForm.get('EmpName').touched || employeeForm.get('EmpName').dirty)">
+        <span *ngIf="employeeForm.get('EmpName').errors.required">Name is required</span>
+        <span *ngIf="employeeForm.get('EmpName').errors.minLength">Name must be greater than 2 letters</span>
+        <span *ngIf="employeeForm.get('EmpName').errors.pattern">Only text characters</span>
+      </span> 
+    </div>
 
-      <div class="input-field col s6">
+      <div class="mb-4">
           <label>Employee Surname:</label>
           <input type="text" #EmployeeSurname="ngModel" name="EmployeeSurname" [(ngModel)]="formModel.EmployeeSurname" required   >
      </div>

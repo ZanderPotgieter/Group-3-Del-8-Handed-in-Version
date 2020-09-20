@@ -1,6 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+/*run npm i ngx-toastr */
+import { ToastrModule } from 'ngx-toastr';
+/*run npm i @angular/material - npm i @material/dialog*/
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeManagementComponent } from './employee-management/employee-management.component';
@@ -94,7 +99,6 @@ import { VatComponent } from './product-management/vat/vat.component';
 import { AddVatComponent } from './product-management/vat/add-vat/add-vat.component';
 import { UpdateVatComponent } from './product-management/vat/update-vat/update-vat.component';
 import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
-import { GenerateLinkComponent } from './login-subsystem/generate-link/generate-link.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -110,6 +114,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { StatusManagementComponent } from './status-management/status-management.component';
+import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/generate-otp.component';
 
 @NgModule({
   declarations: [
@@ -201,7 +206,8 @@ import { StatusManagementComponent } from './status-management/status-management
     UserAccessComponent,
     AdminComponent,
     UsertableComponent,
-    StatusManagementComponent
+    StatusManagementComponent,
+    GenerateOTPComponent
   ],
   imports: [
     BrowserModule,
@@ -210,6 +216,9 @@ import { StatusManagementComponent } from './status-management/status-management
     MatListModule,
     HttpClientModule,
     FormsModule,  
+    ToastrModule.forRoot({
+      progressBar: true
+    }),
     ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
   ],
   providers: [HttpClientModule, ProductCategoryService],

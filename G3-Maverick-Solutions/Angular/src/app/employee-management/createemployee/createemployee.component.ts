@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../employee-management/service/employee.service';
 import { Employee} from '../model/employee.model';
 import { Router } from '@angular/router';
-import { NgForm , Validators} from '@angular/forms';
+import { NgForm , Validators, FormGroup, FormBuilder, NgModel} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 
@@ -13,9 +13,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CreateemployeeComponent implements OnInit {
   btnLabel: string;
+  employeeForm: FormGroup;
 
   formModel = {
-    EmployeeName: ['', Validators.required],
+    EmployeeName: '',
     EmployeeSurname: '' 
   };
 
@@ -32,10 +33,13 @@ export class CreateemployeeComponent implements OnInit {
     EmpShiftsCompleted:''
   };
 
-  constructor( public service: EmployeeService,private router: Router,private toastr: ToastrService) { }
+  constructor( public service: EmployeeService,private router: Router,private toastr: ToastrService, private fb: FormBuilder) { }
 
   ngOnInit(){
     this.btnLabel = 'Create Employee';
+    this.employeeForm = this.fb.group({
+      EmployeeName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z]')]]
+    });
   }
 
   

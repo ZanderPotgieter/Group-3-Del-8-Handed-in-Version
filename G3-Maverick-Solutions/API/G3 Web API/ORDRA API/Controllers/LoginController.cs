@@ -133,112 +133,8 @@ namespace ORDRA_API.Controllers
 
         [Route("getUserDetails")]
         [HttpPost]
-
         public object getUserDetails(dynamic session)
         {
-
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-
-                User newUser = new User();
-
-
-                var hash = GenerateHash(ApplySalt(user.UserPassword));
-
-                User foundUser = db.Users.Where(x => x.UserEmail == user.UserEmail).FirstOrDefault();
-
-
-                if (foundUser == null)
-                {
-
-                    newUser.UserName = user.UserName;
-                    newUser.UserSurname = user.UserSurname;
-                    newUser.UserPassword = hash;
-                    newUser.UserCell = user.UserCell;
-                    newUser.UserEmail = user.UserEmail;
-                    Guid guid = Guid.NewGuid();
-                    newUser.SessionID = guid.ToString();
-                    newUser.UserTypeID = 2;
-
-                    toReturn.Message = "Registration Successful";
-
-
-                    db.Users.Add(newUser);
-                    db.SaveChanges();
-
-                }
-                else if (foundUser != null)
-                {
-                    toReturn.Error = "Email already Registered";
-                    return toReturn;
-                }
-
-                
-
-
-            }
-            catch
-            {
-                toReturn.Error = "Registration Unsuccesful";
-            }
-
-            return toReturn;
-        }
-
-        [Route("loginUser")]
-        [HttpPost]
-
-        public object loginUser(User userInput)
-        {
-
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-
-                var hash = GenerateHash(ApplySalt(userInput.UserPassword));
-                User user = db.Users.Where(x => x.UserName == userInput.UserName && x.UserPassword == hash).FirstOrDefault();
-
-                if (user != null)
-                {
-                    Guid guid = Guid.NewGuid();
-                    user.SessionID = guid.ToString();
-
-                    db.Entry(user).State = EntityState.Modified; // Checks if anything from the user here is diffent from the user in the db
-
-                    db.SaveChanges();
-                    toReturn.sessionID = guid.ToString();
-
-
-                }
-                else
-                {
-                    toReturn.Error = "Incorrect Username or Password";
-
-                }
-
-
-            }
-            catch
-            {
-                toReturn.Error = "Login Unsuccesful";
-
-            }
-
-            return toReturn;
-        }
-
-
-        [Route("getUserDetails")]
-        [HttpPost]
-
-        public object getUserDetails(dynamic session)
-        {
-
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             try
@@ -249,12 +145,10 @@ namespace ORDRA_API.Controllers
                 {
                     user.UserPassword = "This is classified information ;)";
                     toReturn = user;
-
                 }
                 else
                 {
                     toReturn.Error = "Invalid User Token";
-
                 }
             }
             catch
@@ -262,8 +156,8 @@ namespace ORDRA_API.Controllers
                 toReturn.Error = "User Not Found";
             }
             return toReturn;
-
         }
+
 
         public object getAllContainers()
         {

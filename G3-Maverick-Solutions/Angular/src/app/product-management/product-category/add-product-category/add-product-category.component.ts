@@ -36,7 +36,7 @@ export class AddProductCategoryComponent implements OnInit {
   }
 
   Cancel(){
-    
+    this.router.navigate(["product-management"])
   }
   
 }

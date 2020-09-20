@@ -255,6 +255,9 @@
     <Compile Include="Models\Marked_Off_Reason.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\One_Time_Pin.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ORDRA.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -514,6 +514,18 @@ CREATE TABLE Product_Backlog
 )
 GO
 
+CREATE TABLE One_Time_Pin
+(
+	OTPID int Primary Key identity(1,1) Not Null,
+	OTP varchar(5),
+	ExpiryTime dateTime,
+	GenerationTime dateTime,
+	userID int,
+	CONSTRAINT FK_OTPUser FOREIGN KEY (UserID)
+	REFERENCES [User](UserID)
+)
+GO
+
 use OrdraDB
 
 INSERT INTO User_Type (UTypeDescription)

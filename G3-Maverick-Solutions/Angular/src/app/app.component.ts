@@ -125,15 +125,7 @@ enterOTP()
   this.showGenerateOTP = true;
 }
 
-resetPassword()
-{
-  this.showLogin = false;
-  this.showNav = false;
-  this.showRegister = false;
-  this.showResetPassword = true;
-  this.showEnterOTP = false;
-  this.showGenerateOTP = false;
-}
+
 
 
 saveUser(){
@@ -196,7 +188,6 @@ this.showGenerateOTP = false;
 }
 
 sendEmail(){
-  
   this.api.sendEmail(this.email).subscribe((res : any)=>{
     console.log(res);
     if(res.Error)
@@ -216,7 +207,52 @@ sendEmail(){
     this.showEnterOTP = true;
     this.showGenerateOTP = true;}
   })
-  
+  }
+
+  checkOTP()
+  {
+    this.api.checkOTP(this.otp).subscribe((res : any)=>{
+      console.log(res);
+      if(res.Error)
+      {
+        this.errorMessage = res.Error;
+        alert(this.errorMessage);
+        this.showError = true;
+      }
+      else{
+        alert(res.Message);
+          
+      this.showLogin= false;
+      this.showNav = false;
+      this.showRegister = false;
+      this.showContainerNotSelected = false;
+      this.showResetPassword = true;
+      this.showEnterOTP = false;
+      this.showGenerateOTP = false;}
+    })
+  }
+
+  resetPassword()
+  {
+    this.api.resetPassword(this.user).subscribe((res : any)=>{
+      console.log(res);
+      if(res.Error)
+      {
+        this.errorMessage = res.Error;
+        alert(this.errorMessage);
+        this.showError = true;
+      }
+      else{
+        alert(res.Message);
+          
+      this.showLogin= true;
+      this.showNav = false;
+      this.showRegister = false;
+      this.showContainerNotSelected = false;
+      this.showResetPassword = false;
+      this.showEnterOTP = false;
+      this.showGenerateOTP = false;}
+    })
   }
 
 

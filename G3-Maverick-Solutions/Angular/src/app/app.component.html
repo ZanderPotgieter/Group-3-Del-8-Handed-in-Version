@@ -104,7 +104,7 @@
       </div>
     <div class="form-group" [ngClass] ="{}">
       <label>Email:</label>
-      <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-zA-Z]*" required>
+      <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
     </div>
     <span style="color:red" *ngIf="showError">
       {{errorMessage}}</span>
@@ -112,7 +112,7 @@
   
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="enterOTP()">Send One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="sendEmail()">Send One Time Pin</button>
       </div>
     </div>
   </form>
@@ -139,7 +139,7 @@
   
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="enterOTP()">Verify One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="checkOTP()">Verify One Time Pin</button>
       </div>
     </div>
   </form>
@@ -154,11 +154,11 @@
   <form   #form='ngForm' autocomplete="off" >
       <h2>Reset Password</h2>
       <div class="divleft">
-        <label class="subheadinglabel">Enter emailed One Time Pin:</label>
+        <label class="subheadinglabel">Enter new password details:</label>
       </div>
     <div class="form-group" [ngClass] ="{}">
       <label>Email:</label>
-      <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-zA-Z]*" required>
+      <input class="input"  name="email" [(ngModel)]="user.UserEmail" id="txtEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
     </div>
     <span style="color:red" *ngIf="showError">
       {{errorMessage}}</span>
@@ -178,7 +178,7 @@
   
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="resetPassword()">Verify One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="resetPassword()">Reset Password</button>
       </div>
     </div>
   </form>

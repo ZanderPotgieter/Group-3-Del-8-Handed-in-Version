@@ -44,9 +44,9 @@ export class LoginService {
     return this.http.put(this.url + './resetPassword', user, this.httpOptions)
   }
 
-  checkOTP(email: string)
+  checkOTP(otp: string)
   {
-    return this.http.post(this.url + '/checkOTP', email, this.httpOptions);
+    return this.http.post(this.url + '/checkOTP', otp, this.httpOptions);
   }
 
 

@@ -261,14 +261,14 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "User email not found";
+                    toReturn.Error = "User email not found";
                 }
 
 
             }
             catch
             {
-                toReturn.Message = "Mail unsuccessfully sent";
+                toReturn.Error = "Mail unsuccessfully sent";
             }
             return toReturn;
         }
@@ -284,11 +284,11 @@ namespace ORDRA_API.Controllers
             {
                 //receive Otp from db 
 
-
+                
             }
             catch (Exception error)
             {
-                toReturn.Message = "Something went wrong:" + error;
+                toReturn.Error = "Something went wrong:" + error;
             }
             return toReturn;
         }

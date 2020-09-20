@@ -28,11 +28,13 @@ showNav: boolean = false;
 showRegister: boolean = false;
 showError: boolean = false;
 showInvalidPassword: boolean = false;
+showContainerNotSelected: boolean = false;
 errorMessage: string;
 ConfirmPassword: string;
 session: any;
 
 containers: Container[] = [];
+containerSelected: boolean = false;
 currentContainer: Container;
 user : User = new User();
 
@@ -48,10 +50,12 @@ user : User = new User();
   
 
 login(){
+  if(this.containerSelected == true){
   this.api.loginUser(this.user).subscribe( (res:any)=> {
     console.log(res);
     if(res.Error){
       this.errorMessage = res.Error;
+      
       this.showError = true;
     }else{
       localStorage.setItem("accessToken", res.sessionID);
@@ -60,9 +64,10 @@ login(){
       this.showRegister = false
 
         }
-    })
-
- 
+    })}
+    else{
+        this.showContainerNotSelected = true;
+    }
 }
 
 selectContainer(val: Container){
@@ -71,6 +76,8 @@ selectContainer(val: Container){
 
 setContainer(val: Container){
   this.currentContainer = val;
+  this.containerSelected = true;
+  this.showContainerNotSelected = false;
 }
 
 home(){
@@ -86,15 +93,24 @@ register(){
 }
 
 saveUser(){
+  
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
     this.errorMessage = res.Error;
+    alert(this.errorMessage);
     this.showError = true;
   }else{
-  localStorage.setItem("accessToken", res.SessionID);
-  this.router.navigate(["user"])}
-})}
+    alert(res.Message);
+  this.user.UserPassword = "";
+      
+  this.showLogin= true;
+  this.showNav = false;
+  this.showRegister = false;
+  this.showContainerNotSelected = false;}
+})
+
+}
 
 Validate() {
         if (this.user.UserPassword != this.ConfirmPassword) {
@@ -109,6 +125,20 @@ Validate() {
 logout()
 {
   localStorage.removeItem("accessToken");
-  this.router.navigate([""]);
+  this.router.navigate(["user"]);
+  this.user = new User();
+    
+this.showLogin= true;
+this.showNav = false;
+this.showRegister = false;
+this.showInvalidPassword = false;
+}
+
+cancel(){
+  this.showLogin= true;
+this.showNav = false;
+this.showRegister = false;
+this.user = new User();
+this.showContainerNotSelected = false;
 }
 }

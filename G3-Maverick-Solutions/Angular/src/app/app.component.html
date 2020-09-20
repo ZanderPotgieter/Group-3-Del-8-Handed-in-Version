@@ -6,20 +6,22 @@
 	
   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
 </head>
 
 
 <body>
-  <div *ngIf = "showLogin">
+    <div *ngIf = "showLogin">
+
     <div class="wrapperlogin">
         <div class="wrapped-div-login">
     <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
     <form   #form='ngForm' autocomplete="off" >
         <h2>Login</h2>
-      <div class="form-group" [ngClass] ="{}">
-        <label>Username:</label>
-        <input class="input"  name="UserName" [(ngModel)]="user.UserName" pattern="[a-zA-Z]*" required>
-      </div>
+        <div class="form-group" [ngClass] ="{}">
+          <label>Username:</label>
+          <input class="input"  name="UserName" [(ngModel)]="user.UserName" pattern="[a-zA-Z]*" required>
+        </div>
       <div class="form-group">
         <label >Password:</label>
         <input type="password" class="input" [(ngModel)]="user.UserPassword"  name="Password"  required>
@@ -51,25 +53,46 @@
     <div class="wrapperlogin">
         <div class="wrapped-div-login">
     <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
-    <form class="mb-4"  #form='ngForm' autocomplete="off" >
+    <form [formGroup]="regForm">
         <h2>Register</h2>
+        <div class="form-group">
+          <label for="UserName">Name:</label>
+                <input type="text" formControlName="UserName" [(ngModel)]="user.UserName" id="UserName" name="UserName" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="regForm.get('UserName').errors && (regForm.get('UserName').touched || regForm.get('UserName').dirty)">
+                    <span *ngIf="regForm.get('UserName').errors.required">Name is required.<br></span>
+                    <span *ngIf="regForm.get('UserName').errors.pattern">Only text characters.<br></span>
+                </span>
+        </div>
+        <div class="form-group">
+          <label for="UserSurname">Surname:</label>
+                <input type="text" formControlName="UserSurname" [(ngModel)]="user.UserSurname" id="UserSurname" name="UserSurname" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="regForm.get('UserSurname').errors && (regForm.get('UserSurname').touched || regForm.get('UserSurname').dirty)">
+                    <span *ngIf="regForm.get('UserSurname').errors.required">Surname is required.<br></span>
+                    <span *ngIf="regForm.get('UserSurname').errors.pattern">Only text characters.<br></span>
+                </span>
+        </div>
+        <div class="form-group">
+          <label for="UserCell">Cell:</label>
+                <input type="text" formControlName="UserCell" [(ngModel)]="user.UserCell" id="UserCell" name="UserCell" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="regForm.get('UserCell').errors && (regForm.get('UserCell').touched || regForm.get('UserCell').dirty)">
+                    <span *ngIf="regForm.get('UserCell').errors.required">Cell is required.<br></span>
+                    <span *ngIf="regForm.get('UserCell').errors.minlength">Cell must be 10 numbers</span>
+                    <span *ngIf="regForm.get('UserCell').errors.maxlength">Cell must be 10 numbers</span>
+                    <span *ngIf="regForm.get('UserCell').errors.pattern">Only numbers allowed.<br></span>
+                </span>
+        </div>
       <div class="form-group">
-        <label >Name:</label>
-        <input  class="input" type="text"  name="Name" [(ngModel)]="user.UserName" pattern="[a-zA-Z]*" required>
+        <label for="UserEmail">Email:</label>
+              <input type="text" formControlName="UserEmail" [(ngModel)]="user.UserEmail" id="UserEmail" name="UserEmail" pattern="[a-zA-Z ]*" required>
+              <br>
+              <span style="color:red" *ngIf="regForm.get('UserEmail').errors && (regForm.get('UserEmail').touched || regForm.get('UserEmail').dirty)">
+                  <span *ngIf="regForm.get('UserEmail').errors.required">Email is required.<br></span>
+                  <span *ngIf="regForm.get('UserEmail').errors.email">Please enter in a valid email address.<br></span>
+              </span>
       </div>
-      <div class="form-group">
-        <label >Surname:</label>
-        <input  class="input" type="text" [(ngModel)]="user.UserSurname"  name="Surname"  pattern="[a-zA-Z]*" required>
-      </div>
-      <div class="form-group">
-        <label >Cell:</label>
-        <input class="input" type="email" [(ngModel)]="user.UserCell" name="cell" required maxlength="10" minlength="10"/>
-      </div>
-      <div class="form-group">
-        <label >Email:</label>
-        <input class="input" type="email" [(ngModel)]="user.UserEmail" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
-      </div>
-
       <div class="form-group">
         <label >Password:</label>
         <input  class="input"  type="password"  [(ngModel)]="user.UserPassword"name="Password" id="txtPassword" required>

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Container } from '../container-management/container';
 import { NgModule } from '@angular/core';
 import {ContainerService} from '../container-management/container.service';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-container',
@@ -11,12 +12,18 @@ import {ContainerService} from '../container-management/container.service';
 })
 export class CreateContainerComponent implements OnInit {
 
-  constructor(private api: ContainerService, private router: Router) { }
-
+  constructor(private api: ContainerService, private router: Router, private fb: FormBuilder) { }
+  angForm: FormGroup;
   container : Container = new Container();
   responseMessage: string = "Request Not Submitted";
 
-  ngOnInit(): void {
+  ngOnInit(){
+    this.angForm= this.fb.group({  
+      ConName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      ConDescription: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+      
+       
+    });  
   }
 
   Save()
@@ -31,5 +38,5 @@ export class CreateContainerComponent implements OnInit {
   }
 
   Cancel()
-  {}
+  {this.router.navigate(['container-management']);}
 }

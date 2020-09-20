@@ -108,7 +108,17 @@ import { AddPaymentComponent } from './creditor-management/add-payment/add-payme
 import { SearchPaymentComponent } from './creditor-management/search-payment/search-payment.component';
 import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
    
+    //---Admin Componenets---//
+    import {AdminDashboardComponent} from './admin-dashboard/admin-dashboard.component';
+    import {UserAccessComponent} from './user-access/user-access.component';
+    import {UsertableComponent} from './usertable/usertable.component';
+    import {AdminComponent} from './admin/admin.component';
+
     const routes: Routes = [
+
+    
+
+
         //Routes For Users
         {
             path: 'register', component: UserComponent,
@@ -133,7 +143,15 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
        { path: 'updateemployee', component: UpdateemployeeComponent},
        { path: 'searchemployee', component: SearchemployeeComponent},
 
+        
 
+        //Admin Routes
+        {path: 'admin-dashboard', component: AdminDashboardComponent},
+        {path:'user-access', component: UserAccessComponent },
+        {path: 'admin', component: AdminComponent},
+        {path: 'user-table', component: UsertableComponent},
+
+        //Management routes 
 
         {
             path: 'employee-management',

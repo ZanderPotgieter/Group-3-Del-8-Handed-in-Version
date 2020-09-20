@@ -24,14 +24,16 @@
         <label >Password:</label>
         <input type="password" class="input" [(ngModel)]="user.UserPassword"  name="Password"  required>
       </div>
+      <span style="color:red" *ngIf="showError">
+        {{errorMessage}}</span>
       <div class="form-group">
       <label for="Product">Operating In Container: </label>
                 <select required name="conSelection" [(ngModel)]="conSelection" (ngModelChange)="selectContainer($event)">
                     <option *ngFor="let con of containers" [ngValue]="con">{{con.ConName}}</option>
                 </select>
       </div>
-      <span style="color:red" *ngIf="showError">
-        {{errorMessage}}</span>
+      <span style="color:red" *ngIf="showContainerNotSelected">
+        select container</span>
     
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
@@ -59,6 +61,10 @@
         <input  class="input" type="text" [(ngModel)]="user.UserSurname"  name="Surname"  pattern="[a-zA-Z]*" required>
       </div>
       <div class="form-group">
+        <label >Cell:</label>
+        <input class="input" type="email" [(ngModel)]="user.UserCell" name="cell" required maxlength="10" minlength="10"/>
+      </div>
+      <div class="form-group">
         <label >Email:</label>
         <input class="input" type="email" [(ngModel)]="user.UserEmail" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
       </div>
@@ -74,14 +80,11 @@
       <span style="color:red" *ngIf="showInvalidPassword">
         Passwords do not match
       </span>
-      <div class="form-group">
-        <label >Cell:</label>
-        <input class="input" type="email" [(ngModel)]="user.UserCell" name="cell" required maxlength="10" minlength="10"/>
-      </div>
+      
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
           <button style="background-color:rgba(251,113,0,1);color:white" type="submit"(click)="saveUser()">Register</button>
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" >Cancel</button>
+          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
         </div>
       </div>
     </form>
@@ -96,6 +99,7 @@
               
         <ul style="width: 200px; height: 600px; overflow-y: scroll;">
             
+          <li><i class="tiny material-icons">menu</i><a [routerLink]="'/admin'"> <i class="fas fa-home"></i>Administration </a></li>
             <li><i class="tiny material-icons">people_outline</i><a [routerLink]="'/employee-management'"> <i class="fas fa-home"></i>Employee Management </a></li>
             <li><i class="tiny material-icons">store</i><a [routerLink]="'/container-management'"><i class="fas fa-user"></i>Container Management</a></li>
             <li><i class="tiny material-icons">person_pin</i><a [routerLink]="'/manager-management'"><i class="fas fa-address-card"></i>Manager Profile Management</a></li>
@@ -127,8 +131,7 @@
         
             <div class="header-section-3">
                 {{user.UserName}} {{user.UserSurname}} <br> 
-                <i class="tiny material-icons" ng-click="logout()">power_settings_new</i>
-                <!-- <button (click)="logout()"> </button> -->
+               <button (click)="logout()"><i class="tiny material-icons" >power_settings_new</i></button>
             </div>
 
         </div> 

@@ -1,6 +1,6 @@
 <body>
     <h1>Add Customer</h1>
-    <form [formGroup]="cusForm">
+    <form >
         
         <br>
         <div class="card">
@@ -10,12 +10,8 @@
         <br><br>
         <div class="divleft" >
             <label for="CusName">Name:       </label>
-            <input type="text" class="form-control" formControlName="CusName" [(ngModel)]="customer.CusName" id="CusName" name="CusName" pattern="[a-zA-Z]" required>
-            <span style="color:red" *ngIf="cusForm.get('CusName').errors && (cusForm.get('CusName').touched || cusForm.get('CusName').dirty)">
-                <span *ngIf="cusForm.get('CusName').errors.required">Name is required</span>
-                <span *ngIf="cusForm.get('CusName').errors.minLength">Name must be greater that 2 characters</span>
-                <span *ngIf="cusForm.get('CusName').errors.pattern">Only text characters</span>
-            </span>
+            <input type="text" class="form-control"  [(ngModel)]="customer.CusName" id="CusName" name="CusName"  required>
+            
         </div>
 
         <br>

@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import {Customer} from '../customer-management/customer';
 import { NgModule } from '@angular/core';
 import {CustomerService} from '../customer-management/customer.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-add-customer',
@@ -12,16 +11,14 @@ import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 })
 export class AddCustomerComponent implements OnInit {
 
-  constructor(private api: CustomerService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: CustomerService, private router: Router) { }
    
-  cusForm: FormGroup;
+  
   customer : Customer = new Customer();
   responseMessage: string = "Request Not Submitted";
   
   ngOnInit(): void {
-    this.cusForm = this.fb.group({
-      CusName: ['', [Validators.required, Validators.minLength(2), Validators.pattern("[a-zA-Z]*")]],
-    })
+    
   }
 
   addCustomer(){

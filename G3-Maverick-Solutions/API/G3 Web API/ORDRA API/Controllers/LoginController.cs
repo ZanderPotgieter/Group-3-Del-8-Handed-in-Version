@@ -239,12 +239,17 @@ namespace ORDRA_API.Controllers
                     DateTime expiryTime = genTime.AddHours(3);
 
                     //Saving otp details in the db
-                    /* */
+                    dynamic otpObj = new ExpandoObject();
+                    otpObj.OTP = OTP;
+                    otpObj.ExpiryTime = expiryTime;
+                    otpObj.GenerationTime = genTime;
+                    otpObj.UserID = user.UserID;
+                    db.One_Time_Pin.Add(otpObj);
 
                     //sending an email
                     using (MailMessage mail = new MailMessage())
                     {
-                        mail.From = new MailAddress("ordra@gmail.com");
+                        mail.From = new MailAddress("thobeka.mthethwa.338@gmail.com");
                         mail.To.Add(email);
                         mail.Subject = "Reset Password One Time Pin";
                         mail.Body = "<h1>Your one time pin to reset your password is: </h1>" + OTP +
@@ -253,7 +258,7 @@ namespace ORDRA_API.Controllers
 
                         using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                         {
-                            smtp.Credentials = new System.Net.NetworkCredential("ordra@gmail.com", "password");
+                            smtp.Credentials = new System.Net.NetworkCredential("thobeka.mthethwa.338@gmail.com", "password");   
                             smtp.EnableSsl = true;
                             smtp.Send(mail);
                             toReturn.Message = "Mail sent";
@@ -277,15 +282,30 @@ namespace ORDRA_API.Controllers
         //checking the entered otp with the generated otp
         [HttpPost]
         [Route("checkOTP")]
-        public object checkOTP(string userOTP)
+        public object checkOTP(string userOTP, string email)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             try
             {
                 //receive Otp from db 
-
-                
+                User user = db.Users.Where(z => z.UserEmail == email).FirstOrDefault();
+                if(user!=null)
+                {
+                    One_Time_Pin otp = db.One_Time_Pin.Where(z => z.userID == user.UserID && z.OTP == userOTP).FirstOrDefault();
+                    if (otp!=null)
+                    {
+                        toReturn.Message = "One Time Pin successfully verified";
+                    }
+                    else
+                    {
+                        toReturn.Error = "One time pin is incorrect";
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "User not found";
+                }
             }
             catch (Exception error)
             {

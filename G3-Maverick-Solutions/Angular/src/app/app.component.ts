@@ -217,7 +217,7 @@ sendEmail(){
 
   checkOTP()
   {
-    this.api.checkOTP(this.otp).subscribe((res : any)=>{
+    this.api.checkOTP(this.otp, this.email).subscribe((res : any)=>{
       console.log(res);
       if(res.Error)
       {

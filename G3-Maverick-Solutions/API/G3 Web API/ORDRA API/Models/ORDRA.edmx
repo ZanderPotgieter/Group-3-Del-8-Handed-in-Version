@@ -215,7 +215,7 @@
             <PropertyRef Name="OTPID" />
           </Key>
           <Property Name="OTPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OTP" Type="varchar" MaxLength="5" />
+          <Property Name="OTP" Type="varchar" MaxLength="6" />
           <Property Name="ExpiryTime" Type="datetime" />
           <Property Name="GenerationTime" Type="datetime" />
           <Property Name="userID" Type="int" />
@@ -2480,7 +2480,7 @@
             <PropertyRef Name="OTPID" />
           </Key>
           <Property Name="OTPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OTP" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="OTP" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="ExpiryTime" Type="DateTime" Precision="3" />
           <Property Name="GenerationTime" Type="DateTime" Precision="3" />
           <Property Name="userID" Type="Int32" />

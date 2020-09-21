@@ -36,7 +36,7 @@ export class LoginService {
 
   sendEmail(email: string)
   {
-    return this.http.post(this.url + '/sendEmail', email, this.httpOptions);
+    return this.http.post(this.url + '/sendEmail?email=' + email, this.httpOptions);
   }
 
   resetPassword(user: User)
@@ -46,7 +46,7 @@ export class LoginService {
 
   checkOTP(otp: string, email: string)
   {
-    return this.http.post(this.url + '/checkOTP', otp + email , this.httpOptions);
+    return this.http.post(this.url + '/checkOTP?email=' + email + '&userOTP='+ otp  , this.httpOptions);
   }
 
 

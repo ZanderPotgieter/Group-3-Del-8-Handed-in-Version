@@ -219,12 +219,14 @@ namespace ORDRA_API.Controllers
         [HttpPost]
         public object sendEmail(string email)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
             try
             {
 
-                User user = db.Users.Where(z => Convert.ToString(z.UserEmail) == email).FirstOrDefault();
+
+                User user = db.Users.Where(z =>z.UserEmail == email).FirstOrDefault();
                 if (user != null)
                 {
 
@@ -239,17 +241,18 @@ namespace ORDRA_API.Controllers
                     DateTime expiryTime = genTime.AddHours(3);
 
                     //Saving otp details in the db
-                    dynamic otpObj = new ExpandoObject();
+                    One_Time_Pin otpObj = new One_Time_Pin();
                     otpObj.OTP = OTP;
                     otpObj.ExpiryTime = expiryTime;
                     otpObj.GenerationTime = genTime;
-                    otpObj.UserID = user.UserID;
+                    otpObj.userID = user.UserID;
+                
                     db.One_Time_Pin.Add(otpObj);
-
+                    db.SaveChanges();
                     //sending an email
                     using (MailMessage mail = new MailMessage())
                     {
-                        mail.From = new MailAddress("thobeka.mthethwa.338@gmail.com");
+                        mail.From = new MailAddress("ordrasa@gmail.com");
                         mail.To.Add(email);
                         mail.Subject = "Reset Password One Time Pin";
                         mail.Body = "<h1>Your one time pin to reset your password is: </h1>" + OTP +
@@ -258,7 +261,7 @@ namespace ORDRA_API.Controllers
 
                         using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                         {
-                            smtp.Credentials = new System.Net.NetworkCredential("thobeka.mthethwa.338@gmail.com", "password");   
+                            smtp.Credentials = new System.Net.NetworkCredential("ordrasa@gmail.com", "Ordra@444");   
                             smtp.EnableSsl = true;
                             smtp.Send(mail);
                             toReturn.Message = "Mail sent";
@@ -306,7 +309,7 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Error = "User not found";
                 }
-            }
+        }
             catch (Exception error)
             {
                 toReturn.Error = "Something went wrong:" + error;

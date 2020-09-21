@@ -1,6 +1,15 @@
 <body>
-    <form>
-        <h1>Add Product</h1>
+  <h1>Add Product</h1>
+  <form>
+    <div class="card" > 
+      <p class="subheadinglabel">Select An Add Option:</p>
+      <div class="divleft">
+          <button type="submit" (click)="AddToSystem()">Add Product to System</button>
+          <button type="submit" (click)="LinkToContainer()">Link Product to Container</button>
+      </div>
+  </div>
+  </form>
+    <form *ngIf= "addToSystem">
         <div class="card">
             <div class="divleft">
                 <label class="subheadinglabel">Enter Product Details:</label>
@@ -15,6 +24,8 @@
                 <br>
                 <label for="ProdDesciption">Description:</label><input type="text" class="form-control" [(ngModel)]="product.ProdDesciption" id="ProdDesciption" name="ProdDesciption" required>
                 <br>
+                <label for="ProdBarcode">Barcode:</label><input type="number" class="form-control" [(ngModel)]="product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" required>
+                <br>
                 <label for="ProdReLevel">Reorder level:</label><input type="number" class="form-control" [(ngModel)]="product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" required>
                 <br>
                 <label for="CPriceR">Cost Price(R):</label><input type="number" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPriceR" required>
@@ -23,12 +34,20 @@
                 <br>
                 <label for="PriceStartDate">Price Start Date:</label> <input type="date" class="form-control" [(ngModel)]="price.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>
                 <br>
-                <label for="PriceEndDate">Price End Date:</label> <input type="date" class="form-control" [(ngModel)]="price.PriceEndDate" id="PriceEndDate" name="PriceEndDate" required>
-                <br>
                 <button type="submit" (click)="Save()">Save</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>
+    </form>
+
+    <form *ngIf= "linkToContainer">
+      <div class="card" > 
+        <p class="subheadinglabel">Select An Add Option:</p>
+        <div class="divleft">
+            <button type="submit" (click)="AddToSystem()">Add Product to System</button>
+            <button type="submit" (click)="LinkToContainer()">Link Product to Container</button>
+        </div>
+    </div>
     </form>
 </body>
 

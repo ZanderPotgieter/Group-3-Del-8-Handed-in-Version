@@ -152,9 +152,15 @@
       <div class="divleft">
         <label class="subheadinglabel">Enter emailed One Time Pin:</label>
       </div>
+      <div class="form-group" [ngClass] ="{}">
+        <label>Email:</label>
+        <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+      </div>
+      <span style="color:red" *ngIf="showError">
+        {{errorMessage}}</span>
     <div class="form-group" [ngClass] ="{}">
-      <label>Email:</label>
-      <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-zA-Z]*" required>
+      <label>One Time Pin:</label>
+      <input class="input"  name="otp" [(ngModel)]="otp" id="txtOtp" pattern="[0-9 ]*" required>
     </div>
     <span style="color:red" *ngIf="showError">
       {{errorMessage}}</span>

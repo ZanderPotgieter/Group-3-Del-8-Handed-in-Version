@@ -517,7 +517,7 @@ GO
 CREATE TABLE One_Time_Pin
 (
 	OTPID int Primary Key identity(1,1) Not Null,
-	OTP varchar(5),
+	OTP varchar(6),
 	ExpiryTime dateTime,
 	GenerationTime dateTime,
 	userID int,
@@ -525,6 +525,7 @@ CREATE TABLE One_Time_Pin
 	REFERENCES [User](UserID)
 )
 GO
+
 
 use OrdraDB
 

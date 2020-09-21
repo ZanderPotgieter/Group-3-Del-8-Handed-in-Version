@@ -18,6 +18,8 @@ export class AddProductComponent implements OnInit {
   product : Product = new Product();
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
+  addToSystem: boolean = false;
+  linkToContainer: boolean = false;
 
   ngOnInit(){
     this.productService.getAllProductCategory()
@@ -26,6 +28,16 @@ export class AddProductComponent implements OnInit {
           this.categories = value;
         }
       });
+  }
+
+  AddToSystem(){
+    this.addToSystem = true;
+    this.linkToContainer = false;
+  }
+
+  LinkToContainer(){
+    this.linkToContainer = true;
+    this.addToSystem = false;
   }
 
   Save(){
@@ -40,7 +52,9 @@ export class AddProductComponent implements OnInit {
     
   }
 
-  Cancel(){}
+  Cancel(){
+    this.router.navigate(["product-management"]);
+  }
   
 
 }

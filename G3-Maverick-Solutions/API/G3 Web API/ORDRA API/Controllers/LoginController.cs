@@ -298,7 +298,15 @@ namespace ORDRA_API.Controllers
                     One_Time_Pin otp = db.One_Time_Pin.Where(z => z.userID == user.UserID && z.OTP == userOTP).FirstOrDefault();
                     if (otp!=null)
                     {
-                        toReturn.Message = "One Time Pin successfully verified";
+                        if (otp.ExpiryTime >= DateTime.Now)
+                        {
+                            toReturn.Message = "One Time Pin successfully verified";
+                        }
+                        else
+                        {
+                            toReturn.Message = "One Time Pin has expired";
+                        }
+                        
                     }
                     else
                     {
@@ -320,7 +328,7 @@ namespace ORDRA_API.Controllers
         //resetting password
         [HttpPut]
         [Route("resetPassword")]
-        public object resetPassword(User userInput)
+        public object resetPassword(string email, string password)
         {
             db.Configuration.ProxyCreationEnabled = false;
 
@@ -328,8 +336,8 @@ namespace ORDRA_API.Controllers
             try
             {
                 //hashing new password
-                var hash = GenerateHash(ApplySalt(userInput.UserPassword));
-                User user = db.Users.Where(x => x.UserEmail == userInput.UserEmail).FirstOrDefault();
+                var hash = GenerateHash(ApplySalt(password));
+                User user = db.Users.Where(x => x.UserEmail == email).FirstOrDefault();
 
                 if (user != null)
                 {
@@ -345,7 +353,34 @@ namespace ORDRA_API.Controllers
             catch (Exception)
             {
                 toReturn.Message = "Update Unsuccessful";
+            }
+            return toReturn;
+        }
 
+
+        [Route("getUserByEmail")]
+        [HttpGet]
+        public object getUserByEmail(string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                
+                var user = db.Users.Where(x => x.UserEmail == email).FirstOrDefault();
+                if (user != null)
+                {
+                    user.UserPassword = "This is classified information ;)";
+                    toReturn = user;
+                }
+                else
+                {
+                    toReturn.Error = "Invalid User Token";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "User Not Found";
             }
             return toReturn;
         }

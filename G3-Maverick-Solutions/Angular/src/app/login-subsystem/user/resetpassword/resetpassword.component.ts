@@ -19,7 +19,7 @@ export class ResetpasswordComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  resetPassword(){
+  /* resetPassword(){
     if(this.confirmPassword == this.user.UserPassword)
     {
       this.api.resetPassword(this.user).subscribe( (res:any)=> {
@@ -33,8 +33,8 @@ export class ResetpasswordComponent implements OnInit {
     {
       this.responseMessage = "Password and Confirm Password do not match";
       alert(this.responseMessage);
-    }
-  }
+    } */
+  //}
     
     
 

@@ -12,7 +12,7 @@
                 <br>
                 <span style="color:red" *ngIf="pcatForm.get('PCatName').errors && (pcatForm.get('PCatName').touched || pcatForm.get('PCatName').dirty)">
                     <span *ngIf="pcatForm.get('PCatName').errors.required">Name is required.</span>
-                    <span *ngIf="pcatForm.get('PCatName').errors.minlength || pcatForm.get('PCatName').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+                    <span *ngIf="pcatForm.get('PCatName').errors.minlength || pcatForm.get('PCatName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
                     <span *ngIf="pcatForm.get('PCatName').errors.pattern">Only text characters.</span>
                 </span>
                 <br>
@@ -21,7 +21,7 @@
                 <br>
                 <span style="color:red" *ngIf="pcatForm.get('PCatDescription').errors && (pcatForm.get('PCatDescription').touched || pcatForm.get('PCatDescription').dirty)">
                     <span *ngIf="pcatForm.get('PCatDescription').errors.required">Description is required.</span>
-                    <span *ngIf="pcatForm.get('PCatDescription').errors.minlength">Description must be greater that 2 characters</span>
+                    <span *ngIf="pcatForm.get('PCatDescription').errors.minlength">Description must be greater than 2 characters</span>
                     <span *ngIf="pcatForm.get('PCatDescription').errors.pattern">Only text characters.</span>
                 </span>
             </div>

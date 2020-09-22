@@ -34,7 +34,9 @@ export class SearchProductComponent implements OnInit {
 
     this.searchForm= this.fb.group({ 
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
-       
+      SelectProd: ['', [Validators.required]],
+      SelectProdC: ['', [Validators.required]],
+      SelectCon: ['', [Validators.required]],
     }); 
 
     this.productService.getAllProductCategory()

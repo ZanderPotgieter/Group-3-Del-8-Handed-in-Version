@@ -16,10 +16,14 @@
                 <label class="subheadinglabel">Enter Product Details:</label>
                 <br>
                 <label for="ProductCategoryID">Product Category:</label>
-                  <select  required>
+                  <select  required formControlName="Select" name="Select">
                     <option value="0">--Select--</option>  
                     <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
                   </select>
+                  <br>
+                <span style="color:red" *ngIf="pdForm.get('Select').errors && (pdForm.get('Select').touched || pdForm.get('Select').dirty)">
+                  <span *ngIf="pdForm.get('Select').errors.required">Select Product Category required.</span>
+              </span>
                 <br>
                 <label for="ProdName">Name:</label><input type="text" formControlName="ProdName"  class="form-control" [(ngModel)]="product.ProdName" id="ProdName" name="ProdName" pattern="[a-zA-Z ]*" required>
                 <br>
@@ -81,21 +85,29 @@
         </div>
     </form>
 
-    <form >
+    <form [formGroup]="pdForm">
       <div class="card" *ngIf= "linkToContainer"> 
         <p class="subheadinglabel">Select Container and Product:</p>
         <div class="divleft">
           <label for="ContainerID">Container:</label>
-                  <select  required>
+                  <select  required formControlName="SelectCon" name="SelectCon">
                     <option value="0">--Select--</option>  
                     <option [value]="type" *ngFor="let con of containers">{{con.ConName}}</option>
                   </select>
+                  <br>
+                  <span style="color:red" *ngIf="pdForm.get('SelectCon').errors && (pdForm.get('SelectCon').touched || pdForm.get('SelectCon').dirty)">
+                    <span *ngIf="pdForm.get('SelectCon').errors.required">Select Container required.</span>
+                </span>
               <br>
           <label for="ProductID">Product:</label>
-                  <select  required>
+                  <select  required formControlName="SelectProduct" name="SelectProduct">
                     <option value="0">--Select--</option>  
                     <option [value]="type" *ngFor="let prod of products">{{prod.ProdName}}</option>
                   </select>
+                  <br>
+                  <span style="color:red" *ngIf="pdForm.get('SelectProduct').errors && (pdForm.get('SelectProduct').touched || pdForm.get('SelectProduct').dirty)">
+                    <span *ngIf="pdForm.get('SelectProduct').errors.required">Select Product required.</span>
+                </span>
               <br>
             <button type="submit" (click)="Link()">Link</button>
             <button type="submit" (click)="Cancel()">Cancel</button>

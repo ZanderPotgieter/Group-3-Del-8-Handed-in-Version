@@ -12,10 +12,14 @@
             <div class="divleft" style="float: left; width: 50%;">
                 <label class="subheadinglabel">Product Details:</label>
                 <br>
-                <label for="ProductCategoryID">Product Category:</label><select  required>
+                <label for="ProductCategoryID">Product Category:</label><select  required formControlName="SelectPCat" name="SelectPCat">
                     <option value="0">--Select--</option>  
                     <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
                    </select>
+                   <br>
+                        <span style="color:red" *ngIf="searchedForm.get('SelectPCat').errors && (searchedForm.get('SelectPCat').touched || searchedForm.get('SelectPCat').dirty)">
+                            <span *ngIf="searchedForm.get('SelectPCat').errors.required">Select Product Category required.</span>
+                        </span>
                 <br>
                 <label for="ProdName">Name:</label><input type="text" formControlName="ProdName"  class="form-control" [(ngModel)]="product.ProdName" id="ProdName" name="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
                 <br>

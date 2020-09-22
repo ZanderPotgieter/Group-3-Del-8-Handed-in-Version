@@ -33,10 +33,14 @@
                 <p class="subheadinglabel">Select Product:</p>
 
                 <div class="divleft">
-                    <label for="ProductCategoryID">Product:</label><select  required>
+                    <label for="ProductCategoryID">Product:</label><select  required formControlName="SelectProd" name="SelectProd">
                          <option value="0">--Select--</option>  
                          <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
                         </select>
+                        <br>
+                        <span style="color:red" *ngIf="searchForm.get('SelectProd').errors && (searchForm.get('SelectProd').touched || searchForm.get('SelectProd').dirty)">
+                            <span *ngIf="searchForm.get('SelectProd').errors.required">Select Product required.</span>
+                        </span>
                      <br>
 
                      <button type="submit" (click)="SearchProduct()">Search</button>
@@ -48,10 +52,14 @@
                 <p class="subheadinglabel">Select Product Category:</p>
 
                 <div class="divleft">
-                    <label for="ProductCategoryID">Product Category:</label><select  required>
+                    <label for="ProductCategoryID">Product Category:</label><select  required formControlName="SelectProdC" name="SelectProdC">
                          <option value="0">--Select--</option>  
                          <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
                         </select>
+                        <br>
+                        <span style="color:red" *ngIf="searchForm.get('SelectProdC').errors && (searchForm.get('SelectProdC').touched || searchForm.get('SelectProdC').dirty)">
+                            <span *ngIf="searchForm.get('SelectProdC').errors.required">Select Product Category required.</span>
+                        </span>
                      <br>
 
                      <button type="submit" (click)="SearchCategory()">Search</button>
@@ -63,10 +71,14 @@
                 <p class="subheadinglabel">Select Container:</p>
 
                 <div class="divleft">
-                    <label for="ProductCategoryID">Container:</label><select  required>
+                    <label for="ProductCategoryID">Container:</label><select  required formControlName="SelectCon" name="SelectCon">
                          <option value="0">--Select--</option>  
                          <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
                         </select>
+                        <br>
+                        <span style="color:red" *ngIf="searchForm.get('SelectCon').errors && (searchForm.get('SelectCon').touched || searchForm.get('SelectCon').dirty)">
+                            <span *ngIf="searchForm.get('SelectCon').errors.required">Select Container required.</span>
+                        </span>
                      <br>
 
                      <button type="submit" (click)="SearchContainer()">Search</button>

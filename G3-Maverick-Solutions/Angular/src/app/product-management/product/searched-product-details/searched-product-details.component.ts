@@ -28,7 +28,7 @@ export class SearchedProductDetailsComponent implements OnInit {
 
   ngOnInit(){
     this.searchedForm= this.fb.group({
-      
+      SelectPCat: ['', [Validators.required]],
       ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 

@@ -30,7 +30,7 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(){
     this.pdForm= this.fb.group({
-      
+      Select:  ['', [Validators.required]],
       ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
@@ -38,6 +38,8 @@ export class AddProductComponent implements OnInit {
       CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       PriceStartDate: ['', [Validators.required]], 
+      SelectCon: ['', [Validators.required]], 
+      SelectProduct: ['', [Validators.required]],
     }); 
     this.productService.getAllProductCategory()
       .subscribe(value => {

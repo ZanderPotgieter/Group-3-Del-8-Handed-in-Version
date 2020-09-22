@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { ProductCategoryService } from '../../product-category.service';
 import { ProductCategory } from '../../product-category';
 import { NgModule } from '@angular/core';
+import { Observable } from 'rxjs';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-search-product-category',
@@ -11,23 +13,38 @@ import { NgModule } from '@angular/core';
 })
 export class SearchProductCategoryComponent implements OnInit {
 
-  constructor(private productCategoryService: ProductCategoryService, private router: Router) { }
-
+  constructor(private productCategoryService: ProductCategoryService, private router: Router, private fb: FormBuilder) { }
+  pcatForm: FormGroup;
   productCategory : ProductCategory = new ProductCategory();
   responseMessage: string = "Request Not Submitted";
 
+  showAll: boolean = false;
   showSaves: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
-  showSearch: boolean = true;
+  showSearch: boolean = false;
   showResults: boolean = false;
   name : string;
-
+  allCategories: Observable<ProductCategory[]>;
 
   ngOnInit(){
-    
+    this.pcatForm= this.fb.group({  
+      PCatName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      PCatDescription: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+      
+       
+    }); 
+  }
+  All(){
+    this.allCategories = this.productCategoryService.getAllProductCategory();
+    this.showAll = true;
+    this.showSearch = false;
   }
 
+  Input(){
+    this.showSearch = true;
+    this.showAll = false;
+  }
   Search(){
     this.productCategoryService.searchProductCategory(this.name).subscribe( (res:any)=> {
       console.log(res);
@@ -48,7 +65,7 @@ export class SearchProductCategoryComponent implements OnInit {
   }
 
   Cancel(){
-
+    this.router.navigate(["product-management"]);
   }
 
   Update(){

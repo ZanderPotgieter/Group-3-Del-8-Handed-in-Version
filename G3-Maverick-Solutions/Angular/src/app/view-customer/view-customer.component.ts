@@ -4,6 +4,10 @@ import {Customer} from '../customer-management/customer';
 import { NgModule } from '@angular/core';
 import {CustomerService} from '../customer-management/customer.service';
 import {CustomerOrderService} from '../customer-order-management/customer-order.service';
+import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 
 
@@ -17,8 +21,16 @@ import {CustomerOrderService} from '../customer-order-management/customer-order.
 
 
 export class ViewCustomerComponent implements OnInit {
+  private _allCus: Observable<Customer[]>;  
+  public get allCus(): Observable<Customer[]> {  
+    return this._allCus;  
+  }  
+  public set allCus(value: Observable<Customer[]>) {  
+    this._allCus = value;  
+  }  
 
-  constructor(private api: CustomerService, private interaction: CustomerOrderService, private router: Router) { }
+  constructor(private api: CustomerService, private interaction: CustomerOrderService, private router: Router, private bf: FormBuilder) { }
+  cusForm: FormGroup;
   customer : Customer = new Customer();
   responseMessage: string = "Request Not Submitted";
 
@@ -31,7 +43,26 @@ export class ViewCustomerComponent implements OnInit {
   name : string;
   surname : string;
 
+  loadDisplay(){  
+    debugger;  
+    this.allCus= this.api.getAllCustomers();  
+  
+  } 
+
   ngOnInit(): void {
+    this.loadDisplay();  
+    this.cusForm= this.bf.group({  
+      CusName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      CusSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
+      surname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      CusCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
+      CusEmail: ['', [Validators.required, Validators.email]], 
+      CusStreetNr: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(8), Validators.pattern('[0-9 ]*')]],
+      CusStreet: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      CusCode: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]], 
+      CusSuburb: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],       
+    }); 
     
   }
 

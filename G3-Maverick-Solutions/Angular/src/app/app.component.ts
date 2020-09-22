@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import {User} from './user';
 import {LoginService} from './login.service';
 import {Container} from './container-management/container';
-import {Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormControl} from '@angular/forms';
 
 
 
@@ -21,8 +22,8 @@ export class AppComponent  implements OnInit {
   title = 'ORDRA';
   dateVal = new Date();
 
-  constructor(private api : LoginService, private router: Router) { }
-  
+  constructor(private api : LoginService, private router: Router, private fb: FormBuilder) { }
+regForm: FormGroup;
 showLogin: boolean = true;
 showNav: boolean = false;
 showRegister: boolean = false;
@@ -31,6 +32,7 @@ showInvalidPassword: boolean = false;
 showContainerNotSelected: boolean = false;
 errorMessage: string;
 ConfirmPassword: string;
+password: string;
 session: any;
 
 containers: Container[] = [];
@@ -38,13 +40,24 @@ containerSelected: boolean = false;
 currentContainer: Container;
 user : User = new User();
 
+email: string;
+otp: string;
+showGenerateOTP: boolean = false;
+showEnterOTP: boolean = false;
+showResetPassword: boolean = false;
+
   ngOnInit(){
     this.api.getAllContainers().subscribe((res:any) =>{
       console.log(res);
-      this.containers = res;
-      
+      this.containers = res; 
     })
 
+    this.regForm= this.fb.group({  
+      UserName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      UserSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
+      UserCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
+      UserEmail: ['', [Validators.required, Validators.email]],   
+    }); 
   }
 
   
@@ -54,14 +67,16 @@ login(){
   this.api.loginUser(this.user).subscribe( (res:any)=> {
     console.log(res);
     if(res.Error){
-      this.errorMessage = res.Error;
-      
+      this.errorMessage = res.Error; 
       this.showError = true;
     }else{
       localStorage.setItem("accessToken", res.sessionID);
       this.showLogin = false;
       this.showNav = true;
       this.showRegister = false
+      this.showResetPassword = false;
+      this.showEnterOTP = false;
+      this.showGenerateOTP = false;
 
         }
     })}
@@ -84,13 +99,51 @@ home(){
   this.showLogin = true;
   this.showNav = false;
   this.showRegister = false;
+  this.showResetPassword = false;
+  this.showEnterOTP = false;
+  this.showGenerateOTP = false;
 }
 
 register(){
   this.showLogin = false;
   this.showNav = false;
   this.showRegister = true;
+  this.showResetPassword = false;
+  this.showEnterOTP = false;
+  this.showGenerateOTP = false;
 }
+
+generateOTP()
+{
+  this.showLogin = false;
+  this.showNav = false;
+  this.showRegister = false;
+  this.showEnterOTP = false;
+  this.showGenerateOTP = true;
+}
+
+enterOTP()
+{
+  this.showLogin = false;
+  this.showNav = false;
+  this.showRegister = false;
+  this.showResetPassword = false;
+  this.showEnterOTP = true;
+  this.showGenerateOTP = true; 
+}
+
+showRP()
+{
+  this.showLogin = false;
+  this.showNav = false;
+  this.showRegister = false;
+  this.showResetPassword = true;
+  this.showEnterOTP = false;
+  this.showGenerateOTP = false; 
+}
+
+
+
 
 saveUser(){
   
@@ -107,7 +160,10 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
   this.showLogin= true;
   this.showNav = false;
   this.showRegister = false;
-  this.showContainerNotSelected = false;}
+  this.showContainerNotSelected = false;
+  this.showResetPassword = false;
+  this.showEnterOTP = false;
+  this.showGenerateOTP = false;}
 })
 
 }
@@ -132,6 +188,9 @@ this.showLogin= true;
 this.showNav = false;
 this.showRegister = false;
 this.showInvalidPassword = false;
+this.showResetPassword = false;
+this.showEnterOTP = false;
+this.showGenerateOTP = false;
 }
 
 cancel(){
@@ -140,5 +199,77 @@ this.showNav = false;
 this.showRegister = false;
 this.user = new User();
 this.showContainerNotSelected = false;
+this.showResetPassword = false;
+this.showEnterOTP = false;
+this.showGenerateOTP = false;
 }
+
+sendEmail(){
+  this.api.sendEmail(this.email).subscribe((res : any)=>{
+    console.log(res);
+    if(res.Error)
+    {
+      this.errorMessage = res.Error;
+      alert(this.errorMessage);
+      this.showError = true;
+    }
+    else{
+      alert(res.Message);
+        
+    this.showLogin= false;
+    this.showNav = false;
+    this.showRegister = false;
+    this.showContainerNotSelected = false;
+    this.showResetPassword = false;
+    this.showEnterOTP = true;
+    this.showGenerateOTP = true;}
+  })
+  }
+
+  checkOTP()
+  {
+    this.api.checkOTP(this.otp, this.email).subscribe((res : any)=>{
+      console.log(res);
+      if(res.Error)
+      {
+        this.errorMessage = res.Error;
+        alert(this.errorMessage);
+        this.showError = true;
+      }
+      else{
+        alert(res.Message);
+          
+      this.showLogin= false;
+      this.showNav = false;
+      this.showRegister = false;
+      this.showContainerNotSelected = false;
+      this.showResetPassword = true;
+      this.showEnterOTP = false;
+      this.showGenerateOTP = false;}
+    })
+  }
+
+  resetPassword()
+  {
+    this.api.resetPassword(this.email, this.password).subscribe((res : any)=>{
+      console.log(res);
+      if(res.Error)
+      {
+        this.errorMessage = res.Error;
+        alert(this.errorMessage);
+        this.showError = true;
+      }
+      else{
+        alert(res.Message);
+          
+      this.showLogin= true;
+      this.showNav = false;
+      this.showRegister = false;
+      this.showContainerNotSelected = false;
+      this.showResetPassword = false;
+      this.showEnterOTP = false;
+      this.showGenerateOTP = false;}
+    })
+  }
+
 }

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import {Container} from '../container-management/container';
 import { NgModule } from '@angular/core';
 import {ContainerService} from '../container-management/container.service';
+import { Observable } from 'rxjs';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-search-container',
@@ -11,21 +13,39 @@ import {ContainerService} from '../container-management/container.service';
 })
 export class SearchContainerComponent implements OnInit {
 
-  constructor(private api: ContainerService, private router: Router) { }
-
+  constructor(private api: ContainerService, private router: Router, private fb: FormBuilder) { }
+  conForm: FormGroup;
   container : Container = new Container();
   responseMessage: string = "Request Not Submitted";
 
+  showAll: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
-  showSearch: boolean = true;
+  showSearch: boolean = false;
   showResults: boolean = false;
   name : string;
+  allContainers: Observable<Container[]>;
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.conForm= this.fb.group({  
+      ConName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      ConDescription: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+      
+       
+    }); 
   }
 
+  All(){
+    this.allContainers = this.api.getAllContainers();
+    this.showAll = true;
+    this.showSearch = false;
+  }
+
+  Input(){
+    this.showSearch = true;
+    this.showAll = false;
+  }
   Search(){
     this.api.searchContainer(this.name).subscribe( (res:any)=> {
       console.log(res);
@@ -46,7 +66,7 @@ export class SearchContainerComponent implements OnInit {
   }
 
   Cancel(){
-
+    this.router.navigate(["container-management"])
   }
 
   Update(){

@@ -1,24 +1,34 @@
 <body>
     <h1>Create Container</h1>
 
-    <form>
+    <form [formGroup]="angForm">
         <div class="card">
          <p class="subheadinglabel">Enter Container Details:</p>
 
             
             <div class="divleft">
                 <label for="ConName">Name:</label>
-                <input type="text"  class="form-control" [(ngModel)]="container.ConName" id="ConName" name="ConName" required>
+                <input type="text" formControlName="ConName" class="form-control" [(ngModel)]="container.ConName" id="ConName" name="ConName" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('ConName').errors && (angForm.get('ConName').touched || angForm.get('ConName').dirty)">
+                    <span *ngIf="angForm.get('ConName').errors.required">Name is required.</span>
+                    <span *ngIf="angForm.get('ConName').errors.minlength || angForm.get('ConName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('ConName').errors.pattern">Only text characters.</span>
+                </span>
             </div>    
             <br>
             <div class="divleft"> 
                 <label for="ConDescription">Description:</label>
-                <input type="text" class="form-control" [(ngModel)]="container.ConDescription" id="ConDescription" name="ConDescription" required>
-            
+                <input type="text" formControlName="ConDescription" class="form-control" [(ngModel)]="container.ConDescription" id="ConDescription" name="ConDescription" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('ConDescription').errors && (angForm.get('ConDescription').touched || angForm.get('ConDescription').dirty)">
+                    <span *ngIf="angForm.get('ConDescription').errors.required">Description is required.</span>
+                    <span *ngIf="angForm.get('ConDescription').errors.minlength">Description must be greater than 2 characters</span>
+                    <span *ngIf="angForm.get('ConDescription').errors.pattern">Only text characters.</span>
+                </span>
             </div>
         
          <div class="divleft">
-            <!--label for Alt Step 8-->
             <button type="submit" (click)="Save()">Save</button>
             <button type="submit" (click)="Cancel()">Cancel</button>
             </div>

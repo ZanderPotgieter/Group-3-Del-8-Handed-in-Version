@@ -14,6 +14,7 @@ using System.Data.Entity;
 using ORDRA_API.Models;
 using System.Security.Cryptography;
 using System.Text;
+using System.Net.Mail;
 
 namespace ORDRA_API.Controllers
 {
@@ -22,12 +23,12 @@ namespace ORDRA_API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
 
     [RoutePrefix("Api/Login")]
+   
 
     public class LoginController : ApiController
     {
-
+        
         OrdraDBEntities db = new OrdraDBEntities();
-
 
         [Route("registerUser")]
         [HttpPost]
@@ -134,10 +135,8 @@ namespace ORDRA_API.Controllers
 
         [Route("getUserDetails")]
         [HttpPost]
-
         public object getUserDetails(dynamic session)
         {
-
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             try
@@ -148,12 +147,10 @@ namespace ORDRA_API.Controllers
                 {
                     user.UserPassword = "This is classified information ;)";
                     toReturn = user;
-
                 }
                 else
                 {
                     toReturn.Error = "Invalid User Token";
-
                 }
             }
             catch
@@ -161,8 +158,8 @@ namespace ORDRA_API.Controllers
                 toReturn.Error = "User Not Found";
             }
             return toReturn;
-
         }
+
 
         public object getAllContainers()
         {
@@ -183,7 +180,6 @@ namespace ORDRA_API.Controllers
             }
             return toReturn;
         }
-
 
 
 
@@ -218,5 +214,179 @@ namespace ORDRA_API.Controllers
             return resultString.ToString();
 
         }
+
+
+        //send email
+        [Route("sendEmail")]
+        [HttpPost]
+        public object sendEmail(string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+
+
+                User user = db.Users.Where(z =>z.UserEmail == email).FirstOrDefault();
+                if (user != null)
+                {
+
+                    //generating a reset password one time pin
+                    Random rnd = new Random();
+                    string OTP = (rnd.Next(100000, 999999)).ToString();
+
+                    //getting the time of generation of the OTP
+                    DateTime genTime = DateTime.Now;
+
+                    //getting the expiry time of the OTP
+                    DateTime expiryTime = genTime.AddHours(3);
+
+                    //Saving otp details in the db
+                    One_Time_Pin otpObj = new One_Time_Pin();
+                    otpObj.OTP = OTP;
+                    otpObj.ExpiryTime = expiryTime;
+                    otpObj.GenerationTime = genTime;
+                    otpObj.userID = user.UserID;
+                
+                    db.One_Time_Pin.Add(otpObj);
+                    db.SaveChanges();
+                    //sending an email
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress("ordrasa@gmail.com");
+                        mail.To.Add(email);
+                        mail.Subject = "Reset Password One Time Pin";
+                        mail.Body = "<h1>Your one time pin to reset your password is: </h1>" + OTP +
+                                    "<h1>The one time pin will expire in 3 hours. <h1>";
+                        mail.IsBodyHtml = true;
+
+                        using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            smtp.Credentials = new System.Net.NetworkCredential("ordrasa@gmail.com", "Ordra@444");   
+                            smtp.EnableSsl = true;
+                            smtp.Send(mail);
+                            toReturn.Message = "Mail sent";
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "User email not found";
+                }
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Mail unsuccessfully sent";
+            }
+            return toReturn;
+        }
+
+        //checking the entered otp with the generated otp
+        [HttpPost]
+        [Route("checkOTP")]
+        public object checkOTP(string userOTP, string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //receive Otp from db 
+                User user = db.Users.Where(z => z.UserEmail == email).FirstOrDefault();
+                if(user!=null)
+                {
+                    One_Time_Pin otp = db.One_Time_Pin.Where(z => z.userID == user.UserID && z.OTP == userOTP).FirstOrDefault();
+                    if (otp!=null)
+                    {
+                        if (otp.ExpiryTime >= DateTime.Now)
+                        {
+                            toReturn.Message = "One Time Pin successfully verified";
+                        }
+                        else
+                        {
+                            toReturn.Message = "One Time Pin has expired";
+                        }
+                        
+                    }
+                    else
+                    {
+                        toReturn.Error = "One time pin is incorrect";
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "User not found";
+                }
+        }
+            catch (Exception error)
+            {
+                toReturn.Error = "Something went wrong:" + error;
+            }
+            return toReturn;
+        }
+
+        //resetting password
+        [HttpPut]
+        [Route("resetPassword")]
+        public object resetPassword(string email, string password)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //hashing new password
+                var hash = GenerateHash(ApplySalt(password));
+                User user = db.Users.Where(x => x.UserEmail == email).FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.UserPassword = hash;
+                    db.SaveChanges();
+                    toReturn.Message = "Update Successful";
+                }
+                else
+                {
+                    toReturn.Message = "Record Not Found";
+                }
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Update Unsuccessful";
+            }
+            return toReturn;
+        }
+
+
+        [Route("getUserByEmail")]
+        [HttpGet]
+        public object getUserByEmail(string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                
+                var user = db.Users.Where(x => x.UserEmail == email).FirstOrDefault();
+                if (user != null)
+                {
+                    user.UserPassword = "This is classified information ;)";
+                    toReturn = user;
+                }
+                else
+                {
+                    toReturn.Error = "Invalid User Token";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "User Not Found";
+            }
+            return toReturn;
+        }
+
     }
 }
+

@@ -1,60 +1,135 @@
-<h1>Create Employee Profile</h1>
+<div *ngIf='main'>
+  <h1>Create Employee Profile</h1>
 <br>
+<form [formGroup] = "employeeForm"  #form='ngForm' (submit)="onSubmit(form)">
 
-<div class="card"> 
-    <p style="text-align: left;color: orange;"><u>Enter Name and Surname to search:</u></p>
-    <br>
-    <div class="row">
-        <div class="input-field col s6">
-          <label>Employee Name:</label>
-          <input type="text" name="EmployeeName"  >
-        </div>
-        <div class="input-field col s6">
-            <label>Employee Surame:</label>
-            <input type="text" name="EmployeeSurname"  >
+  <div class="card"> 
+  <p style="text-align: left;color: orange;"><u>Enter Name and Surname to search:</u></p>
+  <br>
+  <div class="row">
+    <div class="mb-4">
+      <label>Employee Name:</label>
+      <input type="text" formControlName="EmpName" #EmployeeName="ngModel" name="EmployeeName" [(ngModel)]="formModel.EmployeeName" pattern="[a-zA-Z]*" required>
+       <span style="color:red" *ngIf="employeeForm.get('EmpName').errors && (employeeForm.get('EmpName').touched || employeeForm.get('EmpName').dirty)">
+        <span *ngIf="employeeForm.get('EmpName').errors.required">Name is required</span>
+        <span *ngIf="employeeForm.get('EmpName').errors.minLength">Name must be greater than 2 letters</span>
+        <span *ngIf="employeeForm.get('EmpName').errors.pattern">Only text characters</span>
+      </span> 
     </div>
-    <div class="row">
+
+      <div class="mb-4">
+          <label>Employee Surname:</label>
+          <input type="text" #EmployeeSurname="ngModel" name="EmployeeSurname" [(ngModel)]="formModel.EmployeeSurname" required   >
+     </div>
+   <div class="row">
       <div class="input-field col s12">
-        <button class="btn-large btn-submit" type="submit">Search</button>
-        <button class="btn-large btn-submit" type="submit">Cancel</button>
+      <button style="background-color:rgba(251,113,0,1);color:white" type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid">Search</button>
       </div>
-    </div>
+  </div>
+</div>
+</div>
+</form>
+<button class="btn-large btn-submit" (click)="clear()">Cancel</button>
+</div>
 
+<div *ngIf='variable'>
+  <h1>Found Employee Profile</h1>
+<br>
+<div class="card"> 
     <!--Hide dive above on  succesful find of employee-->
     <p style="text-align: left;color: orange;"><u>General Details:</u></p>
-    <div style="width: 100%; overflow: hidden;">
+    <div style="width: 50%; overflow: hidden;">
          
         <div style="width: 300px; float: left;">
               <label>Employee Name:</label>
-              <input type="text" name="EmployeeName"  >
+              <input type="text"name="EmpName"  value="{{service.empList.EmpName}}">
               <label>Cell Number:</label>
+              <input type="text"  name="EmpCellNo"  value="{{service.empList.EmpCellNo}}"  >
               <p type="text" name="cellno"></p>
          </div>
 
-         <div style="margin-left: 5px;">
+         <div style="width: 300px; float: right;">
             <label>Employee Surname:</label>
-            <input type="text" name="EmployeeSurname">
+            <input type="text"  name="EmpSurname" value="{{service.empList.EmpSurname}}">
             <label>Employee Email:</label>
+            <input type="email" name="EmpEmail"  value="{{service.empList.EmpEmail}}">
             <p type="text" name="employeeemail"></p>
        </div>
 
     </div>
 
     <p style="text-align: left;color: orange;"><u>Enter Employee Details:</u></p>
-    <div class="row">
+ <div class="row">
       <div class="input-field col s6">
         <label>Start Date:</label>
-        <input type="text" name="startdate">
+        <input  type="date" name="EmpStartDate" value="{{service.empList.EmpStartDate}}">
       </div>
       <div class="input-field col s6">
           <label>Shifts Completed:</label>
-          <input type="text" name="shiftscompleted">
+     <input type="number"  name="EmpShiftsCompleted" value="{{service.empList.EmpShiftsCompleted}}">
   </div>
 
   <div class="row">
     <div class="input-field col s12">
-      <button class="btn-large btn-submit" type="submit">Save Profile</button>
-      <button class="btn-large btn-submit" type="submit">Cancel</button>
+      <button class="btn-large btn-submit" (click)="goUpdate()" type="submit">Update Profile</button>
+      <button class="btn-large btn-submit"    (click)="clear()">Cancel</button>
     </div>
   </div>
 
+</div>
+</div>
+</div>
+
+<div *ngIf='add'>
+  <h1>Create Employee Profile</h1>
+<br>
+  <form class="mb-4"  #form='ngForm' autocomplete="off" (submit)="submitEmployee(form)">
+  <h3>Emplyee Not Found: Please add one below :)</h3>
+  <div class="card"> 
+  
+    <!--Hide dive above on  succesful find of employee-->
+    <p style="text-align: left;color: orange;"><u>General Details:</u></p>
+    <div style="width: 50%; overflow: hidden;">
+        <div style="width: 300px; float: left;">
+              <label>Employee Name:</label>
+              <input type="text"name="EmpName" #EmpName="ngModel"[(ngModel)]="formModel1.EmpName" >
+              <label>Cell Number:</label>
+              <input type="text"  name="EmpCellNo" #EmpCellNo="ngModel"[(ngModel)]="formModel1.EmpCellNo"  >
+              <p type="text" name="cellno"></p>
+         </div>
+
+         <div style="width: 300px; float: right;">
+            <label>Employee Surname:</label>
+            <input type="text"  name="EmpSurname" #EmpSurname="ngModel"[(ngModel)]="formModel1.EmpSurname">
+            <label>Employee Email:</label>
+            <input type="email" name="EmpEmail" #EmpEmail="ngModel"[(ngModel)]="formModel1.EmpEmail" >
+            <p type="text" name="employeeemail"></p>
+       </div>
+
+    </div>
+
+ <p style="text-align: left;color: orange;"><u>Enter Employee Details:</u></p>
+ <div class="row">
+
+      <div class="input-field col s6">
+        <label>Start Date:</label>
+        <input type="date" name="EmpStartDate" #EmpStartDate="ngModel"[(ngModel)]="formModel1.EmpStartDate" >
+      </div>
+      <div class="input-field col s6">
+          <label>Shifts Completed:</label>
+     <input type="number"  name="EmpShiftsCompleted" #EmpShiiftsCompleted="ngModel"[(ngModel)]="formModel1.EmpShiftsCompleted">
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <button class="btn-large btn-submit" type="submit" [disabled]="form.invalid">Save Profile</button>
+    </div>
+  </div>
+
+  </div>
+
+  </div>
+</form>
+<button class="btn-large btn-submit"   (click)="clear()">Cancel</button>
+
+</div>

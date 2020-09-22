@@ -1,14 +1,15 @@
 <body>
     <h1>Add Province</h1>
     <br>
-    <form [formGroup]= "provinceForm">
+    <form >
         
         <div class="card" >
             <label class="subheadinglabel">Enter the new province details:</label> 
             <div class="divleft">
                 <br><br>
-                <label for="Name">Name</label>
-                <input type = "text" formControlName="province.ProvName" id="ProvName" placeholder="Example: Gauteng" required name = "ProvName">     
+                <label for="Name">Name</label>    
+                <input type="text" class="form-control" [(ngModel)]="province.ProvName" id="ProvName" name="ProvName" required>
+      
                 <br><br>
 
             </div>

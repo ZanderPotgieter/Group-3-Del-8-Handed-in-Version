@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router'; 
 
 
 @Component({
@@ -9,20 +9,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchedProductDetailsComponent implements OnInit {
   
-  constructor() { }
+  constructor(private router: Router) { }
+
+  showBtns: boolean = true;
+  showBtnsWhenUpdateClicked: boolean = false;
 
   ngOnInit(): void {
   }
 
   Update(){
-   
+   this.showBtnsWhenUpdateClicked = true;
+   this.showBtns = false;
   }
 
-  Remove(){}
+  Remove(){
 
-  Save(){}
+  }
 
-  Cancel(){}
+  ListAllPrices(){
+
+  }
+
+  AddPrice(){
+
+  }
+
+  Save(){
+
+  }
+
+  Cancel(){
+    this.router.navigate(["product-management"]);
+  }
   
 
 }

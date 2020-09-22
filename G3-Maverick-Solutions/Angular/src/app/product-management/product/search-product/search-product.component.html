@@ -1,55 +1,219 @@
 <body>
     <h1>Search Product</h1>
 
-   <form>
-        <div class="card"> 
-            <p class="subheadinglabel">Select Product Category To Search:</p>
+    <form [formGroup]="searchForm">
+        <div class="card">
+            <p class="subheadinglabel">Select Search Criteria:</p>
 
             <div class="divleft">
-                <label for="ProductCategoryID">Product Category:</label><select  required>
-                    <option value="0">--Select--</option>  
-                    <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
-                  </select>
+               <mat-radio-group aria-label="Select Option To Search">
+                   <mat-radio-button value= 1 (click)="barcodeInput()">Barcode</mat-radio-button>
+                   <mat-radio-button value= 2 (click)="selectProduct()">Product Name</mat-radio-button>
+                   <mat-radio-button value= 3 (click)="selectCategory()">Product Category</mat-radio-button>
+                   <mat-radio-button value= 4 (click)="selectContainer()">Container</mat-radio-button>
+                   <mat-radio-button value= 5 (click)="searchBtn()">All Products</mat-radio-button>
+               </mat-radio-group>
             </div>
-        
-         <div class="divleft">
-                <button type="submit" (click)="Search()">Search</button>
+
+            <div class="divleft" *ngIf="showBarcodeInput">
+                <p class="subheadinglabel">Enter Barcode:</p>
+                <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="searchForm.get('ProdBarcode').errors && (searchForm.get('ProdBarcode').touched || searchForm.get('ProdBarcode').dirty)">
+                  <span *ngIf="searchForm.get('ProdBarcode').errors.required">Barcode is required.</span>
+                  <span *ngIf="searchForm.get('ProdBarcode').errors.minlength || searchForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
+                  <span *ngIf="searchForm.get('ProdBarcode').errors.pattern">Only numbers allowed.</span>
+              </span>
+                <br>
+                <button type="submit" (click)="SearchBarcode()">Search</button>
+                <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+
+            <div class="divleft" *ngIf="showSelectProduct">
+                <p class="subheadinglabel">Select Product:</p>
+
+                <div class="divleft">
+                    <label for="ProductCategoryID">Product:</label><select  required>
+                         <option value="0">--Select--</option>  
+                         <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
+                        </select>
+                     <br>
+
+                     <button type="submit" (click)="SearchProduct()">Search</button>
+                     <button type="submit" (click)="Cancel()">Cancel</button>
+                </div>
+            </div>
+
+            <div class="divleft" *ngIf="showSelectCategory">
+                <p class="subheadinglabel">Select Product Category:</p>
+
+                <div class="divleft">
+                    <label for="ProductCategoryID">Product Category:</label><select  required>
+                         <option value="0">--Select--</option>  
+                         <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
+                        </select>
+                     <br>
+
+                     <button type="submit" (click)="SearchCategory()">Search</button>
+                     <button type="submit" (click)="Cancel()">Cancel</button>
+                </div>
+            </div>
+
+            <div class="divleft" *ngIf="showSelectContainer">
+                <p class="subheadinglabel">Select Container:</p>
+
+                <div class="divleft">
+                    <label for="ProductCategoryID">Container:</label><select  required>
+                         <option value="0">--Select--</option>  
+                         <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
+                        </select>
+                     <br>
+
+                     <button type="submit" (click)="SearchContainer()">Search</button>
+                     <button type="submit" (click)="Cancel()">Cancel</button>
+                </div>
+            </div>>
+
+            <div class="divleft" *ngIf="showSearchBtn">
+                <button type="submit" (click)="SearchAllProducts()">Search</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>
+    </form>
 
-    <br><br>
+   <form>
+    <div class="card" *ngIf="showBarcodeResult">
+        <div class="divleft"> 
+            <label class="subheadinglabel">Searched Barcode Result:</label>
+            <br>
+            <label for="ProductCategoryID">Product Category:</label><input type="text">
+            <br>
+            <label for="ProdName">Name:</label><input type="text">
+            <br>
+            <label for="ProdDesciption">Description:</label><input type="text">
+            <br>
+            <label for="ProdBarcode">Barcode:</label><input type="text">
+            <br>
+            <label for="ProdReLevel">Reorder level:</label><input type="text">
+            <br>
+            <label for="CPriceR">Cost Price(R):</label><input type="text">
+            <br>
+            <label for="UPriceR">Unit Price(R):</label><input type="text">
+            <br>
+            <label for="PriceStartDate">Price Start Date:</label><input type="text">
+            <br>
+            <label for="PriceEndDate">Price End Date:</label><input type="text">
+        </div>
+    </div>
+
+    <div class="card" *ngIf="showProductResult">
+        <div class="divleft"> 
+            <label class="subheadinglabel">Searched Product Name Result:</label>
+            <br>
+            <label for="ProductCategoryID">Product Category:</label><input type="text">
+            <br>
+            <label for="ProdName">Name:</label><input type="text">
+            <br>
+            <label for="ProdDesciption">Description:</label><input type="text">
+            <br>
+            <label for="ProdBarcode">Barcode:</label><input type="text">
+            <br>
+            <label for="ProdReLevel">Reorder level:</label><input type="text">
+            <br>
+            <label for="CPriceR">Cost Price(R):</label><input type="text">
+            <br>
+            <label for="UPriceR">Unit Price(R):</label><input type="text">
+            <br>
+            <label for="PriceStartDate">Price Start Date:</label><input type="text">
+            <br>
+            <label for="PriceEndDate">Price End Date:</label><input type="text">
+        </div>
+    </div>
+
+    <div class="card" *ngIf="showCategoryResults">
+        <div class="divleft">
+            <label class="subheadinglabel">Searched Product Category Results:</label>
+            <br>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+
+
+                <tr>
+                    <td>Bic Pen</td>
+                    <td>Item used for writing</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+                <tr>
+                    <td>Staedtler Pen</td>
+                    <td>Item used for writing</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+                <tr>
+                    <td>Pritt Glue Stick</td>
+                    <td>Item used to glue paper together</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+            </table>  
+       </div>
+     </div>
+
+    <div class="card" *ngIf="showContainerResults">
+        <div class="divleft">
+            <label class="subheadinglabel">Searched Container Results:</label>
+            <br>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+
+
+                <tr>
+                    <td>Bic Pen</td>
+                    <td>Item used for writing</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+                <tr>
+                    <td>Staedtler Pen</td>
+                    <td>Item used for writing</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+            </table>  
+       </div>
+     </div>
+
+     <div class="card" *ngIf="showAllProductsResults">
+        <div class="divleft">
+            <label class="subheadinglabel">Searched All Products Results:</label>
+            <br>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+
+                <tr>
+                    <td>Bic Pen</td>
+                    <td>Item used for writing</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+    
+                <tr>
+                    <td>Pritt Glue Stick</td>
+                    <td>Item used to glue paper together</td>
+                    <td><button type="submit" (click)="View()">View</button></td>
+                </tr>
+            </table>  
+       </div>
+     </div>
  
-        <div class="card">
-            <div class="divleft">
-                <label class="subheadinglabel">Searched Product Category Results:</label>
-                <br>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-
-
-                    <tr>
-                        <td>Bic Pen</td>
-                        <td>Item used for writing</td>
-                        <td><button type="submit" (click)="View()">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Staedtler Pen</td>
-                        <td>Item used for writing</td>
-                        <td><button type="submit" (click)="View()">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Pritt Glue Stick</td>
-                        <td>Item used to glue paper together</td>
-                        <td><button type="submit" (click)="View()">View</button></td>
-                    </tr>
-                </table>  
-           </div>
-         </div>
+        
      </form>  
 </body>
 

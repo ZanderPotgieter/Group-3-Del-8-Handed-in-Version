@@ -1,61 +1,64 @@
 <body>
+
     <form>
         <h1>Searched Product Details</h1>
-        
+
         <div class="card">
             <div class="divleft">
                 <label class="subheadinglabel">Searched Product Details:</label>
-                <br>
-                <label>Product Category:</label><select id="ProductCategoryID" name="ProductCategoryID" disabled>
-                    <option value="Stationery">Stationery</option>
-                    <option value="Plastic ware">Plastic ware</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Herbal Medicine">Herbal Medicine</option>
-                    <option value="Blue-tel">Blue-tel</option>
-                  </select>
-                <br>
-                <label>Name:</label><input type="text" value="Staedtler Pen" required disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Name:</label><input type="text" value="Staedtler Pen" required>-->
-                <br>
-                <label>Description:</label><input  type="text" value="Item used for writing" disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Description:</label><input  type="text" value="Item used for writing" disabled>-->
-                <br>
-                <label>Reorder level:</label><input type="text" value="15" required  disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Reorder level:</label><input type="text" value="15" required>-->
-                <br>
-                <label>Cost Price(R):</label><input type="text" value="2.50" required  disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Cost Price(R):</label><input type="text" value="2.50" required>-->
-                <br>
-                <label>Unit Price(R):</label><input type="text" value="4.00" required  disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Unit Price(R):</label><input type="text" value="4.00" required>-->
-                <br>
-                <label>Price Start Date:</label> <input type="text" value="06/25/2020" required  disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Date:</label> <input type="date" value="06/25/2020" required>-->
-                <br>
-                <label>Price End Date:</label> <input type="text" value="09/01/2020" required  disabled>
-                <!--Input become editable when the update button is clicked-->
-                <!--<label>Date:</label> <input type="date" value="06/25/2020" required>-->
-                
             </div>
-        
-            <div class="divleft">
-                <!--Buttons belows(Update & Delete) become hidden when update butten is clicked-->
-                <button type="submit" (click)="Update()"  hidden>Update</button>
-                <button type="submit" (click)="Remove()"  hidden> Remove</button>
+           
+            <div class="divleft" style="float: left; width: 50%;">
+                <label class="subheadinglabel">Product Details:</label>
+                <br>
+                <label for="ProductCategoryID">Product Category:</label><input type="text">
+                <br>
+                <label for="ProdName">Name:</label><input type="text">
+                <br>
+                <label for="ProdDesciption">Description:</label><input type="text">
+                <br>
+                <label for="ProdBarcode">Barcode:</label><input type="text">
+                <br>
+                <label for="ProdReLevel">Reorder level:</label><input type="text">
+            </div>
 
-                
-                <!--When the update button is clicked the buttons(Save & Cancel) belows becomes visible-->
+            <div class="divleft" style="float: left; width: 50%;">
+                <label class="subheadinglabel">Current Price:</label>
+                <br>
+                <label for="CPriceR">Cost Price(R):</label><input type="text">
+                <br>
+                <label for="UPriceR">Unit Price(R):</label><input type="text">
+                <br>
+                <label for="PriceStartDate">Price Start Date:</label><input type="text">
+                <br>
+                <label for="PriceEndDate">Price End Date:</label><input type="text">
+            </div>
+
+            <div class="divleft" *ngIf="showBtns">
+                <button type="submit" (click)="Update()">Update</button>
+                <button type="submit" (click)="Remove()"> Remove</button>
+                <button type="submit" (click)="ListAllPrices()">List All Prices</button>
+                <button type="submit" (click)="AddPrice()">Add Price</button>
+            </div>
+
+            <div class="divleft"  *ngIf="showBtnsWhenUpdateClicked">
                 <button type="submit" (click)="Save()" >Save</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>
     </form>
+
+    <form>
+        <div>
+            <p>list of prices</p>
+        </div>
+
+        <div>
+            <p>add price</p>
+        </div>
+    </form>
+
+
 </body>
 
 

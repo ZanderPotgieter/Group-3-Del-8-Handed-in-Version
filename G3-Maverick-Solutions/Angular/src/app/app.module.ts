@@ -115,6 +115,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { StatusManagementComponent } from './status-management/status-management.component';
 import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/generate-otp.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -219,7 +220,7 @@ import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/genera
     ToastrModule.forRoot({
       progressBar: true
     }),
-    ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
+    ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule, MatRadioModule
   ],
   providers: [HttpClientModule, ProductCategoryService],
   bootstrap: [AppComponent]

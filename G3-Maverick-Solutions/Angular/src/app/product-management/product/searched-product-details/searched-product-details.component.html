@@ -1,6 +1,6 @@
 <body>
 
-    <form>
+    <form [formGroup]="searchedForm">
         <h1>Searched Product Details</h1>
 
         <div class="card">
@@ -8,53 +8,145 @@
                 <label class="subheadinglabel">Searched Product Details:</label>
             </div>
            
+            <div>
             <div class="divleft" style="float: left; width: 50%;">
                 <label class="subheadinglabel">Product Details:</label>
                 <br>
-                <label for="ProductCategoryID">Product Category:</label><input type="text">
+                <label for="ProductCategoryID">Product Category:</label><select  required>
+                    <option value="0">--Select--</option>  
+                    <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
+                   </select>
                 <br>
-                <label for="ProdName">Name:</label><input type="text">
+                <label for="ProdName">Name:</label><input type="text" formControlName="ProdName"  class="form-control" [(ngModel)]="product.ProdName" id="ProdName" name="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
                 <br>
-                <label for="ProdDesciption">Description:</label><input type="text">
+                <span style="color:red" *ngIf="searchedForm.get('ProdName').errors && (searchedForm.get('ProdName').touched || searchedForm.get('ProdName').dirty)">
+                  <span *ngIf="searchedForm.get('ProdName').errors.required">Name is required.</span>
+                  <span *ngIf="searchedForm.get('ProdName').errors.minlength">Name must be greater than 2 characters.</span>
+                  <span *ngIf="searchedForm.get('ProdName').errors.pattern">Only text characters.</span>
+              </span>
                 <br>
-                <label for="ProdBarcode">Barcode:</label><input type="text">
+                <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="product.ProdDesciption" id="ProdDesciption" name="ProdDesciption" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
                 <br>
-                <label for="ProdReLevel">Reorder level:</label><input type="text">
+                  <span style="color:red" *ngIf="searchedForm.get('ProdDesciption').errors && (searchedForm.get('ProdDesciption').touched || searchedForm.get('ProdDesciption').dirty)">
+                    <span *ngIf="searchedForm.get('ProdDesciption').errors.required">Description is required.</span>
+                    <span *ngIf="searchedForm.get('ProdDesciption').errors.minlength">Description must be greater than 2 characters.</span>
+                    <span *ngIf="searchedForm.get('ProdDesciption').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
+                <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                  <span style="color:red" *ngIf="searchedForm.get('ProdBarcode').errors && (searchedForm.get('ProdBarcode').touched || searchedForm.get('ProdBarcode').dirty)">
+                    <span *ngIf="searchedForm.get('ProdBarcode').errors.required">Barcode is required.</span>
+                    <span *ngIf="searchedForm.get('ProdBarcode').errors.minlength || searchedForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
+                    <span *ngIf="searchedForm.get('ProdBarcode').errors.pattern">Only numbers allowed.</span>
+                </span>
+                <br>
+                <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="searchedForm.get('ProdReLevel').errors && (searchedForm.get('ProdReLevel').touched || searchedForm.get('ProdReLevel').dirty)">
+                  <span *ngIf="searchedForm.get('ProdReLevel').errors.required">Reorder level is required.</span>
+                  <span *ngIf="searchedForm.get('ProdReLevel').errors.minlength ||searchedForm.get('ProdReLevel').errors.maxlength">Reorder level must be greater than 1 number and less than 2 number.</span>
+                  <span *ngIf="searchedForm.get('ProdReLevel').errors.pattern">Only numbers allowed.</span>
+                </span>
+                <br>
             </div>
 
             <div class="divleft" style="float: left; width: 50%;">
                 <label class="subheadinglabel">Current Price:</label>
                 <br>
-                <label for="CPriceR">Cost Price(R):</label><input type="text">
+                <label for="CPriceR">Cost Price(R):</label><input type="number" formControlName="CPriceR" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPriceR" disabled>
                 <br>
-                <label for="UPriceR">Unit Price(R):</label><input type="text">
+                <label for="UPriceR">Unit Price(R):</label><input type="number" formControlName="UPriceR" class="form-control" [(ngModel)]="price.UPriceR" id="UPriceR" name="UPriceR" disabled>
                 <br>
-                <label for="PriceStartDate">Price Start Date:</label><input type="text">
+                <label for="PriceStartDate">Price Start Date:</label><input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="price.PriceStartDate" id="PriceStartDate" name="PriceStartDate" disabled>
                 <br>
-                <label for="PriceEndDate">Price End Date:</label><input type="text">
+                <label for="PriceEndDate">Price End Date:</label><input type="date" formControlName="PriceEndDate" class="form-control" [(ngModel)]="price.PriceEndDate" id="PriceEndDate" name="PriceEndDate" disabled>
+                <br>
             </div>
+        </div>
 
-            <div class="divleft" *ngIf="showBtns">
-                <button type="submit" (click)="Update()">Update</button>
-                <button type="submit" (click)="Remove()"> Remove</button>
-                <button type="submit" (click)="ListAllPrices()">List All Prices</button>
-                <button type="submit" (click)="AddPrice()">Add Price</button>
-            </div>
-
-            <div class="divleft"  *ngIf="showBtnsWhenUpdateClicked">
-                <button type="submit" (click)="Save()" >Save</button>
-                <button type="submit" (click)="Cancel()">Cancel</button>
+            <div class="divleft" style="float: left; width: 100%;">
+                <div class="divleft" *ngIf="showBtns" >
+                    <br><br>
+                    <button type="submit" (click)="Update()">Update</button>
+                    <button type="submit" (click)="Remove()"> Remove</button>
+                    <button type="submit" (click)="ListAllPrices()">List All Prices</button>
+                    <button type="submit" (click)="AddPrice()">Add Price</button>
+                </div>
+                
+                <div class="divleft"  *ngIf="showBtnsWhenUpdateClicked">
+                    <button type="submit" (click)="Save()" >Save</button>
+                    <button type="submit" (click)="Cancel()">Cancel</button>
+                </div>
             </div>
         </div>
     </form>
 
-    <form>
-        <div>
-            <p>list of prices</p>
-        </div>
+    <form [formGroup]="searchedForm">
+        <div class="card" *ngIf="showListOfPrices">
+            <div class="divleft">
+                <label class="subheadinglabel">List of all Prices:</label>
+                <br>
+                <table>
+                    <tr>
+                        <th>Cost Price(R)</th>
+                        <th>Unit Price(R)</th>
+                        <th>Price Start Date</th>
+                        <th>Price End Date</th>
+                    </tr>
+    
+    
+                    <tr>
+                        <td>7.00</td>
+                        <td>9.00</td>
+                        <td>2020/02/12</td>
+                        <td>2020/04/28</td>
+                    </tr>
+                    <tr>
+                        <td>10.00</td>
+                        <td>12.00</td>
+                        <td>2020/04/28</td>
+                        <td>2020/06/21</td>
+                    </tr>
+                    <tr>
+                        <td>25.00</td>
+                        <td>30.00</td>
+                        <td>2020/06/21</td>
+                        <td>2021/01/31</td>
+                    </tr>
+                </table>  
+           </div>
+         </div>
 
-        <div>
-            <p>add price</p>
+        <div class="card" *ngIf="showAddPrice">
+            <div class="divleft" >
+                <label class="subheadinglabel">Enter Price Details:</label>
+                <br>
+                <label for="CPriceR">Cost Price(R):</label><input type="number"  formControlName="CPriceR" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+                <br>
+                <span style="color:red" *ngIf="searchedForm.get('CPriceR').errors && (searchedForm.get('CPriceR').touched || searchedForm.get('CPriceR').dirty)">
+                  <span *ngIf="searchedForm.get('CPriceR').errors.required">Cost Price is required.</span>
+                  <span *ngIf="searchedForm.get('CPriceR').errors.minlength || searchedForm.get('CPriceR').errors.maxlength">Cost Price must be greater than 1 number and less than 2 number.</span>
+                  <span *ngIf="searchedForm.get('CPriceR').errors.pattern">Only numbers allowed.</span>
+                </span>
+                <br>
+                <label for="UPriceR">Unit Price(R):</label><input type="number"  formControlName="UPriceR" class="form-control" [(ngModel)]="price.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+                <br>
+                <span style="color:red" *ngIf="searchedForm.get('UPriceR').errors && (searchedForm.get('UPriceR').touched ||searchedForm.get('UPriceR').dirty)">
+                  <span *ngIf="searchedForm.get('UPriceR').errors.required">Unit Price is required.</span>
+                  <span *ngIf="searchedForm.get('UPriceR').errors.minlength || searchedForm.get('UPriceR').errors.maxlength">Unit Price must be greater than 1 number and less than 2 number.</span>
+                  <span *ngIf="searchedForm.get('UPriceR').errors.pattern">Only numbers allowed.</span>
+                </span>
+                <br>
+                <label for="PriceStartDate">Price Start Date:</label><input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="price.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>
+                <br>
+                <span style="color:red" *ngIf="searchedForm.get('PriceStartDate').errors && (searchedForm.get('PriceStartDate').touched ||searchedForm.get('PriceStartDate').dirty)">
+                  <span *ngIf="searchedForm.get('PriceStartDate').errors.required">Price start date is required.</span>
+                </span>
+                <br>
+                <button type="submit" (click)="AddNewPrice()" >Save</button>
+                <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
         </div>
     </form>
 

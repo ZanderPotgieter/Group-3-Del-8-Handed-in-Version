@@ -38,10 +38,12 @@ export class SearchProductCategoryComponent implements OnInit {
   All(){
     this.allCategories = this.productCategoryService.getAllProductCategory();
     this.showAll = true;
+    this.showSearch = false;
   }
 
   Input(){
     this.showSearch = true;
+    this.showAll = false;
   }
   Search(){
     this.productCategoryService.searchProductCategory(this.name).subscribe( (res:any)=> {

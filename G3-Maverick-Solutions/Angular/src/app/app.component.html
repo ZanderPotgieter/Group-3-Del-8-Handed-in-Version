@@ -121,7 +121,7 @@
       <div class="wrapped-div-login">
   <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
   <form   #form='ngForm' autocomplete="off" >
-      <h2>Reset Password</h2>
+      <h2>Generate One time Pin</h2>
       <div class="divleft">
         <label class="subheadinglabel">Enter your email address:</label>
       </div>
@@ -136,6 +136,7 @@
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
         <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="sendEmail()">Send One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>
@@ -148,7 +149,7 @@
       <div class="wrapped-div-login">
   <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
   <form   #form='ngForm' autocomplete="off" >
-      <h2>Reset Password</h2>
+      <h2>Verify One Time Pin</h2>
       <div class="divleft">
         <label class="subheadinglabel">Enter emailed One Time Pin:</label>
       </div>
@@ -169,6 +170,7 @@
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
         <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="checkOTP()">Verify One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>
@@ -180,21 +182,21 @@
   <div class="wrapperlogin">
       <div class="wrapped-div-login">
   <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
-  <form   #form='ngForm' autocomplete="off" >
+  <form  #form='ngForm' autocomplete="off" id="resetForm">
       <h2>Reset Password</h2>
       <div class="divleft">
         <label class="subheadinglabel">Enter new password details:</label>
       </div>
     <div class="form-group" [ngClass] ="{}">
       <label>Email:</label>
-      <input class="input"  name="email" [(ngModel)]="user.UserEmail" id="txtEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+      <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
     </div>
     <span style="color:red" *ngIf="showError">
       {{errorMessage}}</span>
 
       <div class="form-group">
         <label >Password:</label>
-        <input  class="input"  type="password"  [(ngModel)]="user.UserPassword"name="Password" id="txtPassword" required>
+        <input  class="input"  type="password"  [(ngModel)]="password"name="Password" id="txtPassword" required>
       </div>
       <div class="form-group">
         <label >Confirm Password:</label>
@@ -208,6 +210,7 @@
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
         <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="resetPassword()">Reset Password</button>
+        <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>

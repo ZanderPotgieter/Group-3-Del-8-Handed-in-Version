@@ -39,9 +39,9 @@ export class LoginService {
     return this.http.post(this.url + '/sendEmail?email=' + email, this.httpOptions);
   }
 
-  resetPassword(user: User)
+  resetPassword(email: string, password: string)
   {
-    return this.http.put(this.url + './resetPassword', user, this.httpOptions)
+    return this.http.put(this.url + '/resetPassword?email='+ email + '&password=' + password, this.httpOptions)
   }
 
   checkOTP(otp: string, email: string)

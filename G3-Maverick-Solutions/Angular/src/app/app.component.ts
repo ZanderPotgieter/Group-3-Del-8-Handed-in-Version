@@ -32,6 +32,7 @@ showInvalidPassword: boolean = false;
 showContainerNotSelected: boolean = false;
 errorMessage: string;
 ConfirmPassword: string;
+password: string;
 session: any;
 
 containers: Container[] = [];
@@ -128,7 +129,17 @@ enterOTP()
   this.showRegister = false;
   this.showResetPassword = false;
   this.showEnterOTP = true;
-  this.showGenerateOTP = true;
+  this.showGenerateOTP = true; 
+}
+
+showRP()
+{
+  this.showLogin = false;
+  this.showNav = false;
+  this.showRegister = false;
+  this.showResetPassword = true;
+  this.showEnterOTP = false;
+  this.showGenerateOTP = false; 
 }
 
 
@@ -240,7 +251,7 @@ sendEmail(){
 
   resetPassword()
   {
-    this.api.resetPassword(this.user).subscribe((res : any)=>{
+    this.api.resetPassword(this.email, this.password).subscribe((res : any)=>{
       console.log(res);
       if(res.Error)
       {
@@ -260,6 +271,5 @@ sendEmail(){
       this.showGenerateOTP = false;}
     })
   }
-
 
 }

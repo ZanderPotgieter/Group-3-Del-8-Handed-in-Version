@@ -1,86 +1,179 @@
 <body>
-    <h1>Search Customer Order</h1>
-   <form>
-    <div class="card"> 
+    
+    <h1>View Customer Order</h1>
+<form [formGroup] = 'orderForm'>
+    <div *ngIf="showcriteria"class="card" style="padding: 2px 2px;" >
+
         <div class="divleft">
             <label class="subheadinglabel">Select Search Criteria</label><br>
-            <button type="submit">Search By OrderNo</button>
-             <button type="submit">Search By Cell</button>
         </div>
-    </div>
-
-        <br><br>
-        <div class="card">
         <div class="divleft">
+            <button style="height: 30px;" (click)="selectedOrderNo()">Order No.</button>
+            <button style="height: 30px;" (click)="selectedCell()">Cell No.</button>
+            <button style="height: 30px;" (click)="searchAll()">View all</button>
+        </div>
+    </div> 
+
+    <div *ngIf="showOptions" class="card">
+        <div  class="divleft">
             <label class="subheadinglabel">Enter Search Details:</label><br>
-            <div hidden="true" class="divleft"  >
+            <div *ngIf="showOrdNo"class="divleft"  >
                 <label for="ordNo">Order Number:      </label>
-                <input class="searchinput" type="text" id="ordNo" name="ordNo" required>
+                <input [(ngModel)]="orderNo" formControlName="ordNo" class="form-control" type="text" id="ordNo" name="ordNo" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="orderForm.get('ordNo').errors && (orderForm.get('ordNo').touched || orderForm.get('ordNo').dirty)">
+                <span *ngIf="orderForm.get('ordNo').errors.required">Order number is required.</span>
+                <span *ngIf="orderForm.get('ordNo').errors.minLength">Order number must have 4 digits</span>
+                <span *ngIf="orderForm.get('ordNo').errors.maxLength">Order number must have 4 digits</span>
+                <span *ngIf="orderForm.get('ordNo').errors.pattern">Only numbers</span>
+                </span>
+                <br>
             </div>
-            <div   class="divleft"  >
-                <label for="ordNo">Cell Number:      </label>
-                <input class="searchinput" type="text" id="ordNo" name="ordNo" required>
+        </div>
+
+            <div *ngIf="showCell"  class="divleft"  >
+                <label for="cell">Cell Number:      </label>
+                <input  [(ngModel)]="cell" formControlName="cell" class="form-control"  type="text" id="cell" name="cell" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="orderForm.get('cell').errors && (orderForm.get('cell').touched || orderForm.get('cell').dirty)">
+                <span *ngIf="orderForm.get('cell').errors.required">Cell number is required.</span>
+                <span *ngIf="orderForm.get('cell').errors.minLength">Cell number must have 10 digits</span>
+                <span *ngIf="orderForm.get('cell').errors.maxLength">Cell number must have 10 digits</span>
+                <span *ngIf="orderForm.get('cell').errors.pattern">Only numbers</span>
+                </span>
+                <br>
             </div>
+
+           <!-- <div class ="diveleft">
+                <label style="color: red; font-size: 13px; width :200px">Enter search details</label>
+            </div>-->
+
             <div class="divleft">
-            <button type="submit">Search</button>
-            <button type="submit">Cancel</button>
+            <button type="submit" (click)="search()">Search</button>
+            <button type="submit" (click)="gotoCustomerOrderManagement()">Cancel</button>
             <br><br>
             </div>
         </div>
 
-    </div>
-    <br><br>
-    <!--<div *ngIf="showTable">-->
-    
-        <div class="card">
-            
+        <div *ngIf="showList" class="card">
             <div class="divleft">
                 <br>  <label class="subheadinglabel" >Orders:</label><br>
                 <table>   
                
                     <tr>
                         <th>OrderNo</th>
-                        <th>Date</th>
+                        <th>Status</th>
                         <th>Name</th>
                         <th>Surname</th>
-                        <th>Action</th>
+                        <th></th>
                         
                     </tr>
-          
-                 
-                    <!--<tr *ngFor="let item of products">-->
-                    
-                 
-               
-                    <tr>
-                        <td>88</td>
-                        <td>18/07/2020</td>
-                        <td>George</td>
-                        <td>sadoka</td>
-                        <td><button class="btntable" (click)="gotoViewOrder()"  type="submit">View</button></td>
-                        
-                  
-                       
+                    <tr *ngFor="let item of searchedOrders, index as ndx">
+                        <td>{{item.CusOrdNumber}}</td>
+                        <td>{{item.CusOrdStatus}}</td>
+                        <td>{{item.CusName}}</td>
+                        <td>{{item.CusSurname}}</td>
+                        <td><button style="height: 30px;"class="btntable" (click)="view(item.CusOrdNumber)">View</button></td>
+
                     </tr>
-        
-                    <tr>
-                        <td>66</td>
-                        <td>20/07/2020</td>
-                        <td>George</td>
-                        <td>sadoka</td>
-                        <td><button class="btntable"  type="submit">View</button></td>
-                        
-                        
-                        
-                    </tr>
-                
-            
                 </table>
             </div>
             <br><br>
          </div>
 
+        <div class="card" *ngIf="showOrder" >
+            <div class="divleft" >
+                <label class="subheadinglabel" >Customer Order Details </label>
+            </div>
 
-   </form>
-</body>
+
+            <div class="divleft" >
+                <label class="displaylabel" for="cusOrdNo">Order No:      </label>
+               <label id="cusOrdNo" name="cusOrdNo">{{orderDetails.CusOrdNumber}}</label>
+               </div>
+
+               <div class="divleft" >
+               <label class="displaylabel" for="OrdDate">Date:      </label>
+                 <label  id="OrdDate" name="OrdDate">{{orderDetails.CusOrdDate}}</label>
+               </div>
+               
+            
+            <div class="divleft" >
+            <label  class="displaylabel" for="cusCell">Cell:</label>
+            <label id="cusCell" name="cusCell" >{{customer.CusCell}}</label>
+        
+            </div>
+        
+            <div class="divleft">
+                
+            <label class="displaylabel" for="cusName">Name:       </label>
+             <label  id="cusName" name="cusName" >{{customer.CusName}}</label>
+            </div>
+            
+
+            <div class="divleft" >
+            <label class="displaylabel" for="cusName" >Surname:       </label>
+            <label  id="cusSurname" name="cusSurname">{{customer.CusSurname}}</label>
+            </div>
+            
+
+            <div class="divleft" >   
+            <label  class="displaylabel" for="cusCell" >Email:</label>
+            <label id="cusCell" name="cusCell" >{{customer.CusEmail}}</label>
+            </div>
+            
+        </div>
+    
+
+    <br>
+    <div class="card"*ngIf="showOrder" >
+            <table>    
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+                <tr *ngFor="let item of orderProducts, index as ndx">
+                    <td>{{item.Prodname}}</td>
+                     <td>{{item.Quantity}}</td>
+                     <td>R{{item.Price}}</td>
+                    <td>R{{item.Subtotal}}</td>
+                    <td><button class="btntable" style="height: 30px;" (click) ="remove(ndx)">X</button></td>
+                </tr>
+
+                <tr >
+                    
+                    <th></th>
+                    <th></th>
+                    <th>Subtotal (Exc VAT):</th>
+                    <th>R{{calculatedValues.TotalExcVat}}</th>
+                </tr>
+
+                <tr>
+                    
+                    
+                    <th></th>
+                    <th></th>
+                    <th>VAT:</th>
+                    <th>{{calculatedValues.Vat}}</th>
+                </tr>
+            
+                <tr>
+                    
+                    <th></th>
+                    <th></th>
+                    <th>TOTAL:</th>
+                    <th>R{{calculatedValues.TotalExcVat}}</th>
+                </tr>
+            </table>
+
+        <div class="divleft">
+        <button  type="submit" (click)="cancelOrder()" >Collect Order</button>
+        <button type="submit" (click)="collectOrder()">Cancel Order</button>
+        <button  type="submit" (click)="gotoCustomerOrderManagement()">Back</button>
+        </div>
+    </div>
+       
 

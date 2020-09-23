@@ -25,9 +25,14 @@ export class CustomerOrderService {
     return this.http.get(this.url + '/searchByCell?cell='+cell).pipe(map(result => result));  
   } 
   
-  searchOrderNo(orderNo : string){  
-    return this.http.get(this.url + '/searchOrderNo?orderNO='+orderNo).pipe(map(result => result));  
+  searchByOrderNo(orderNo : string){  
+    return this.http.get(this.url + '/searchByOrderNo?orderNo='+orderNo).pipe(map(result => result));  
   } 
+
+  searchAll(){  
+    return this.http.get(this.url + '/searchAll').pipe(map(result => result));  
+  } 
+
 
   initiatePlaceOrder(customerID : number ){
     return this.http.get(this.url + '/initiatePlaceOrder/'+customerID); 
@@ -40,16 +45,16 @@ export class CustomerOrderService {
     order, httpOptions); 
   }
 
-  cancelOrder(order: CustomerOrder) : Observable<CustomerOrder>{
+  cancelOrder(CustomerOrderID : number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post<CustomerOrder>(this.url + '/cancelOrder',  
-    order, httpOptions); 
+    return this.http.post(this.url + '/cancelOrder',  
+    CustomerOrderID, httpOptions); 
   }
 
-  collectOrder(order: CustomerOrder) : Observable<CustomerOrder[]>{
+  collectOrder(CustomerOrderID : number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post<CustomerOrder[]>(this.url + '/collectOrder',  
-    order, httpOptions); 
+    return this.http.post(this.url + '/collectOrder',  
+    CustomerOrderID, httpOptions); 
   }
 
   sendNotification(orders: CustomerOrder[]) : Observable<CustomerOrder[]>{

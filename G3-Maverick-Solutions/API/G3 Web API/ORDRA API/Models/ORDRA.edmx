@@ -5,6 +5,18 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="OrdraDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppEmployee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpName" Type="varchar" MaxLength="75" />
+          <Property Name="EmpSurname" Type="varchar" MaxLength="75" />
+          <Property Name="EmpCellNo" Type="varchar" MaxLength="75" />
+          <Property Name="EmpEmail" Type="varchar" MaxLength="75" />
+          <Property Name="EmpStartDate" Type="date" />
+          <Property Name="EmpShiftsCompleted" Type="int" />
+        </EntityType>
         <EntityType Name="Area">
           <Key>
             <PropertyRef Name="AreaID" />
@@ -215,7 +227,7 @@
             <PropertyRef Name="OTPID" />
           </Key>
           <Property Name="OTPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OTP" Type="varchar" MaxLength="6" />
+          <Property Name="OTP" Type="varchar" MaxLength="5" />
           <Property Name="ExpiryTime" Type="datetime" />
           <Property Name="GenerationTime" Type="datetime" />
           <Property Name="userID" Type="int" />
@@ -1011,6 +1023,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="OrdraDBModelStoreContainer">
+          <EntitySet Name="AppEmployee" EntityType="Self.AppEmployee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area_Status" EntityType="Self.Area_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
@@ -2474,13 +2487,14 @@
             <End Role="User" EntitySet="Users" />
             <End Role="One_Time_Pin" EntitySet="One_Time_Pin" />
           </AssociationSet>
+          <EntitySet Name="AppEmployees" EntityType="OrdraDBModel.AppEmployee" />
         </EntityContainer>
         <EntityType Name="One_Time_Pin">
           <Key>
             <PropertyRef Name="OTPID" />
           </Key>
           <Property Name="OTPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OTP" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="OTP" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="ExpiryTime" Type="DateTime" Precision="3" />
           <Property Name="GenerationTime" Type="DateTime" Precision="3" />
           <Property Name="userID" Type="Int32" />
@@ -2498,6 +2512,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AppEmployee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="EmpSurname" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="EmpCellNo" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="EmpEmail" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="EmpStartDate" Type="DateTime" Precision="0" />
+          <Property Name="EmpShiftsCompleted" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2955,6 +2981,19 @@
                 <ScalarProperty Name="ExpiryTime" ColumnName="ExpiryTime" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="OTPID" ColumnName="OTPID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppEmployees">
+            <EntityTypeMapping TypeName="OrdraDBModel.AppEmployee">
+              <MappingFragment StoreEntitySet="AppEmployee">
+                <ScalarProperty Name="EmpShiftsCompleted" ColumnName="EmpShiftsCompleted" />
+                <ScalarProperty Name="EmpStartDate" ColumnName="EmpStartDate" />
+                <ScalarProperty Name="EmpEmail" ColumnName="EmpEmail" />
+                <ScalarProperty Name="EmpCellNo" ColumnName="EmpCellNo" />
+                <ScalarProperty Name="EmpSurname" ColumnName="EmpSurname" />
+                <ScalarProperty Name="EmpName" ColumnName="EmpName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

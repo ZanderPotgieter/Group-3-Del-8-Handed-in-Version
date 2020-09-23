@@ -526,8 +526,22 @@ CREATE TABLE One_Time_Pin
 )
 GO
 
-
 use OrdraDB
+
+CREATE TABLE AppEmployee
+(
+	EmployeeID int primary key identity(1,1) NOT NULL,
+	EmpName varchar(75) NULL,
+	EmpSurname varchar(75) NULL,
+	EmpCellNo varchar(75) NULL,
+	EmpEmail varchar(75) NULL,
+	EmpStartDate date NULL,
+	EmpShiftsCompleted int NULL,
+)
+GO
+
+
+
 
 INSERT INTO User_Type (UTypeDescription)
 VALUES ('Manager'), 

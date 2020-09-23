@@ -14,10 +14,10 @@ export class SearchemployeeComponent implements OnInit {
   constructor(private service: EmployeeService, private router: Router) { }
 
   ngOnInit(){
-    this.resetForm();
+    //this.resetForm();
   }
 
-  resetForm() {
+ /*  resetForm() {
     this.service.empsearchData = 
     {
       UserID: 0,
@@ -33,6 +33,6 @@ export class SearchemployeeComponent implements OnInit {
       console.log(res);
       this.resetForm();
     });  
-}
+} */
 
 }

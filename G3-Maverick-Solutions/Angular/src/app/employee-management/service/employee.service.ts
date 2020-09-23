@@ -1,32 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Employee } from '../model/employee.model';
-import { SearchEmployee } from '../model/search-employee';
-import { environment } from 'src/environments/environment';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import{map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
-  //add for storing employee info 
-  empData: Employee;
-  empsearchData:SearchEmployee ;
-  empList: Employee[];
-
-  constructor(private fb: FormBuilder, private http: HttpClient ) { }
-
-
-  search(formData) {
-    return this.http.post(environment.ApiUrl  + '/Search/searchEmployee', formData);
-  }
   
-  postEmployee(formData) {
-    return this.http.post(environment.ApiUrl + '/AppEmployees', formData);
+
+  constructor( private http: HttpClient ) { }
+
+  url = 'https://localhost:44399/API/Employee'
+
+  getEmployee(Id: number) {  
+    return this.http.get(this.url + '/getEmployee/' + Id).pipe(map(result => result));  
+  } 
+
+  getAllEmployees(): Observable<Employee[]> {  
+    return this.http.get<Employee[]>(this.url + '/getAllEmployees');  
   }
 
-  deleteEmployee(formData) {
-    return this.http.post(environment.ApiUrl + '/Delete/deleteEmployee', formData);
+  searchEmployee(name: string, surname: string){  
+    return this.http.get(this.url + '/searchEmployee?name='+name+'&surname='+surname).pipe(map(result => result));  
+  } 
+
+  createEmployee(Manager: Employee): Observable<Employee> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.post<Employee>(this.url + '/createEmployee',  
+    Manager, httpOptions);  
+  } 
+
+  updateEmployee(employee: Employee): Observable<Employee> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.put<Employee>(this.url + '/updateEmployee',  
+    employee, httpOptions);  
   }
+
+  deleteEmployee(Id: number): Observable<number> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.delete<number>(this.url + '/deleteEmployee?id=' + Id,  
+ httpOptions); 
+}
+
+ 
 
 }

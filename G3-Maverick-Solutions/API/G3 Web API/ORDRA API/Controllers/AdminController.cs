@@ -21,27 +21,7 @@ namespace ORDRA_API.Controllers
         OrdraDBEntities db = new OrdraDBEntities();
 
 
-        //---User Types---//
-        [HttpGet]
-        [Route("getAllUserTypes")]
-        public object getAllUserTypes()
-        {
-
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-                toReturn = db.User_Type.ToList();
-            }
-            catch
-            {
-                toReturn.Error = "Search Interrupted. Retry";
-            }
-
-            return toReturn;
-
-        }
+    //---Users-----//
 
         [HttpGet]
         [Route("getAllUsers")]
@@ -66,7 +46,9 @@ namespace ORDRA_API.Controllers
                     item.UserEmail = user.UserEmail;
                     item.UserType = type;
 
-                    returnUsers.Add(item);;
+                    returnUsers.Add(item);
+
+                    toReturn = returnUsers;
                 }
             }
             catch
@@ -128,7 +110,101 @@ namespace ORDRA_API.Controllers
         }
 
 
+        //------Users Types------//
 
+        //Getting all user types
+        [HttpGet]
+        [Route("getAllUserTypes")]
+        public object getAllUserTypes()
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
+
+            try
+            {
+                List<User_Type> types = db.User_Type.ToList();
+                if (types != null)
+                {
+                    List<dynamic> typesList = new List<dynamic>();
+                    foreach (User_Type item in types)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.UserTypeID;
+                        status.description = item.UTypeDescription;
+                        typesList.Add(status);
+                    }
+                    toReturn.List = typesList;
+                }
+                else
+                {
+                    toReturn.Message = "No User Types Found";
+                }
+                
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        //add User Type
+        [HttpPut]
+        [Route("addUserType")]
+        public object addUserType(string description)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                User_Type newType = new User_Type();
+                newType.UTypeDescription = description;
+                db.User_Type.Add(newType);
+                db.SaveChanges();
+
+                toReturn.Message = "User Type Added Successfully";
+
+            }
+            catch
+            {
+                toReturn.Error = "User Type Add Unsuccessful";
+            }
+
+            return toReturn;
+
+        }
+
+        //Update User Type
+        [HttpPost]
+        [Route("updateUserType")]
+        public object updateUserType(int id, string description)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == id).FirstOrDefault();
+                newType.PTDescription = description;
+                db.SaveChanges();
+
+                toReturn.Message = "Update User Type Successful";
+            }
+            catch
+            {
+                toReturn.Error = "User Type Update Unsuccessful";
+            }
+
+            return toReturn;
+
+        }
 
 
 
@@ -141,10 +217,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Customer_Order_Status.ToList();
+                List<Customer_Order_Status> statuses = db.Customer_Order_Status.ToList();
+                if (statuses != null)
+                {
+                    List<dynamic> statusList = new List<dynamic>();
+                    foreach (Customer_Order_Status item in statuses)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.CustomerOrderStatusID;
+                        status.description = item.CODescription;
+                        statusList.Add(status);
+                    }
+
+                    toReturn.List = statusList;
+                }
+                else
+                {
+                    toReturn.Message = "Customer Order Statuses Not Found";
+                }
             }
             catch
             {
@@ -171,7 +265,7 @@ namespace ORDRA_API.Controllers
                 db.Customer_Order_Status.Add(newStatus);
                 db.SaveChanges();
 
-                toReturn.Message = "Customer Order Status Add Successful";
+                toReturn.Message = "Customer Order Status Added Successfully";
 
             }
             catch
@@ -248,10 +342,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Supplier_Order_Status.ToList();
+                List<Supplier_Order_Status> statuses = db.Supplier_Order_Status.ToList();
+                if (statuses != null)
+                {
+                    List<dynamic> statusList = new List<dynamic>();
+                    foreach (Supplier_Order_Status item in statuses)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.SupplierOrderStatusID;
+                        status.description = item.SOSDescription;
+                        statusList.Add(status);
+                    }
+
+                    toReturn.List = statusList;
+                }
+                else
+                {
+                    toReturn.Message = "No Supplier Order Statuses Found";
+                }
             }
             catch
             {
@@ -278,7 +390,7 @@ namespace ORDRA_API.Controllers
                 db.Supplier_Order_Status.Add(newStatus);
                 db.SaveChanges();
 
-                toReturn.Message = "Supplier Order Status Add Successful";
+                toReturn.Message = "Supplier Order Status Added Successfully";
 
             }
             catch
@@ -356,10 +468,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Marked_Off_Reason.ToList();
+                List<Marked_Off_Reason> reasons = db.Marked_Off_Reason.ToList();
+                if (reasons != null)
+                {
+                    List<dynamic> statusList = new List<dynamic>();
+                    foreach (Marked_Off_Reason item in reasons)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.ReasonID;
+                        status.description = item.MODescription;
+                        statusList.Add(status);
+                    }
+
+                    toReturn.List = statusList;
+                }
+                else
+                {
+                    toReturn.Message = "No Marked Off Reasons Found";
+                }
             }
             catch
             {
@@ -386,7 +516,7 @@ namespace ORDRA_API.Controllers
                 db.Marked_Off_Reason.Add(newReason);
                 db.SaveChanges();
 
-                toReturn.Message = "Marked Off Reason Add Successful";
+                toReturn.Message = "Marked Off Reason Added Successfully";
             }
             catch
             {
@@ -462,10 +592,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Payment_Type.ToList();
+                List<Payment_Type> types = db.Payment_Type.ToList();
+                if (types != null)
+                {
+                    List<dynamic> typesList = new List<dynamic>();
+                    foreach (Payment_Type item in types)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.PaymentTypeID;
+                        status.description = item.PTDescription;
+                        typesList.Add(status);
+                    }
+                    toReturn.List = typesList;
+                }
+                else
+                {
+                    toReturn.Message = "No Payment Types Found";
+                }
+
             }
             catch
             {
@@ -492,7 +640,7 @@ namespace ORDRA_API.Controllers
                 db.Payment_Type.Add(newType);
                 db.SaveChanges();
 
-                toReturn.Message = "Payment Type Add Successful";
+                toReturn.Message = "Payment Type Added Successfully";
 
             }
             catch

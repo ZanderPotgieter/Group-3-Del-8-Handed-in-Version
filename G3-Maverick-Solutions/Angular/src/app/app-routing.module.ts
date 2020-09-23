@@ -110,9 +110,10 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
    
     //---Admin Componenets---//
     import {AdminDashboardComponent} from './admin-dashboard/admin-dashboard.component';
-    import {UserAccessComponent} from './user-access/user-access.component';
+    import {UserTreeComponent} from './user-tree/user-tree.component';
     import {UsertableComponent} from './usertable/usertable.component';
     import {AdminComponent} from './admin/admin.component';
+   import {ViewStatusesComponent} from './adminModels/view-statuses/view-statuses.component';
 
     const routes: Routes = [
 
@@ -147,9 +148,10 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
 
         //Admin Routes
         {path: 'admin-dashboard', component: AdminDashboardComponent},
-        {path:'user-access', component: UserAccessComponent },
+        {path: 'user-tree', component: UserTreeComponent},
         {path: 'admin', component: AdminComponent},
         {path: 'user-table', component: UsertableComponent},
+        {path: 'view-statuses', component: ViewStatusesComponent},
 
         //Management routes 
 

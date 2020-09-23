@@ -1,0 +1,46 @@
+<body>
+    <h1>System Status And Types Management</h1>
+    <form>
+        <div >
+            
+            <mat-radio-group  aria-label="Select Option To View">
+            <mat-radio-button  value = 1 (click)="getCusSta()" >Customer Order Statuses </mat-radio-button>
+            <mat-radio-button value = 2 (click)="getSupSta()" >Supplier Order Statuses </mat-radio-button>
+            <mat-radio-button value = 3 (click)="markedOffReason()" >Product Marked Of Reasons </mat-radio-button>
+            <mat-radio-button value = 4 (click)="paymentType()" >Payment Types </mat-radio-button>
+            <mat-radio-button value = 5 (click)="userType()" >User Types </mat-radio-button>
+            </mat-radio-group>
+
+        </div>
+        <div class="card">
+        <table>
+            <th style="width: 5%; padding:5px"></th>
+            <th style="text-align: left;">Description</th>
+            <th style="width: 20%; padding:5px"></th>
+            <th style="width: 20%;"><button style="border-radius: 10px; width: 60%;" (click)="add()"><i class="small material-icons" >add</i></button></th>
+           <!--<th style="width: 20%;"></th>-->
+          
+            <tr *ngIf="showadd">
+                <td ></td>
+                <td><input style="width: 70%" type="text" name="description" [(ngModel)]="addDes"></td>
+                <td><button style="border-radius: 10px; width: 60%;" (click)="saveadd()"><i class="small material-icons" plceholder="new item">save</i></button></td>
+                <td></td>
+                <!--<td></td>-->
+            </tr>
+            <tr *ngFor="let item of list; index as ndx; trackBy:trackByndx;">
+                <td>{{ndx+1}}</td>
+                <td><input style="width: 70%" type = "text" name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].description"></td>
+                <td ><button  style="border-radius: 10px; width: 60%;" (click)="update()"><i class="small material-icons" >edit</i></button></td>
+                <td><button style="border-radius: 10px; width: 60%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
+                <!--<td><button style="border-radius: 10px; width: 60%;" (click)="delete(ndx)"><i class="small material-icons" >delete</i></button></td>-->
+    
+            </tr>
+         
+        </table>
+    </div>
+    
+
+      
+
+    </form>
+</body>

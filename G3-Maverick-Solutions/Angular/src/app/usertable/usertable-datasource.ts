@@ -2,58 +2,50 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
+import {Users} from '../adminModels/users';
+import {AdminService} from '../admin.service';
 import { Observable, of as observableOf, merge } from 'rxjs';
 
-// TODO: Replace this with your own data model type
-export interface UsertableItem {
-  name: string;
-  id: number;
-}
 
 // TODO: replace this with real data from your application
-const EXAMPLE_DATA: UsertableItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'},
-];
+
 
 /**
  * Data source for the Usertable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class UsertableDataSource extends DataSource<UsertableItem> {
-  data: UsertableItem[] = EXAMPLE_DATA;
+export class UsertableDataSource {
+ 
+
+  constructor( ) {
+   
+  }
+
+  private api: AdminService
+  dataList: Users[] = [];
+
+  getAllUsers(){
+   this.api.getAllUsers().subscribe( (res:any)=> {
+      console.log(res);
+      this.dataList = res;
+
+    })
+
+    return this.dataList;
+    
+  }
+
+  data: Users[] = this.getAllUsers();
   paginator: MatPaginator;
   sort: MatSort;
-
-  constructor() {
-    super();
-  }
 
   /**
    * Connect this data source to the table. The table will only update when
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<UsertableItem[]> {
+  connect(): Observable<Users[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
@@ -77,7 +69,7 @@ export class UsertableDataSource extends DataSource<UsertableItem> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: UsertableItem[]) {
+  private getPagedData(data: Users[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -86,7 +78,7 @@ export class UsertableDataSource extends DataSource<UsertableItem> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: UsertableItem[]) {
+  private getSortedData(data: Users[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -94,8 +86,8 @@ export class UsertableDataSource extends DataSource<UsertableItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case 'name': return compare(a.UserName, b.UserName, isAsc);
+        case 'id': return compare(+a.UserSurname, +b.UserSurname, isAsc);
         default: return 0;
       }
     });

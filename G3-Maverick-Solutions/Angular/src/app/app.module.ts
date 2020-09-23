@@ -106,7 +106,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
-import { UserAccessComponent } from './user-access/user-access.component';
 import { MatTreeModule } from '@angular/material/tree';
 import { AdminComponent } from './admin/admin.component';
 import { UsertableComponent } from './usertable/usertable.component';
@@ -115,6 +114,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { StatusManagementComponent } from './status-management/status-management.component';
 import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/generate-otp.component';
+import { UsersComponent } from './adminModels/statuses/users.component';
+import {ViewStatusesComponent} from './adminModels/view-statuses/view-statuses.component';
+import {MatRadioModule} from '@angular/material/radio';
+import { UserTreeComponent } from './user-tree/user-tree.component';
+
+
 
 @NgModule({
   declarations: [
@@ -203,11 +208,13 @@ import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/genera
     UpdateVatComponent,
     SupplierDetailComponent,
     AdminDashboardComponent,
-    UserAccessComponent,
     AdminComponent,
     UsertableComponent,
     StatusManagementComponent,
-    GenerateOTPComponent
+    GenerateOTPComponent,
+    UsersComponent,
+    ViewStatusesComponent,
+    UserTreeComponent,
   ],
   imports: [
     BrowserModule,
@@ -219,6 +226,7 @@ import { GenerateOTPComponent } from './login-subsystem/user/generate-otp/genera
     ToastrModule.forRoot({
       progressBar: true
     }),
+    MatRadioModule,
     ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
   ],
   providers: [HttpClientModule, ProductCategoryService],

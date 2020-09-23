@@ -22,11 +22,32 @@ export class ProductService {
   getAllProductCategory(): Observable<ProductCategory[]> {  
     return this.http.get<ProductCategory[]>(this.url + '/GetAllProductCategories');  
   } 
+  
+  getProductByID(id: number): Observable<Product> {  
+    return this.http.get<Product>(this.url + '/getProductByID/' + id);  
+  } 
 
-  addProduct(product: Product): Observable<Product>   {  
+  getProductByBarcode(prodBarcode: string): Observable<Product>{
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.post<Product>(this.url + '/getProductByBarcode/?prodBarcode=' + prodBarcode ,httpOptions)
+  }
+
+  getProductByName(prodName: string): Observable<Product>{
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.post<Product>(this.url + "/getProductByName?prodName=" + prodName, httpOptions);
+  }
+
+  getProductByCategory(prodCategory: string): Observable<Product>{
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.post<Product>(this.url + "/getProductByCategory?prodCategory=" + prodCategory, httpOptions);
+  }
+
+  
+
+  addProduct(newProduct: Product): Observable<Product>   {  
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post<Product>(this.url + '/AddProduct',  
-    product, httpOptions);  
+    return this.http.put<Product>(this.url + '/addProduct',  
+    newProduct, httpOptions);  
   }  
 
   addStockTake(stockTake: StockTake): Observable<StockTake> {  

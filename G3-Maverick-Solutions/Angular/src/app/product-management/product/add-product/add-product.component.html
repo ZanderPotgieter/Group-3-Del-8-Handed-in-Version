@@ -16,7 +16,7 @@
                 <label class="subheadinglabel">Enter Product Details:</label>
                 <br>
                 <label for="ProductCategoryID">Product Category:</label>
-                  <select  required formControlName="Select" name="Select">
+                  <select  required formControlName="Select" name="Select" [(ngModel)]="Select" (ngModelChange)="loadProducts($event)">
                     <option value="0">--Select--</option>  
                     <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
                   </select>
@@ -25,7 +25,7 @@
                   <span *ngIf="pdForm.get('Select').errors.required">Select Product Category required.</span>
               </span>
                 <br>
-                <label for="ProdName">Name:</label><input type="text" formControlName="ProdName"  class="form-control" [(ngModel)]="product.ProdName" id="ProdName" name="ProdName" pattern="[a-zA-Z ]*" required>
+                <label for="ProdName">Name:</label><input type="text" formControlName="ProdName"  class="form-control" [(ngModel)]="newProduct.ProdName" id="ProdName" name="ProdName" pattern="[a-zA-Z ]*" required>
                 <br>
                 <span style="color:red" *ngIf="pdForm.get('ProdName').errors && (pdForm.get('ProdName').touched || pdForm.get('ProdName').dirty)">
                   <span *ngIf="pdForm.get('ProdName').errors.required">Name is required.</span>
@@ -33,7 +33,7 @@
                   <span *ngIf="pdForm.get('ProdName').errors.pattern">Only text characters.</span>
               </span>
               <br>
-                <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="product.ProdDesciption" id="ProdDesciption" name="ProdDesciption" pattern="[a-zA-Z ]*" required>
+                <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="newProduct.ProdDesciption" id="ProdDesciption" name="ProdDesciption" pattern="[a-zA-Z ]*" required>
               <br>
                 <span style="color:red" *ngIf="pdForm.get('ProdDesciption').errors && (pdForm.get('ProdDesciption').touched || pdForm.get('ProdDesciption').dirty)">
                   <span *ngIf="pdForm.get('ProdDesciption').errors.required">Description is required.</span>
@@ -41,7 +41,7 @@
                   <span *ngIf="pdForm.get('ProdDesciption').errors.pattern">Only text characters.</span>
               </span>
               <br>
-                <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required>
+                <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="newProduct.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required>
               <br>
                 <span style="color:red" *ngIf="pdForm.get('ProdBarcode').errors && (pdForm.get('ProdBarcode').touched || pdForm.get('ProdBarcode').dirty)">
                   <span *ngIf="pdForm.get('ProdBarcode').errors.required">Barcode is required.</span>
@@ -49,7 +49,7 @@
                   <span *ngIf="pdForm.get('ProdBarcode').errors.pattern">Only numbers allowed.</span>
               </span>
               <br>
-                <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required>
+                <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="newProduct.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required>
               <br>
               <span style="color:red" *ngIf="pdForm.get('ProdReLevel').errors && (pdForm.get('ProdReLevel').touched || pdForm.get('ProdReLevel').dirty)">
                 <span *ngIf="pdForm.get('ProdReLevel').errors.required">Reorder level is required.</span>

@@ -18,10 +18,13 @@ export class AddProductComponent implements OnInit {
   constructor(private productService: ProductService, private router: Router, private fb: FormBuilder) { }
   pdForm: FormGroup;
   categories: ProductCategory[];
-  product : Product = new Product();
+  newProduct : Product = new Product();
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
  
+  Select: number;
+  selectedCatID: number;
+
   addToSystem: boolean = false;
   linkToContainer: boolean = false;
  
@@ -61,9 +64,13 @@ export class AddProductComponent implements OnInit {
     this.addToSystem = false;
   }
 
+  loadProducts(val: ProductCategory){
+    this.Select = val.ProductCategoryID;
+    this.newProduct.ProductCategoryID = this.selectedCatID;
+  }
+
   Save(){
-    this.productService.addProduct(this.product).subscribe( (res: any)=> {
-      this.product.ProductID = this.price.ProductID;
+    this.productService.addProduct(this.newProduct).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;}

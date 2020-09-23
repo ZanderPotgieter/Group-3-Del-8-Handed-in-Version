@@ -30,13 +30,26 @@ export class SearchProductComponent implements OnInit {
   showContainerResults: boolean = false;
   showAllProductsResults: boolean = false;
 
+  prodBarcode: string;
+  responseMessage: string = "Request Not Submitted";
+  productBarcode : Product = new Product();
+  productBarcodeWithPrice: Price = new Price();
   ngOnInit() {
 
     this.searchForm= this.fb.group({ 
+      prodBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
       SelectProd: ['', [Validators.required]],
       SelectProdC: ['', [Validators.required]],
       SelectCon: ['', [Validators.required]],
+      ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+      ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+      ProdReLevel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9 ]*')]], 
+      CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
+      UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
+      PriceStartDate: ['', [Validators.required]],
+      PriceEndDate: [''],
+      ProductCategoryID: [''],
     }); 
 
     this.productService.getAllProductCategory()
@@ -53,6 +66,8 @@ export class SearchProductComponent implements OnInit {
     this.showSelectCategory = false;
     this.showSelectContainer = false;
     this.showSearchBtn = false;
+
+    
   }
 
   selectProduct(){
@@ -89,11 +104,32 @@ export class SearchProductComponent implements OnInit {
 
   SearchBarcode(){
 
-    this.showBarcodeResult = true;
-    this.showProductResult = false;
-    this.showCategoryResults = false;
-    this.showContainerResults = false;
-    this.showAllProductsResults = false;
+    this.productService.getProductByBarcode(this.prodBarcode).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      else{
+          this.productBarcode.ProdName = res.ProdName;
+          this.productBarcode.ProdDesciption = res.ProdDesciption;
+          this.productBarcode.ProdBarcode = res.ProdBarcode;
+          this.productBarcode.ProdReLevel = res.ProdReLevel;
+          this.productBarcode.ProductCategoryID = res.ProductCategoryID;
+          this.productBarcode.ProductID = res.ProductID;
+          this.productBarcodeWithPrice.CPriceR= res.CPriceR;
+          this.productBarcodeWithPrice.UPriceR = res.UPriceR;
+          this.productBarcodeWithPrice.PriceID = res.PriceID;
+          this.productBarcodeWithPrice.PriceStartDate = res.PriceStartDate;
+          this.productBarcodeWithPrice.PriceEndDate = res.PriceEndDate;
+          this.productBarcodeWithPrice.ProductID = res.ProductID;
+      }
+      this.showBarcodeResult = true;
+      this.showProductResult = false;
+      this.showCategoryResults = false;
+      this.showContainerResults = false;
+      this.showAllProductsResults = false;
+      
+    })
   }
 
   SearchProduct(){

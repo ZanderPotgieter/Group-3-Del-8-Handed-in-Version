@@ -17,12 +17,12 @@
 
             <div class="divleft" *ngIf="showBarcodeInput">
                 <p class="subheadinglabel">Enter Barcode:</p>
-                <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required>
+                <label for="prodBarcode">Barcode:</label><input type="text" formControlName="prodBarcode" class="form-control" [(ngModel)]="prodBarcode" id="prodBarcode" name="prodBarcode" pattern="[0-9 ]*" required>
                 <br>
-                <span style="color:red" *ngIf="searchForm.get('ProdBarcode').errors && (searchForm.get('ProdBarcode').touched || searchForm.get('ProdBarcode').dirty)">
-                  <span *ngIf="searchForm.get('ProdBarcode').errors.required">Barcode is required.</span>
-                  <span *ngIf="searchForm.get('ProdBarcode').errors.minlength || searchForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
-                  <span *ngIf="searchForm.get('ProdBarcode').errors.pattern">Only numbers allowed.</span>
+                <span style="color:red" *ngIf="searchForm.get('prodBarcode').errors && (searchForm.get('prodBarcode').touched || searchForm.get('prodBarcode').dirty)">
+                  <span *ngIf="searchForm.get('prodBarcode').errors.required">Barcode is required.</span>
+                  <span *ngIf="searchForm.get('prodBarcode').errors.minlength || searchForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
+                  <span *ngIf="searchForm.get('prodBarcode').errors.pattern">Only numbers allowed.</span>
               </span>
                 <br>
                 <button type="submit" (click)="SearchBarcode()">Search</button>
@@ -98,23 +98,23 @@
         <div class="divleft"> 
             <label class="subheadinglabel">Searched Barcode Result:</label>
             <br>
-            <label for="ProductCategoryID">Product Category:</label><input type="text">
+            <label for="ProductCategoryID">Product Category:</label><input type="number"  formControlName="ProductCategoryID" class="form-control" [(ngModel)]="productBarcode.ProductCategoryID" id="ProductCategoryID" name="ProductCategoryID" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="ProdName">Name:</label><input type="text">
+            <label for="ProdName">Name:</label><input type="text" formControlName="ProdName" class="form-control" [(ngModel)]="productBarcode.ProdName"  id="ProdName"  name ="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="ProdDesciption">Description:</label><input type="text">
+            <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="productBarcode.ProdDesciption"  id="ProdDesciption"  name ="ProdDesciption" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="ProdBarcode">Barcode:</label><input type="text">
+            <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="productBarcode.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="ProdReLevel">Reorder level:</label><input type="text">
+            <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="productBarcode.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="CPriceR">Cost Price(R):</label><input type="text">
+            <label for="CPriceR">Cost Price(R):</label><input type="number"  formControlName="CPriceR" class="form-control" [(ngModel)]="productBarcodeWithPrice.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="UPriceR">Unit Price(R):</label><input type="text">
+            <label for="UPriceR">Unit Price(R):</label><input type="number"  formControlName="UPriceR" class="form-control" [(ngModel)]="productBarcodeWithPrice.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="PriceStartDate">Price Start Date:</label><input type="text">
+            <label for="PriceStartDate">Price Start Date:</label><input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="productBarcodeWithPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="PriceEndDate">Price End Date:</label><input type="text">
+            <label for="PriceEndDate">Price End Date:</label><input type="date" formControlName="PriceEndDatee" class="form-control" [(ngModel)]="productBarcodeWithPrice.PriceEndDate" id="PriceEndDate" name="PriceEndDate" required [readonly] = "this.inputEnabled">
         </div>
     </div>
 

@@ -1,6 +1,6 @@
 <body>
     <h1>Add Supplier</h1>
-    <form>
+    <form #form='ngForm' class="mb-4" autocomplete="off" >
         
         <br>
         <div class="card">
@@ -17,19 +17,22 @@
         <br>
         <div class="divleft" >
             <label for="SupCell">Cell Number:  </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" required>
+            <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"  class="form-control" [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" required>
+            <small style="color: coral;">Format: 123-456-7890</small>
         </div>
 
         <br>
         <div class="divleft"  >
-            <label for="SupEmail">Email:      </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" required>
+            <label for="SupEmail">Email:</label>
+            <input type="email" class="form-control" [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" required>
+            <small style="color: coral;">Format: email@email.email</small>
+
         </div>
 
         <br>
         <div class="divleft" >
             <label for="SupStreetNr">Street No: </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required> 
+            <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required> 
         </div>
 
         <br>
@@ -41,7 +44,7 @@
         <br>
         <div class="divleft" >
             <label for="SupCode">Postal Code:   </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required> 
+            <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required> 
         </div>
  
         <br>
@@ -51,7 +54,7 @@
         </div>
         <br><br>
         <div class="divleft" >
-            <button type="submit" (click)="addSupplier()">Save</button> 
+            <button type="submit" (click)="addSupplier()" [disabled]="form.invalid">Save</button> 
             <button type="submit" (click)="gotoSupplierManagement()">Cancel</button>
          </div>
          <br><br>

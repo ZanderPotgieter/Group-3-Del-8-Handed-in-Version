@@ -4,6 +4,7 @@ import { Supplier} from '../supplier-management/supplier';
 import { NgModule } from '@angular/core';
 import {SupplierService} from '../supplier-management/supplier.service';
 
+
 @Component({
   selector: 'app-add-supplier',
   templateUrl: './add-supplier.component.html',
@@ -23,6 +24,7 @@ export class AddSupplierComponent implements OnInit {
       console.log(res);
       if(res.Message){
       this.responseMessage = res.Message;}
+
       alert(this.responseMessage)
       this.router.navigate(["supplier-management"])
     })

@@ -1,44 +1,150 @@
 <body>
-    <h1>Search Sale</h1>
-    <form>
-        
-        <div class="card" id="creditor">
+  <h1>Search Sale</h1>
+  <form>
+      <div *ngIf="showcriteria"class="card" style="padding: 2px 2px;" >
   
-          <div class="subheadinglabel" id="creditor">Enter Product or Date:</div>
-            <br>
+            <div class="divleft">
+                <label class="subheadinglabel">Select Search Criteria</label><br>
+            </div>
+            <div class="divleft">
+                <button style="height: 30px;" (click)="selectedDate()">Date</button>
+                <button style="height: 30px;" (click)="productSelected()">Product</button>
+            </div>
+      </div> 
+        <div *ngIf="showOptions" class="card">
+          <div  class="divleft" *ngIf = "showProduct">
+              <label class="subheadinglabel">Select Search Details:</label><br>
+              <div class="divleft" >
+                  <label for="Product">Product: </label>
+                   <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
+                       <option *ngFor="let product of productsWithPrice" [ngValue]="product">{{product.Prodname}}</option>
+                   </select>
+              </div>
+               <div *ngIf="prodNotSelected" class ="diveleft">
+                   <label style="color: red; font-size: 13px; width :200px">Select a product</label>
+               </div>
   
-            <label>Product:</label>
-            <input class="searchinput" type ="text" id="LocNameid" name="LocName" required style="width:580px"> <br>
+              <div *ngIf="showDate"  class="divleft"  >
+                  <label for="date">Date:      </label>
+                  <input  [(ngModel)]="date" type="text" id="date" name="date" required placeholder="yyyy-MM-dd">
+              </div>
   
-            <label>Date:</label>
-            <input type="date" name="tanggal" style="width:180px"><br/>
+              <div class="divleft">
+                <br><br>
+                <button type="submit" (click)="search()">Search</button>
+                <button (click)=" gotoSalesManagement()">Cancel</button>
+                <br><br>
+                </div>
+          </div>
+        </div> 
   
-  
+       
             
-            <button type="submit">Search</button>
-            <button routerLink="/sales-management" type="submit">Cancel</button>
   
-        </div>
-        <div class="card" id="creditor">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>Quantity</th>
-              <th>Product</th>
-              <th>Unit Price</th>
-              <th>Cost Price</th>
-              <th>Subtotal</th>
-              <th>Date</th>
-            </tr>
-            </thead>
+          <div *ngIf="showList" class="card">
+              <div class="divleft">
+                  <br>  <label class="subheadinglabel" >Sales:</label><br>
+                  <table>   
+                 
+                      <tr>
+                          <th>Sale ID</th>
+                          <th>Sale Date</th>>
+                          <th>Cashier</th>
+                          <th></th>
+                          
+                      </tr>
+                      <tr *ngFor="let item of searchedSales, index as ndx">
+                          <td>{{item.SaleID}}</td>
+                          <td>{{item.SaleDate}}</td>
+                          <td>{{item.User.UserName}}</td>
+                          <td><button style="height: 30px;"class="btntable" (click)="view(item.SaleID)">View</button></td>
+  
+                      </tr>
+                  </table>
+              </div>
+              <br><br>
+           </div>
+  
+          <div class="card" *ngIf="showSale" >
+              <div class="divleft" >
+                  <label class="subheadinglabel" >Sale Details </label>
+              </div>  
+                  
+            <div class="divleft">
+              
+  
+              <div class="divleft" style="float:left; width:50%;">
+              <label class="displaylabel" for="saleDate" style="width:100px">Date:      </label>
+                <label  id="saleDate" name="saleDate">{{sale}}</label>
+              </div>
+       
+            </div>
           
-          </table>
-            
-        </div>
-        <br><br>
+            <table>    
+              <tr>
+                  <th>Method</th>
+                  <th>Amount</th>
+                  
+              </tr>
+              <tr *ngFor="let item of payments, index as ndx">
+                  <td>{{item.paymentMethod}}</td>
+                   <td>{{item.paymount}}</td>
+                  <td><button class="btntable" style="height: 30px;" (click) ="remove(ndx)">X</button></td>
+              </tr>
+            </table>
   
-    
-    </form>
+          </div>   
+      
   
-  </body>
+      <br>
+      <div class="card" >
+              <table>    
+                  <tr>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Subtotal</th>
+                      <th></th>
+                  </tr>
+                  <tr *ngFor="let item of saleProducts, index as ndx">
+                      <td>{{item.Prodname}}</td>
+                       <td>{{item.Quantity}}</td>
+                       <td>R{{item.Price}}</td>
+                      <td>R{{item.Subtotal}}</td>
+                      <td><button class="btntable" style="height: 30px;" (click) ="remove(ndx)">X</button></td>
+                  </tr>
+  
+                  <tr >
+                      
+                      <th></th>
+                      <th></th>
+                      <th>Subtotal (Exc VAT):</th>
+                    <!--  <th>R{{calculatedValues.TotalExcVat}}</th>-->
+                  </tr>
+  
+                  <tr>
+                      
+                      
+                      <th></th>
+                      <th></th>
+                      <th>VAT:</th>
+                     <!-- <th>{{calculatedValues.Vat}}</th>-->
+                  </tr>
+              
+                  <tr>
+                      
+                      <th></th>
+                      <th></th>
+                      <th>TOTAL:</th>
+                      <!-- <th>R{{calculatedValues.TotalExcVat}}</th>-->
+                  </tr>
+              </table>
+  
+          <div class="divleft">
+          <button  type="submit" (click)="showSearchedOrdersList()">Back</button>
+          </div>
+      </div>
+  </form>
+  
+</body>
   

@@ -31,7 +31,7 @@ export class SearchProductCategoryComponent implements OnInit {
     this.pcatForm= this.fb.group({  
       PCatName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
       PCatDescription: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
-      
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
        
     }); 
   }

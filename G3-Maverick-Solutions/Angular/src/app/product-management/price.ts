@@ -1,3 +1,6 @@
+import { Product } from '../product-management/product';
+
+
 export class Price {
     PriceID : number;
 	ProductID : number;
@@ -5,4 +8,5 @@ export class Price {
 	PriceStartDate :Date;
 	PriceEndDate : Date;
 	CPriceR : number;
+	Product: Product;
 }

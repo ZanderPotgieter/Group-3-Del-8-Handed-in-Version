@@ -226,6 +226,8 @@ export class ViewStatusesComponent implements OnInit {
     
   }
 
-  
+  Cancel(){
+    this.router.navigate(['add']);
+  }
 
 }

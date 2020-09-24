@@ -18,10 +18,14 @@ export class AddProductComponent implements OnInit {
   constructor(private productService: ProductService, private router: Router, private fb: FormBuilder) { }
   pdForm: FormGroup;
   categories: ProductCategory[];
-  product : Product = new Product();
+  selectedCategory: ProductCategory;
+  newProduct : Product = new Product();
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
  
+  Select: number;
+  selectedCatID: number;
+
   addToSystem: boolean = false;
   linkToContainer: boolean = false;
  
@@ -30,7 +34,7 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(){
     this.pdForm= this.fb.group({
-      
+      Select:  ['', [Validators.required]],
       ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
@@ -38,11 +42,21 @@ export class AddProductComponent implements OnInit {
       CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       PriceStartDate: ['', [Validators.required]], 
+      SelectCon: ['', [Validators.required]], 
+      SelectProduct: ['', [Validators.required]],
     }); 
     this.productService.getAllProductCategory()
       .subscribe(value => {
         if (value != null) {
           this.categories = value;
+        }
+      });
+     //get all products service
+
+     this.productService.getAllProducts()
+      .subscribe(value => {
+        if (value != null) {
+          this.products = value;
         }
       });
 
@@ -59,14 +73,23 @@ export class AddProductComponent implements OnInit {
     this.addToSystem = false;
   }
 
+  loadProducts(val: ProductCategory){
+   
+    this.addCategory(val);
+  }
+
+  addCategory(val : ProductCategory){
+    this.selectedCategory = val;
+  }
   Save(){
-    this.productService.addProduct(this.product).subscribe( (res: any)=> {
-      this.product.ProductID = this.price.ProductID;
+    this.newProduct.ProductCategoryID = this.selectedCategory.ProductCategoryID;
+    this.price.Product = this.newProduct;
+    this.productService.addProduct(this.price).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;}
         alert(this.responseMessage)
-        this.router.navigate(["product-management"])
+       
     })
     
   }

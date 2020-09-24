@@ -241,28 +241,36 @@ namespace ORDRA_API.Controllers
                     Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == objectProduct.ProductID).FirstOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
 
-                    DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
-                    DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
+                    if (price != null && cat != null)
+                    {
+                        DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
+                        DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
 
-                    dynamic objectProdandPrice = new ExpandoObject();
-                    objectProdandPrice.ProductID = objectProduct.ProductID;
-                    objectProdandPrice.ProductCategoryID = objectProduct.ProductCategoryID;
-                    objectProdandPrice.ProductCategoty = cat.PCatDescription;
-                    objectProdandPrice.ProdBarcode = objectProduct.ProdBarcode;
-                    objectProdandPrice.ProdName = objectProduct.ProdName;
-                    objectProdandPrice.ProdDescription = objectProduct.ProdDesciption;
-                    objectProdandPrice.ProdReLevel = objectProduct.ProdReLevel;
-                    objectProdandPrice.PriceID = price.PriceID;
-                    objectProdandPrice.UPriceR = (double)price.UPriceR;
-                    objectProdandPrice.CPriceR = (double)price.CPriceR;
-                    objectProdandPrice.PriceStartDate = startdate.ToString("yyyy-MM-dd");
-                    objectProdandPrice.PriceEndDate = enddate.ToString("yyyy-MM-dd");
+                        dynamic objectProdandPrice = new ExpandoObject();
+                        objectProdandPrice.ProductID = objectProduct.ProductID;
+                        objectProdandPrice.ProductCategoryID = objectProduct.ProductCategoryID;
+                        objectProdandPrice.ProductCategoty = cat.PCatDescription;
+                        objectProdandPrice.ProdBarcode = objectProduct.ProdBarcode;
+                        objectProdandPrice.ProdName = objectProduct.ProdName;
+                        objectProdandPrice.ProdDescription = objectProduct.ProdDesciption;
+                        objectProdandPrice.ProdReLevel = objectProduct.ProdReLevel;
+                        objectProdandPrice.PriceID = price.PriceID;
+                        objectProdandPrice.UPriceR = (double)price.UPriceR;
+                        objectProdandPrice.CPriceR = (double)price.CPriceR;
+                        objectProdandPrice.PriceStartDate = startdate.ToString("yyyy-MM-dd");
+                        objectProdandPrice.PriceEndDate = enddate.ToString("yyyy-MM-dd");
 
-                    toReturn.ProdandPrice = objectProdandPrice;
-                    toReturn.Product = objectProduct;
-                    toReturn.CurrentPrice = price;
-                    toReturn.PriceList = db.Prices.Where(x => x.ProductID == objectProduct.ProductID);
-
+                        toReturn.ProdandPrice = objectProdandPrice;
+                        toReturn.Product = objectProduct;
+                        toReturn.CurrentPrice = price;
+                        toReturn.PriceList = db.Prices.Where(x => x.ProductID == objectProduct.ProductID);
+                    }
+                    else
+                    {
+                        toReturn.Product = objectProduct;
+                        toReturn.PriceList = db.Prices.Where(x => x.ProductID == objectProduct.ProductID);
+                        toReturn.Message = "No current Price For Product";
+                    }
                 }
                 else
                 {
@@ -294,44 +302,52 @@ namespace ORDRA_API.Controllers
             try
             {
                 objectProducts = db.Products.Include(x => x.Product_Category).Where(x => x.Product_Category.PCatName == prodCategory).ToList();
-
-
-                List<dynamic> prodList = new List<dynamic>();
                 if (objectProducts != null)
                 {
-                    foreach (Product objectProduct in objectProducts)
-                    {
-                        Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == objectProduct.ProductID).FirstOrDefault();
-                        Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
-
-                        DateTime startdate =Convert.ToDateTime(price.PriceStartDate);
-                        DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
-
-                        dynamic objectProdandPrice = new ExpandoObject();
-                        objectProdandPrice.ProductID = objectProduct.ProductID;  
-                        objectProdandPrice.ProductCategoryID = objectProduct.ProductCategoryID;
-                        objectProdandPrice.ProductCategoty = cat.PCatDescription;
-                        objectProdandPrice.ProdBarcode = objectProduct.ProdBarcode;
-                        objectProdandPrice.ProdName = objectProduct.ProdName;
-                        objectProdandPrice.ProdDescription = objectProduct.ProdDesciption;
-                        objectProdandPrice.ProdReLevel = objectProduct.ProdReLevel;
-                        objectProdandPrice.PriceID = price.PriceID;
-                        objectProdandPrice.UPriceR = (double)price.UPriceR;
-                        objectProdandPrice.CPriceR = (double)price.CPriceR;
-                        objectProdandPrice.PriceStartDate = startdate.ToString("yyyy-MM-dd");
-                        objectProdandPrice.PriceEndDate = enddate.ToString("yyyy-MM-dd");
-                        prodList.Add(objectProdandPrice);
-
-                        
-                    }
-                    toReturn.ProdandPriceList = prodList ;
-
+                    toReturn.Products = objectProducts;
                 }
                 else
                 {
-
-                    toReturn.Message = "Prodcut Not Found";
+                    toReturn.Message = "No Products Found In Category";
                 }
+                
+
+                //List<dynamic> prodList = new List<dynamic>();
+                //if (objectProducts != null)
+                //{
+                //    foreach (Product objectProduct in objectProducts)
+                //    {
+                //        Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == objectProduct.ProductID).FirstOrDefault();
+                //        Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
+
+                //        DateTime startdate =Convert.ToDateTime(price.PriceStartDate);
+                //        DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
+
+                //        dynamic objectProdandPrice = new ExpandoObject();
+                //        objectProdandPrice.ProductID = objectProduct.ProductID;  
+                //        objectProdandPrice.ProductCategoryID = objectProduct.ProductCategoryID;
+                //        objectProdandPrice.ProductCategoty = cat.PCatDescription;
+                //        objectProdandPrice.ProdBarcode = objectProduct.ProdBarcode;
+                //        objectProdandPrice.ProdName = objectProduct.ProdName;
+                //        objectProdandPrice.ProdDescription = objectProduct.ProdDesciption;
+                //        objectProdandPrice.ProdReLevel = objectProduct.ProdReLevel;
+                //        objectProdandPrice.PriceID = price.PriceID;
+                //        objectProdandPrice.UPriceR = (double)price.UPriceR;
+                //        objectProdandPrice.CPriceR = (double)price.CPriceR;
+                //        objectProdandPrice.PriceStartDate = startdate.ToString("yyyy-MM-dd");
+                //        objectProdandPrice.PriceEndDate = enddate.ToString("yyyy-MM-dd");
+                //        prodList.Add(objectProdandPrice);
+
+                        
+                //    }
+                //    toReturn.ProdandPriceList = prodList ;
+
+                //}
+                //else
+                //{
+
+                //    toReturn.Message = "Prodcut Not Found";
+                //}
 
             }
             catch
@@ -376,33 +392,41 @@ namespace ORDRA_API.Controllers
             {
                 //get category for product
                 Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == newProduct.Product.ProductCategoryID).FirstOrDefault();
+                if (cat != null)
+                {
 
-                //save new product
-                Product addProd = new Product();
-                addProd.ProdName = newProduct.Product.ProdName;
-                addProd.ProdBarcode = newProduct.Product.ProdBarcode;
 
-                addProd.ProdDesciption = newProduct.Product.ProdDesciption;
-                addProd.ProdReLevel = newProduct.Product.ProdReLevel;
-                addProd.Product_Category = cat;
-                db.Products.Add(addProd);
-                db.SaveChanges();
+                    //save new product
+                    Product addProd = new Product();
+                    addProd.ProdName = newProduct.Product.ProdName;
+                    addProd.ProdBarcode = newProduct.Product.ProdBarcode;
 
-                //get details of saved product;
-                Product addedprod = db.Products.ToList().LastOrDefault();
-                DateTime date = DateTime.Now.AddYears(1);
+                    addProd.ProdDesciption = newProduct.Product.ProdDesciption;
+                    addProd.ProdReLevel = newProduct.Product.ProdReLevel;
+                    addProd.Product_Category = cat;
+                    db.Products.Add(addProd);
+                    db.SaveChanges();
 
-                //save price for product;
-                Price addPrice = new Price();
-                addPrice.Product = addedprod;
-                addPrice.CPriceR = (float)newProduct.CPriceR;
-                addPrice.UPriceR = (float)newProduct.UPriceR;
-                addPrice.PriceStartDate = newProduct.PriceStartDate;
-                addPrice.PriceEndDate = date;
-                db.Prices.Add(addPrice);
-                db.SaveChanges();
-               
-                 toReturn.Message = "Add Product Succsessful";
+                    //get details of saved product;
+                    Product addedprod = db.Products.ToList().LastOrDefault();
+                    DateTime date = DateTime.Now.AddYears(1);
+
+                    //save price for product;
+                    Price addPrice = new Price();
+                    addPrice.Product = addedprod;
+                    addPrice.CPriceR = (float)newProduct.CPriceR;
+                    addPrice.UPriceR = (float)newProduct.UPriceR;
+                    addPrice.PriceStartDate = newProduct.PriceStartDate;
+                    addPrice.PriceEndDate = date;
+                    db.Prices.Add(addPrice);
+                    db.SaveChanges();
+
+                    toReturn.Message = "Add Product Succsessful";
+                }
+                else
+                {
+                    toReturn.Message = "Add Product UnSuccsessful: Select A Category";
+                }
            
             }
             catch(Exception)
@@ -770,7 +794,7 @@ namespace ORDRA_API.Controllers
             {
                 db.VATs.Add(newVat);
                 db.SaveChanges();
-                toReturn.Message = "VAT Add Succsessful";
+                toReturn.Message = "VAT Added Succsessfully";
             }
             catch (Exception)
             {

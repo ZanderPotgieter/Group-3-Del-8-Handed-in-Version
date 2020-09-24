@@ -33,13 +33,20 @@
     
     </form>
 
-   <form>
+   <form [formGroup]="conForm">
         <div class="card" *ngIf= "showSearch"> 
             <p class="subheadinglabel">Enter Container Name To Search:</p>
 
             <div class="divleft">
                 <label for="name">Name:</label>
-                <input  class="searchinput" class="Form-control" [(ngModel)]="name"  type="text" id="name" name="name" required>
+                <input  class="searchinput" formControlName="name" class="Form-control" [(ngModel)]="name"  type="text" id="name" name="name"  pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="conForm.get('name').errors && (conForm.get('name').touched || conForm.get('name').dirty)">
+                    <span *ngIf="conForm.get('name').errors.required">Name is required.</span>
+                    <span *ngIf="conForm.get('name').errors.minlength || conForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="conForm.get('name').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
             </div>
         
             <div class="divleft">

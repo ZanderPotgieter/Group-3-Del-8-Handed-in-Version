@@ -22,6 +22,7 @@ export class SearchLocationComponent implements OnInit {
   inputEnabled:boolean = true;
   showSearch: boolean = true;
   showResults: boolean = false;
+  showResultsEdit: boolean = false;
   name : string;
 
   ngOnInit(): void {
@@ -34,20 +35,24 @@ export class SearchLocationComponent implements OnInit {
   searchLocation(){
     this.api.searchLocation(this.name).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message != null){
+      if(res.Message == "Record Not Found"){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      alert(res.Message);
+      this.showSearch = true;
+      this.showResults = false;
+      this.showResultsEdit = false;
+    
+    }
       else{
           this.location.LocationID = res.LocationID;
           this.location.LocName = res.LocName;
-          this.location.LocationStatusID = res.LocationStatusID;
-          this.location.AreaID = res.AreaID;
-          this.location.ContainerID = res.ContainerID;
-      }
-      
-      this.showSearch = false;
-      this.showResults = true;
-      
+          this.location.LocationStatusID = res.Location_Status.LSDescription;
+          this.location.AreaID = res.Area.ArName;
+          this.location.ContainerID = res.Container.ConName;
+          this.showSearch = false;
+          this.showResults = true;
+          this.showResultsEdit = false;
+      }     
     })
 
   }
@@ -64,9 +69,11 @@ export class SearchLocationComponent implements OnInit {
   }
 
   enableInputs(){
-    this.showSave = true;
+    this.showSave = false;
     this.inputEnabled = false;
     this.showButtons = false;
+    this.showResults = false;
+    this.showResultsEdit = true;
 
   }
 
@@ -77,6 +84,7 @@ export class SearchLocationComponent implements OnInit {
     
     this.showSearch = true;
     this.showResults = false;
+    this.showResultsEdit = false;
   }
 
   }

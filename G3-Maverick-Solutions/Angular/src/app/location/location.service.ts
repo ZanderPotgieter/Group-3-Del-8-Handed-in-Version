@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';  
 import { HttpHeaders } from '@angular/common/http';  
 import { Observable } from 'rxjs';  
-import { Location } from './location';   
+import { Location } from './location'; 
+import { AreaVM } from './area-vm'; 
+import { StatusVm} from './status-vm';   
+import { ContainerVm} from './container-vm';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +13,11 @@ import { Location } from './location';
 export class LocationService {  
   constructor(private http: HttpClient) { }  
   url = 'https://localhost:44399/Api/Location';  
+
+  areaList: AreaVM[];
+  statusList: StatusVm[];
+  containerList: ContainerVm[];
+
   
   getAllLocations(): Observable<Location[]> {  
     return this.http.get<Location[]>(this.url + '/getAllLocations');  
@@ -34,6 +42,27 @@ export class LocationService {
     return this.http.put<Location>(this.url + '/updateLocation',  
     Location, httpOptions);  
   }  
+
+
+  //Get Area
+  getAreas()
+  {
+    return this.http.get('https://localhost:44399/Api/Areas').toPromise();
+  }
+
+  //get status
+  getStatuses() 
+  {
+    return this.http.get('https://localhost:44399/Api/Location_Status').toPromise();
+
+  }
+
+    //get containers
+    getContainers() 
+    {
+      return this.http.get('https://localhost:44399/Api/Container/GetAllContainers').toPromise();
+  
+    }
 
 
 }

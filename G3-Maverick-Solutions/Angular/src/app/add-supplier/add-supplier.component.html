@@ -11,6 +11,7 @@
         <div class="divleft" >
             <label for="SupName">Name:       </label>
             <input type="text" class="form-control" [(ngModel)]="supplier.SupName" id="SupName" name="SupName" required>
+            <small style="color: coral;">required</small>
         </div>
 
 
@@ -33,24 +34,28 @@
         <div class="divleft" >
             <label for="SupStreetNr">Street No: </label>
             <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required> 
+            <small style="color: coral;">required</small>
         </div>
 
         <br>
         <div class="divleft" >
             <label for="SupStreet">Street:    </label>
             <input type="text" class="form-control" [(ngModel)]="supplier.SupStreet" id="SupStreet" name="SupStreet" required> 
+            <small style="color: coral;">required</small>
         </div>
         
         <br>
         <div class="divleft" >
             <label for="SupCode">Postal Code:   </label>
             <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required> 
+            <small style="color: coral;">required</small>
         </div>
  
         <br>
         <div class="divleft" >
             <label for="SupSuburb">Suburb:   </label>
             <input type="text"  class="form-control" [(ngModel)]="supplier.SupSuburb" id="SupSuburb" name="SupSuburb" placeholder="Example: Hatfield" required> 
+            <small style="color: coral;">required</small>
         </div>
         <br><br>
         <div class="divleft" >

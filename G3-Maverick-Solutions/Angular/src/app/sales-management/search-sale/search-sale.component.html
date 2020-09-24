@@ -1,6 +1,6 @@
 <body>
   <h1>Search Sale</h1>
-  <form>
+  <form [formGroup]="searchSaleForm">
       <div *ngIf="showcriteria"class="card" style="padding: 2px 2px;" >
   
             <div class="divleft">
@@ -9,6 +9,8 @@
             <div class="divleft">
                 <button style="height: 30px;" (click)="selectedDate()">Date</button>
                 <button style="height: 30px;" (click)="productSelected()">Product</button>
+                <button style="height: 30px;" (click)="productBarcode()">Product Barcode</button>
+                <button style="height: 30px;" (click)="searchAllSales()">All Sales</button>
             </div>
       </div> 
         <div *ngIf="showOptions" class="card">
@@ -16,31 +18,123 @@
               <label class="subheadinglabel">Select Search Details:</label><br>
               <div class="divleft" >
                   <label for="Product">Product: </label>
-                   <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
+                   <select required name="prodSelection" formControlName="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
                        <option *ngFor="let product of productsWithPrice" [ngValue]="product">{{product.Prodname}}</option>
                    </select>
-              </div>
-               <div *ngIf="prodNotSelected" class ="diveleft">
-                   <label style="color: red; font-size: 13px; width :200px">Select a product</label>
-               </div>
-  
-              <div *ngIf="showDate"  class="divleft"  >
-                  <label for="date">Date:      </label>
-                  <input  [(ngModel)]="date" type="text" id="date" name="date" required placeholder="yyyy-MM-dd">
-              </div>
-  
-              <div class="divleft">
-                <br><br>
+                   <br>
+                   <div *ngIf="prodNotSelected" class ="diveleft">
+                    <label style="color: red; font-size: 13px; width :200px">Select a product</label>
+                </div>
+                   <br>
                 <button type="submit" (click)="search()">Search</button>
                 <button (click)=" gotoSalesManagement()">Cancel</button>
-                <br><br>
-                </div>
-          </div>
+              </div>
+               
+            </div>
+              
+            <div class="divleft" *ngIf="showDate" >
+              <label class="subheadinglabel">Enter Date:</label>
+              <br>
+                  <label for="date">Date:      </label>
+                  <input  [(ngModel)]="date" type="text" id="date" formControlName="date" name="date" required placeholder="yyyy-MM-dd">
+                  <br>
+                <span style="color:red" *ngIf="searchSaleForm.get('date').errors && (searchSaleForm.get('date').touched || searchSaleForm.get('date').dirty)">
+                  <span *ngIf="searchSaleForm.get('date').errors.required">Date is required.</span>
+              </span>
+              <br>
+                  <button type="submit" (click)="searchByDate()">Search</button>
+                  <button (click)=" gotoSalesManagement()">Cancel</button>
+             </div>
+  
+            <div class="divleft" *ngIf="showBarcode" >
+              <label class="subheadinglabel">Enter Product Barcode:</label>
+              <br>
+              <label for="ProdBarcode">Barcode:</label>
+              <input  [(ngModel)]="ProdBarcode" type="number" formControlName="ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required>
+              <br>
+                <span style="color:red" *ngIf="searchSaleForm.get('ProdBarcode').errors && (searchSaleForm.get('ProdBarcode').touched || searchSaleForm.get('ProdBarcode').dirty)">
+                  <span *ngIf="searchSaleForm.get('ProdBarcode').errors.required">Barcode is required.</span>
+                  <span *ngIf="searchSaleForm.get('ProdBarcode').errors.minlength || searchSaleForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
+                  <span *ngIf="searchSaleForm.get('ProdBarcode').errors.pattern">Only numbers allowed.</span>
+              </span>
+                <br>
+              <button type="submit" (click)="searchByBarcode()">Search</button>
+              <button (click)=" gotoSalesManagement()">Cancel</button>
+            </div>
+           
+          
         </div> 
+
+        <div *ngIf="showListSearchByproduct" class="card">
+          <div class="divleft">
+            <br>  <label class="subheadinglabel" >Sales By Product:</label><br>
+            <table>   
+           
+                <tr>
+                    <th>Product Name</th>
+                    <th>Sale Date</th>
+                    
+                    
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    
+                  
+
+                </tr>
+            </table>
+          </div>
+        </div>
   
+        <div *ngIf="showListSearchByBarcode" class="card">
+          <div class="divleft">
+            <br>  <label class="subheadinglabel" >Sales By Barcode:</label><br>
+            <table>   
+           
+                <tr>
+                    <th>Product Barcode</th>
+                    <th>Sale Date</th>
+                    <th>Cashier</th>
+                    
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  
+
+                </tr>
+            </table>
+          </div>
+        </div>
        
-            
-  
+        <div *ngIf="showListAllSales" class="card">
+          <div class="divleft">
+            <br>  <label class="subheadinglabel" >List of All Sales:</label><br>
+            <table>   
+           
+                <tr>
+                    <th>Sale ID</th>
+                    <th>Sale Date</th>
+                    <th>Cashier</th>
+                    
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  
+
+                </tr>
+            </table>
+          </div>
+        </div>
+       
+        <!--Code taken from old repo. I think this is for the seacrh date-->
           <div *ngIf="showList" class="card">
               <div class="divleft">
                   <br>  <label class="subheadinglabel" >Sales:</label><br>
@@ -48,7 +142,7 @@
                  
                       <tr>
                           <th>Sale ID</th>
-                          <th>Sale Date</th>>
+                          <th>Sale Date</th>
                           <th>Cashier</th>
                           <th></th>
                           
@@ -97,7 +191,8 @@
       
   
       <br>
-      <div class="card" >
+      <!--Code taken from old repo. Not sure if its supposed to be here-->
+  <!--  <div class="card" >
               <table>    
                   <tr>
                       <th>Product</th>
@@ -119,7 +214,7 @@
                       <th></th>
                       <th></th>
                       <th>Subtotal (Exc VAT):</th>
-                    <!--  <th>R{{calculatedValues.TotalExcVat}}</th>-->
+                     <th>R{{calculatedValues.TotalExcVat}}</th>
                   </tr>
   
                   <tr>
@@ -128,7 +223,7 @@
                       <th></th>
                       <th></th>
                       <th>VAT:</th>
-                     <!-- <th>{{calculatedValues.Vat}}</th>-->
+                    <th>{{calculatedValues.Vat}}</th>
                   </tr>
               
                   <tr>
@@ -136,14 +231,14 @@
                       <th></th>
                       <th></th>
                       <th>TOTAL:</th>
-                      <!-- <th>R{{calculatedValues.TotalExcVat}}</th>-->
+                      <th>R{{calculatedValues.TotalExcVat}}</th>
                   </tr>
               </table>
   
           <div class="divleft">
           <button  type="submit" (click)="showSearchedOrdersList()">Back</button>
-          </div>
-      </div>
+          </div>  
+      </div>-->
   </form>
   
 </body>

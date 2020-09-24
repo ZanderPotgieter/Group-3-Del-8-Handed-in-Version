@@ -9,6 +9,8 @@ import {SalesService} from '../sales.service';
 import {SearchedSale} from '../searched-sale'
 import {ProductDetails} from 'src/app/customer-order-management/product-details';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-search-sale',
@@ -17,7 +19,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class SearchSaleComponent implements OnInit {
 
-  constructor(private api: SalesService,private router: Router) { }
+  constructor(private api: SalesService,private router: Router, private fb: FormBuilder) { }
+  searchSaleForm: FormGroup;
   dateVal: Date;
   date:string;
   SaleDate: Date;
@@ -41,12 +44,24 @@ export class SearchSaleComponent implements OnInit {
   showProduct: boolean = false;
   showDate: boolean = false;
   showOptions: boolean = false;
+  showBarcode: boolean = false;
+
+  showListSearchByproduct: boolean = false;
+  showListSearchByBarcode: boolean = false;
+  showListAllSales: boolean = false;
 
   selectedSale: SearchedSale = new SearchedSale();
   searchedSales: Sale[] = [];
   sale: Sale = new Sale();
 
   ngOnInit(): void {
+
+    this.searchSaleForm= this.fb.group({ 
+      ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
+      date: ['', [Validators.required]],
+      prodSelection: ['', [Validators.required]],
+    }); 
+
     this.api.initiateSale().subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
@@ -78,6 +93,16 @@ export class SearchSaleComponent implements OnInit {
     this.showOptions = true;
   }
 
+  productBarcode(){
+    this.showBarcode = true;
+    this.showcriteria = false;
+    this.showOptions = true;
+  }
+
+  searchAllSales(){
+    this.showListAllSales = true;
+  }
+
   addProduct(val: ProductDetails){
     if(val == null){
       this.prodNotSelected= true
@@ -101,6 +126,7 @@ export class SearchSaleComponent implements OnInit {
       this.searchByDate();
       
     }
+    this.showListSearchByproduct = true;
   }
 
   searchByProduct(){
@@ -137,6 +163,10 @@ export class SearchSaleComponent implements OnInit {
       })
   }
 
+  searchByBarcode(){
+     this.showListSearchByBarcode = true;
+  }
+
   view(val: any){
     this.SaleID = val;
     this.getSale(val)
@@ -157,7 +187,7 @@ export class SearchSaleComponent implements OnInit {
        
         }
  
-      
+        this.showList = true;
       })
 
       this.showSale = true;

@@ -21,6 +21,8 @@ namespace ORDRA_API.Models
             this.Locations = new HashSet<Location>();
             this.Return_Product = new HashSet<Return_Product>();
             this.Managers = new HashSet<Manager>();
+            this.Customer_Order = new HashSet<Customer_Order>();
+            this.Sales = new HashSet<Sale>();
         }
     
         public int ContainerID { get; set; }
@@ -35,5 +37,9 @@ namespace ORDRA_API.Models
         public virtual ICollection<Return_Product> Return_Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Manager> Managers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Customer_Order> Customer_Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales { get; set; }
     }
 }

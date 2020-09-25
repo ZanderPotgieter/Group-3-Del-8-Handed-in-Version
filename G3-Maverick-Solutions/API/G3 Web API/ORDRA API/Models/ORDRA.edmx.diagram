@@ -93,6 +93,8 @@
         <AssociationConnector Association="OrdraDBModel.User_Shift" ManuallyRouted="false" />
         <EntityTypeShape EntityType="OrdraDBModel.One_Time_Pin" Width="1.5" PointX="6" PointY="59.25" />
         <AssociationConnector Association="OrdraDBModel.FK_OTPUser" />
+        <AssociationConnector Association="OrdraDBModel.FK_COContainer" />
+        <AssociationConnector Association="OrdraDBModel.FK_SContainer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

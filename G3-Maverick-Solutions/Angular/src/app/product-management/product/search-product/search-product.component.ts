@@ -5,6 +5,8 @@ import { ProductCategory } from '../../product-category';
 import { Price } from '../../price';
 import { Product } from '../../product';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import {LoginService} from 'src/app/login.service';
+import {Container} from 'src/app/container-management/container';
 
 @Component({
   selector: 'app-search-product',
@@ -13,9 +15,10 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class SearchProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder) { }
+  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private api: LoginService) { }
   searchForm: FormGroup;
   categories: ProductCategory[];
+  containers: Container[];
   product : Product = new Product();
 
   showBarcodeInput: boolean = false;
@@ -31,12 +34,23 @@ export class SearchProductComponent implements OnInit {
   showAllProductsResults: boolean = false;
 
   prodBarcode: string;
+  prodName: string;
   responseMessage: string = "Request Not Submitted";
   productBarcode : Product = new Product();
   productBarcodeWithPrice: Price = new Price();
 
   Product: Product = new Product();
   Price: Price = new Price();
+  pricelist: Price[] =[];
+  productList: Product[] = [];
+  products: Product[] = [];
+  newPrice: Price = new Price;
+
+  showadd: boolean=false;
+  containerID: number;
+  productName: number;
+  productID: number;
+  CategoryName: string;
 
   ngOnInit() {
 
@@ -62,6 +76,23 @@ export class SearchProductComponent implements OnInit {
         this.categories = value;
       }
     });
+
+    this.productService.getAllProducts()
+    .subscribe((value:any)=> {
+      console.log(value);
+      if (value != null) {
+        this.products = value.Products;
+      }
+    });
+
+    this.api.getAllContainers().subscribe((res:any) =>{
+      console.log(res);
+      this.containers = res; 
+      if (res.Error){
+        alert(res.Error);
+      }
+      
+    });
   }
 
   barcodeInput(){
@@ -71,6 +102,12 @@ export class SearchProductComponent implements OnInit {
     this.showSelectContainer = false;
     this.showSearchBtn = false;
 
+    this.showBarcodeInput = true;
+      this.showBarcodeResult = false;
+      this.showProductResult = false;
+      this.showCategoryResults = false;
+      this.showContainerResults = false;
+      this.showAllProductsResults = false;
     
   }
 
@@ -80,6 +117,13 @@ export class SearchProductComponent implements OnInit {
     this.showSelectCategory = false;
     this.showSelectContainer = false;
     this.showSearchBtn = false;
+
+    this.showBarcodeInput = false;
+    this.showBarcodeResult = false;
+    this.showProductResult = false;
+    this.showCategoryResults = false;
+    this.showContainerResults = false;
+    this.showAllProductsResults = false;
   }
 
   selectCategory(){
@@ -96,6 +140,13 @@ export class SearchProductComponent implements OnInit {
     this.showSelectProduct = false;
     this.showSelectCategory = false;
     this.showSearchBtn = false;
+
+    this.showBarcodeInput = false;
+    this.showBarcodeResult = false;
+    this.showProductResult = false;
+    this.showCategoryResults = false;
+    this.showContainerResults = false;
+    this.showAllProductsResults = false;
   }
 
   searchBtn(){
@@ -104,31 +155,54 @@ export class SearchProductComponent implements OnInit {
     this.showSelectProduct = false;
     this.showSelectCategory = false;
     this.showSelectContainer = false;
+
+    this.showBarcodeInput = false;
+    this.showBarcodeResult = false;
+    this.showProductResult = false;
+    this.showCategoryResults = false;
+    this.showContainerResults = false;
+    this.showAllProductsResults = false;
+  }
+
+  setContainer(val: Container){
+    this.containerID = val.ContainerID;
+  }
+
+  setCategory(val: ProductCategory){
+      this.CategoryName= val.PCatName;
+  }
+
+  setProduct(val: Product){
+    this.prodName = val.ProdName;
   }
 
   SearchBarcode(){
 
-    this.productService.getProductByBarcode(this.prodBarcode).subscribe( (res:any)=> {
+   return  this.productService.getProductByBarcode(this.prodBarcode).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
       alert(this.responseMessage)}
       else{
-          this.Product.ProdName = res.ProdandPrice.ProdName;
-          this.Product.ProdDesciption = res.ProdandPrice.ProdDesciption;
-          this.Product.ProdBarcode = res.ProdandPrice.ProdBarcode;
-          this.Product.ProdReLevel = res.ProdandPrice.ProdReLevel;
-          this.Product.ProductCategoryID = res.ProdandPrice.ProductCategoryID;
-          this.Product.ProductID = res.ProdandPrice.ProductID;
-          this.Price.CPriceR= res.ProdandPrice.CPriceR;
-          this.Price.UPriceR = res.ProdandPrice.UPriceR;
-          this.Price.PriceID = res.ProdandPrice.PriceID;
-          this.Price.PriceStartDate = res.ProdandPrice.PriceStartDate;
-          this.Price.PriceEndDate = res.ProdandPrice.PriceEndDate;
-          this.Price.ProductID = res.ProdandPrice.ProductID;
+          this.Product.ProdName = res.Product.ProdName;
+          this.Product.ProdDesciption = res.Product.ProdDesciption;
+          this.Product.ProdBarcode = res.Product.ProdBarcode;
+          this.Product.ProdReLevel = res.Product.ProdReLevel;
+          this.Product.ProductCategoryID = res.Product.ProductCategoryID;
+          this.Product.ProductID = res.Product.ProductID;
+          this.Price.CPriceR= res.CurrentPrice.CPriceR;
+          this.Price.UPriceR = res.CurrentPrice.UPriceR;
+          this.Price.PriceID = res.CurrentPrice.PriceID;
+          this.Price.PriceStartDate = res.CurrentPrice.PriceStartDate;
+          this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
+          this.Price.ProductID = res.Product.ProductID;
+
+          this.pricelist = res.PriceList;
+
       }
-      this.showBarcodeResult = true;
-      this.showProductResult = false;
+      this.showBarcodeInput = false;
+      this.showBarcodeResult = false;
+      this.showProductResult = true;
       this.showCategoryResults = false;
       this.showContainerResults = false;
       this.showAllProductsResults = false;
@@ -137,35 +211,90 @@ export class SearchProductComponent implements OnInit {
   }
 
   SearchProduct(){
+   return  this.productService.getProductByName(this.prodName).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      else{
+          this.Product.ProdName = res.Product.ProdName;
+          this.Product.ProdDesciption = res.Product.ProdDesciption;
+          this.Product.ProdBarcode = res.Product.ProdBarcode;
+          this.Product.ProdReLevel = res.Product.ProdReLevel;
+          this.Product.ProductCategoryID = res.Product.ProductCategoryID;
+          this.Product.ProductID = res.Product.ProductID;
+          this.Price.CPriceR= res.CurrentPrice.CPriceR;
+          this.Price.UPriceR = res.CurrentPrice.UPriceR;
+          this.Price.PriceID = res.CurrentPrice.PriceID;
+          this.Price.PriceStartDate = res.CurrentPrice.PriceStartDate;
+          this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
+          this.Price.ProductID = res.Product.ProductID;
+
+          this.pricelist = res.PriceList;
+
+      }
     this.showBarcodeResult = false;
     this.showProductResult = true;
     this.showCategoryResults = false;
     this.showContainerResults = false;
-    this.showAllProductsResults = false;
+    this.showAllProductsResults = false;})
   }
 
   SearchCategory(){
-    this.showBarcodeResult = false;
-    this.showProductResult = false;
-    this.showCategoryResults = true;
-    this.showContainerResults = false;
-    this.showAllProductsResults = false;
-  }
+    return this.productService.getProductByCategory(this.CategoryName).subscribe((res: any)=>{
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      else{
+        this.productList = res.Products;
 
-  SearchContainer(){
-    this.showBarcodeResult = false;
-    this.showProductResult = false;
-    this.showCategoryResults = false;
-    this.showContainerResults = true;
-    this.showAllProductsResults = false;
-  }
-
-  SearchAllProducts(){
-    this.showBarcodeResult = false;
+        
+      }
+      this.showBarcodeResult = false;
     this.showProductResult = false;
     this.showCategoryResults = false;
     this.showContainerResults = false;
     this.showAllProductsResults = true;
+    })
+  }
+
+  SearchContainer(){
+    return this.productService.getContainerProducts(this.containerID).subscribe((res: any)=>{
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      else{
+        this.productList = res.Products;
+
+        
+      }
+    this.showBarcodeResult = false;
+    this.showProductResult = false;
+    this.showCategoryResults = false;
+    this.showContainerResults = true;
+    this.showAllProductsResults = false;})
+  }
+
+  SearchAllProducts(){
+    return this.productService.getAllProducts().subscribe((res: any)=>{
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      else{
+        this.productList = res.Products;
+
+        
+      }
+      this.showBarcodeResult = false;
+    this.showProductResult = false;
+    this.showCategoryResults = false;
+    this.showContainerResults = false;
+    this.showAllProductsResults = true;
+    })
+  
   }
 
   Cancel(){
@@ -176,5 +305,48 @@ export class SearchProductComponent implements OnInit {
     this.router.navigate(['searched-product-details']);
   }
 
+  showAdd(){
+    this.showadd = true;
+  }
+
+  saveadd(){
+    this.newPrice.ProductID = this.Product.ProductID;
+    
+    this.productService.addPrice(this.newPrice)
+    .subscribe((res: any) => {
+      console.log(res);
+      if(res.Message)
+      {
+      alert(res.Message)
+    }
+    });
+  }
+
+  update(ndx: number){
+    this.prodBarcode = this.productList[ndx].ProdBarcode;
+    this.SearchBarcode();
+  }
+
+  Update(){
+    
+    return this.productService.updateProduct(this.Product).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      this.router.navigate(["product-management"])
+      })
+
+  }
+
+  Delete(){
+    return this.productService.deleteProduct(this.Product.ProductID).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      this.router.navigate(["product-management"])
+      })
+  }
   
 }

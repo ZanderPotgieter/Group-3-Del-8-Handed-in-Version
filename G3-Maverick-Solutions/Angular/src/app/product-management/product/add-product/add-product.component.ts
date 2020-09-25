@@ -7,6 +7,7 @@ import { Product } from '../../product';
 import { Container } from '../../../container-management/container';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { variable } from '@angular/compiler/src/output/output_ast';
+import {LoginService} from 'src/app/login.service';
 
 @Component({
   selector: 'app-add-product',
@@ -15,10 +16,11 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 })
 export class AddProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder) { }
+  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder,private api: LoginService) { }
   pdForm: FormGroup;
   categories: ProductCategory[];
   selectedCategory: ProductCategory;
+  selectedProductID : number;
   newProduct : Product = new Product();
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
@@ -28,6 +30,7 @@ export class AddProductComponent implements OnInit {
 
   addToSystem: boolean = false;
   linkToContainer: boolean = false;
+  selectedContainerID: number;
  
   containers: Container[] = [];
   products: Product[] = [];
@@ -45,20 +48,30 @@ export class AddProductComponent implements OnInit {
       SelectCon: ['', [Validators.required]], 
       SelectProduct: ['', [Validators.required]],
     }); 
-    this.productService.getAllProductCategory()
-      .subscribe(value => {
-        if (value != null) {
-          this.categories = value;
-        }
-      });
-     //get all products service
+    this.productService.getAllProducts()
+    .subscribe((value:any)=> {
+      console.log(value);
+      if (value != null) {
+        this.products = value.Products;
+      }
+    });
 
-     this.productService.getAllProducts()
-      .subscribe(value => {
-        if (value != null) {
-          this.products = value;
-        }
-      });
+    this.api.getAllContainers().subscribe((res:any) =>{
+      console.log(res);
+      this.containers = res; 
+      if (res.Error){
+        alert(res.Error);
+      }
+      
+    });
+
+    this.productService.getAllProductCategory()
+    .subscribe(value => {
+      if (value != null) {
+        this.categories = value;
+      }
+    });
+
 
     
   }
@@ -81,14 +94,35 @@ export class AddProductComponent implements OnInit {
   addCategory(val : ProductCategory){
     this.selectedCategory = val;
   }
+
+  setProducts(val : Product){
+    this.setProduct(val);
+    
+  }
+  setProduct(val: Product){
+    this.selectedProductID = val.ProductID
+}
+  setContainer(val : Container){
+    this.setContainer(val)
+    
+  }
+
+  setCon(val: Container){
+    this.selectedContainerID = val.ContainerID;
+  }
+
   Save(){
     this.newProduct.ProductCategoryID = this.selectedCategory.ProductCategoryID;
     this.price.Product = this.newProduct;
     this.productService.addProduct(this.price).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
-        this.responseMessage = res.Message;}
+        this.responseMessage = res.Message;
         alert(this.responseMessage)
+        this.router.navigate(["product-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
        
     })
     
@@ -96,6 +130,34 @@ export class AddProductComponent implements OnInit {
 
 
   Link(){
+    return this.productService.linkContainer(this.selectedProductID, this.selectedContainerID).subscribe( (res: any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["product-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
+    })
+
+
+  }
+
+  RemoveLink(){
+    return this.productService.removeContainer(this.selectedProductID, this.selectedContainerID).subscribe( (res: any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["product-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
+    })
+
 
   }
 

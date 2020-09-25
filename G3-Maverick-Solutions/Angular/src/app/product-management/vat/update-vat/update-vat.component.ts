@@ -19,11 +19,13 @@ export class UpdateVatComponent implements OnInit {
   addDes : string;
   showadd: boolean = false;
   enableInput: boolean = true;
+  responseMessage : string;
+  
 
   ngOnInit(){
     this.productService.getVat().subscribe((res:any)=> {
       console.log(res);
-      this.list = res;
+      this.list = res.VAT;
       })
   }
 
@@ -47,10 +49,17 @@ export class UpdateVatComponent implements OnInit {
   saveupdate(vatUpdate: Vat){
     this.productService.updateVat(vatUpdate).subscribe((res:any)=> {
       console.log(res);
-      this.list = res;
-      })
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["product-management"])}
+        if(res.Error){
+          this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        }
 
-  }
+  })
+}
 
   add(){
 
@@ -61,7 +70,6 @@ export class UpdateVatComponent implements OnInit {
   saveadd(){
     this.productService.addVat(this.newVat).subscribe((res:any)=> {
       console.log(res);
-      this.list = res;
       })
 
   }

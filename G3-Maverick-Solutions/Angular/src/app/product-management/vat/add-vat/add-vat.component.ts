@@ -22,14 +22,18 @@ export class AddVatComponent implements OnInit {
     this.productService.addVat(this.vat).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
-        this.responseMessage = res.Message;}
+        this.responseMessage = res.Message;
         alert(this.responseMessage)
-        this.router.navigate(["product-management"])
+        this.router.navigate(["product-management"])}
+        if(res.Error){
+          this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        }
     })
   }
 
   Cancel(){
-    
+    this.router.navigate(["product-management"]);
   }
 
 }

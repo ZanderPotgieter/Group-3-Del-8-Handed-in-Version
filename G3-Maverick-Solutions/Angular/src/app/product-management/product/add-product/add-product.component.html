@@ -90,22 +90,20 @@
       <div class="card" *ngIf= "linkToContainer"> 
         <p class="subheadinglabel">Select Container and Product:</p>
         <div class="divleft">
-          <label for="ContainerID">Container:</label>
+    
           <br>
-          <label for="ProductCategoryID">Product Category:</label>
-            <select  required formControlName="Select" name="Select" [(ngModel)]="Select" (ngModelChange)="loadProducts($event)">
+          <label for="ProductCategoryID">Container:</label><select  required formControlName="SelectCon" name="SelectCon" (ngModelChange)="setContainer($event)">
+                         
+            <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
+           </select>
+           <br>
            
-              <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
-            </select>
-            <br>
-          <span style="color:red" *ngIf="pdForm.get('Select').errors && (pdForm.get('Select').touched || pdForm.get('Select').dirty)">
-            <span *ngIf="pdForm.get('Select').errors.required">Select Product Category required.</span>
-        </span>
+        
           <br>
           <label for="ProductID">Product:</label>
-                  <select  required formControlName="SelectProduct" name="SelectProduct">
+                  <select  required formControlName="SelectProduct" name="SelectProduct" (ngModelChange)="setProducts($event)">
       
-                    <option [value]="type" *ngFor="let prod of products">{{prod.ProdName}}</option>
+                    <option [ngValue]="prod" *ngFor="let prod of products" [ngValue]="prod">{{prod.ProdName}}</option>
                   </select>
                   <br>
                   <span style="color:red" *ngIf="pdForm.get('SelectProduct').errors && (pdForm.get('SelectProduct').touched || pdForm.get('SelectProduct').dirty)">
@@ -113,6 +111,7 @@
                 </span>
               <br>
             <button type="submit" (click)="Link()">Link</button>
+            <button type="submit" (click)="RemoveLink()">Remove Link</button>
             <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
     </div>

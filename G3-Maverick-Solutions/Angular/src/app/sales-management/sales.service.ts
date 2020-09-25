@@ -25,14 +25,23 @@ export class SalesService {
   }
 
   searchSalesByDate(date : Date){
-    return this.http.get(this.url + '/searchSalesByDate/'+date).pipe(map(result => result));
+    return this.http.get(this.url + '/searchSalesByDate/'+date);
   }
 
   searchSalesByProduct(prodId:number){
-    return this.http.get(this.url + '/searchSalesByProdcut/'+ prodId).pipe(map(result => result));
+    return this.http.get(this.url + '/searchSalesByProdcut/'+ prodId);
   }
 
   getSale(id:number){
-    return this.http.get(this.url + '/searchSalesByProdcut/'+ id).pipe(map(result => result));
+    return this.http.get(this.url + '/searchSalesByID/'+ id);
   }
+  getAllSales(){
+    return this.http.get(this.url + '/getAllSales');
+  }
+
+
+
+
+
+
 }

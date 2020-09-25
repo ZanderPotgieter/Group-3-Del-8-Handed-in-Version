@@ -78,6 +78,8 @@ export class MakeSaleComponent implements OnInit {
 
       }
     })
+
+    
   }
 
   addProduct(val: ProductDetails){

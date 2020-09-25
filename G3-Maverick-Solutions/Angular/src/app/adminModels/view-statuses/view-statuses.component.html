@@ -1,6 +1,6 @@
 <body>
     <h1>System Status And Types Management</h1>
-    <form>
+    <form >
         <div >
             
             <mat-radio-group  aria-label="Select Option To View">
@@ -22,14 +22,14 @@
           
             <tr *ngIf="showadd">
                 <td ></td>
-                <td><input style="width: 70%" type="text" name="description" [(ngModel)]="addDes"></td>
+                <td><input style="width: 70%" type="text" name="description" [(ngModel)]="addDes" required></td>
                 <td><button style="border-radius: 10px; width: 60%;" (click)="saveadd()"><i class="small material-icons" plceholder="new item">save</i></button></td>
                 <td></td>
                 <!--<td></td>-->
             </tr>
             <tr *ngFor="let item of list; index as ndx; trackBy:trackByndx;">
                 <td>{{ndx+1}}</td>
-                <td><input style="width: 70%" type = "text" name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].description"></td>
+                <td><input style="width: 70%" type = "text"  name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].description"></td>
                 <td ><button  style="border-radius: 10px; width: 60%;" (click)="update()"><i class="small material-icons" >edit</i></button></td>
                 <td><button style="border-radius: 10px; width: 60%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
                 <!--<td><button style="border-radius: 10px; width: 60%;" (click)="delete(ndx)"><i class="small material-icons" >delete</i></button></td>-->

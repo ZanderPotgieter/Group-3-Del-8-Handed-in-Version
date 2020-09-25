@@ -29,6 +29,7 @@ namespace ORDRA_API.Controllers
             toReturn.products = new ExpandoObject();
             toReturn.SaleDate = new ExpandoObject();
             toReturn.paymetTypes = new ExpandoObject();
+            toReturn.VAT = new ExpandoObject();
 
 
             try
@@ -39,6 +40,9 @@ namespace ORDRA_API.Controllers
                 //get payment types
                 toReturn.paymentTypes = db.Payment_Type.ToList();
 
+                //get VAT
+                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now && x.VATEndDate >= DateTime.Now).FirstOrDefault();
+
 
                 //Get List Of products with current price
                 List<Product> productsList = db.Products.ToList();
@@ -46,17 +50,21 @@ namespace ORDRA_API.Controllers
                 foreach (var prod in productsList)
                 {
                     Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).FirstOrDefault();
-                    double Price = (double)price.UPriceR;
-                    dynamic productDetails = new ExpandoObject();
-                    productDetails.ProductCategoryID = prod.ProductCategoryID;
-                    productDetails.ProductID = prod.ProductID;
-                    productDetails.ProdDescription = prod.ProdDesciption;
-                    productDetails.Prodname = prod.ProdName;
-                    productDetails.Quantity = 0;
-                    productDetails.Price = Math.Round(Price, 2);
-                    productDetails.Subtotal = 0.0;
+                    if (price != null)
+                    {
+                        double Price = (double)price.UPriceR;
+                        dynamic productDetails = new ExpandoObject();
+                        productDetails.ProductCategoryID = prod.ProductCategoryID;
+                        productDetails.ProductID = prod.ProductID;
+                        productDetails.ProdBarcode = prod.ProdBarcode;
+                        productDetails.ProdDescription = prod.ProdDesciption;
+                        productDetails.Prodname = prod.ProdName;
+                        productDetails.Quantity = 0;
+                        productDetails.Price = Math.Round(Price, 2);
+                        productDetails.Subtotal = 0.0;
 
-                    products.Add(productDetails);
+                        products.Add(productDetails);
+                    }
                 }
                 toReturn.products = products;
 
@@ -64,14 +72,50 @@ namespace ORDRA_API.Controllers
 
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn = error.Message;
+                toReturn.Error = "Please Reload Page to Initiate Sale";
             }
 
             return toReturn;
 
 
+        }
+
+        [HttpGet]
+        [Route("getAllSales")]
+        public object getAllSales()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                List<Sale> sales = db.Sales.ToList();
+                List<dynamic> Sales = new List<dynamic>();
+
+                foreach (Sale sale in sales)
+                {
+                    Sale sale1= db.Sales.Where(x => x.SaleID == sale.SaleID).FirstOrDefault();
+                    ///User user = sale1.User;
+                    DateTime date = Convert.ToDateTime(sale1.SaleDate);
+                    if (sale1 != null )
+                    {
+                        dynamic searchedSale = new ExpandoObject();
+                        searchedSale.SaleID = sale.SaleID;
+                       // searchedSale.UserName = user.UserName;
+                        searchedSale.SaleDate = date.ToString("yyyy-MM-dd");
+                        Sales.Add(searchedSale);
+                    }
+                }
+
+                toReturn.Sales = Sales;
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
         }
 
         //Make Sale
@@ -81,14 +125,18 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            try
-            {
-                //get user who made sale
-                User user = db.Users.Where(x => x.UserID == newSale.UserID).FirstOrDefault();
+            // try
+            // {
+            //get user who made sale
+            // User user = db.Users.Where(x => x.UserID == newSale.UserID).FirstOrDefault();
+            int id = (int)newSale.UserID;
 
+           // User saleUser = db.Users.Where(x => x.UserID == id).FirstOrDefault();
+
+            
                 //add sale
                 Sale sale = new Sale();
-                sale.User = user;
+                sale.UserID = newSale.UserID;
                 sale.SaleDate = DateTime.Now;
                 db.Sales.Add(sale);
                 db.SaveChanges();
@@ -106,9 +154,11 @@ namespace ORDRA_API.Controllers
                 {
                     Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
                     Product_Sale prodSale = new Product_Sale();
-                    prodSale.Sale = addedSale;
-                    prodSale.Product = product;
+                    prodSale.SaleID = addedSale.SaleID;
+                    prodSale.ProductID = product.ProductID;
                     prodSale.PSQuantity = prod.PSQuantity;
+                    prodSale.Product = product;
+                    prodSale.Sale = addedSale;
 
                     db.Product_Sale.Add(prodSale);
                     db.SaveChanges();
@@ -133,12 +183,13 @@ namespace ORDRA_API.Controllers
                 int saleMadeID = addedSale.SaleID;
 
                 toReturn.saleID = saleMadeID;
-                toReturn.Message = "Sale Completed";
-            }
-            catch (Exception error)
-            {
-                toReturn = error.Message;
-            }
+                toReturn.Message = "Sale Completed Succuessfully";
+           
+           // }
+            //catch
+            //{
+                //toReturn.Error = "Sale Unsuccessfully Completed";
+           // }
 
             return toReturn;
         }
@@ -157,9 +208,9 @@ namespace ORDRA_API.Controllers
                 List<Sale> searchedSales = db.Sales.Include(x => x.Product_Sale).Include(x => x.Payments).Include(x => x.User).Where(x => x.SaleDate == date).ToList();
                 toReturn = searchedSales;
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn.Message = error.Message;
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -198,9 +249,9 @@ namespace ORDRA_API.Controllers
                 toReturn = searchedSales;
 
             }
-            catch (Exception error)
+            catch
             {
-                toReturn.Message = error.Message;
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;

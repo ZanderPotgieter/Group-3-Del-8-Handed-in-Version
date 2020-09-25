@@ -687,22 +687,27 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                DateTime date = DateTime.Now.AddYears(1);
-                //save price for product;
-                Price addPrice = new Price();
-                addPrice.ProductID = newPrice.ProductID;
-                addPrice.CPriceR = (float)newPrice.CPriceR;
-                addPrice.UPriceR = (float)newPrice.UPriceR;
-                addPrice.PriceStartDate = newPrice.PriceStartDate;
-                addPrice.PriceEndDate = date;
-                db.Prices.Add(addPrice);
-                db.SaveChanges();
+                Product product = db.Products.Where(x => x.ProductID == newPrice.ProductID).FirstOrDefault();
+                if (product != null)
+                {
+                    DateTime date = DateTime.Now.AddYears(1);
+                    //save price for product;
+                    Price addPrice = new Price();
+                    addPrice.Product = product;
+                    addPrice.CPriceR = (float)newPrice.CPriceR;
+                    addPrice.UPriceR = (float)newPrice.UPriceR;
+                    addPrice.PriceStartDate = newPrice.PriceStartDate;
+                    addPrice.PriceEndDate = date;
+                    db.Prices.Add(addPrice);
+                    db.SaveChanges();
 
-                toReturn.Message = "Price Added To Product Successfuly";
+                    toReturn.Message = "Price Added To Product Successfuly";
+                }
+              
             }
             catch (Exception)
             {
-                toReturn.Message = "Price Add Unsuccessfuly";
+                toReturn.Error = "Price Add Unsuccessfuly";
 
             }
             return toReturn;
@@ -1040,11 +1045,11 @@ namespace ORDRA_API.Controllers
 
             VAT objectVat = new VAT();
             dynamic toReturn = new ExpandoObject();
-            var id = vatUpdate.VATID;
+      
 
             try
             {
-                objectVat = db.VATs.Where(x => x.VATID == id).LastOrDefault();
+                objectVat = db.VATs.Where(x => x.VATID == vatUpdate.VATID).FirstOrDefault();
                 if (objectVat != null)
                 {
                     objectVat.VATPerc = vatUpdate.VATPerc;

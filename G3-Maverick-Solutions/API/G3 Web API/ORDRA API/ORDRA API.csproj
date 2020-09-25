@@ -186,6 +186,7 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
+    <Compile Include="Controllers\SaleController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\SupplierOrderController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

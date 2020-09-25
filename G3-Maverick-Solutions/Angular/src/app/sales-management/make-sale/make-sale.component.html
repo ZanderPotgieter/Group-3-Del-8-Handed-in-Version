@@ -1,47 +1,113 @@
 <!DOCTYPE html>
 <body>
   <h1>Make Sale</h1>
-  <br>
   <form>
-      
-      <div class="card" id="makesale">
-        <div class="divleft">
-        <div class="subheadinglabel" id="product">Enter Product Name:</div>
-        <br>
-        <input type="text" name="search" placeholder="Enter Product... 🔎" style="width: 180px;"> 
-          <br>     
-        </div>   
-          <br/>
-
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>Quantity</th>
-              <th>Product</th>
-              <th>Unit Price</th>
-              <th>Cost Price</th>
-              <th>Subtotal</th>
-            </tr>
-            </thead>  
-          
-          </table>
-        <br/>
-        <br/>
-
-        <label>Total: </label>
-        <input class="searchinput" type ="text" id="Totalid" name="SaleTotal" required style="width:180px"> <br/>
-
-        <label>VAT:</label>
-        <input class="searchinput" type ="text" id="VATid" name="totalVAT" required style="width:180px"> <br/>
-          
-          <br/>
-          <div class="divleft">
-            <button routerLink="/payment-select" type="submit">Proceed to Payment</button>
-            <button routerLink="/sales-management" type="submit">Cancel Sale</button>
-        </div>
-          
+    <div *ngIf="showProd" class="card"> 
+      <div class="divleft" style="padding: 2px 2px;">
+        <label class="subheadinglabel" >Add Products:</label>
       </div>
-      <br><br>
+      <div class="divleft" >
+       <label for="Product">Product: </label>
+        <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
+            <option *ngFor="let product of productsWithPrice" [ngValue]="product">{{product.Prodname}}</option>
+        </select>
+      </div>
+       <div *ngIf="prodNotSelected" class ="diveleft">
+        <label style="color: red; font-size: 13px; width :200px">Select a product</label>
+     </div>
+     <div class="divleft">
+        <label for="quantity">Quantity </label>
+        <input  style="width:40px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+        <button style="height: 30px;" (click)="listProducts()">Add</button>
+      </div>
+ 
+    </div>
+    <br>
+
+    <br>
+    <div class="card" style="padding: 2px 2px;" >
+   
+      <div class="divleft">
+        <div class="divleft" style="padding: 2px 2px;" >
+            <label class="subheadinglabel" >Sale Details </label>
+        </div>
+
+        <div class="divleft" >
+            <div class="divleft" >
+                <label for="Product">Payment Method: </label>
+                 <select required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
+                     <option *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
+                 </select>
+             </div>
+
+             <div class="divleft">
+                <label for="quantity">Amount </label>
+                <input  style="width:40px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+                <button style="height: 30px;" (click)="makePayment()">Make Payment</button>
+              </div>
+              <div *ngIf="showChange" class ="diveleft">
+                 <label width :200px>Change: R{{change}}</label>
+               </div>
+              <div *ngIf="ShowOustanding" class ="diveleft">
+                <label width :200px>Outstanding: R{{outstandingAmt}}</label>
+              </div>
+         
+
+            </div>
+        </div>
+    </div>
+    <br>
+    <div *ngIf="showTable" class="card">
+        <table>    
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+            <tr *ngFor="let item of saleProducts, index as ndx">
+                <td>{{item.Prodname}}</td>
+                 <td>{{item.Quantity}}</td>
+                 <td>R{{item.Price}}</td>
+                <td>R{{item.Subtotal}}</td>
+                <td><button class="btntable" style="height: 30px; width:50px"  (click) ="remove(ndx)">X</button></td>
+            </tr>
+
+            <tr >
+                
+                <th></th>
+                <th></th>
+                <th>Subtotal (Exc VAT):</th>
+                <th>R{{displaySubtotal}}</th>
+            </tr>
+
+            <tr>
+                <th></th>
+                <th></th>
+                <th>VAT:{{vatPerc}}%:</th>
+                <th>R{{displayVat}}</th>
+            </tr>
+        
+            <tr>
+                
+                <th></th>
+                <th></th>
+                <th>TOTAL:</th>
+                <th>R{{displayTotal}}</th>
+            </tr>
+        </table>
+
+      
+      <div class="divleft">
+        
+          <div class="divleft">
+              <button type="submit" (click)="makeSale()">Complete Sale</button>
+              <button type="submit" (click)="gotoSaleManagement()">Cancel</button>
+          </div>
+      </div>
+    </div>
+
 
   
   </form>

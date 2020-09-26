@@ -223,6 +223,11 @@
       </div>
   </div>
 </div>
+<div hidden="true" *ngIf ="currentContainer">
+  <app-make-sale [ConName] = "currentContainer.ConName"></app-make-sale>
+  <app-make-sale [ContainerID] = "currentContainer.ContainerID"></app-make-sale>
+
+</div>
 
 <div *ngIf = "showNav">
     <div class="wrapper">
@@ -258,7 +263,7 @@
             </div>
         
             <div class="header-section-2">
-                Date:  {{dateVal | date: 'dd/MM/yyyy'}}
+                Date:  {{dateVal | date: 'yyyy-MM-dd'}}
             </div>
         
             <div class="header-section-3">

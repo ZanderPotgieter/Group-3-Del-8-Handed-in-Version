@@ -1,33 +1,76 @@
 <!DOCTYPE html>
 <body>
   <h1>Make Sale</h1>
-  <form>
+  <form >
     <div *ngIf="showProd" class="card"> 
       <div class="divleft" style="padding: 2px 2px;">
         <label class="subheadinglabel" >Add Products:</label>
       </div>
       <div class="divleft" >
-       <label for="Product">Product: </label>
-        <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
-            <option *ngFor="let product of productsWithPrice" [ngValue]="product">{{product.Prodname}}</option>
-        </select>
-      </div>
-       <div *ngIf="prodNotSelected" class ="diveleft">
-        <label style="color: red; font-size: 13px; width :200px">Select a product</label>
-     </div>
-     <div class="divleft">
-        <label for="quantity">Quantity </label>
-        <input  style="width:40px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
-        <button style="height: 30px;" (click)="listProducts()">Add</button>
-      </div>
- 
+        <mat-radio-group  aria-label="Select Option">
+        <mat-radio-button  value = 1 (click)="useBardode()" >Use Barcode</mat-radio-button>
+        <mat-radio-button value = 2 (click)="useName()" >Use Product Name</mat-radio-button>
+       
+        </mat-radio-group>
+
     </div>
+
+      
+       <div *ngIf="showBarcode" class="divleft" [formGroup]="searchForm">
+         <label for="prodBarcode">Barcode:</label><input type="text" formControlName="prodBarcode" class="form-control" [(ngModel)]="prodBarcode" id="prodBarcode" name="prodBarcode" pattern="[0-9 ]*" required>
+        <br>
+       <!-- <span style="color:red" *ngIf="searchForm.get('prodBarcode').errors && (searchForm.get('prodBarcode').touched || searchForm.get('prodBarcode').dirty)">
+          <span *ngIf="searchForm.get('prodBarcode').errors.required">Barcode is required.</span>
+          <span *ngIf="searchForm.get('prodBarcode').errors.minlength || searchForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
+          <span *ngIf="searchForm.get('prodBarcode').errors.pattern">Only numbers allowed.</span>
+      </span>-->
+        <br>
+        <div hidden="true" class="divleft" *ngIf="showSearch">
+          <button style="width:60px; border-radius: 10px;" type="submit" (click)="getProduct()"><i class="tiny material-icons">search</i></button>
+        </div>
+        
+     </div>
+      
+        <div class="divleft" *ngIf="showQuantity">
+          <label for="quantity">Quantity </label>
+          <input  style="width:50px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+          <button style="height: 30px;" (click)="listProducts()">Add</button>
+        </div>
+
+
+        <div *ngIf="showName" style="padding: 2px 2px;">
+          <div class="divleft" >
+           <label for="Product">Product: </label>
+            <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
+                <option *ngFor="let product of productsWithPrice" [ngValue]="product">{{product.Prodname}}</option>
+            </select>
+          </div>
+           <div *ngIf="prodNotSelected" class ="diveleft">
+            <label style="color: red; font-size: 13px; width :200px">Select a product</label>
+         </div>
+         <div class="divleft">
+            <label for="quantity">Quantity </label>
+            <input  style="width:40px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+            <button style="height: 30px;" (click)="listProducts()">Add</button>
+          </div>
+        </div>
+       
+    </div>
+
+   
+    
     
     <br>
     <div *ngIf="showTable" class="card">
       <div class="divleft" style="padding: 2px 2px;" >
-        <label class="subheadinglabel" >Sale Details </label>
+        <label class="subheadinglabel" >Sale Details: </label>
     </div>
+    <div class="divleft" style="padding: 2px 2px;" >
+     
+      <label style="width: 200px">Date: {{saleDate | date: 'yyyy-MM-dd'}}</label>
+      <label style="width: 300px">Cashier: {{user.UserName}} {{user.UserSurname}}</label>
+     <!--<label style="width: 300px">Container: {{ConName}}</label>-->
+  </div>
     <br>
         <table>    
             <tr>
@@ -90,15 +133,15 @@
 
        <div class="divleft">
           <label for="quantity">Amount </label>
-          <input  style="width:40px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+          <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
           <button style="height: 30px;" (click)="makePayment()">Make Payment</button>
         </div>
-        <div *ngIf="showChange" class ="diveleft">
-           <label width :200px>Change: R{{change}}</label>
-         </div>
-        <div *ngIf="ShowOustanding" class ="diveleft">
-          <label width :200px>Outstanding: R{{outstandingAmt}}</label>
+        <div class="divleft" *ngIf="ShowOustanding">
+          <label style="width :100px">Outstanding: R{{outstandingAmt}}</label>
         </div>
+        <div class="divleft" *ngIf="showChange">
+           <label style="width :100px">Change: R{{change}}</label>
+         </div>
    
        <div class="divleft">
         <button type="submit" (click)="makeSale()">Complete Sale</button>

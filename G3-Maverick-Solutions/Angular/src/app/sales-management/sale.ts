@@ -5,8 +5,9 @@ import{User} from '../login-subsystem/user/model/user.model';
 export class Sale {
     SaleID: number;
     UserID: number;
+    ContainerID:number;
     SaleDate: Date;
-    Payments: Payment[];
-    Product_Sale: ProductSale[];
-    User: User[]
+    Payments: Payment[] = [];
+    Product_Sale: ProductSale[] = [];
+    User: User;
 }

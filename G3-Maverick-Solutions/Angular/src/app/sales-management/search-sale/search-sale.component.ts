@@ -10,7 +10,8 @@ import {SearchedSale} from '../searched-sale'
 import {ProductDetails} from 'src/app/customer-order-management/product-details';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
-
+import { NgModule } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-sale',
@@ -22,7 +23,7 @@ export class SearchSaleComponent implements OnInit {
   constructor(private api: SalesService,private router: Router, private fb: FormBuilder) { }
   searchSaleForm: FormGroup;
   dateVal: Date;
-  date:string;
+  date: Date;
   SaleDate: Date;
   SaleID: number;
   selectedProduct: ProductDetails = new ProductDetails();
@@ -53,7 +54,8 @@ export class SearchSaleComponent implements OnInit {
   selectedSale: SearchedSale = new SearchedSale();
   searchedSales: Sale[] = [];
   sale: Sale = new Sale();
-
+  saleList: Sale[] = [];
+  
   ngOnInit(): void {
 
     this.searchSaleForm= this.fb.group({ 
@@ -100,7 +102,18 @@ export class SearchSaleComponent implements OnInit {
   }
 
   searchAllSales(){
-    this.showListAllSales = true;
+
+   return this.api.getAllSales().subscribe((res: any)=>{
+     console.log(res);
+     if(res.Message != null){
+       this.responseMessage = res.Message;
+       alert(this.responseMessage)}
+       else{
+         this.saleList = res.Sales;
+       }
+       this.showListAllSales = true;
+   })
+   
   }
 
   addProduct(val: ProductDetails){
@@ -140,16 +153,16 @@ export class SearchSaleComponent implements OnInit {
             this.searchedSales = res;
        
         }
- 
+        this.showListSearchByproduct = true
       
       })
   }
 
   searchByDate(){
     
-    this.SaleDate = new Date(this.date);
+    //this.SaleDate = new Date(this.date);
      
-    this.api.searchSalesByDate(this.SaleDate).subscribe( (res:any)=> {
+    this.api.searchSalesByDate(this.date).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
@@ -159,7 +172,7 @@ export class SearchSaleComponent implements OnInit {
        
         }
  
-      
+      this.showList = true;
       })
   }
 

@@ -56,6 +56,8 @@ export class SearchSaleComponent implements OnInit {
   sale: Sale = new Sale();
   saleList: Sale[] = [];
   
+  viewSaleList: Sale[] = [];
+
   ngOnInit(): void {
 
     this.searchSaleForm= this.fb.group({ 
@@ -116,6 +118,28 @@ export class SearchSaleComponent implements OnInit {
    
   }
 
+  //viewSale(i: number)
+  //{
+    //this.SaleID = i;
+  //  this. getViewSale();
+  //}
+
+  getViewSale(i: number){
+    this.SaleID = i;
+    return this.api.getSale(this.SaleID).subscribe((res: any)=>{
+      console.log(res);
+      if(res.Message != null){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)}
+        else{
+          this.viewSaleList = res.Sales;
+          this.saleDate = res.saleDate;
+            this.saleDetails = res.calculatedValues;
+        }
+      
+    })
+  }
+ 
   addProduct(val: ProductDetails){
     if(val == null){
       this.prodNotSelected= true
@@ -180,7 +204,7 @@ export class SearchSaleComponent implements OnInit {
      this.showListSearchByBarcode = true;
   }
 
-  view(val: any){
+  view(val: number){
     this.SaleID = val;
     this.getSale(val)
     

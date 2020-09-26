@@ -31,11 +31,12 @@ export class SalesService {
 
   searchSalesByProduct(prodId:number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
-    return this.http.get(this.url + '/searchSalesByProdcut/'+ prodId , httpOptions);
+    return this.http.get(this.url + '/searchSalesByProduct/'+ prodId , httpOptions);
   }
 
   getSale(id:number){
-    return this.http.get(this.url + '/searchSalesByID/'+ id);
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
+    return this.http.get(this.url + '/getSale/'+ id , httpOptions);
   }
   getAllSales(){
     return this.http.get(this.url + '/getAllSales');

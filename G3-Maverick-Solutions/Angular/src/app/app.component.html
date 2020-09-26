@@ -227,23 +227,23 @@
 <div *ngIf = "showNav">
     <div class="wrapper">
         <div class="sidebar">
-        <h2><img width="170"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
+        <h2><img width="170"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" (click)="onHome()"></h2>
               
         <ul style="width: 200px; height: 600px; overflow-y: scroll;">
             
           <li><i class="tiny material-icons">menu</i><a [routerLink]="'/admin'"> <i class="fas fa-home"></i>Administration </a></li>
+          <li><i class="tiny material-icons">store</i><a [routerLink]="'/container-management'"><i class="fas fa-user"></i>Container Management</a></li>
+          <li><i class="tiny material-icons">attach_money</i><a [routerLink]="'/creditor-management'"><i class="fas fa-map-pin"></i>Creditor Management </a></li>
+          <li><i class="tiny material-icons">contacts</i><a [routerLink]="'/customer-management'"><i class="fas fa-address-book"></i>Customer Management </a></li>
+          <li><i class="tiny material-icons">shopping_cart</i><a [routerLink]="'/customer-order-management'"><i class="fas fa-map-pin"></i>Customer Order Management </a></li>
+          <li><i class="tiny material-icons">card_giftcard</i><a [routerLink]="'/donation-management'"><i class="fas fa-map-pin"></i>Donation Management </a></li>
             <li><i class="tiny material-icons">people_outline</i><a [routerLink]="'/employee-management'"> <i class="fas fa-home"></i>Employee Management </a></li>
-            <li><i class="tiny material-icons">store</i><a [routerLink]="'/container-management'"><i class="fas fa-user"></i>Container Management</a></li>
-            <li><i class="tiny material-icons">person_pin</i><a [routerLink]="'/manager-management'"><i class="fas fa-address-card"></i>Manager Profile Management</a></li>
             <li><i class="tiny material-icons">add_location</i><a [routerLink]="'/gps-management'"><i class="fas fa-project-diagram"></i>GPS Management</a></li>
+            <li><i class="tiny material-icons">person_pin</i><a [routerLink]="'/manager-management'"><i class="fas fa-address-card"></i>Manager Profile Management</a></li>
+            <li><i class="tiny material-icons">layers</i><a [routerLink]="'/product-management'"><i class="fas fa-map-pin"></i>Product Management </a></li>
             <li><i class="tiny material-icons">shopping_basket</i><a [routerLink]="'/sales-management'"><i class="fas fa-blog"></i>Sales </a></li>
-            <li><i class="tiny material-icons">contacts</i><a [routerLink]="'/customer-management'"><i class="fas fa-address-book"></i>Customer Management </a></li>
-            <li><i class="tiny material-icons">shopping_cart</i><a [routerLink]="'/customer-order-management'"><i class="fas fa-map-pin"></i>Customer Order Management </a></li>
             <li><i class="tiny material-icons">settings_ethernet</i><a [routerLink]="'/supplier-management'"><i class="fas fa-map-pin"></i>Supplier Management </a></li>
             <li><i class="tiny material-icons">local_shipping</i><a [routerLink]="'/supplier-order-management'"><i class="fas fa-map-pin"></i>Supplier Order Management </a></li>
-            <li><i class="tiny material-icons">layers</i><a [routerLink]="'/product-management'"><i class="fas fa-map-pin"></i>Product Management </a></li>
-            <li><i class="tiny material-icons">card_giftcard</i><a [routerLink]="'/donation-management'"><i class="fas fa-map-pin"></i>Donation Management </a></li>
-            <li><i class="tiny material-icons">attach_money</i><a [routerLink]="'/creditor-management'"><i class="fas fa-map-pin"></i>Creditor Management </a></li>
             <li><i class="tiny material-icons">timeline</i><a [routerLink]="'/reporting-management'"><i class="fas fa-map-pin"></i>Reporting </a></li>
         
         </ul> 

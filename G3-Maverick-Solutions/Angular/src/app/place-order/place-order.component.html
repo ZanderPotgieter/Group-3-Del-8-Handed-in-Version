@@ -1,82 +1,142 @@
-
-    
-
-        <h1>Place Order</h1>
-        <form>
-        >
+<h1>Place Order</h1>
+<form [formGroup]="cusorderForm">
+        
+           
        
-        <br><br>
-        <div class="card">
-            <br>
-        <div class="divleft"  >
-            <label class="subheadinglabel" >Add Customer: </label>
         <br>
-            <label for="name">Name:       </label>
-            <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
-       
-            <label for="cusSurname">Surname:   </label>
-            <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
-       
-            <button (click)="getCustomer()" >Add</button>
+        <div class="card" *ngIf="showInitiate">
+
+        <div class="divleft" style="padding: 2px 2px;" >
+            <label class="subheadinglabel" >Search Customer: </label>
         </div>
+     
+        <div class="divleft"  style="float:left; width:40%;">
+            <label for="cusName">Name:     </label>
+            <input class="searchinput"  [(ngModel)]="name" type="text" id="name" name="name" [ngModelOptions]="{standalone: true}"><br>
+                  <span style="color:red" *ngIf="cusorderForm.get('name').errors && (cusorderForm.get('name').touched || cusorderForm.get('name').dirty)">
+                    <br>
+                      <span *ngIf="cusorderForm.get('name').errors.required">Name is required.<br></span>
+                      <span *ngIf="cusorderForm.get('name').errors.pattern">Only text characters.<br></span>
+                  </span>
+       </div>
+       <div class="divleft"  style="float:left; width:60%;">
+        <label for="surname">Surname:     </label>
+        <input class="searchinput" type="text" formControlName="surname" [(ngModel)]="surname" [ngModelOptions]="{standalone: true}" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
+        <span style="color:red" *ngIf="cusorderForm.get('surname').errors && (cusorderForm.get('surname').touched || cusorderForm.get('surname').dirty)">
+            <br>
+            <span *ngIf="cusorderForm.get('surname').errors.required">Surname is required.<br></span>
+            <span *ngIf="cusorderForm.get('surname').errors.pattern">Only text characters.<br></span>
+        </span>
         <br>
+            <button style="float:left;" (click) = "getCustomer()" >Place Order</button>
+
+            <div *ngIf="customerNull" class ="divleft">
+                <label style="color: red; font-size: 13px; width :200px">Please enter search criteira.</label>
+            </div>
+        </div>
+
+        <table class="table table-striped">  
+            <thead class="thead-dark">  
+              <tr>  
+                <th>Name</th>  
+                <th>Surname</th>  
+                <th>Cell No</th>  
+                <th>Email</th>  
+                <th>Suburb</th>  
+              </tr>  
+            </thead>  
+            <tbody>  
+              <tr *ngFor="let cus of allCus | async">  
+                <td>{{cus.CusName}}</td>  
+                <td>{{cus.CusSurname}}</td>  
+                <td>{{cus.CusCell}}</td>  
+                <td>{{cus.CusEmail}}</td>  
+                <td>{{cus.CusSuburb}}</td> 
+              </tr>  
+            </tbody>  
+          </table>  
+       
+        
     </div>
 
-        <div class="card"> 
+     
+
+        
+        <br>
+        <div class="card" style="padding: 2px 2px;" *ngIf="showDetails" >
+           
             <div class="divleft">
-                <label class="subheadinglabel" >Add Products:</label>
-                <br>
-                <label for="Category">Product Category: </label>
+                <div class="divleft" style="padding: 2px 2px;" >
+                    <label class="subheadinglabel" >Customer Order Details </label>
+                </div>
+
+
+                <div class="divleft" style="float:left; width:50%;">
+                    <label class="displaylabel" for="cusOrdNo">Order No:      </label>
+                   <label id="cusOrdNo" name="cusOrdNo">{{customerOrder.CusOrdNumber}}</label>
+                   </div>
+
+                   <div class="divleft" style="float:left; width:50%;">
+                   <label class="displaylabel" for="OrdDate" style="width:100px">Date:      </label>
+                     <label  id="OrdDate" name="OrdDate">{{customerOrder.CusOrdDate}}</label>
+                   </div>
+                
+                <div class="divleft" style="float:left; width:50%;">
+                <label  class="displaylabel" for="cusCell">Cell:</label>
+                <label id="cusCell" name="cusCell" >{{customer.CusCell}}</label>
+            
+                </div>
+
+                <div class="divleft" style="float:left; width:50%;">
+                    
+                <label class="displaylabel" for="cusName" style="width:100px">Name:       </label>
+                 <label  id="cusName" name="cusName" >{{customer.CusName}}</label>
+                </div>
+
+                <div class="divleft" style="float:left; width:50%;">
+                <label class="displaylabel" for="cusName" >Surname:       </label>
+                <label  id="cusSurname" name="cusSurname">{{customer.CusSurname}}</label>
+                </div>
+
+                <div class="divleft" style="float:left; width:50%;">   
+                <label  class="displaylabel" for="cusCell" style="width:100px">Email:</label>
+                <label id="cusCell" name="cusCell" >{{customer.CusEmail}}</label>
+                </div>
+            </div>
+         </div>
+
+         
+        <div *ngIf="showProd" class="card"> 
+            <div class="divleft" style="padding: 2px 2px;">
+            <label class="subheadinglabel" >Add Products:</label>
+            </div>
+           
+           <!--<div class="divleft"  style="float:left; width:50%;">
+                
+                <label for="Category">Category: </label>
                 <select required name="catSelection" [(ngModel)]="catSelection" (ngModelChange)="loadProducts($event)">
                     <option *ngFor="let category of categoryList" [ngValue]="category">{{category.PCatName}}</option>
                 </select>
-           
-                <label for="Product">Product: </label>
-                <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)">
+            </div>-->
+            <div class="divleft" >
+               <label for="Product">Product: </label>
+                <select required name="prodSelection" [(ngModel)]="prodSelection" (ngModelChange)="addProduct($event)" [ngModelOptions]="{standalone: true}">
                     <option *ngFor="let product of productsWithPrice" [ngValue]="product">{{product.Prodname}}</option>
                 </select>
             </div>
+            <div *ngIf="prodNotSelected" class ="divleft">
+                <label style="color: red; font-size: 13px; width :1000px">No product has been selected. Please select a product to add to the order.</label>
+            </div>
          <div class="divleft">
                 <label for="quantity">Quantity </label>
-                <input  width="5px" type="number" name="quantity" [(ngModel)]="quantity" id="quantity" required>
-            
-                <button (click)="listProducts()">Add</button>
-            
+                <input  style="width:40px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required [ngModelOptions]="{standalone: true}">
+                <div *ngIf="quantyNull" class ="diveleft">
+                    <label style="color: red; font-size: 13px; width :1000px">No quantity has been entered. Please enter a quantity for the product. </label>
+                </div>
+                <button style="height: 30px;" (click)="listProducts()">Add</button>
          </div>
         </div>
         <br>
-        <label class="subheadinglabel" ></label>
-        <br>
-        <div class="card">
-           
-            <br>
-            <div class="divleft">
-                <label class="subheadinglabel" >Customer Order Details</label>
-
-                <div class="divleft">
-                    <label class="displaylabel" for="cusOrdNo">Order No:      </label>
-                    <input type="text" name="cusOrdNo" [(ngModel)]="customerOrder.CusOrdNumber" disabled>
-                   <!-- <label id="cusOrdNo" name="cusOrdNo">{{customerOrder.CusOrdNumber}}</label> -->
-            
-                    <label class="displaylabel" for="OrdDate">Date:      </label>
-
-                    <label  id="OrdDate" name="OrdDate">{{customerOrder.CusOrdDate}}</label> 
-                </div>
-
-                <br>
-                <label class="displaylabel" for="cusName">Customer:       </label>
-                <label  id="cusName" name="cusName" >{{customer.CusName}}</label>
-                <label  id="cusSurname" name="cusSurname">{{customer.CusSurname}}</label>
-
-        
-                <label  class="displaylabel" for="cusCell">Cell:</label>
-                <label id="cusCell" name="cusCell" >{{customer.CusCell}}</label>
-
-                <label  class="displaylabel" for="cusCell">Email:</label>
-                <label id="cusCell" name="cusCell" >{{customer.CusEmail}}</label>
-        
-            </div>
-    </div>
 
         <br>
         <div *ngIf="showTable" class="card">
@@ -86,16 +146,14 @@
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Subtotal</th>
-                        <th>Action</th>
+                        <th></th>
                     </tr>
                     <tr *ngFor="let item of orderProducts, index as ndx">
                         <td>{{item.Prodname}}</td>
-                     <!--  <td><input type="text" [(ngValue)]="item" *ngFor="let name of item.quantity" name="name.value" width="5px" [(ngModel)]= "name.Quantity" [(ngModelChange)] = "calculate()"/></td>
-                     --> 
                          <td>{{item.Quantity}}</td>
                          <td>R{{item.Price}}</td>
                         <td>R{{item.Subtotal}}</td>
-                        <td><button class="btntable" (click) ="remove(ndx)">-X-</button></td>
+                        <td><button class="btntable" style="height: 30px; width:50px"  (click) ="remove(ndx)">X</button></td>
                     </tr>
 
                     <tr >
@@ -103,36 +161,32 @@
                         <th></th>
                         <th></th>
                         <th>Subtotal (Exc VAT):</th>
-                        <th>R{{orderDetails.TotalExcVat}}</th>
+                        <th>R{{displaySubtotal}}</th>
                     </tr>
     
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>VAT:{{vatPerc}}%:</th>
+                        <th>R{{displayVat}}</th>
+                    </tr>
+                
                     <tr>
                         
                         <th></th>
                         <th></th>
-                        <th></th>
-                        <th>VAT {{vatPerc}}%:</th>
-                        <th>{{orderDetails.Vat}}</th>
-                    </tr>
-                
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                         <th>TOTAL:</th>
-                        <th>R{{orderDetails.TotalExcVat}}</th>
+                        <th>R{{displayTotal}}</th>
                     </tr>
                 </table>
-                
 
-    
               
             <div class="divleft">
                 <button type="submit" (click)="placeOrder()">Place Order</button>
-                <button type="submit">Cancel</button>
+                <button type="submit" (click)="gotoCustomerOrderManagement()">Cancel</button>
             </div>
         </div>
         <br>
 
-
-
+    
+        

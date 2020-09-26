@@ -134,9 +134,9 @@ export class ViewCustomerComponent implements OnInit {
     this.router.navigate(['customer-management']);
   }
 
-   gotoPlaceOrder(){
-     this.interaction.sendCustomerID(this.customer.CustomerID);
-    this.router.navigate(['place-order']);
-  }
+   //gotoPlaceOrder(){
+     //this.interaction.sendCustomerID(this.customer.CustomerID);
+    //this.router.navigate(['place-order']);
+  //}
 
 }

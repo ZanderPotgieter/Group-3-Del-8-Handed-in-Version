@@ -693,6 +693,7 @@ namespace ORDRA_API.Controllers
                     DateTime date = DateTime.Now.AddYears(1);
                     //save price for product;
                     Price addPrice = new Price();
+                    addPrice.ProductID = product.ProductID;
                     addPrice.Product = product;
                     addPrice.CPriceR = (float)newPrice.CPriceR;
                     addPrice.UPriceR = (float)newPrice.UPriceR;
@@ -990,7 +991,7 @@ namespace ORDRA_API.Controllers
                     DateTime startdate = Convert.ToDateTime(item.VATStartDate);
                     vat.VATID = item.VATID;
                     vat.VATPerc = item.VATPerc;
-                    vat.VATStartDate = item.VATStartDate;
+                    vat.VATStartDate = startdate.ToString("yyyy-MM-dd");
                     vat.VATEndDate = item.VATEndDate;
 
                     vatList.Add(vat);
@@ -1052,9 +1053,10 @@ namespace ORDRA_API.Controllers
                 objectVat = db.VATs.Where(x => x.VATID == vatUpdate.VATID).FirstOrDefault();
                 if (objectVat != null)
                 {
+                    DateTime date = DateTime.Now.AddYears(1);
+                    objectVat.VATEndDate = date;
                     objectVat.VATPerc = vatUpdate.VATPerc;
                     objectVat.VATStartDate = vatUpdate.VATStartDate;
-                    objectVat.VATEndDate = vatUpdate.VATEndDate;
 
                     db.SaveChanges();
 

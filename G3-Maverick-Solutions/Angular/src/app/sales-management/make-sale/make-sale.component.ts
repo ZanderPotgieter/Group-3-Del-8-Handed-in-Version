@@ -7,6 +7,7 @@ import {ProductSale} from '../product-sale';
 import {SaleDetails} from '../sale-details';
 import {SalesService} from '../sales.service';
 import {ProductDetails} from 'src/app/customer-order-management/product-details';
+import {User} from 'src/app/user';
 
 import { from } from 'rxjs';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -56,14 +57,16 @@ export class MakeSaleComponent implements OnInit {
   selectedProduct: ProductDetails = new ProductDetails();
   selectedPayment: PaymentType = new PaymentType();;
   productSale: ProductSale = new ProductSale();
+  showPay: boolean = false;
 
   prodcuctsales: ProductSale[] = [];
   productsWithPrice: ProductDetails[] = [];
   saleProducts: ProductDetails[] = [];
   payments: Payment[] = [];
   paymentTypes: PaymentType[] =[];
+  user : User = new User();
 
-  
+  session : any;
   paySelection = 0;
   prodSelection = 0;
 
@@ -75,11 +78,21 @@ export class MakeSaleComponent implements OnInit {
         this.productsWithPrice = value.products;
         this.saleDate = value.SaleDate;
         this.paymentTypes = value.paymentTypes;
+        this.vatPerc = value.VAT.VATPerc;
 
       }
     })
+    if(!localStorage.getItem("accessToken")){
+      this.router.navigate([""]);
+    }
+    else {
+      this.session = {"token" : localStorage.getItem("accessToken")}
+      this.api.getUserDetails(this.session).subscribe( (res:any) =>{
+        this.user = res;
+      })
 
-    
+  }
+
   }
 
   addProduct(val: ProductDetails){
@@ -91,6 +104,10 @@ export class MakeSaleComponent implements OnInit {
 
   prodPush(val: ProductDetails){
     this.selectedProduct = val;
+    }
+
+    showPayment(){
+      this.showPay = true;
     }
 
     addPayment(val: PaymentType){
@@ -106,10 +123,7 @@ export class MakeSaleComponent implements OnInit {
       }
 
       makePayment(){
-        this.payment.PaymentTypeID = this.selectedPayment.PaymentTypeID;
-        this.payment.PayAmount = this.amount;
-        this.payment.PayDate = this.saleDate;
-        this.sale.Payments.push(this.payment);
+        
 
         if(this.total > this.amount){
           this.outstandingAmt = this.total - this.amount;
@@ -128,11 +142,17 @@ export class MakeSaleComponent implements OnInit {
           this.showChange = true;
           
         }
+
+        this.payment.PaymentTypeID = this.selectedPayment.PaymentTypeID;
+        this.payment.PayAmount = this.amount;
+        this.payment.PayDate = this.saleDate;
+        this.sale.Payments.push(this.payment);
         
       }
 
       makeSale(){
         if ( this.total == 0){
+          this.sale.UserID = this.user.UserID;
           this.api.makeSale(this.sale).subscribe((res:any) =>{
         if (res.Message != null){
           this.responseMessage = res.Message
@@ -162,10 +182,6 @@ export class MakeSaleComponent implements OnInit {
         this.selectedProduct.Subtotal = (this.quantity * this.selectedProduct.Price)
         this.saleProducts.push(this.selectedProduct);
       
-        this.productSale.PSQuantity = this.quantity;
-        this.productSale.ProductID = this.selectedProduct.ProductID;
-      
-        this.sale.Product_Sale.push(this.productSale);
       
         this.total = this.total + this.selectedProduct.Subtotal;
       
@@ -182,11 +198,23 @@ export class MakeSaleComponent implements OnInit {
        this.displayVat = this.Vat.toFixed(2);
        this.displaySubtotal = this.TotalExcVat.toFixed(2);
       
+       this.productSale.PSQuantity = 2;
+       this.productSale.ProductID = 1;
       
-        
+      // this.productSale.PSQuantity = this.quantity;
+       //this.productSale.ProductID = this.selectedProduct.ProductID;
+
+       this.pushProduct_Sale(this.productSale);
+     
+       
       
       this.showTable = true;}
       
+      }
+
+      pushProduct_Sale(val: ProductSale){
+        this.sale.Product_Sale.push(this.productSale);
+
       }
 
       remove(index: any){
@@ -200,11 +228,13 @@ export class MakeSaleComponent implements OnInit {
         this.saleDetails.TotalExcVat = this.TotalExcVat;
       
         this.saleProducts.splice(index,1);
-        this.sale.Product_Sale.splice(index,1);
+        
       
         this.displayTotal = this.TotalIncVat.toFixed(2);
        this.displayVat = this.Vat.toFixed(2);
        this.displaySubtotal = this.TotalExcVat.toFixed(2);
+
+       this.sale.Product_Sale.splice(index,1);
       }
 
       onLogout() {

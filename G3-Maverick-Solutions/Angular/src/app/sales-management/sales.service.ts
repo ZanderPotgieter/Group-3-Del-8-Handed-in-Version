@@ -11,6 +11,12 @@ import{map} from 'rxjs/operators';
 export class SalesService {
   constructor(private http: HttpClient) { }
 
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+
   url = 'https://localhost:44399/Api/Sale'
 
   initiateSale(){
@@ -39,6 +45,9 @@ export class SalesService {
     return this.http.get(this.url + '/getAllSales');
   }
 
+  getUserDetails(session: any){
+    return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, this.httpOptions)
+  }
 
 
 

@@ -22,42 +22,13 @@
       </div>
  
     </div>
-    <br>
-
-    <br>
-    <div class="card" style="padding: 2px 2px;" >
-   
-      <div class="divleft">
-        <div class="divleft" style="padding: 2px 2px;" >
-            <label class="subheadinglabel" >Sale Details </label>
-        </div>
-
-        <div class="divleft" >
-            <div class="divleft" >
-                <label for="Product">Payment Method: </label>
-                 <select required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
-                     <option *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
-                 </select>
-             </div>
-
-             <div class="divleft">
-                <label for="quantity">Amount </label>
-                <input  style="width:40px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
-                <button style="height: 30px;" (click)="makePayment()">Make Payment</button>
-              </div>
-              <div *ngIf="showChange" class ="diveleft">
-                 <label width :200px>Change: R{{change}}</label>
-               </div>
-              <div *ngIf="ShowOustanding" class ="diveleft">
-                <label width :200px>Outstanding: R{{outstandingAmt}}</label>
-              </div>
-         
-
-            </div>
-        </div>
-    </div>
+    
     <br>
     <div *ngIf="showTable" class="card">
+      <div class="divleft" style="padding: 2px 2px;" >
+        <label class="subheadinglabel" >Sale Details </label>
+    </div>
+    <br>
         <table>    
             <tr>
                 <th>Product</th>
@@ -71,7 +42,7 @@
                  <td>{{item.Quantity}}</td>
                  <td>R{{item.Price}}</td>
                 <td>R{{item.Subtotal}}</td>
-                <td><button class="btntable" style="height: 30px; width:50px"  (click) ="remove(ndx)">X</button></td>
+                <td><button class="btntable" style="height: 30px; width:50px"  (click) ="remove(ndx)"><i class="tiny material-icons">delete</i></button></td>
             </tr>
 
             <tr >
@@ -102,11 +73,38 @@
       <div class="divleft">
         
           <div class="divleft">
-              <button type="submit" (click)="makeSale()">Complete Sale</button>
+              <button type="submit" (click)="showPayment()">Make Payment</button>
               <button type="submit" (click)="gotoSaleManagement()">Cancel</button>
           </div>
       </div>
     </div>
+
+    
+    <div  class="card" style="padding: 2px 2px;" *ngIf = "showPay">
+      <div class="divleft" >
+          <label for="Product">Payment Method: </label>
+           <select required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
+               <option *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
+           </select>
+       </div>
+
+       <div class="divleft">
+          <label for="quantity">Amount </label>
+          <input  style="width:40px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+          <button style="height: 30px;" (click)="makePayment()">Make Payment</button>
+        </div>
+        <div *ngIf="showChange" class ="diveleft">
+           <label width :200px>Change: R{{change}}</label>
+         </div>
+        <div *ngIf="ShowOustanding" class ="diveleft">
+          <label width :200px>Outstanding: R{{outstandingAmt}}</label>
+        </div>
+   
+       <div class="divleft">
+        <button type="submit" (click)="makeSale()">Complete Sale</button>
+       </div>
+
+      </div>
 
 
   

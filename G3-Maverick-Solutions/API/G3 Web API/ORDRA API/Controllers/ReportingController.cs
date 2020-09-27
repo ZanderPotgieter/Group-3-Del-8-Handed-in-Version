@@ -9,6 +9,10 @@ using ORDRA_API.Models;
 using System.Data.Entity;
 using System.Globalization;
 using System.Web.Http.Cors;
+using System.Data.Entity.Infrastructure;
+using System.Threading.Tasks;
+using System.Web.Http.Description;
+
 
 namespace ORDRA_API.Controllers
 {
@@ -433,7 +437,7 @@ namespace ORDRA_API.Controllers
 
                     toReturn.ChartData = categories;
 
-                    /*//table data
+                    //table data
                     //group by the product categories
                     var products = markedProducts.GroupBy(z => z.Product.ProdName);
                     List<dynamic> productGroups = new List<dynamic>();
@@ -463,7 +467,7 @@ namespace ORDRA_API.Controllers
                         productGroups.Add(product);
                     }
 
-                    toReturn.TableData = productGroups;*/
+                    toReturn.TableData = productGroups;
                 }
                 else
                 {
@@ -496,7 +500,7 @@ namespace ORDRA_API.Controllers
                 if (products != null)
                 {
                     //chart data
-                    var prodList = products.GroupBy(z => z.Product.Product_Category.PCatName);
+                    var prodList = products.GroupBy(z => z.Product.ProductCategoryID);    ///Product.Product_Category.PCatName);
 
                     foreach (var item in prodList)
                     {
@@ -570,7 +574,7 @@ namespace ORDRA_API.Controllers
                 {
                     //table data
                     //group by the donation recipients 
-                    var recipients = donations.GroupBy(z => new { z.Donation_Recipient.DrName, z.Donation_Recipient.DrSurname, z.Donation_Recipient.DrEmail });
+                    var recipients = donations.GroupBy(z => z.RecipientID);
                     List<dynamic> recipGroups = new List<dynamic>();
                     foreach (var item in recipients)
                     {
@@ -591,9 +595,11 @@ namespace ORDRA_API.Controllers
                                 {
                                     List<Price> prices = db.Prices.Include(z => z.Product).ToList();
                                     var prodID = prod.ProductID.ToString();
+                                    var product = db.Products.Where(z => Convert.ToString(z.ProductID) == prodID);
+
                                     var price = prices.Where(z => Convert.ToString(z.ProductID) == prodID).FirstOrDefault();
                                     dynamic productObject = new ExpandoObject();
-                                    productObject.Name = prod.Product.ProdName;
+                                    //productObject.Name = p
                                     productObject.Price = price.UPriceR;
                                     productObject.Quantity = prod.DPQuantity;
                                     productObject.ProdTot = Convert.ToDecimal(price.UPriceR) * Convert.ToDecimal(prod.DPQuantity);

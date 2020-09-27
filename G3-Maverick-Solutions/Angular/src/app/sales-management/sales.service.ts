@@ -11,9 +11,6 @@ import{map} from 'rxjs/operators';
 export class SalesService {
   constructor(private http: HttpClient) { }
 
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
     })
   };
 
@@ -21,7 +18,6 @@ export class SalesService {
 
   initiateSale(){
     return this.http.get(this.url + '/initiateMakeSale').pipe(map(result => result)); 
-
   }
 
   makeSale(sale: Sale) : Observable<Sale>{
@@ -31,15 +27,18 @@ export class SalesService {
   }
 
   searchSalesByDate(date : Date){
-    return this.http.get(this.url + '/searchSalesByDate/'+date);
+    const httpOptions = { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*'}) };
+    return this.http.get(this.url + '/searchSalesByDate/'+date , httpOptions);
   }
 
   searchSalesByProduct(prodId:number){
-    return this.http.get(this.url + '/searchSalesByProdcut/'+ prodId);
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
+    return this.http.get(this.url + '/searchSalesByProduct/'+ prodId , httpOptions);
   }
 
   getSale(id:number){
-    return this.http.get(this.url + '/searchSalesByID/'+ id);
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
+    return this.http.get(this.url + '/getSale/'+ id , httpOptions);
   }
   getAllSales(){
     return this.http.get(this.url + '/getAllSales');

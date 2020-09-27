@@ -13,7 +13,7 @@ namespace ORDRA_API.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
 
-    [RoutePrefix("API/CustomerOrders")]
+    [RoutePrefix("Api/CustomerOrders")]
     public class CustomerOrdersController : ApiController
     {
 
@@ -22,16 +22,14 @@ namespace ORDRA_API.Controllers
 
         //Search Order By Cell
         [HttpGet]
-        [Route("searchByCell/{cell}")]
+        [Route("searchByCell")]
         public object searchByCell(string cell)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
-
             try
             {
-
                 List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).Where(x => x.Customer.CusCell == cell).ToList();
                 if (customerOrders != null)
                 {
@@ -47,37 +45,65 @@ namespace ORDRA_API.Controllers
                         order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
                         order.CusOrdStatus = ord.Customer_Order_Status.CODescription;
                         orders.Add(order);
-
-
-
                     }
-
-
-
                     toReturn = orders;
                 }
                 else
                 {
                     toReturn.Message = "Order(s) Not Found";
                 }
-
             }
-
             catch (Exception error)
             {
                 toReturn = "Something Went Wrong" + error.Message;
             }
-
             return toReturn;
+        }
 
+        //Retrieve all orders
+        [HttpGet]
+        [Route("searchAll")]
+        public object searchAll()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
 
-
+            try
+            {
+                List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).ToList();
+                if (customerOrders != null)
+                {
+                    List<dynamic> orders = new List<dynamic>();
+                    foreach (var ord in customerOrders)
+                    {
+                        DateTime ordDate = Convert.ToDateTime(ord.CusOrdDate);
+                        dynamic order = new ExpandoObject();
+                        order.CustomerOrderID = ord.CustomerOrderID;
+                        order.CusName = ord.Customer.CusName;
+                        order.CusSurname = ord.Customer.CusSurname;
+                        order.CusOrdNumber = ord.CusOrdNumber;
+                        order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
+                        order.CusOrdStatus = ord.Customer_Order_Status.CODescription;
+                        orders.Add(order);
+                    }
+                    toReturn = orders;
+                }
+                else
+                {
+                    toReturn.Message = "No orders have been placed";
+                }
+            }
+            catch (Exception error)
+            {
+                toReturn = "Something Went Wrong" + error.Message;
+            }
+            return toReturn;
         }
 
 
         //Search Order By OrderNo
         [HttpGet]
-        [Route("searchByOrderNo/{orderNo}")]
+        [Route("searchByOrderNo")]
         public object searchByOrderNo(string orderNo)
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -129,16 +155,12 @@ namespace ORDRA_API.Controllers
 
                             products.Add(productDetails);
                         }
-
                         else
                         {
                             toReturn.Message = "Something Went Wrong Price is null";
 
                         }
                     }
-
-
-
 
 
                     var vatOnDate = db.VATs.Where(x => x.VATStartDate <= order.CusOrdDate).FirstOrDefault();
@@ -181,8 +203,6 @@ namespace ORDRA_API.Controllers
                         toReturn.orderProducts = products;
 
                     }
-
-
                     else
                     {
                         toReturn.Message = "Something Went Wrong VAT is null";
@@ -193,12 +213,7 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Message = "Order(s) Not Found";
                 }
-
-
-
-
             }
-
             catch (Exception error)
             {
                 toReturn.Message = "Something Went Wrong: " + error.Message;
@@ -486,7 +501,6 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
-
             try
             {
 
@@ -499,9 +513,7 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Message = "Order(s) Not Found";
                 }
-
             }
-
             catch (Exception error)
             {
                 toReturn = error.Message;

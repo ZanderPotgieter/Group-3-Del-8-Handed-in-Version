@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import {AdminService} from 'src/app/admin.service';
 import {Items} from 'src/app/adminModels/items';
 
+
 @Component({
   selector: 'app-view-statuses',
   templateUrl: './view-statuses.component.html',
@@ -25,9 +26,10 @@ export class ViewStatusesComponent implements OnInit {
  showadd: boolean = false;
  enableInput: boolean = true;
 
-  constructor(private api: AdminService, private router: Router) { }
+  constructor(private api: AdminService, private router: Router ) { }
 
   ngOnInit(): void {
+    
   }
 
   getCusSta(){

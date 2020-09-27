@@ -26,7 +26,7 @@
                     <label style="color: red; font-size: 13px; width :200px">Select a product</label>
                 </div>
                    <br>
-                <button type="submit" (click)="search()">Search</button>
+                <button type="submit" (click)="searchByProduct()">Search</button>
                 <button (click)=" gotoSalesManagement()">Cancel</button>
               </div>
                
@@ -36,7 +36,7 @@
               <label class="subheadinglabel">Enter Date:</label>
               <br>
                   <label for="date">Date:      </label>
-                  <input  [(ngModel)]="date" type="text" id="date" formControlName="date" name="date" required placeholder="yyyy-MM-dd">
+                  <input  [(ngModel)]="date" type="date" id="date" formControlName="date" name="date" required placeholder="yyyy-MM-dd">
                   <br>
                 <span style="color:red" *ngIf="searchSaleForm.get('date').errors && (searchSaleForm.get('date').touched || searchSaleForm.get('date').dirty)">
                   <span *ngIf="searchSaleForm.get('date').errors.required">Date is required.</span>
@@ -71,16 +71,16 @@
             <table>   
            
                 <tr>
-                    <th>Product Name</th>
+                    <th>Product ID</th>
                     <th>Sale Date</th>
-                    
+                    <th>Cashier</th>
                     
                     
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    
+                <tr *ngFor="let item of searchedSales; index as ndx;">
+                    <td>{{item.Product_Sale.ProductID}}</td>
+                    <td>{{item.SaleDate}}</td>
+                    <td>{{item.User.UserName}}</td>
                   
 
                 </tr>
@@ -100,7 +100,7 @@
                     
                     
                 </tr>
-                <tr>
+                <tr >
                     <td></td>
                     <td></td>
                     <td></td>
@@ -111,6 +111,7 @@
           </div>
         </div>
        
+        <!--search all-->
         <div *ngIf="showListAllSales" class="card">
           <div class="divleft">
             <br>  <label class="subheadinglabel" >List of All Sales:</label><br>
@@ -119,22 +120,77 @@
                 <tr>
                     <th>Sale ID</th>
                     <th>Sale Date</th>
-                    <th>Cashier</th>
+                    <th>Action</th>
                     
                     
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr *ngFor="let item of saleList; index as i;">
+                    <td>{{item.SaleID}}</td>
+                    <td>{{item.SaleDate}}</td>
+                    <td><button  style="border-radius: 10px; width: 90%;" (click)="getViewSale(i)">View</button></td>
+                   
                   
 
                 </tr>
             </table>
           </div>
         </div>
+
+        <!--View sale-->
+        <div class="card">
+          <div  class="divleft">
+           <label class="subheadinglabel" >Sale Details:</label>
+           <br>
+           <label for="saleDate">Date:</label><label  id="saleDate" name="saleDate">{{saleDate}}</label>
+
+           <table>
+             <tr>
+               <th>Product</th>
+               <th>Quantity</th>
+               <th>Price</th>
+               <th>Subtotal</th>
+             </tr>
+
+             <tr *ngFor="let item of viewSaleList, index as ndx">
+              <td>{{item.Prodname}}</td>
+              <td>{{item.Quantity}}</td>
+              <td>R{{item.Price}}</td>
+              <td>R{{item.Subtotal}}</td>
+             </tr>
+
+             
+             <tr >
+                   
+               <th></th>
+               <th></th>
+               <th>Subtotal (Exc VAT):</th>
+               <th>R{{saleDetails.TotalExcVat}}</th>
+           </tr>
+
+           <tr>
+               
+               
+               <th></th>
+               <th></th>
+               <th>VAT:</th>
+               <th>{{saleDetails.Vat}}</th>
+           </tr>
        
-        <!--Code taken from old repo. I think this is for the seacrh date-->
+           <tr>
+               
+               <th></th>
+               <th></th>
+               <th>TOTAL:</th>
+               <th>R{{saleDetails.TotalIncVat}}</th>
+           </tr>
+
+           </table>
+          </div>
+
+        </div>
+
+       
+        <!--Search by date-->
           <div *ngIf="showList" class="card">
               <div class="divleft">
                   <br>  <label class="subheadinglabel" >Sales:</label><br>
@@ -144,20 +200,22 @@
                           <th>Sale ID</th>
                           <th>Sale Date</th>
                           <th>Cashier</th>
-                          <th></th>
+                         <!-- <th></th>-->
                           
                       </tr>
                       <tr *ngFor="let item of searchedSales, index as ndx">
                           <td>{{item.SaleID}}</td>
                           <td>{{item.SaleDate}}</td>
                           <td>{{item.User.UserName}}</td>
-                          <td><button style="height: 30px;"class="btntable" (click)="view(item.SaleID)">View</button></td>
+                         <!-- <td><button style="height: 30px;"class="btntable" (click)="view(item.SaleID)">View</button></td>-->
   
                       </tr>
                   </table>
               </div>
               <br><br>
            </div>
+
+           
   
           <div class="card" *ngIf="showSale" >
               <div class="divleft" >

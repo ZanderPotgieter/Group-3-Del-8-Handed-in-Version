@@ -650,7 +650,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_EmployeeImage">
+        <Association Name="FK_EmployeePicture">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="EmployeePicture" Type="Self.EmployeePicture" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1232,7 +1232,7 @@
             <End Role="Employee" EntitySet="Employee" />
             <End Role="EmployeeCV" EntitySet="EmployeeCV" />
           </AssociationSet>
-          <AssociationSet Name="FK_EmployeeImage" Association="Self.FK_EmployeeImage">
+          <AssociationSet Name="FK_EmployeePicture" Association="Self.FK_EmployeePicture">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="EmployeePicture" EntitySet="EmployeePicture" />
           </AssociationSet>
@@ -1560,7 +1560,7 @@
           <NavigationProperty Name="User" Relationship="Self.FK_EmployeeUser" FromRole="Employee" ToRole="User" />
           <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STakeEmployee" FromRole="Employee" ToRole="Stock_Take" />
           <NavigationProperty Name="EmployeeCVs" Relationship="OrdraDBModel.FK_EmployeeCV" FromRole="Employee" ToRole="EmployeeCV" />
-          <NavigationProperty Name="EmployeePictures" Relationship="OrdraDBModel.FK_EmployeeImage" FromRole="Employee" ToRole="EmployeePicture" />
+          <NavigationProperty Name="EmployeePictures" Relationship="OrdraDBModel.FK_EmployeePicture" FromRole="Employee" ToRole="EmployeePicture" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -2636,6 +2636,15 @@
           <AssociationSet Name="FK_UserTypeAccess" Association="OrdraDBModel.FK_UserTypeAccess">
             <End Role="User_Type" EntitySet="User_Type" />
             <End Role="User_Type_Access" EntitySet="User_Type_Access" />
+          <EntitySet Name="EmployeeCVs" EntityType="OrdraDBModel.EmployeeCV" />
+          <EntitySet Name="EmployeePictures" EntityType="OrdraDBModel.EmployeePicture" />
+          <AssociationSet Name="FK_EmployeeCV" Association="OrdraDBModel.FK_EmployeeCV">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeeCV" EntitySet="EmployeeCVs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeePicture" Association="OrdraDBModel.FK_EmployeePicture">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeePicture" EntitySet="EmployeePictures" />
           </AssociationSet>
           <EntitySet Name="EmployeeCVs" EntityType="OrdraDBModel.EmployeeCV" />
           <EntitySet Name="EmployeePictures" EntityType="OrdraDBModel.EmployeePicture" />
@@ -2735,6 +2744,47 @@
             </Principal>
             <Dependent Role="User_Type_Access">
               <PropertyRef Name="UserTypeID" />
+        <EntityType Name="EmployeeCV">
+          <Key>
+            <PropertyRef Name="CVID" />
+          </Key>
+          <Property Name="CVID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CVCaption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CVName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="OrdraDBModel.FK_EmployeeCV" FromRole="EmployeeCV" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmployeePicture">
+          <Key>
+            <PropertyRef Name="ImgID" />
+          </Key>
+          <Property Name="ImgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImgCaption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImgName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="OrdraDBModel.FK_EmployeePicture" FromRole="EmployeePicture" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_EmployeeCV">
+          <End Type="OrdraDBModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.EmployeeCV" Role="EmployeeCV" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeeCV">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeePicture">
+          <End Type="OrdraDBModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.EmployeePicture" Role="EmployeePicture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeePicture">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3282,6 +3332,27 @@
             </EntityTypeMapping>
           </EntitySetMapping>
         </EntityContainerMapping>
+          <EntitySetMapping Name="EmployeeCVs">
+            <EntityTypeMapping TypeName="OrdraDBModel.EmployeeCV">
+              <MappingFragment StoreEntitySet="EmployeeCV">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="CVName" ColumnName="CVName" />
+                <ScalarProperty Name="CVCaption" ColumnName="CVCaption" />
+                <ScalarProperty Name="CVID" ColumnName="CVID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeePictures">
+            <EntityTypeMapping TypeName="OrdraDBModel.EmployeePicture">
+              <MappingFragment StoreEntitySet="EmployeePicture">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ImgName" ColumnName="ImgName" />
+                <ScalarProperty Name="ImgCaption" ColumnName="ImgCaption" />
+                <ScalarProperty Name="ImgID" ColumnName="ImgID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

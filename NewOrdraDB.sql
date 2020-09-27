@@ -553,8 +553,29 @@ CREATE TABLE One_Time_Pin
 )
 GO
 
-
 use OrdraDB
+
+CREATE TABLE EmployeePicture
+(
+	ImgID int primary key identity(1,1) Not null,
+	ImgCaption varchar(50),
+	ImgName Varchar(50),
+	EmployeeID int,
+	CONSTRAINT FK_EmployeeImage FOREIGN KEY (EmployeeID)
+	REFERENCES Employee(EmployeeID),
+)
+GO
+
+CREATE TABLE EmployeeCV
+(
+	CVID int primary key identity(1,1) Not null,
+	CVCaption varchar(50),
+	CVName Varchar(50),
+	EmployeeID int,
+	CONSTRAINT FK_EmployeeCV FOREIGN KEY (EmployeeID)
+	REFERENCES Employee(EmployeeID),
+)
+GO
 
 INSERT INTO User_Type (UTypeDescription)
 VALUES ('Admin'),

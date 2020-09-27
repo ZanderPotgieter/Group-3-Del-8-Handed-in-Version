@@ -144,7 +144,11 @@ export class SearchSaleComponent implements OnInit {
     if(val == null){
       this.prodNotSelected= true
     }
-    this.prodPush(val);
+    else{
+      this.prodPush(val);
+      this.prodNotSelected = false;
+    }
+   
   }
 
   prodPush(val: ProductDetails){

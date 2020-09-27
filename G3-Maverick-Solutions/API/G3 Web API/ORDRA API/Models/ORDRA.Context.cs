@@ -67,6 +67,8 @@ namespace ORDRA_API.Models
         public virtual DbSet<User_Type> User_Type { get; set; }
         public virtual DbSet<VAT> VATs { get; set; }
         public virtual DbSet<One_Time_Pin> One_Time_Pin { get; set; }
+        public virtual DbSet<Access> Accesses { get; set; }
+        public virtual DbSet<User_Type_Access> User_Type_Access { get; set; }
         public virtual DbSet<EmployeeCV> EmployeeCVs { get; set; }
         public virtual DbSet<EmployeePicture> EmployeePictures { get; set; }
     }

@@ -12,20 +12,17 @@ namespace ORDRA_API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class User_Type
+    public partial class Access
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User_Type()
+        public Access()
         {
-            this.Users = new HashSet<User>();
             this.User_Type_Access = new HashSet<User_Type_Access>();
         }
     
-        public int UserTypeID { get; set; }
-        public string UTypeDescription { get; set; }
+        public int AccessID { get; set; }
+        public string AccessDescription { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_Type_Access> User_Type_Access { get; set; }
     }

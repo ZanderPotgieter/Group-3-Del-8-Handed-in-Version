@@ -228,6 +228,7 @@ import { UserTreeComponent } from './user-tree/user-tree.component';
     MatRadioModule,
     ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
   ],
+  exports:[MakeSaleComponent],
   providers: [HttpClientModule, ProductCategoryService],
   bootstrap: [AppComponent]
 })

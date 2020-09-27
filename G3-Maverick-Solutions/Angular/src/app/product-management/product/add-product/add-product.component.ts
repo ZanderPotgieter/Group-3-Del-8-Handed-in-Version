@@ -103,7 +103,7 @@ export class AddProductComponent implements OnInit {
     this.selectedProductID = val.ProductID
 }
   setContainer(val : Container){
-    this.setContainer(val)
+    this.setCon(val)
     
   }
 

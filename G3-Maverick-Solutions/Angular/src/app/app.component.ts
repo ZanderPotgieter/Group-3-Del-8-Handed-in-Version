@@ -75,6 +75,8 @@ login(){
   this.api.loginUser(this.user).subscribe( (res:any)=> {
     console.log(res);
     if(res.Error){
+      this.errorMessage = res.Error;
+      
       this.showError = true;
       setTimeout(() => {
         this.showError = false;

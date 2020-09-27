@@ -125,8 +125,8 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            // try
-            // {
+            try
+            {
             //get user who made sale
             // User user = db.Users.Where(x => x.UserID == newSale.UserID).FirstOrDefault();
             int id = (int)newSale.UserID;
@@ -185,11 +185,11 @@ namespace ORDRA_API.Controllers
                 toReturn.saleID = saleMadeID;
                 toReturn.Message = "Sale Completed Succuessfully";
            
-           // }
-            //catch
-            //{
-                //toReturn.Error = "Sale Unsuccessfully Completed";
-           // }
+           }
+            catch
+            {
+                toReturn.Error = "Sale Unsuccessfully Completed";
+            }
 
             return toReturn;
         }

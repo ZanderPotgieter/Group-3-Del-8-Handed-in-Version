@@ -21,7 +21,117 @@ namespace ORDRA_API.Controllers
         OrdraDBEntities db = new OrdraDBEntities();
 
 
-    //---Users-----//
+        //---Users-----//
+        [HttpGet]
+        [Route("getUserAccess")]
+        public object getUserAccess(dynamic session)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.userAccess = new List<dynamic>();
+            toReturn.user = new ExpandoObject();
+
+            try
+            {
+                string sessionID = session.token;
+                var user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
+                if (user != null)
+                {
+                    user.UserPassword = "This is classified information ;)";
+                    toReturn.user = user;
+                }
+                else
+                {
+                    toReturn.Error = "Invalid User Token";
+                }
+
+                List<string> access = new List<string>();
+                List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Include(x => x.UserTypeID).Where(x => x.UserTypeID == user.UserTypeID).ToList();
+                foreach( User_Type_Access acc in userAccess)
+                {
+                    
+                    string name = acc.Access.AccessDescription;
+                    access.Add(name);
+
+                }
+
+                toReturn.access = access;
+
+                
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getUserTypeAccess")]
+        public object getUserTypeAccess()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            List<Tuple<string, List<string>>> usertypeAccess = new List<Tuple< string, List<string>>>();
+            //List<string, string[]> returnList = new List<string, string[]>();
+           // dynamic[,] returnList = { { }, { } };
+            
+
+            try
+            {
+
+                List<User_Type> userstypes = db.User_Type.ToList();
+
+                List<string> userTypes = new List<string>();
+               
+
+                foreach(User_Type user_type in userstypes)
+                {
+
+                    string name = user_type.UTypeDescription;
+                    userTypes.Add(name);
+
+                    List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Where(x => x.UserTypeID == user_type.UserTypeID).ToList();
+                    List<string> userTypeAccess = new List<string>();
+
+                    foreach (User_Type_Access user_access in userAccess)
+                    {
+
+
+                        string access = user_access.Access.AccessDescription;
+                        userTypeAccess.Add(access);
+
+                        
+                    }
+
+                    usertypeAccess.Add(new Tuple<string, List<string>>(name, userTypeAccess));
+
+
+
+
+                }
+
+                toReturn.dataMap = usertypeAccess;
+                toReturn.rootLevelNodes = userTypes;
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+
+
+
+
 
         [HttpGet]
         [Route("getAllUsers")]
@@ -31,9 +141,10 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
+
             try
         
-    {
+            {
                 List<dynamic> returnUsers = new List<dynamic>();
                 List<User> users = db.Users.Include(x => x.User_Type).ToList();
                 foreach (var user in users)

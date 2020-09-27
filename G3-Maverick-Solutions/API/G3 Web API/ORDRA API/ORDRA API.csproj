@@ -238,6 +238,9 @@
     <Compile Include="Models\Employee.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmployeeImage.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Location.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
@@ -512,6 +515,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

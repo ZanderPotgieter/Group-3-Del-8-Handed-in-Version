@@ -18,6 +18,7 @@ namespace ORDRA_API.Models
         public Employee()
         {
             this.Stock_Take = new HashSet<Stock_Take>();
+            this.EmployeeImages = new HashSet<EmployeeImage>();
         }
     
         public int EmployeeID { get; set; }
@@ -28,5 +29,7 @@ namespace ORDRA_API.Models
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Stock_Take> Stock_Take { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeImage> EmployeeImages { get; set; }
     }
 }

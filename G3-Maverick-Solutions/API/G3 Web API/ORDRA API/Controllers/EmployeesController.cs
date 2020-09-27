@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Net.Http;
 using System.Web.Http;
 using System.Dynamic;
@@ -9,6 +10,7 @@ using System.Data.Entity;
 using System.Web.Http.Cors;
 using ORDRA_API.Models;
 using Microsoft.Ajax.Utilities;
+using System.IO;
 
 namespace ORDRA_API.Controllers
 {
@@ -60,24 +62,125 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Message = "Employee Record Not Found";
+                        toReturn.Error = "Employee Record Not Found";
                     }
 
                 }
                 else
                 {
-                    toReturn.Message = "User Record Not Found";
+                    toReturn.Error = "User Record Not Found";
                 }
 
 
             }
             catch (Exception error)
             {
-                toReturn.Message = "Something Went Wrong" + error.Message;
+                toReturn.Error = "Something Went Wrong" + error.Message;
             }
 
             return toReturn;
         }
+
+        //get all
+        [HttpGet]
+        [Route("getAll")]
+        public object getAll()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.user = new ExpandoObject();
+            toReturn.employee = new ExpandoObject();
+
+
+            try
+            {
+                List<Employee> employees = db.Employees.ToList();
+                List<User> userList = new List<User>();
+                List<Employee> employeeList = new List<Employee>();
+
+                foreach (var emp in employees)
+                {
+                    if (emp != null)
+                    {
+
+                        //Set Employee Details To Return Object
+                       
+                        Employee empDetails = new Employee();
+                        empDetails.UserID = emp.UserID;
+                        empDetails.EmployeeID = emp.EmployeeID;
+                        empDetails.EmpShiftsCompleted = emp.EmpShiftsCompleted;
+                        empDetails.EmpStartDate= emp.EmpStartDate;
+                        employeeList.Add(empDetails);
+
+                        User user = db.Users.Where(z => z.UserID == emp.UserID).FirstOrDefault();
+                        if (user != null)
+                        {
+
+
+                            //Set user Details To Return Object
+                            User userDetails = new User();
+                            userDetails.UserID = user.UserID;
+                            userDetails.UserName = user.UserName;
+                            userDetails.UserSurname = user.UserSurname;
+                            userDetails.UserEmail= user.UserEmail;
+                            userDetails.UserCell = user.UserCell;
+                            userList.Add(userDetails);
+                        }
+                        else
+                        {
+                            toReturn.Error = "Employee Record Not Found";
+                        }
+
+                    }
+                    else
+                    {
+                        toReturn.Error = "User Record Not Found";
+                    }
+                }
+
+                toReturn.user = userList;
+                toReturn.employee = employeeList;
+                
+            }
+            catch (Exception error)
+            {
+                toReturn.Error = "Something Went Wrong" + error.Message;
+            }
+
+            return toReturn;
+        }
+
+        //getting employee image 
+        [HttpGet]
+        [Route("getImage")]
+        public object getImage(int employeeID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                EmployeeImage image = db.EmployeeImages.Where(z => z.EmployeeID == employeeID).FirstOrDefault();
+                if (image != null)
+                {
+                    //string path =  image.ImgName;
+                    string path = System.IO.Path.Combine(HttpContext.Current.Server.MapPath("~/Images"), image.ImgName);
+                    toReturn.Image = path;
+                        //get pAppDomain.CurrentDomain.BaseDirectory + image.ImgName;
+                  
+                }
+                else
+                {
+                    toReturn.Error = "Image not available";
+                }
+            }
+            catch (Exception error)
+            {
+                toReturn.Error = "Something Went Wrong" + error.Message;
+            }
+
+            return toReturn;
+        }
+
 
         //Getting all Employees
         [HttpGet]
@@ -162,7 +265,7 @@ namespace ORDRA_API.Controllers
                     db.Employees.Add(employeeDetails);
                     db.SaveChanges();
 
-                    toReturn.Error = "Employee Profile Succesfully Created";
+                    toReturn.Message = "Employee Profile Succesfully Created";
                 }
                 else
                 {
@@ -247,6 +350,71 @@ namespace ORDRA_API.Controllers
             }
 
             return toReturn;
+        }
+
+        [HttpPost]
+        [Route("uploadImage")]
+        public HttpResponseMessage uploadImage(int employeeID)
+        {
+            string imageName = null;
+            var httpRequest = HttpContext.Current.Request;
+           
+            //upload image
+            var postedFile = httpRequest.Files["image"];
+
+            //create custom filename
+            imageName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+            imageName = imageName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
+            //var filePath = Path.GetFullPath(imageName); //HttpContext.Current.Server.MapPath("~/Images/" + imageName);
+            var filePath = HttpContext.Current.Server.MapPath("~/Images/" + imageName);
+            //postedFile.SaveAs(Path.Combine(filePath));
+            postedFile.SaveAs(filePath);
+
+            //save to db
+            using (OrdraDBEntities dbs = new OrdraDBEntities())
+            {
+                EmployeeImage image = new EmployeeImage()
+                {
+                    ImgCaption = httpRequest["ImageCaption"],
+                    ImgName = imageName,
+                    EmployeeID = employeeID,
+                };
+                db.EmployeeImages.Add(image);
+                db.SaveChanges();
+            }
+            return Request.CreateResponse(HttpStatusCode.Created);
+        }
+
+        [HttpPost]
+        [Route("uploadCv")]
+        public HttpResponseMessage uploadCv(int employeeID)
+        {
+            string imageName = null;
+            var httpRequest = HttpContext.Current.Request;
+
+            //upload cv
+            var postedFile = httpRequest.Files["file"];
+
+            //create custom filename
+            imageName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+            imageName = imageName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
+            var filePath = Path.GetFullPath(imageName); //HttpContext.Current.Server.MapPath("~/Images/" + imageName);
+            postedFile.SaveAs(Path.Combine(filePath, postedFile.FileName));
+            //postedFile.SaveAs(filePath);
+
+            //save to db
+            using (OrdraDBEntities dbs = new OrdraDBEntities())
+            {
+                EmployeeImage image = new EmployeeImage()
+                {
+                    ImgCaption = httpRequest["ImageCaption"],
+                    ImgName = imageName,
+                    EmployeeID = employeeID,
+                };
+                db.EmployeeImages.Add(image);
+                db.SaveChanges();
+            }
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
 
 

@@ -150,6 +150,15 @@
           <Property Name="EmpStartDate" Type="date" />
           <Property Name="EmpShiftsCompleted" Type="int" />
         </EntityType>
+        <EntityType Name="EmployeeImage">
+          <Key>
+            <PropertyRef Name="ImgID" />
+          </Key>
+          <Property Name="ImgID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImgCaption" Type="varchar" MaxLength="50" />
+          <Property Name="ImgName" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="int" />
+        </EntityType>
         <EntityType Name="Location">
           <Key>
             <PropertyRef Name="LocationID" />
@@ -587,6 +596,18 @@
             </Principal>
             <Dependent Role="Donated_Product">
               <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeImage">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="EmployeeImage" Type="Self.EmployeeImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeeImage">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1038,6 +1059,7 @@
           <EntitySet Name="Donation_Recipient" EntityType="Self.Donation_Recipient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Donation_Status" EntityType="Self.Donation_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeImage" EntityType="Self.EmployeeImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location_Status" EntityType="Self.Location_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
@@ -1120,6 +1142,10 @@
           <AssociationSet Name="FK_DPProduct" Association="Self.FK_DPProduct">
             <End Role="Product" EntitySet="Product" />
             <End Role="Donated_Product" EntitySet="Donated_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeImage" Association="Self.FK_EmployeeImage">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeeImage" EntitySet="EmployeeImage" />
           </AssociationSet>
           <AssociationSet Name="FK_EmployeeUser" Association="Self.FK_EmployeeUser">
             <End Role="User" EntitySet="User" />
@@ -1432,6 +1458,7 @@
           <Property Name="EmpShiftsCompleted" Type="Int32" />
           <NavigationProperty Name="User" Relationship="Self.FK_EmployeeUser" FromRole="Employee" ToRole="User" />
           <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STakeEmployee" FromRole="Employee" ToRole="Stock_Take" />
+          <NavigationProperty Name="EmployeeImages" Relationship="OrdraDBModel.FK_EmployeeImage" FromRole="Employee" ToRole="EmployeeImage" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -2488,6 +2515,11 @@
             <End Role="One_Time_Pin" EntitySet="One_Time_Pin" />
           </AssociationSet>
           <EntitySet Name="AppEmployees" EntityType="OrdraDBModel.AppEmployee" />
+          <EntitySet Name="EmployeeImages" EntityType="OrdraDBModel.EmployeeImage" />
+          <AssociationSet Name="FK_EmployeeImage" Association="OrdraDBModel.FK_EmployeeImage">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeeImage" EntitySet="EmployeeImages" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="One_Time_Pin">
           <Key>
@@ -2524,6 +2556,28 @@
           <Property Name="EmpStartDate" Type="DateTime" Precision="0" />
           <Property Name="EmpShiftsCompleted" Type="Int32" />
         </EntityType>
+        <EntityType Name="EmployeeImage">
+          <Key>
+            <PropertyRef Name="ImgID" />
+          </Key>
+          <Property Name="ImgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImgCaption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImgName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="OrdraDBModel.FK_EmployeeImage" FromRole="EmployeeImage" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_EmployeeImage">
+          <End Type="OrdraDBModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.EmployeeImage" Role="EmployeeImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeeImage">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2994,6 +3048,16 @@
                 <ScalarProperty Name="EmpSurname" ColumnName="EmpSurname" />
                 <ScalarProperty Name="EmpName" ColumnName="EmpName" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeImages">
+            <EntityTypeMapping TypeName="OrdraDBModel.EmployeeImage">
+              <MappingFragment StoreEntitySet="EmployeeImage">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ImgName" ColumnName="ImgName" />
+                <ScalarProperty Name="ImgCaption" ColumnName="ImgCaption" />
+                <ScalarProperty Name="ImgID" ColumnName="ImgID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

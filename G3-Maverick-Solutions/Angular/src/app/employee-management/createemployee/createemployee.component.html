@@ -34,12 +34,7 @@
             </div>
           </div>
       </div>
-    
-
-
      
-
-        
     <br><br>
         <div *ngIf = "showResults" class="card">
             <br>
@@ -72,37 +67,94 @@
         
 
     <br>
-    <div *ngIf = "showNewEmp" class="card">
-      <br>
-      <label class="subheadinglabel" >Enter Employee Profile Details</label>
-      <br>
-      <div class="divleft"  > 
-        <label for="EmpStartDate">Work Start Date:       </label>
-        <input type="date" formControlName="empStartDate" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
-        <span style="color:red" *ngIf="empForm.get('empStartDate').errors && (empForm.get('empStartDate').touched || empForm.get('empStartDate').dirty)">
+    <div *ngIf = "showNewEmp">
+      <div class="card">
+        <br>
+        <label class="subheadinglabel" >Enter Employee Profile Details</label>
+        <br>
+        <div class="divleft"  > 
+          <label for="EmpStartDate">Work Start Date:       </label>
+          <input type="date" formControlName="empStartDate" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
+          <span style="color:red" *ngIf="empForm.get('empStartDate').errors && (empForm.get('empStartDate').touched || empForm.get('empStartDate').dirty)">
           <span *ngIf="empForm.get('empStartDate').errors.required">Employee Start date is required.</span>
-    </span>
+          </span>
+        </div>
+
+        <!-- <div class="divleft"  *ngIf = "showText"> 
+          <label for="EmpStartDate">Work Start Date:       </label>
+          <input type="text" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
+        </div> -->
+
+        <div class="divleft">
+          <label for="EmpShiftsCompleted">Shifts Completed:      </label>
+          <input type="number" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" id="EmpShiftsCompleted" name="EmpShiftsCompleted"  required>
+          <span style="color:red" *ngIf="empForm.get('empShiftsCompleted').errors && (empForm.get('empShiftsCompleted').touched || empForm.get('empShiftsCompleted').dirty)">
+                <span *ngIf="empForm.get('empShiftsCompleted').errors.required">Number of shifts completed is required.</span>
+          </span>
+        </div>
+
+        <br>
+        <div class="divleft"  >
+          <button type="submit"  (click)="createEmployee()">Save Profile</button>
+          <button type="submit" (click)="cancel()">Cancel</button>
+          <button type="submit" (click)="gotoUploadImage()" >Upload Image</button>
+          <button type="submit"  (click)="gotoUploadCv()">Upload CV</button>
+        </div>
       </div>
+  </div>
 
-      <!-- <div class="divleft"  *ngIf = "showText"> 
-        <label for="EmpStartDate">Work Start Date:       </label>
-        <input type="text" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
-      </div> -->
+  <div *ngIf = "showUpload">
+    <div class="card">
+      <button click="gotoUploadImage()" >Upload Image</button>
+      <button click="gotoUploadCv()">Upload CV</button>
+    </div>
 
-      <div class="divleft">
-        <label for="EmpShiftsCompleted">Shifts Completed:      </label>
-        <input type="number" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" id="EmpShiftsCompleted" name="EmpShiftsCompleted"  required>
-        <span style="color:red" *ngIf="empForm.get('empShiftsCompleted').errors && (empForm.get('empShiftsCompleted').touched || empForm.get('empShiftsCompleted').dirty)">
-              <span *ngIf="empForm.get('empShiftsCompleted').errors.required">Number of shifts completed is required.</span>
-        </span>
-      </div>
-
-      <br>
-      <div class="divleft"  >
-         <button type="submit"  (click)="createEmployee()">Save Profile</button>
-         <button type="submit" (click)="cancel()">Cancel</button>
+    <div *ngIf ="showUploadImg" class="card">
+      <div class="container">
+        <div class ="row">
+          <div class="col s8 offset-2">
+            <div class="card-panel teal lighten-2">
+              <label class="subheadinglabel" >Add Employee Image</label>
+            </div>
+            <form #imageForm = ngForm (ngSubmit)= "OnSubmit(Caption, Image, employee.EmployeeID)">
+              <div class="row">
+                <div class="input-field col s12">
+                  <label for="Caption">Caption: </label>
+                  <input type="text" formControlName="caption"  #Caption ngModel name="Caption" id="Caption" required>
+                </div>
+              </div>
+              <img [src]="imageUrl" img style="width:350px; height: 300px"> <br>
+                <input type="file" formControlName="image" name="image" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
+                <button type="submit" class="btn-large btn-submit" [disabled]="Image.value=='' || !imageForm.valid">Submit </button> 
+            </form>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div *ngIf ="showUploadCv" class="card"></div>
+    <div class="container">
+      <div class ="row">
+        <div class="col s8 offset-2">
+          <div class="card-panel teal lighten-2">
+            <label class="subheadinglabel" >Add Employee CV</label>
+          </div>
+          <form #imageForm = ngForm (ngSubmit)= "OnSubmitCV(Caption, CV, employee.EmployeeID)">
+            <div class="row">
+              <div class="input-field col s12">
+                <label for="Caption" visible="false">Caption: </label>
+                <input type="text" formControlName="caption"  #Caption ngModel name="Caption" id="Caption" disabled visible="false">
+              </div>
+            </div>
+            <img [src]="cvUrl" img style="width:350px; height: 300px"> <br>
+              <input type="file" formControlName="cv" name="cv" #CV accept="cv/*" (change)="handleFileInput($event.target.files)">
+              <button type="submit" class="btn-large btn-submit" >Submit </button> 
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
     </form>
   </body>
     

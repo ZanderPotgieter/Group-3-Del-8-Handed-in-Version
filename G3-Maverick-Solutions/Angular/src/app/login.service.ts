@@ -14,6 +14,7 @@ export class LoginService {
  constructor(private http: HttpClient) { }
 
   url = 'https://localhost:44399/Api/Login'
+  urladmin = 'https://localhost:44399/Api/Admin'
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -35,7 +36,11 @@ export class LoginService {
   }
 
   getUserTypeAccess(){
-    return this.http.get(this.url + 'https://localhost:44399/Api/Admin/getUserTypeAccess')
+    return this.http.get( this.urladmin + '/getUserTypeAccess')
+  }
+
+  getUserAccess( session: any){
+    return this.http.post(this.urladmin+ '/getUserAccess',session, this.httpOptions)
   }
 
   sendEmail(email: string)

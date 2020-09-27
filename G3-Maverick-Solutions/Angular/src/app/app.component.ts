@@ -6,6 +6,7 @@ import {LoginService} from './login.service';
 import {Container} from './container-management/container';
 import {FormBuilder, Validators} from '@angular/forms';
 import { FormGroup, FormControl} from '@angular/forms';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
 
 
@@ -48,6 +49,24 @@ showGenerateOTP: boolean = false;
 showEnterOTP: boolean = false;
 showResetPassword: boolean = false;
 containersLoaded : boolean = false;
+
+userAccess : string [] = [];
+adminEnabled: boolean = false;
+employeeEnabled: boolean = false;
+salesEnabled: boolean = false;
+customerEnabled: boolean = false;
+customerOrderEnabled: boolean = false;
+supplierEnabled: boolean = false;
+supplierOrderEnabled: boolean = false;
+productEnabled: boolean = false;
+containerEnabled: boolean = false;
+gpsEnabled: boolean = false;
+donationsEnabled: boolean = false;
+managerEnabled: boolean = false;
+creditorEnabled: boolean = false;
+reportingEnabled: boolean = false;
+
+
   ngOnInit(){
     this.api.getAllContainers().subscribe((res:any) =>{
       console.log(res);
@@ -89,6 +108,8 @@ login(){
       this.showResetPassword = false;
       this.showEnterOTP = false;
       this.showGenerateOTP = false;
+
+        this.getUserAccess();
 
         }
     })}
@@ -290,5 +311,68 @@ sendEmail(){
       this.showGenerateOTP = false;}
     })
   }
+
+  getUserAccess(){
+    if(!localStorage.getItem("accessToken")){
+      this.router.navigate([""]);
+    }
+    else {
+      this.session = {"token" : localStorage.getItem("accessToken")}
+      this.api.getUserAccess(this.session).subscribe( (res:any) =>{
+        console.log(res);
+        this.user = res.user;
+        this.userAccess = res.userAccess;
+
+        this.setUserAccess(this.userAccess);
+      })
+
+  }
+  }
+
+  setUserAccess(access: string[]){
+   access.forEach(item => {
+     if (item == "Administration")
+     {
+       this.adminEnabled = true;
+     }
+     if (item =="Employee"){
+       this.employeeEnabled = true;
+     }
+     if (item == "Sales"){
+       this.salesEnabled = true;
+     }
+     if (item == "Customer"){
+       this.customerEnabled = true;
+     }
+     if (item == "Customer Order"){
+       this.customerOrderEnabled = true;
+     }
+     if (item == "Supplier"){
+       this.supplierEnabled = true;
+     }
+     if (item == "Supplier Order"){
+       this.supplierOrderEnabled = true;
+     }
+     if(item == "Product" || item == "Product Category" ){
+      this.productEnabled = true;
+     }
+     if(item == "Container"){
+       this.containerEnabled = true;
+     }
+     if(item == "Location" || item == "Area" || item=="Province"){
+       this.gpsEnabled = true;
+     }
+     if(item == "Donations" || item == "Donation Recepient"){
+       this.donationsEnabled = true;
+     }
+     if(item == "Reporting"){
+       this.reportingEnabled = true;
+     }
+     
+
+      
+    });
+  }
+
 
 }

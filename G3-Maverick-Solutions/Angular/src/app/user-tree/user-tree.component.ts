@@ -51,25 +51,29 @@ export class ChecklistDatabase {
 
   get data(): TodoItemNode[] { return this.dataChange.value; }
 
-  constructor(private api: AdminService) {
+  constructor(private api: AdminService, private mydata: any) {
+   
     this.initialize();
   }
 
-  initialize() {
-    
-    var mydata;
-    var nodes;
-
-   const dta =  this.api.getUserTypeAccess().subscribe( (res:any) =>{
+  setData(){
+   
+   return this.api.getUserTypeAccess().subscribe( (res:any) =>{
     console.log(res);
-    mydata = res.datMap;
-    nodes = res.rootLevelNodes;
+    this.mydata = res.dataMap;
+    //nodes = res.rootLevelNodes;
 
     })
+
+  }
+
+  initialize() {
+   
+    this.setData();
  
     // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
     //     file node as children.
-    const data = this.buildFileTree(mydata, 0);
+    const data = this.buildFileTree(this.mydata, 0);
 
     // Notify the change.
     this.dataChange.next(data);

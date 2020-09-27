@@ -19,24 +19,22 @@ export class UsertableDataSource {
  
 
   constructor( ) {
-   
+   this.getAllUsers();
   }
 
   private api: AdminService
   dataList: Users[] = [];
 
   getAllUsers(){
-   this.api.getAllUsers().subscribe( (res:any)=> {
+   return this.api.getAllUsers().subscribe( (res:any)=> {
       console.log(res);
       this.dataList = res;
 
     })
-
-    return this.dataList;
     
   }
 
-  data: Users[] = this.getAllUsers();
+  data: Users[] = this.dataList;
   paginator: MatPaginator;
   sort: MatSort;
 

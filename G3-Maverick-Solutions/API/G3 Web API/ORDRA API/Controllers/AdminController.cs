@@ -22,7 +22,7 @@ namespace ORDRA_API.Controllers
 
 
         //---Users-----//
-        [HttpGet]
+        [HttpPost]
         [Route("getUserAccess")]
         public object getUserAccess(dynamic session)
         {
@@ -32,10 +32,10 @@ namespace ORDRA_API.Controllers
             toReturn.userAccess = new List<dynamic>();
             toReturn.user = new ExpandoObject();
 
-            try
-            {
+            //try
+            //{
                 string sessionID = session.token;
-                var user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
+                var user = db.Users.Include(x => x.User_Type).Where(x => x.SessionID == sessionID).FirstOrDefault();
                 if (user != null)
                 {
                     user.UserPassword = "This is classified information ;)";
@@ -47,7 +47,8 @@ namespace ORDRA_API.Controllers
                 }
 
                 List<string> access = new List<string>();
-                List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Include(x => x.UserTypeID).Where(x => x.UserTypeID == user.UserTypeID).ToList();
+                List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Where(x => x.UserTypeID == user.UserTypeID).ToList();
+       
                 foreach( User_Type_Access acc in userAccess)
                 {
                     
@@ -56,15 +57,15 @@ namespace ORDRA_API.Controllers
 
                 }
 
-                toReturn.access = access;
+                toReturn.userAccess = access;
 
                 
 
-            }
-            catch
-            {
-                toReturn.Error = "Search Interrupted. Retry";
-            }
+            //}
+            //catch
+            //{
+               // toReturn.Error = "Search Interrupted. Retry";
+            //}
 
             return toReturn;
 
@@ -108,7 +109,9 @@ namespace ORDRA_API.Controllers
                         
                     }
 
-                    usertypeAccess.Add(new Tuple<string, List<string>>(name, userTypeAccess));
+                    
+
+                    usertypeAccess.Add(new Tuple<string, List<string>>( name, userTypeAccess));
 
 
 

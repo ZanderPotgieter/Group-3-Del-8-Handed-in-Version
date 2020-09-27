@@ -21,27 +21,7 @@ namespace ORDRA_API.Controllers
         OrdraDBEntities db = new OrdraDBEntities();
 
 
-        //---User Types---//
-        [HttpGet]
-        [Route("getAllUserTypes")]
-        public object getAllUserTypes()
-        {
-
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-                toReturn = db.User_Type.ToList();
-            }
-            catch
-            {
-                toReturn.Error = "Search Interrupted. Retry";
-            }
-
-            return toReturn;
-
-        }
+    //---Users-----//
 
         [HttpGet]
         [Route("getAllUsers")]
@@ -54,7 +34,22 @@ namespace ORDRA_API.Controllers
             try
         
     {
-                toReturn = db.Users.Include(x => x.User_Type).ToList();
+                List<dynamic> returnUsers = new List<dynamic>();
+                List<User> users = db.Users.Include(x => x.User_Type).ToList();
+                foreach (var user in users)
+                {
+                    User_Type type = db.User_Type.Where(x => x.UserTypeID == user.UserTypeID).FirstOrDefault();
+                    dynamic item = new ExpandoObject();
+                    item.UserName = user.UserName;
+                    item.UserSurname = user.UserSurname;
+                    item.UserCell = user.UserCell;
+                    item.UserEmail = user.UserEmail;
+                    item.UserType = type;
+
+                    returnUsers.Add(item);
+
+                    toReturn = returnUsers;
+                }
             }
             catch
             {
@@ -79,11 +74,24 @@ namespace ORDRA_API.Controllers
             {
                 List<User_Type> user_Types = db.User_Type.ToList();
                 List<dynamic> treedataList = new List<dynamic>();
+               
+
                 foreach (var item in user_Types)
                 {
                     dynamic treedata = new ExpandoObject();
                     treedata.name = item.UTypeDescription;
-                    treedata.children = db.Users.Where(X => X.UserTypeID == item.UserTypeID);
+
+                    dynamic child = new ExpandoObject();
+                    List<dynamic> children = new List<dynamic>();
+                    List<User> users= db.Users.Where(X => X.UserTypeID == item.UserTypeID).ToList();
+                    foreach ( var user in users)
+                    {
+                        child = user.UserName + " " + user.UserSurname;
+                        children.Add(child);
+
+                    }
+                    treedata.children = children;
+                     
                     treedataList.Add(treedata);
                 }
 
@@ -102,7 +110,101 @@ namespace ORDRA_API.Controllers
         }
 
 
+        //------Users Types------//
 
+        //Getting all user types
+        [HttpGet]
+        [Route("getAllUserTypes")]
+        public object getAllUserTypes()
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
+
+            try
+            {
+                List<User_Type> types = db.User_Type.ToList();
+                if (types != null)
+                {
+                    List<dynamic> typesList = new List<dynamic>();
+                    foreach (User_Type item in types)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.UserTypeID;
+                        status.description = item.UTypeDescription;
+                        typesList.Add(status);
+                    }
+                    toReturn.List = typesList;
+                }
+                else
+                {
+                    toReturn.Message = "No User Types Found";
+                }
+                
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        //add User Type
+        [HttpPut]
+        [Route("addUserType")]
+        public object addUserType(string description)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                User_Type newType = new User_Type();
+                newType.UTypeDescription = description;
+                db.User_Type.Add(newType);
+                db.SaveChanges();
+
+                toReturn.Message = "User Type Added Successfully";
+
+            }
+            catch
+            {
+                toReturn.Error = "User Type Add Unsuccessful";
+            }
+
+            return toReturn;
+
+        }
+
+        //Update User Type
+        [HttpPost]
+        [Route("updateUserType")]
+        public object updateUserType(int id, string description)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == id).FirstOrDefault();
+                newType.PTDescription = description;
+                db.SaveChanges();
+
+                toReturn.Message = "Update User Type Successful";
+            }
+            catch
+            {
+                toReturn.Error = "User Type Update Unsuccessful";
+            }
+
+            return toReturn;
+
+        }
 
 
 
@@ -115,10 +217,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Customer_Order_Status.ToList();
+                List<Customer_Order_Status> statuses = db.Customer_Order_Status.ToList();
+                if (statuses != null)
+                {
+                    List<dynamic> statusList = new List<dynamic>();
+                    foreach (Customer_Order_Status item in statuses)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.CustomerOrderStatusID;
+                        status.description = item.CODescription;
+                        statusList.Add(status);
+                    }
+
+                    toReturn.List = statusList;
+                }
+                else
+                {
+                    toReturn.Message = "Customer Order Statuses Not Found";
+                }
             }
             catch
             {
@@ -132,7 +252,7 @@ namespace ORDRA_API.Controllers
         //add Customer Orders Statuses
         [HttpPost]
         [Route("addCusOrderStatuses")]
-        public object addCusOrderStatuses(Customer_Order_Status status)
+        public object addCusOrderStatuses(string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -141,11 +261,11 @@ namespace ORDRA_API.Controllers
             try
             {
                 Customer_Order_Status newStatus = new Customer_Order_Status();
-                newStatus.CODescription = newStatus.CODescription;
+                newStatus.CODescription = description;
                 db.Customer_Order_Status.Add(newStatus);
                 db.SaveChanges();
 
-                toReturn.Message = "Customer Order Status Add Successful";
+                toReturn.Message = "Customer Order Status Added Successfully";
 
             }
             catch
@@ -160,7 +280,7 @@ namespace ORDRA_API.Controllers
         //Update Customer Orders Statuses
         [HttpPost]
         [Route("updateCusOrderStatuses")]
-        public object updateCusOrderStatuses(Customer_Order_Status status)
+        public object updateCusOrderStatuses(int id, string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -168,8 +288,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Customer_Order_Status newStatus = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == status.CustomerOrderStatusID).FirstOrDefault();
-                newStatus.CODescription = newStatus.CODescription;
+                Customer_Order_Status newStatus = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == id).FirstOrDefault();
+                newStatus.CODescription = description;
                 db.SaveChanges();
 
                 toReturn.Message = "Customer Order Status Update Successful";
@@ -185,7 +305,7 @@ namespace ORDRA_API.Controllers
 
         [HttpPost]
         [Route("deleteCusOrderStatuses")]
-        public object deleteCusOrderStatuses(Customer_Order_Status status)
+        public object deleteCusOrderStatuses(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -193,7 +313,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Customer_Order_Status newStatus = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == status.CustomerOrderStatusID).FirstOrDefault();
+                Customer_Order_Status newStatus = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == id).FirstOrDefault();
              
                 db.Customer_Order_Status.Remove(newStatus);
                 db.SaveChanges();
@@ -222,10 +342,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Supplier_Order_Status.ToList();
+                List<Supplier_Order_Status> statuses = db.Supplier_Order_Status.ToList();
+                if (statuses != null)
+                {
+                    List<dynamic> statusList = new List<dynamic>();
+                    foreach (Supplier_Order_Status item in statuses)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.SupplierOrderStatusID;
+                        status.description = item.SOSDescription;
+                        statusList.Add(status);
+                    }
+
+                    toReturn.List = statusList;
+                }
+                else
+                {
+                    toReturn.Message = "No Supplier Order Statuses Found";
+                }
             }
             catch
             {
@@ -239,7 +377,7 @@ namespace ORDRA_API.Controllers
         //add Supplier Orders Statuses
         [HttpPut]
         [Route("addSupOrderStatuses")]
-        public object addSupOrderStatuses(Supplier_Order_Status status)
+        public object addSupOrderStatuses(string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -248,11 +386,11 @@ namespace ORDRA_API.Controllers
             try
             {
                 Supplier_Order_Status newStatus = new Supplier_Order_Status();
-                newStatus.SOSDescription= newStatus.SOSDescription;
+                newStatus.SOSDescription= description;
                 db.Supplier_Order_Status.Add(newStatus);
                 db.SaveChanges();
 
-                toReturn.Message = "Supplier Order Status Add Successful";
+                toReturn.Message = "Supplier Order Status Added Successfully";
 
             }
             catch
@@ -267,7 +405,7 @@ namespace ORDRA_API.Controllers
         //Update Supplier Orders Statuses
         [HttpPost]
         [Route("updateSupOrderStatuses")]
-        public object updateSupOrderStatuses(Supplier_Order_Status status)
+        public object updateSupOrderStatuses(int id, string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -275,8 +413,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Supplier_Order_Status newStatus = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == status.SupplierOrderStatusID).FirstOrDefault();
-                newStatus.SOSDescription = newStatus.SOSDescription;
+                Supplier_Order_Status newStatus = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == id).FirstOrDefault();
+                newStatus.SOSDescription = description;
                 db.SaveChanges();
                 toReturn.Message = "Supplier Order Status Update Successful";
 
@@ -294,7 +432,7 @@ namespace ORDRA_API.Controllers
 
         [HttpDelete]
         [Route("deleteSupOrderStatuses")]
-        public object deleteSupOrderStatuses(Supplier_Order_Status status)
+        public object deleteSupOrderStatuses(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -302,11 +440,11 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Supplier_Order_Status newStatus = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == status.SupplierOrderStatusID).FirstOrDefault();
+                Supplier_Order_Status newStatus = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == id).FirstOrDefault();
 
                 db.Supplier_Order_Status.Remove(newStatus);
                 db.SaveChanges();
-                toReturn.Message = "Supplier Order Status Delet Successful";
+                toReturn.Message = "Supplier Order Status Delete Successful";
 
             }
             catch
@@ -330,10 +468,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Marked_Off_Reason.ToList();
+                List<Marked_Off_Reason> reasons = db.Marked_Off_Reason.ToList();
+                if (reasons != null)
+                {
+                    List<dynamic> statusList = new List<dynamic>();
+                    foreach (Marked_Off_Reason item in reasons)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.ReasonID;
+                        status.description = item.MODescription;
+                        statusList.Add(status);
+                    }
+
+                    toReturn.List = statusList;
+                }
+                else
+                {
+                    toReturn.Message = "No Marked Off Reasons Found";
+                }
             }
             catch
             {
@@ -347,7 +503,7 @@ namespace ORDRA_API.Controllers
         //add MarkedOfReason
         [HttpPut]
         [Route("addMarkedOfReason")]
-        public object addMarkedOfReasons(Marked_Off_Reason reason)
+        public object addMarkedOfReasons(string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -356,11 +512,11 @@ namespace ORDRA_API.Controllers
             try
             {
                 Marked_Off_Reason newReason = new Marked_Off_Reason();
-                newReason.MODescription = reason.MODescription;
+                newReason.MODescription = description;
                 db.Marked_Off_Reason.Add(newReason);
                 db.SaveChanges();
 
-                toReturn.Message = "Marked Off Reason Add Successful";
+                toReturn.Message = "Marked Off Reason Added Successfully";
             }
             catch
             {
@@ -374,7 +530,7 @@ namespace ORDRA_API.Controllers
         //Update MarkedOfReason
         [HttpPost]
         [Route("updateMarkedOfReason")]
-        public object updateMarkedOfReason(Marked_Off_Reason reason)
+        public object updateMarkedOfReason(int id, string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -382,8 +538,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Marked_Off_Reason newReason = db.Marked_Off_Reason.Where(x => x.ReasonID == reason.ReasonID).FirstOrDefault();
-                newReason.MODescription = reason.MODescription;
+                Marked_Off_Reason newReason = db.Marked_Off_Reason.Where(x => x.ReasonID == id).FirstOrDefault();
+                newReason.MODescription = description;
                 db.SaveChanges();
 
                 toReturn.Message = "Marked Off Reason Update Successful";
@@ -402,7 +558,7 @@ namespace ORDRA_API.Controllers
 
         [HttpDelete]
         [Route("deleteMarkedOfReason")]
-        public object deleteMarkedOfReason(Marked_Off_Reason reason)
+        public object deleteMarkedOfReason(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -410,7 +566,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Marked_Off_Reason newReason = db.Marked_Off_Reason.Where(x => x.ReasonID == reason.ReasonID).FirstOrDefault();
+                Marked_Off_Reason newReason = db.Marked_Off_Reason.Where(x => x.ReasonID == id).FirstOrDefault();
                 db.Marked_Off_Reason.Remove(newReason);
                 db.SaveChanges();
 
@@ -436,10 +592,28 @@ namespace ORDRA_API.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.List = new List<dynamic>();
 
             try
             {
-                toReturn = db.Payment_Type.ToList();
+                List<Payment_Type> types = db.Payment_Type.ToList();
+                if (types != null)
+                {
+                    List<dynamic> typesList = new List<dynamic>();
+                    foreach (Payment_Type item in types)
+                    {
+                        dynamic status = new ExpandoObject();
+                        status.id = item.PaymentTypeID;
+                        status.description = item.PTDescription;
+                        typesList.Add(status);
+                    }
+                    toReturn.List = typesList;
+                }
+                else
+                {
+                    toReturn.Message = "No Payment Types Found";
+                }
+
             }
             catch
             {
@@ -453,7 +627,7 @@ namespace ORDRA_API.Controllers
         //add Payment Type
         [HttpPut]
         [Route("addPaymentTypes")]
-        public object addPaymentTypes(Payment_Type type)
+        public object addPaymentTypes(string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -462,11 +636,11 @@ namespace ORDRA_API.Controllers
             try
             {
                 Payment_Type newType = new Payment_Type();
-                newType.PTDescription = type.PTDescription;
+                newType.PTDescription = description;
                 db.Payment_Type.Add(newType);
                 db.SaveChanges();
 
-                toReturn.Message = "Payment Type Add Successful";
+                toReturn.Message = "Payment Type Added Successfully";
 
             }
             catch
@@ -481,7 +655,7 @@ namespace ORDRA_API.Controllers
         //Update Payment Type
         [HttpPost]
         [Route("updatePaymentTypes")]
-        public object updatePaymentTypes(Payment_Type type)
+        public object updatePaymentTypes(int id, string description)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -489,8 +663,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == type.PaymentTypeID).FirstOrDefault();
-                newType.PTDescription = type.PTDescription;
+                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == id).FirstOrDefault();
+                newType.PTDescription = description;
                 db.SaveChanges();
 
                 toReturn.Message = "Update Payment Type Successful";
@@ -508,7 +682,7 @@ namespace ORDRA_API.Controllers
 
         [HttpDelete]
         [Route("deletePaymentTypes")]
-        public object deletePaymentTypes(Payment_Type type)
+        public object deletePaymentTypes(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -516,7 +690,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == type.PaymentTypeID).FirstOrDefault();
+                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == id).FirstOrDefault();
                 db.Payment_Type.Remove(newType);
                 db.SaveChanges();
 

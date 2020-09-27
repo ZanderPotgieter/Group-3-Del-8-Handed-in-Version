@@ -11,14 +11,14 @@
 
 
 <body>
-    <div *ngIf = "showLogin">
+    <div *ngIf = "showLogin" style='width: 80%!important;' >
 
     <div class="wrapperlogin">
         <div class="wrapped-div-login">
     <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
     <form   #form='ngForm' autocomplete="off" >
         <h2>Login</h2>
-        <div class="form-group" [ngClass] ="{}">
+        <div class="form-group" [ngClass] ="{}" >
           <label>Username:</label>
           <input class="input"  name="UserName" [(ngModel)]="user.UserName" pattern="[a-zA-Z]*" required [ngModelOptions]="{standalone: true}">
         </div>
@@ -36,6 +36,7 @@
       </div>
       <span style="color:red" *ngIf="showContainerNotSelected">
         select container</span>
+        
     
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
@@ -49,16 +50,18 @@
     </div>
 </div>
 
-<div *ngIf = "showRegister">
+<div *ngIf = "showRegister"  >
     <div class="wrapperlogin">
         <div class="wrapped-div-login">
+          <div>
     <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
+  </div>
     <form [formGroup]="regForm">
         <h2>Register</h2>
-        <div class="form-group">
+        <div class="form-group" >
           <label for="UserName">Name:</label>
                 <input type="text" formControlName="UserName" [(ngModel)]="user.UserName" id="UserName" name="UserName" pattern="[a-zA-Z ]*" required>
-                <br>
+                
                 <span style="color:red" *ngIf="regForm.get('UserName').errors && (regForm.get('UserName').touched || regForm.get('UserName').dirty)">
                     <span *ngIf="regForm.get('UserName').errors.required">Name is required.<br></span>
                     <span *ngIf="regForm.get('UserName').errors.pattern">Only text characters.<br></span>
@@ -67,11 +70,12 @@
         <div class="form-group">
           <label for="UserSurname">Surname:</label>
                 <input type="text" formControlName="UserSurname" [(ngModel)]="user.UserSurname" id="UserSurname" name="UserSurname" pattern="[a-zA-Z ]*" required>
-                <br>
+                <div>
                 <span style="color:red" *ngIf="regForm.get('UserSurname').errors && (regForm.get('UserSurname').touched || regForm.get('UserSurname').dirty)">
                     <span *ngIf="regForm.get('UserSurname').errors.required">Surname is required.<br></span>
                     <span *ngIf="regForm.get('UserSurname').errors.pattern">Only text characters.<br></span>
                 </span>
+              </div>
         </div>
         <div class="form-group">
           <label for="UserCell">Cell:</label>
@@ -99,7 +103,7 @@
       </div>
       <div class="form-group">
         <label >Confirm Password:</label>
-        <input  class="input"  type="password"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (change)="Validate()" required>
+        <input  class="input"  type="password"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (ngModelchange)="Validate()" required>
       </div>
       <span style="color:red" *ngIf="showInvalidPassword">
         Passwords do not match
@@ -116,13 +120,15 @@
     </div>
 </div>
 
-<div *ngIf = "showGenerateOTP">
+<div *ngIf = "showGenerateOTP" >
   <div class="wrapperlogin">
       <div class="wrapped-div-login">
+  <div>
   <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
+</div>
   <form   #form='ngForm' autocomplete="off" >
       <h2>Generate One time Pin</h2>
-      <div class="divleft">
+      <div class="divleft" >
         <label class="subheadinglabel">Enter your email address:</label>
       </div>
     <div class="form-group" [ngClass] ="{}">
@@ -144,7 +150,7 @@
   </div>
 </div>
 
-<div *ngIf = "showEnterOTP">
+<div *ngIf = "showEnterOTP" >
   <div class="wrapperlogin">
       <div class="wrapped-div-login">
   <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
@@ -178,7 +184,7 @@
   </div>
 </div>
 
-<div *ngIf = "showResetPassword">
+<div *ngIf = "showResetPassword" >
   <div class="wrapperlogin">
       <div class="wrapped-div-login">
   <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">

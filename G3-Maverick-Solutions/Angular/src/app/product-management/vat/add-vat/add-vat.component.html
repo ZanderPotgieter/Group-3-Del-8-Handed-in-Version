@@ -8,9 +8,6 @@
                 <label for="VATPerc">VAT Percentage:</label><input type="text" class="form-control" [(ngModel)]="vat.VATPerc" id="VATPerc" name="VATPerc" required>
                 <br>
                 <label for="VATStartDate">VAT Start Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATStartDate" id="VATStartDate" name="VATStartDate" required>
-                <br>
-                <label for="VATEndDate">VAT End Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATEndDate"  id="VATEndDate" name="VATEndDate" >
-                <br>
                 <button type="submit" (click)="Save()">Add VAT</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>

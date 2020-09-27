@@ -7,6 +7,7 @@ import { Product } from '../../product';
 import { Container } from '../../../container-management/container';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { variable } from '@angular/compiler/src/output/output_ast';
+import {LoginService} from 'src/app/login.service';
 
 @Component({
   selector: 'app-add-product',
@@ -15,22 +16,28 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 })
 export class AddProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder) { }
+  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder,private api: LoginService) { }
   pdForm: FormGroup;
   categories: ProductCategory[];
-  product : Product = new Product();
+  selectedCategory: ProductCategory;
+  selectedProductID : number;
+  newProduct : Product = new Product();
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
  
+  Select: number;
+  selectedCatID: number;
+
   addToSystem: boolean = false;
   linkToContainer: boolean = false;
+  selectedContainerID: number;
  
   containers: Container[] = [];
   products: Product[] = [];
 
   ngOnInit(){
     this.pdForm= this.fb.group({
-      
+      Select:  ['', [Validators.required]],
       ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
@@ -38,13 +45,33 @@ export class AddProductComponent implements OnInit {
       CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       PriceStartDate: ['', [Validators.required]], 
+      SelectCon: ['', [Validators.required]], 
+      SelectProduct: ['', [Validators.required]],
     }); 
+    this.productService.getAllProducts()
+    .subscribe((value:any)=> {
+      console.log(value);
+      if (value != null) {
+        this.products = value.Products;
+      }
+    });
+
+    this.api.getAllContainers().subscribe((res:any) =>{
+      console.log(res);
+      this.containers = res; 
+      if (res.Error){
+        alert(res.Error);
+      }
+      
+    });
+
     this.productService.getAllProductCategory()
-      .subscribe(value => {
-        if (value != null) {
-          this.categories = value;
-        }
-      });
+    .subscribe(value => {
+      if (value != null) {
+        this.categories = value;
+      }
+    });
+
 
     
   }
@@ -59,20 +86,78 @@ export class AddProductComponent implements OnInit {
     this.addToSystem = false;
   }
 
+  loadProducts(val: ProductCategory){
+   
+    this.addCategory(val);
+  }
+
+  addCategory(val : ProductCategory){
+    this.selectedCategory = val;
+  }
+
+  setProducts(val : Product){
+    this.setProduct(val);
+    
+  }
+  setProduct(val: Product){
+    this.selectedProductID = val.ProductID
+}
+  setContainer(val : Container){
+    this.setContainer(val)
+    
+  }
+
+  setCon(val: Container){
+    this.selectedContainerID = val.ContainerID;
+  }
+
   Save(){
-    this.productService.addProduct(this.product).subscribe( (res: any)=> {
-      this.product.ProductID = this.price.ProductID;
+    this.newProduct.ProductCategoryID = this.selectedCategory.ProductCategoryID;
+    this.price.Product = this.newProduct;
+    this.productService.addProduct(this.price).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
-        this.responseMessage = res.Message;}
+        this.responseMessage = res.Message;
         alert(this.responseMessage)
-        this.router.navigate(["product-management"])
+        this.router.navigate(["product-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
     })
     
   }
 
 
   Link(){
+    return this.productService.linkContainer(this.selectedProductID, this.selectedContainerID).subscribe( (res: any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["product-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
+    })
+
+
+  }
+
+  RemoveLink(){
+    return this.productService.removeContainer(this.selectedProductID, this.selectedContainerID).subscribe( (res: any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["product-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
+    })
+
 
   }
 

@@ -14,19 +14,67 @@ export class UpdateVatComponent implements OnInit {
   constructor(private productService: ProductService, private router: Router) { }
 
   vat : Vat = new Vat();
-  ngOnInit(){
-    this.loadVat();
-  }
+  newVat: Vat = new Vat();
+  list: Vat[] =[];  
+  addDes : string;
+  showadd: boolean = false;
+  enableInput: boolean = true;
+  responseMessage : string;
+  
 
-  loadVat(){
+  ngOnInit(){
     this.productService.getVat().subscribe((res:any)=> {
       console.log(res);
-      this.vat.VATPerc = res.VATPerc;
-      this.vat.VATStartDate = res.VATStartDate;
-      this.vat.VATEndDate = res.VATEndDate;
+      this.list = res.VAT;
       })
   }
-  Save(){}
 
-  Cancel(){}
+  trackByndx(ndx: number, item:any): any{
+    return ndx;
+  }
+
+  save(ndx: number){
+    this.vat.VATPerc = this.list[ndx].VATPerc;
+    this.vat.VATStartDate = this.list[ndx].VATStartDate;
+    this.saveupdate( this.vat);
+
+  }
+
+ 
+
+  update(){
+    this.enableInput = false;
+  }
+
+  saveupdate(vatUpdate: Vat){
+    this.productService.updateVat(vatUpdate).subscribe((res:any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["product-management"])}
+        if(res.Error){
+          this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        }
+
+  })
+}
+
+  add(){
+
+    this.showadd = true;
+    
+  }
+
+  saveadd(){
+    this.productService.addVat(this.newVat).subscribe((res:any)=> {
+      console.log(res);
+      })
+
+  }
+
+  Cancel(){
+    this.router.navigate(['product-management']);
+  }
 }

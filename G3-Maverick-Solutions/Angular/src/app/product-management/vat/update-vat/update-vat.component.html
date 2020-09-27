@@ -4,14 +4,32 @@
         <div class="card">
             <div class="divleft">
                 <label class="subheadinglabel"> VAT Details:</label>
+                
+                <table>
+                    <th style="text-align: left;">VAT Percentage</th>
+                    <th style="text-align: left;">VAT Start Date</th>
+                    <th style="width: 20%; padding:5px"></th>
+                    <th style="width: 20%; padding:5px"></th>
+                    
+                  
+                    <tr *ngIf="showadd">
+    
+                        <td><input style="width: 70%" type="text" name="newVat" [(ngModel)]="newVat.VATPerc"></td>
+                        <td><input style="width: 70%" type="text" name="newVat" [(ngModel)]="newVat.VATStartDate"></td>
+                        <td></td>
+                        <td><button style="border-radius: 10px; width: 60%;" (click)="saveadd()"><i class="small material-icons" plceholder="new item">save</i></button></td>
+                        
+                    </tr>
+                    <tr *ngFor="let item of list; index as ndx; trackBy:trackByndx;">
+                        <td><input style="width: 70%" type = "number" min="1" name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].VATPerc" [ngModelOptions]="{standalone: true}"></td>
+                        <td><input style="width: 70%" type = "text" name="b{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].VATStartDate" [ngModelOptions]="{standalone: true}"></td>
+                        <td ><button  style="border-radius: 10px; width: 60%;" (click)="update()"><i class="small material-icons" >edit</i></button></td>
+                        <td><button style="border-radius: 10px; width: 60%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
+            
+                    </tr>
+                 
+                </table>
                 <br>
-                <label for="VATPerc">VAT Percentage:</label><input type="number" class="form-control" [(ngModel)]="vat.VATPerc" id="VATPerc" name="VATPerc" required>
-                <br>
-                <label for="VATStartDate">VAT Start Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATStartDate" id="VATStartDate" name="VATStartDate" required>
-                <br>
-                <label for="VATEndDate">VAT End Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATEndDate" id="VATEndDate" name="VATEndDate" required>
-                <br>
-                <button type="submit" (click)="Save()">Save</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>

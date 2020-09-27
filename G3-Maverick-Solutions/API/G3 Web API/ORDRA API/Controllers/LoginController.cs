@@ -61,11 +61,13 @@ namespace ORDRA_API.Controllers
                     newUser.SessionID = guid.ToString();
                     newUser.UserTypeID = 2;
 
-                    toReturn.Message = "Registration Successful";
+                   
 
 
                     db.Users.Add(newUser);
                     db.SaveChanges();
+
+                    toReturn.Message = "Registration Successful";
 
                 }
                 else if (foundUser != null)

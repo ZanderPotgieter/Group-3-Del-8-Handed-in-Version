@@ -18,13 +18,14 @@ export class AdminComponent implements OnInit {
   }
 
   gotoUserAccess(){
-    this.router.navigate(['user-access']);
+    this.router.navigate(['user-tree']);
   }
 
   gotoUserType(){
     this.router.navigate(['user-table']);
   }
 
-  gotoStatusManagement(){}
-
+  gotoStatusManagement(){
+   this.router.navigate(['view-statuses']);
+}
 }

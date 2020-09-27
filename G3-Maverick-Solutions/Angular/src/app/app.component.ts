@@ -34,6 +34,8 @@ errorMessage: string;
 ConfirmPassword: string;
 password: string;
 session: any;
+UserName: string;
+UserPassword: string;
 
 containers: Container[] = [];
 containerSelected: boolean = false;
@@ -45,11 +47,15 @@ otp: string;
 showGenerateOTP: boolean = false;
 showEnterOTP: boolean = false;
 showResetPassword: boolean = false;
-
+containersLoaded : boolean = false;
   ngOnInit(){
     this.api.getAllContainers().subscribe((res:any) =>{
       console.log(res);
       this.containers = res; 
+      if (res.Error){
+        alert(res.Error);
+      }
+      
     })
 
     this.regForm= this.fb.group({  
@@ -64,11 +70,15 @@ showResetPassword: boolean = false;
 
 login(){
   if(this.containerSelected == true){
+    this.user.UserName = this.UserName;
+    this.user.UserPassword = this.UserPassword;
   this.api.loginUser(this.user).subscribe( (res:any)=> {
     console.log(res);
     if(res.Error){
-      this.errorMessage = res.Error; 
       this.showError = true;
+      setTimeout(() => {
+        this.showError = false;
+      }, 5000);
     }else{
       localStorage.setItem("accessToken", res.sessionID);
       this.showLogin = false;
@@ -153,10 +163,13 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
     this.errorMessage = res.Error;
     alert(this.errorMessage);
     this.showError = true;
+    setTimeout(() => {
+      this.showError = false;
+    }, 5000);
   }else{
     alert(res.Message);
-  this.user.UserPassword = "";
-      
+  this.UserPassword = "";
+
   this.showLogin= true;
   this.showNav = false;
   this.showRegister = false;
@@ -211,7 +224,7 @@ sendEmail(){
     {
       this.errorMessage = res.Error;
       alert(this.errorMessage);
-      this.showError = true;
+     
     }
     else{
       alert(res.Message);
@@ -234,7 +247,7 @@ sendEmail(){
       {
         this.errorMessage = res.Error;
         alert(this.errorMessage);
-        this.showError = true;
+       
       }
       else{
         alert(res.Message);
@@ -261,7 +274,7 @@ sendEmail(){
       {
         this.errorMessage = res.Error;
         alert(this.errorMessage);
-        this.showError = true;
+        
       }
       else{
         alert(res.Message);

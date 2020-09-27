@@ -31,13 +31,20 @@
         </div>
     
     </form>
-   <form>
+   <form [formGroup]="pcatForm">
         <div class="card" *ngIf= "showSearch"> 
             <p class="subheadinglabel">Enter Product Category Name To Search:</p>
 
             <div class="divleft">
                 <label for="name">Name:</label>
-                <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
+                <input class="searchinput" formControlName="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="pcatForm.get('name').errors && (pcatForm.get('name').touched || pcatForm.get('name').dirty)">
+                    <span *ngIf="pcatForm.get('name').errors.required">Name is required.</span>
+                    <span *ngIf="pcatForm.get('name').errors.minlength || pcatForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="pcatForm.get('name').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
             </div>
         
             <div class="divleft">

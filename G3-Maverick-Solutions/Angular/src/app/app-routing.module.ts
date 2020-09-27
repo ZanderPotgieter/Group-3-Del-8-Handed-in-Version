@@ -97,6 +97,7 @@ import { NgModule } from '@angular/core';
     import { ProductReportComponent } from './reporting-management/product-report/product-report.component';
     import { DonationReportComponent } from './reporting-management/donation-report/donation-report.component';
     import { SalesReportComponent } from './reporting-management/sales-report/sales-report.component';
+    import { UserReportComponent } from './reporting-management/user-report/user-report.component';
 
     //---Donation Order Subsystem Imports---//
     import { CreateDonationComponent } from './donation-management/create-donation/create-donation.component';
@@ -304,6 +305,7 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
         { path: 'product-report', component: ProductReportComponent },
         { path: 'donation-report', component: DonationReportComponent },
         { path: 'sales-report', component: SalesReportComponent },
+        { path: 'user-report', component: UserReportComponent },
        
         //---Donation Subsystem Routing---//
         { path: 'create-donation', component: CreateDonationComponent },

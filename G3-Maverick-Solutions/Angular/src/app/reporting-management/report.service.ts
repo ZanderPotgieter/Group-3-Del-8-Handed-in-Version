@@ -47,4 +47,9 @@ export class ReportService {
   {
     return this.http.get(this.url + "getDonationReportData?selectedOptionID=" + selectedOption).pipe(map(result => result))
   }
+
+  getUserReportData()
+  {
+    return this.http.get(this.url + "getUserReportData").pipe(map(result => result))
+  }
 }

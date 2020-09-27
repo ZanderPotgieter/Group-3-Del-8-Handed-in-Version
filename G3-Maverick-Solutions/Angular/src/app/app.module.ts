@@ -118,6 +118,7 @@ import { UsersComponent } from './adminModels/statuses/users.component';
 import {ViewStatusesComponent} from './adminModels/view-statuses/view-statuses.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { UserTreeComponent } from './user-tree/user-tree.component';
+import { UserReportComponent } from './reporting-management/user-report/user-report.component';
 
 
 @NgModule({
@@ -214,6 +215,7 @@ import { UserTreeComponent } from './user-tree/user-tree.component';
     UsersComponent,
     ViewStatusesComponent,
     UserTreeComponent,
+    UserReportComponent,
   ],
   imports: [
     BrowserModule,

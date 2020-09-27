@@ -163,8 +163,8 @@ namespace ORDRA_API.Controllers
                 EmployeePicture image = db.EmployeePictures.Where(z => z.EmployeeID == employeeID).FirstOrDefault(); //
                 if (image != null)
                 {
-                    string path =  image.ImgName;
-                    //string path = System.IO.Path.Combine(HttpContext.Current.Server.MapPath("~/Images"), image.ImgName);
+                   // string path =  image.ImgName;
+                    string path = System.IO.Path.Combine(HttpContext.Current.Server.MapPath("~/Images"), image.ImgName);
                     toReturn.Image = path;
                         //get pAppDomain.CurrentDomain.BaseDirectory + image.ImgName;
                   
@@ -399,32 +399,40 @@ namespace ORDRA_API.Controllers
         [Route("uploadCv")]
         public HttpResponseMessage uploadCv(int employeeID)
         {
-            string cvName = null;
-            var httpRequest = HttpContext.Current.Request;
-
-            //upload cv
-            var postedFile = httpRequest.Files["file"];
-
-            //create custom filename
-            cvName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
-            cvName = cvName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
-            var filePath = Path.GetFullPath(cvName); //HttpContext.Current.Server.MapPath("~/Images/" + imageName);
-            postedFile.SaveAs(Path.Combine(filePath, postedFile.FileName));
-            //postedFile.SaveAs(filePath);
-
-            //save to db
-            using (OrdraDBEntities dbs = new OrdraDBEntities())
+            try
             {
-                EmployeeCV cv = new EmployeeCV()
+                string cvName = null;
+                var httpRequest = HttpContext.Current.Request;
+
+                //upload cv
+                var postedFile = httpRequest.Files["file"];
+
+                //create custom filename
+                cvName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                cvName = cvName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
+                var filePath = Path.GetFullPath(cvName); //HttpContext.Current.Server.MapPath("~/Images/" + imageName);
+                postedFile.SaveAs(Path.Combine(filePath, postedFile.FileName));
+                //postedFile.SaveAs(filePath);
+
+                //save to db
+                using (OrdraDBEntities dbs = new OrdraDBEntities())
                 {
-                    CVCaption = httpRequest["ImageCaption"],
-                    CVName = cvName,
-                    EmployeeID = employeeID,
-                };
-                db.EmployeeCVs.Add(cv);
-                db.SaveChanges();
+                    EmployeeCV cv = new EmployeeCV()
+                    {
+                        CVCaption = httpRequest["ImageCaption"],
+                        CVName = cvName,
+                        EmployeeID = employeeID,
+                    };
+                    db.EmployeeCVs.Add(cv);
+                    db.SaveChanges();
+                }
+               
             }
-            return Request.CreateResponse(HttpStatusCode.Created);
+            catch(Exception error)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error in saving the image: " + error);
+            }
+            return Request.CreateResponse(HttpStatusCode.Created, "Saved successfully");
         }
 
 

@@ -1,15 +1,13 @@
 <body>
-     
-            <h1>Generate Creditor Report</h1>
-            <form>
+    <h1>Generate Creditor Report</h1>
+    <div id="formDiv">
+    
                 
-                <div class="card" id="supplier">
-                    
-                    
-                   
-                    <button type="submit" (click)="clickMethod('example')" >Download Report</button>
-                    <button type="submit" (click)="clickMethod('example')" >Print Report</button>
-                    <button type="submit" (click)="clickMethod('example')" >Cancel</button>
+                <div class="card" >
+                    <button type="submit" id="GenButton" (click)="GenerateReport()" >Generate Report</button>
+                    <button type="button" id="DownButton" (click)="DownloadPDF()" >Download Report</button>
+                    <!-- <button type="button" (click)="PrintReport" >Print Report</button> -->
+                    <button type="button" (click)="cancel()" >Cancel</button>
                     <br><br>
                     <!-- <div style="text-align: left;">
                     <label><span style="white-space: nowrap; text-align: left;">This report shows creditors and details about active creditor accounts</span></label>
@@ -18,33 +16,44 @@
                 </div>
         
                 <br><br>
-        <!-- 
-                <div class="card" id="creditor">
-                    <table>
-                        <th>Creditor Name </th>
-                        <th>Email </th>
-                        <th>Latest payment date</th>
-                        <th>Latest payment amount (R)</th>
-                        <th>Account balance (R)</th>
-                        
-                        <tr>
-                            <td>Phoenix wholesaler</td>
-                            <td>pheonixwhole@gmail.com</td>
-                            <td>10/02/2020</td>
-                            <td>12000.00</td>
-                            <td>10500.00</td>
-                        </tr>
-                        <tr>
-                            <th>Total amount owed (R)</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>10500.00</td>
-                        </tr>
-                    </table>  
-                </div> -->
-        
-            </form>
+
+                <!--To Display Table-->
+                <div id="TablesDiv">
+                    <div class="Creditorstable">
+                        <table class="table" id="jsPDFTable">
+                            <h1>Creditor Report</h1>
+                            <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
+                            
+                            <div *ngFor="let item of TableData; let i=index">
+                                <table class = "container table-latitude" id="testing{{i}}">
+                                    <caption><strong>{{item.SupName}} <br> (Account balance: R{{item.Balance}})</strong></caption>
+                                    
+                                    <thead>
+                                        <tr>
+                                            <th>Payment date</th>
+                                            <th>Payment amount (R)</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let credPayments of item.Payments">
+                                            <td>{{credPayments.CredPaymentDate | date }}</td>
+                                            <td>{{credPayments.CredPaymentAmount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br><br>
+                            <!-- <div *ngIf="TableData" id="controlBreak">
+                                <div>Total amount owed to creditors : {{totalBalance}}</div>
+                            </div> -->
+
+                        </table>
+                    </div>
+                    
+                </div>
     <router-outlet></router-outlet>
+</div>
     
 </body>

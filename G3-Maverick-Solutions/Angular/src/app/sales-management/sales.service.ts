@@ -16,8 +16,9 @@ export class SalesService {
       'Content-Type': 'application/json'
     })
   };
+   
 
-  url = 'https://localhost:44399/Api/Sale'
+  url = 'https://localhost:44399/Api/Sale';
 
   initiateSale(){
     return this.http.get(this.url + '/initiateMakeSale').pipe(map(result => result)); 
@@ -48,11 +49,8 @@ export class SalesService {
   }
 
   getUserDetails(session: any){
-    return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, this.httpOptions)
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
+    return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, httpOptions);
   }
-
-
-
-
 
 }

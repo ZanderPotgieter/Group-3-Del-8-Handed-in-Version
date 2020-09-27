@@ -103,6 +103,7 @@
         <EntityTypeShape EntityType="OrdraDBModel.EmployeePicture" Width="1.5" PointX="8.25" PointY="47.25" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeeCV" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeePicture" />
+        <AssociationConnector Association="OrdraDBModel.FK_EmployeeImage" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

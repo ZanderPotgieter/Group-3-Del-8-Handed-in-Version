@@ -5,18 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="OrdraDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="AppEmployee">
-          <Key>
-            <PropertyRef Name="EmployeeID" />
-          </Key>
-          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EmpName" Type="varchar" MaxLength="75" />
-          <Property Name="EmpSurname" Type="varchar" MaxLength="75" />
-          <Property Name="EmpCellNo" Type="varchar" MaxLength="75" />
-          <Property Name="EmpEmail" Type="varchar" MaxLength="75" />
-          <Property Name="EmpStartDate" Type="date" />
-          <Property Name="EmpShiftsCompleted" Type="int" />
-        </EntityType>
         <EntityType Name="Area">
           <Key>
             <PropertyRef Name="AreaID" />
@@ -151,7 +139,16 @@
           <Property Name="EmpStartDate" Type="date" />
           <Property Name="EmpShiftsCompleted" Type="int" />
         </EntityType>
-        <EntityType Name="EmployeeImage">
+        <EntityType Name="EmployeeCV">
+          <Key>
+            <PropertyRef Name="CVID" />
+          </Key>
+          <Property Name="CVID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CVCaption" Type="varchar" MaxLength="50" />
+          <Property Name="CVName" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="int" />
+        </EntityType>
+        <EntityType Name="EmployeePicture">
           <Key>
             <PropertyRef Name="ImgID" />
           </Key>
@@ -237,7 +234,7 @@
             <PropertyRef Name="OTPID" />
           </Key>
           <Property Name="OTPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OTP" Type="varchar" MaxLength="5" />
+          <Property Name="OTP" Type="varchar" MaxLength="6" />
           <Property Name="ExpiryTime" Type="datetime" />
           <Property Name="GenerationTime" Type="datetime" />
           <Property Name="userID" Type="int" />
@@ -613,14 +610,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_EmployeeImage">
+        <Association Name="FK_EmployeeCV">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
-          <End Role="EmployeeImage" Type="Self.EmployeeImage" Multiplicity="*" />
+          <End Role="EmployeeCV" Type="Self.EmployeeCV" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
               <PropertyRef Name="EmployeeID" />
             </Principal>
-            <Dependent Role="EmployeeImage">
+            <Dependent Role="EmployeeCV">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeePicture">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="EmployeePicture" Type="Self.EmployeePicture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeePicture">
               <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1070,7 +1079,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="OrdraDBModelStoreContainer">
-          <EntitySet Name="AppEmployee" EntityType="Self.AppEmployee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area_Status" EntityType="Self.Area_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
@@ -1085,7 +1093,8 @@
           <EntitySet Name="Donation_Recipient" EntityType="Self.Donation_Recipient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Donation_Status" EntityType="Self.Donation_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmployeeImage" EntityType="Self.EmployeeImage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeCV" EntityType="Self.EmployeeCV" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeePicture" EntityType="Self.EmployeePicture" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location_Status" EntityType="Self.Location_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
@@ -1173,9 +1182,13 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="Donated_Product" EntitySet="Donated_Product" />
           </AssociationSet>
-          <AssociationSet Name="FK_EmployeeImage" Association="Self.FK_EmployeeImage">
+          <AssociationSet Name="FK_EmployeeCV" Association="Self.FK_EmployeeCV">
             <End Role="Employee" EntitySet="Employee" />
-            <End Role="EmployeeImage" EntitySet="EmployeeImage" />
+            <End Role="EmployeeCV" EntitySet="EmployeeCV" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeePicture" Association="Self.FK_EmployeePicture">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeePicture" EntitySet="EmployeePicture" />
           </AssociationSet>
           <AssociationSet Name="FK_EmployeeUser" Association="Self.FK_EmployeeUser">
             <End Role="User" EntitySet="User" />
@@ -1496,7 +1509,8 @@
           <Property Name="EmpShiftsCompleted" Type="Int32" />
           <NavigationProperty Name="User" Relationship="Self.FK_EmployeeUser" FromRole="Employee" ToRole="User" />
           <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STakeEmployee" FromRole="Employee" ToRole="Stock_Take" />
-          <NavigationProperty Name="EmployeeImages" Relationship="OrdraDBModel.FK_EmployeeImage" FromRole="Employee" ToRole="EmployeeImage" />
+          <NavigationProperty Name="EmployeeCVs" Relationship="OrdraDBModel.FK_EmployeeCV" FromRole="Employee" ToRole="EmployeeCV" />
+          <NavigationProperty Name="EmployeePictures" Relationship="OrdraDBModel.FK_EmployeePicture" FromRole="Employee" ToRole="EmployeePicture" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -2562,13 +2576,23 @@
             <End Role="Container" EntitySet="Containers" />
             <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
+          <EntitySet Name="EmployeeCVs" EntityType="OrdraDBModel.EmployeeCV" />
+          <EntitySet Name="EmployeePictures" EntityType="OrdraDBModel.EmployeePicture" />
+          <AssociationSet Name="FK_EmployeeCV" Association="OrdraDBModel.FK_EmployeeCV">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeeCV" EntitySet="EmployeeCVs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeePicture" Association="OrdraDBModel.FK_EmployeePicture">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeePicture" EntitySet="EmployeePictures" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="One_Time_Pin">
           <Key>
             <PropertyRef Name="OTPID" />
           </Key>
           <Property Name="OTPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OTP" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="OTP" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="ExpiryTime" Type="DateTime" Precision="3" />
           <Property Name="GenerationTime" Type="DateTime" Precision="3" />
           <Property Name="userID" Type="Int32" />
@@ -2607,6 +2631,50 @@
             </Principal>
             <Dependent Role="Sale">
               <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EmployeeCV">
+          <Key>
+            <PropertyRef Name="CVID" />
+          </Key>
+          <Property Name="CVID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CVCaption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CVName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="OrdraDBModel.FK_EmployeeCV" FromRole="EmployeeCV" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmployeePicture">
+          <Key>
+            <PropertyRef Name="ImgID" />
+          </Key>
+          <Property Name="ImgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImgCaption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImgName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="OrdraDBModel.FK_EmployeePicture" FromRole="EmployeePicture" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_EmployeeCV">
+          <End Type="OrdraDBModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.EmployeeCV" Role="EmployeeCV" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeeCV">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeePicture">
+          <End Type="OrdraDBModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.EmployeePicture" Role="EmployeePicture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeePicture">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3072,22 +3140,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AppEmployees">
-            <EntityTypeMapping TypeName="OrdraDBModel.AppEmployee">
-              <MappingFragment StoreEntitySet="AppEmployee">
-                <ScalarProperty Name="EmpShiftsCompleted" ColumnName="EmpShiftsCompleted" />
-                <ScalarProperty Name="EmpStartDate" ColumnName="EmpStartDate" />
-                <ScalarProperty Name="EmpEmail" ColumnName="EmpEmail" />
-                <ScalarProperty Name="EmpCellNo" ColumnName="EmpCellNo" />
-                <ScalarProperty Name="EmpSurname" ColumnName="EmpSurname" />
-                <ScalarProperty Name="EmpName" ColumnName="EmpName" />
+          <EntitySetMapping Name="EmployeeCVs">
+            <EntityTypeMapping TypeName="OrdraDBModel.EmployeeCV">
+              <MappingFragment StoreEntitySet="EmployeeCV">
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="CVName" ColumnName="CVName" />
+                <ScalarProperty Name="CVCaption" ColumnName="CVCaption" />
+                <ScalarProperty Name="CVID" ColumnName="CVID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="EmployeeImages">
-            <EntityTypeMapping TypeName="OrdraDBModel.EmployeeImage">
-              <MappingFragment StoreEntitySet="EmployeeImage">
+          <EntitySetMapping Name="EmployeePictures">
+            <EntityTypeMapping TypeName="OrdraDBModel.EmployeePicture">
+              <MappingFragment StoreEntitySet="EmployeePicture">
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="ImgName" ColumnName="ImgName" />
                 <ScalarProperty Name="ImgCaption" ColumnName="ImgCaption" />
@@ -3095,7 +3160,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

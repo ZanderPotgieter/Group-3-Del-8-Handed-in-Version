@@ -534,7 +534,7 @@ GO
 
 use OrdraDB
 
-CREATE TABLE EmployeeImage
+CREATE TABLE EmployeePicture
 (
 	ImgID int primary key identity(1,1) Not null,
 	ImgCaption varchar(50),
@@ -555,21 +555,6 @@ CREATE TABLE EmployeeCV
 	REFERENCES Employee(EmployeeID),
 )
 GO
-
-CREATE TABLE AppEmployee
-(
-	EmployeeID int primary key identity(1,1) NOT NULL,
-	EmpName varchar(75) NULL,
-	EmpSurname varchar(75) NULL,
-	EmpCellNo varchar(75) NULL,
-	EmpEmail varchar(75) NULL,
-	EmpStartDate date NULL,
-	EmpShiftsCompleted int NULL,
-)
-GO
-
-
-
 
 INSERT INTO User_Type (UTypeDescription)
 VALUES ('Manager'), 

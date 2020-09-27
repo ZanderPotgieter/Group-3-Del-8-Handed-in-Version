@@ -113,6 +113,7 @@ export class SearchemployeeComponent implements OnInit {
         this.showAll = true;
         this.showResults= false; 
         this.showUpload = false;
+        this.showSearch = false;
       }
     })
   

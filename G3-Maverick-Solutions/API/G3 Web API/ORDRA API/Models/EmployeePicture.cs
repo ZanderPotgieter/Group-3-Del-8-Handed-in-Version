@@ -12,14 +12,13 @@ namespace ORDRA_API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AppEmployee
+    public partial class EmployeePicture
     {
-        public int EmployeeID { get; set; }
-        public string EmpName { get; set; }
-        public string EmpSurname { get; set; }
-        public string EmpCellNo { get; set; }
-        public string EmpEmail { get; set; }
-        public Nullable<System.DateTime> EmpStartDate { get; set; }
-        public Nullable<int> EmpShiftsCompleted { get; set; }
+        public int ImgID { get; set; }
+        public string ImgCaption { get; set; }
+        public string ImgName { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+    
+        public virtual Employee Employee { get; set; }
     }
 }

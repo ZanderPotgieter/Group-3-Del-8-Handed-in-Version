@@ -12,11 +12,11 @@ namespace ORDRA_API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class EmployeeImage
+    public partial class EmployeeCV
     {
-        public int ImgID { get; set; }
-        public string ImgCaption { get; set; }
-        public string ImgName { get; set; }
+        public int CVID { get; set; }
+        public string CVCaption { get; set; }
+        public string CVName { get; set; }
         public Nullable<int> EmployeeID { get; set; }
     
         public virtual Employee Employee { get; set; }

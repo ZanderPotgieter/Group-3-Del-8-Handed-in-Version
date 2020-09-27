@@ -39,10 +39,12 @@ export class SearchContainerComponent implements OnInit {
   All(){
     this.allContainers = this.api.getAllContainers();
     this.showAll = true;
+    this.showSearch = false;
   }
 
   Input(){
     this.showSearch = true;
+    this.showAll = false;
   }
   Search(){
     this.api.searchContainer(this.name).subscribe( (res:any)=> {

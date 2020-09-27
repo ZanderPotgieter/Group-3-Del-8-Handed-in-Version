@@ -28,6 +28,7 @@ namespace ORDRA_API.Models
         public Nullable<int> CustomerOrderStatusID { get; set; }
         public string CusOrdNumber { get; set; }
         public Nullable<System.DateTime> CusOrdDate { get; set; }
+        public Nullable<int> ContainerID { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual Customer_Order_Status Customer_Order_Status { get; set; }
@@ -38,5 +39,6 @@ namespace ORDRA_API.Models
         public virtual ICollection<Payment> Payments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product_Order_Line> Product_Order_Line { get; set; }
+        public virtual Container Container { get; set; }
     }
 }

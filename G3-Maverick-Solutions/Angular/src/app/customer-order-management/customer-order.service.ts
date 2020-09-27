@@ -4,25 +4,47 @@ import { HttpHeaders } from '@angular/common/http';
 import { Observable, from } from 'rxjs'; 
 import {CustomerOrder} from './customer-order';
 import{map} from 'rxjs/operators';
+//import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs';
+import { Customer } from '../customer-management/customer';
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerOrderService {
 
+ 
+
+
   constructor(private http: HttpClient) { }
 
-  private customerIDSourse = new Subject<number>();
-  customerId$ =this.customerIDSourse.asObservable();
+  
+  /*private customerIDSource = new BehaviorSubject<number>();
+  currentCustomerID = this.customerIDSource.asObservable();
+  changeCustomerID(customerID: number){
+    this.currentCustomerID.next(customerID);
+  }*/
 
-  sendCustomerID(customerID : number){
-    this.customerIDSourse.next(customerID);
+
+
+
+  private customerIDSource = new Subject<number>();
+  currentCustomerID = this.customerIDSource.asObservable;
+  //customerId$ =this.customerIDSourse.asObservable();
+
+  changeCustomerID(customerID : number){
+    this.customerIDSource.next(customerID);
   }
+
+
+
+
 
   url = 'https://localhost:44399/Api/CustomerOrders'
 
+  urlcus = 'https://localhost:44399/Api/Customer'
+
   searchByCell(cell : string){  
-    return this.http.get(this.url + '/searchByCell?cell='+cell).pipe(map(result => result));  
+    return this.http.get(this.url + '/searchByCell/'+cell).pipe(map(result => result));  
   } 
   
   searchByOrderNo(orderNo : string){  
@@ -35,7 +57,7 @@ export class CustomerOrderService {
 
 
   initiatePlaceOrder(customerID : number ){
-    return this.http.get(this.url + '/initiatePlaceOrder/'+customerID); 
+    return this.http.get(this.url + '/initiatePlaceOrder/'+customerID).pipe(map(result => result)); 
 
   }
 
@@ -57,10 +79,10 @@ export class CustomerOrderService {
     CustomerOrderID, httpOptions); 
   }
 
-  sendNotification(orders: CustomerOrder[]) : Observable<CustomerOrder[]>{
+  sendNotification(selectedOrders: string[]){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
     return this.http.post<CustomerOrder[]>(this.url + '/sendNotification',  
-    orders, httpOptions); 
+    selectedOrders, httpOptions); 
   }
 
   getOrdersByStatus(status: string){
@@ -70,5 +92,10 @@ export class CustomerOrderService {
   searchCustomer(name: string, surname: string) {  
     return this.http.get('https://localhost:44399/Api/Customer/searchCustomer?name='+name+'&surname='+surname);  
   }
+
+  getAllCustomers(): Observable<Customer[]> {  
+    return this.http.get<Customer[]>(this.urlcus + '/getAllCustomers');  
+  }
+
 
 }

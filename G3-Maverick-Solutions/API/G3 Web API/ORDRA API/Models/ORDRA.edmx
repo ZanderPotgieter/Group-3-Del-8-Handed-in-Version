@@ -90,6 +90,7 @@
           <Property Name="CustomerID" Type="int" />
           <Property Name="UserID" Type="int" />
           <Property Name="CustomerOrderStatusID" Type="int" />
+          <Property Name="ContainerID" Type="int" />
           <Property Name="CusOrdNumber" Type="varchar" MaxLength="5" />
           <Property Name="CusOrdDate" Type="date" />
         </EntityType>
@@ -346,6 +347,7 @@
           </Key>
           <Property Name="SaleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" />
+          <Property Name="ContainerID" Type="int" />
           <Property Name="SaleDate" Type="date" />
         </EntityType>
         <EntityType Name="Shift">
@@ -464,6 +466,18 @@
             </Principal>
             <Dependent Role="Area">
               <PropertyRef Name="ProvinceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_COContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Customer_Order" Type="Self.Customer_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Customer_Order">
+              <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -947,6 +961,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SOPProduct">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Supplier_Order_Product" Type="Self.Supplier_Order_Product" Multiplicity="*" />
@@ -1098,6 +1124,10 @@
           <AssociationSet Name="FK_AProvince" Association="Self.FK_AProvince">
             <End Role="Province" EntitySet="Province" />
             <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COContainer" Association="Self.FK_COContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Customer_Order" EntitySet="Customer_Order" />
           </AssociationSet>
           <AssociationSet Name="FK_COCustomer" Association="Self.FK_COCustomer">
             <End Role="Customer" EntitySet="Customer" />
@@ -1259,6 +1289,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Sale" EntitySet="Sale" />
           </AssociationSet>
+          <AssociationSet Name="FK_SContainer" Association="Self.FK_SContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Sale" EntitySet="Sale" />
+          </AssociationSet>
           <AssociationSet Name="FK_SOPProduct" Association="Self.FK_SOPProduct">
             <End Role="Product" EntitySet="Product" />
             <End Role="Supplier_Order_Product" EntitySet="Supplier_Order_Product" />
@@ -1328,6 +1362,8 @@
           <NavigationProperty Name="Locations" Relationship="Self.FK_LContainer" FromRole="Container" ToRole="Location" />
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RPContainer" FromRole="Container" ToRole="Return_Product" />
           <NavigationProperty Name="Managers" Relationship="Self.Manager_Container" FromRole="Container" ToRole="Manager" />
+          <NavigationProperty Name="Customer_Order" Relationship="OrdraDBModel.FK_COContainer" FromRole="Container" ToRole="Customer_Order" />
+          <NavigationProperty Name="Sales" Relationship="OrdraDBModel.FK_SContainer" FromRole="Container" ToRole="Sale" />
         </EntityType>
         <EntityType Name="Container_Product">
           <Key>
@@ -1391,6 +1427,8 @@
           <NavigationProperty Name="Product_Backlog" Relationship="Self.FK_PBLogCustomerOrder" FromRole="Customer_Order" ToRole="Product_Backlog" />
           <NavigationProperty Name="Payments" Relationship="Self.FK_PCusOrder" FromRole="Customer_Order" ToRole="Payment" />
           <NavigationProperty Name="Product_Order_Line" Relationship="Self.FK_POLCustomerOrder" FromRole="Customer_Order" ToRole="Product_Order_Line" />
+          <Property Name="ContainerID" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_COContainer" FromRole="Customer_Order" ToRole="Container" />
         </EntityType>
         <EntityType Name="Customer_Order_Status">
           <Key>
@@ -1662,6 +1700,8 @@
           <NavigationProperty Name="Payments" Relationship="Self.FK_SalePayment" FromRole="Sale" ToRole="Payment" />
           <NavigationProperty Name="Product_Sale" Relationship="Self.FK_PSSale" FromRole="Sale" ToRole="Product_Sale" />
           <NavigationProperty Name="User" Relationship="Self.FK_SaleUser" FromRole="Sale" ToRole="User" />
+          <Property Name="ContainerID" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_SContainer" FromRole="Sale" ToRole="Container" />
         </EntityType>
         <EntityType Name="Shift">
           <Key>
@@ -2514,11 +2554,13 @@
             <End Role="User" EntitySet="Users" />
             <End Role="One_Time_Pin" EntitySet="One_Time_Pin" />
           </AssociationSet>
-          <EntitySet Name="AppEmployees" EntityType="OrdraDBModel.AppEmployee" />
-          <EntitySet Name="EmployeeImages" EntityType="OrdraDBModel.EmployeeImage" />
-          <AssociationSet Name="FK_EmployeeImage" Association="OrdraDBModel.FK_EmployeeImage">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="EmployeeImage" EntitySet="EmployeeImages" />
+          <AssociationSet Name="FK_COContainer" Association="OrdraDBModel.FK_COContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Customer_Order" EntitySet="Customer_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SContainer" Association="OrdraDBModel.FK_SContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="One_Time_Pin">
@@ -2544,37 +2586,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AppEmployee">
-          <Key>
-            <PropertyRef Name="EmployeeID" />
-          </Key>
-          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmpName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-          <Property Name="EmpSurname" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-          <Property Name="EmpCellNo" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-          <Property Name="EmpEmail" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-          <Property Name="EmpStartDate" Type="DateTime" Precision="0" />
-          <Property Name="EmpShiftsCompleted" Type="Int32" />
-        </EntityType>
-        <EntityType Name="EmployeeImage">
-          <Key>
-            <PropertyRef Name="ImgID" />
-          </Key>
-          <Property Name="ImgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImgCaption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImgName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <NavigationProperty Name="Employee" Relationship="OrdraDBModel.FK_EmployeeImage" FromRole="EmployeeImage" ToRole="Employee" />
-        </EntityType>
-        <Association Name="FK_EmployeeImage">
-          <End Type="OrdraDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.EmployeeImage" Role="EmployeeImage" Multiplicity="*" />
+        <Association Name="FK_COContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Customer_Order" Role="Customer_Order" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
             </Principal>
-            <Dependent Role="EmployeeImage">
-              <PropertyRef Name="EmployeeID" />
+            <Dependent Role="Customer_Order">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2658,6 +2690,7 @@
           <EntitySetMapping Name="Customer_Order">
             <EntityTypeMapping TypeName="OrdraDBModel.Customer_Order">
               <MappingFragment StoreEntitySet="Customer_Order">
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="CustomerOrderID" ColumnName="CustomerOrderID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -2902,6 +2935,7 @@
           <EntitySetMapping Name="Sales">
             <EntityTypeMapping TypeName="OrdraDBModel.Sale">
               <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="SaleID" ColumnName="SaleID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />

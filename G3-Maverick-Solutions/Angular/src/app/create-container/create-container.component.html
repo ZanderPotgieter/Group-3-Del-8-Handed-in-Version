@@ -12,7 +12,7 @@
                 <br>
                 <span style="color:red" *ngIf="angForm.get('ConName').errors && (angForm.get('ConName').touched || angForm.get('ConName').dirty)">
                     <span *ngIf="angForm.get('ConName').errors.required">Name is required.</span>
-                    <span *ngIf="angForm.get('ConName').errors.minlength || angForm.get('ConName').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('ConName').errors.minlength || angForm.get('ConName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
                     <span *ngIf="angForm.get('ConName').errors.pattern">Only text characters.</span>
                 </span>
             </div>    
@@ -23,7 +23,7 @@
                 <br>
                 <span style="color:red" *ngIf="angForm.get('ConDescription').errors && (angForm.get('ConDescription').touched || angForm.get('ConDescription').dirty)">
                     <span *ngIf="angForm.get('ConDescription').errors.required">Description is required.</span>
-                    <span *ngIf="angForm.get('ConDescription').errors.minlength">Description must be greater that 2 characters</span>
+                    <span *ngIf="angForm.get('ConDescription').errors.minlength">Description must be greater than 2 characters</span>
                     <span *ngIf="angForm.get('ConDescription').errors.pattern">Only text characters.</span>
                 </span>
             </div>

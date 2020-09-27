@@ -141,9 +141,12 @@ CREATE TABLE Sale
 (
 	SaleID int Primary Key identity(1,1) Not Null,
 	UserID int,
+	ContainerID int,
 	SaleDate date,
 	CONSTRAINT FK_SaleUser FOREIGN KEY (UserID)
-    REFERENCES [User](UserID)
+    REFERENCES [User](UserID),
+	CONSTRAINT FK_SContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID)
 )
 GO
 
@@ -209,6 +212,7 @@ CREATE TABLE Customer_Order
 	CustomerID int,
 	UserID int,
 	CustomerOrderStatusID int,
+	ContainerID int,
 	CusOrdNumber varchar(5),
 	CusOrdDate date
 	CONSTRAINT FK_COCustomer FOREIGN KEY (CustomerID)
@@ -217,6 +221,8 @@ CREATE TABLE Customer_Order
     REFERENCES [User](UserID),
 	CONSTRAINT FK_COStatus FOREIGN KEY (CustomerOrderStatusID)
     REFERENCES Customer_Order_Status(CustomerOrderStatusID),
+	CONSTRAINT FK_COContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID)
 )
 GO
 
@@ -625,10 +631,10 @@ VALUES ('Fulfilled'),
 	   ('Placed'),
 	   ('Retrieved');
 
-INSERT INTO Sale (UserID, SaleDate)
-VALUES ('2', '2020-07-23'),
-	   ('3', '2020-01-16'),
-	   ('1', '2020-05-12');
+INSERT INTO Sale (UserID, ContainerID, SaleDate)
+VALUES ('2', '1','2020-07-23'),
+	   ('3', '1', '2020-01-16'),
+	   ('1', '3', '2020-05-12');
 
 INSERT INTO Product_Category (PCatName, PCatDescription)
 VALUES ('Stationery', 'writing and other office materials'),
@@ -660,10 +666,10 @@ VALUES ('Wanda', 'Carmicheal', '0824563214', 'wandacarmicheal@gmail.com', '381',
 	   ('Melinda', 'Dube', '0717599838', 'melindadube@yahoo.com', '12', 'Arcadia Street', '0018', 'Arcadia'),
 	   ('Carol', 'Carter', '0627893452', 'carolcarter@gmail.com', '56', 'Sisulu Streett', '0012', 'Islington');
 
-INSERT INTO Customer_Order (CustomerID, UserID, CustomerOrderStatusID, CusOrdNumber, CusOrdDate)
-VALUES ('1', '2', '4', '2722', '2020-08-02'),
-	   ('3', '1', '3', '2726', '2020-08-12'),
-	   ('2', '3', '1', '2710', '2020-06-15');
+INSERT INTO Customer_Order (CustomerID, UserID, CustomerOrderStatusID, ContainerID, CusOrdNumber, CusOrdDate)
+VALUES ('1', '2', '4', '1','2722', '2020-08-02'),
+	   ('3', '1', '3', '1', '2726', '2020-08-12'),
+	   ('2', '3', '1', '2', '2710', '2020-06-15');
 
 INSERT INTO Payment (PaymentTypeID, SaleID, CustomerOrderID, PayDate, PayAmount)
 VALUES ('1', '2', '1', '2020-08-17', '160'),

@@ -58,7 +58,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Order(s) Not Found";
+                    toReturn.Message = "No Customer Orders were found. Please double check the inserted criteria.";
                 }
 
             }
@@ -281,7 +281,7 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            toReturn.Message = "Product not found";
+                            toReturn.Message = "No products were found. All products seem to be in stock.";
                         }
                     }
                     toReturn.products = products;
@@ -290,7 +290,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = " Customer Not Found";
+                    toReturn.Message = "No Customer was found. Please check the inserted criteria and try again.";
                 }
             }
 
@@ -372,12 +372,12 @@ namespace ORDRA_API.Controllers
 
                     else
                     {
-                        toReturn.Message = "Error adding Products";
+                        toReturn.Message = "Something went wrong adding the products!";
                     }
 
                     //Set the return Objects
                     toReturn.newOrder = searchByOrderNo(newOrderNo);
-                    toReturn.Message = "Order Succesfully Placed";
+                    toReturn.Message = "Success! Order was placed successfully and email confirmation sent.";
 
                 }
                 else

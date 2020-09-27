@@ -7,7 +7,9 @@
                     <div class="divleft">
                         <label class="subheadinglabel">Please select the report criteria </label>
                         <br><br>
-                        <label for="OptionSelect">Customer order status</label>
+
+                        <!-- Adjustable criteria  -->
+                        <label for="OptionSelect">Customer order status</label>     
                         <select class="form-control" id="OptionSelect" #optName name = "Option" [(ngModel)] = "selectedOption">
                             <option *ngFor = "let option of options" [value]= "option.id" data-name="option.data">{{option.data}}</option>
                         </select>
@@ -22,9 +24,11 @@
             
         <br>
         <button type="submit" (click)="GenerateReport()" >Generate Report</button> 
-        <button type="button" (click)="DownloadPDF()" >Download Report</button>       
+        <!-- <button type="button" (click)="DownloadPDF()" >Download Report</button>        -->
         <!-- <button type="button" (click)="PrintReport()" >Print Report</button> -->
         <button type="button" (click)="cancel()" >Cancel</button>
+        <br>
+        <label><span style="white-space: nowrap; text-align: center;">This report shows customer orders according to the selected report criteria</span></label>
         <br>
             
         <div class="card">

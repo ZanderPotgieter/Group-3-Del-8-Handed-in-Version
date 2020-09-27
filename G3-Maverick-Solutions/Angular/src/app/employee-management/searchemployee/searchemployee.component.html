@@ -1,54 +1,114 @@
-<h1>Search Employee Details</h1>
-<br>
-<div *ngIf="isSearchError" class="red-text center error-message">
-  <i class="material-icons">error</i> Cannot find given User 
-</div>
-<div class="card"> 
-    <p style="text-align: left;color: orange;"><u>Enter Name and Surname to search:</u></p>
-    <br>
-    <div class="row">
-        <div class="input-field col s6">
-          <label>Employee Name:</label>
-          <input type="text" >
+<h1>Search Employee Profile</h1>
+<form>
+    <div *ngIf = "bar" class="card">
+        <button type="submit" (click) ="search()">Search</button>
+        <button type="submit" (click) ="viewAll()">View all Employees</button>
+    </div>
+
+    <div *ngIf = "showSearch" class="card" >
+            
+        <div  class="divleft" >
+            <br>
+            <label class="subheadinglabel" >Enter Employee Name and Surname To search:</label>
+            <br>
+            <label for="name">Name:       </label>
+            <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
+            <br>
+
+            <label for="cusSurname">Surname:   </label>
+            <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
+            
+            <div class="divleft">
+                <button type="submit" (click) ="searchEmployee()">Search</button>
+                <button type="submit" (click)="gotoEmployeeManagement()">Cancel</button>
+            </div>
         </div>
-        <div class="input-field col s6">
-            <label>Employee Surame:</label>
-            <input type="text"  >
     </div>
-    <div class="row">
-      <div class="input-field col s12">
-        <button class="btn-large btn-submit" type="submit" >Search</button>
-        <button class="btn-large btn-submit" type="submit">Cancel</button>
+
+    <div *ngIf="showUpload">
+        <div>
+            <button type="submit" (click)="getImg()">View Image</button>
+            <button type="submit">View CV</button>
+        </div>
+    </div>
+
+
+
+
+    <div *ngIf ="showImg" class="card">
+        <div class="container">
+            <img [src]=getSantizeUrl(imageUrl) img style="width:450px; height: 400px">      
+        </div>
       </div>
+
+    <div class="card" *ngIf= "showAll"> 
+        <p class="subheadinglabel">List of all the Employees:</p>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Cell</th>
+                <th>Action</th>
+            </tr>
+
+
+            <tr *ngFor="let item of user">
+                
+                <td>{{item.UserName}}</td>
+                <td>{{item.UserSurname}}</td>
+                <td>{{item.UserCell}}</td>
+                <td><button (click)="view(item.UserName, item.UserSurname)">View</button></td>
+            </tr>
+            
+        </table> 
+        <button type="submit" (click)="cancel()">Cancel</button> 
     </div>
-  </div>
 
-    <!--Display Emplyee details below-->
- <div>
- <p style="text-align: left;color: orange;"><u>Employee General Details:</u></p>
- <div style="width: 100%; overflow: hidden;">       
-    <div style="width: 300px; float: left;">
-          <label>Name:</label>
-          <p type="text" name="employeename"></p>
-          <label>Cell Number:</label>
-          <p type="text" name="cellno"></p>
-          <label>Work Start Date:</label>
-          <p type="text" name="startdate"></p>
-     </div>
+    <br><br>
+    <div *ngIf = "showResults" class="card">
+        <div class="divleft">
+            <br>
+            <label class="subheadinglabel">Employee General Details:</label>
+            <br>   
+            <div class="divleft" >
+                <label for="UserName">Name:       </label>
+                <input class="searchinput" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
+                <br>
 
-     <div style="margin-left: 5px;">
-        <label>Employee Surname:</label>
-        <p type="text" name="employeesurname"></p>
-        <label>Employee Email:</label>
-        <p type="text" name="employeeemail"></p>
-        <label>shifts Completed:</label>
-        <p type="text" name="startdate"></p>
-   </div>
+                <label for="UserSurname">Surname:   </label>
+                <input class="searchinput" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
+                <br>
+                <label for="UserCell">Cell Number:  </label>
+                <input class="searchinput" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
+                <br>
+                <label for="UserEmail">Email:      </label>
+                <input class="searchinput" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputEnabled">
+                <br>
+            </div>
+        </div>>
 
-<div class="row">
- <div class="input-field col s12">
-   <button class="btn-large btn-submit" type="submit" routerLink="/updateemployee">Update </button>
-   <button class="btn-large btn-submit" type="submit" >Delete</button>
- </div>
-</div>
-</div>
+        <br>
+        <div class="divleft" >
+            <label class="subheadinglabel">Employee Work Details:</label>
+            <br>
+            <label for="EmployeeStartDate">Work Start Date: </label>
+            <input class="searchinput" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
+            <br>
+            <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
+            <input class="searchinput" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+        </div>
+
+        <br><br>
+        <div class="divleft" *ngIf="showButtons">
+        <button type="submit" (click)="update()">Update</button>
+        <button type="submit" (click)="deleteEmployee()">Delete</button>
+        </div>
+
+        <div class="divleft" *ngIf="showSave" >
+            <button type="submit" (click)="Save()">Save</button>
+            <button type="submit" (click)="cancel()">Cancel</button>
+        </div>
+
+    </div>
+</form>

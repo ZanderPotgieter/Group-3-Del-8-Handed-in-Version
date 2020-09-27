@@ -1,135 +1,173 @@
-<div *ngIf='main'>
-  <h1>Create Employee Profile</h1>
-<br>
-<form [formGroup] = "employeeForm"  #form='ngForm' (submit)="onSubmit(form)">
+<body>
+    <h1>Create Employee Profile</h1>
+    <form [formGroup] = 'empForm'>
 
-  <div class="card"> 
-  <p style="text-align: left;color: orange;"><u>Enter Name and Surname to search:</u></p>
-  <br>
-  <div class="row">
-    <div class="mb-4">
-      <label>Employee Name:</label>
-      <input type="text" formControlName="EmpName" #EmployeeName="ngModel" name="EmployeeName" [(ngModel)]="formModel.EmployeeName" pattern="[a-zA-Z]*" required>
-       <span style="color:red" *ngIf="employeeForm.get('EmpName').errors && (employeeForm.get('EmpName').touched || employeeForm.get('EmpName').dirty)">
-        <span *ngIf="employeeForm.get('EmpName').errors.required">Name is required</span>
-        <span *ngIf="employeeForm.get('EmpName').errors.minLength">Name must be greater than 2 letters</span>
-        <span *ngIf="employeeForm.get('EmpName').errors.pattern">Only text characters</span>
-      </span> 
-    </div>
+      <div *ngIf = "showSearch" class="card" >
+            
+        <div  class="divleft" >
+            <br>
+            <label class="subheadinglabel" >Enter Employee Name and Surname To search:</label>
+            <br>
+            <label for="name">Name:       </label>
+            <input class="searchinput" formControlName="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" pattern="[a-zA-Z ]*" required>
+            <br>
+            <span style="color:red" *ngIf="empForm.get('name').errors && (empForm.get('name').touched || empForm.get('name').dirty)">
+              <span *ngIf="empForm.get('name').errors.required">Name is required.</span>
+              <span *ngIf="empForm.get('name').errors.minlength || empForm.get('name').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+              <span *ngIf="empForm.get('name').errors.pattern">Only text characters.</span>
+            </span>
+            <br>
 
-      <div class="mb-4">
-          <label>Employee Surname:</label>
-          <input type="text" #EmployeeSurname="ngModel" name="EmployeeSurname" [(ngModel)]="formModel.EmployeeSurname" required   >
-     </div>
-   <div class="row">
-      <div class="input-field col s12">
-      <button style="background-color:rgba(251,113,0,1);color:white" type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid">Search</button>
+            <label for="name">Surname:       </label>
+            <input class="searchinput" formControlName="surname" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
+            <br>
+            <span style="color:red" *ngIf="empForm.get('surname').errors && (empForm.get('surname').touched || empForm.get('surname').dirty)">
+              <span *ngIf="empForm.get('surname').errors.required">Surname is required.</span>
+              <span *ngIf="empForm.get('surname').errors.minlength || empForm.get('surname').errors.maxlength">Surname must be greater that 2 characters and less than 25 characters</span>
+              <span *ngIf="empForm.get('surname').errors.pattern">Only text characters.</span>
+            </span>
+            <br>>
+
+            <div class="divleft">
+                <button type="submit" (click) ="searchEmployee()">Search</button>
+                <button type="submit" (click)="gotoEmployeeManagement()">Cancel</button>
+            </div>
+          </div>
+      </div>
+     
+    <br><br>
+        <div *ngIf = "showResults" class="card">
+            <br>
+            <label class="subheadinglabel">Employee General Details:</label>
+            <br>   
+            <div class="divleft" >
+                <label for="UserName">Name:       </label>
+                <input class="searchinput" formControlName="UserName" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
+                
+            </div>
+
+            <div class="divleft" >
+                <label for="UserSurname">Surname:   </label>
+                <input class="searchinput" formControlName="UserSurname" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
+            </div>
+    
+            
+            <div class="divleft" >
+                <label for="UserCell">Cell Number:  </label>
+                <input class="searchinput" formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
+            </div>
+
+            <div class="divleft" >
+                <label for="UserEmail">Email:      </label>
+                <input class="searchinput" formControlName="UserEmail" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail"required [readonly] = "this.inputEnabled">
+            </div>
+    
+        <br>
+      </div>
+        
+
+    <br>
+    <div *ngIf = "showNewEmp">
+      <div class="card">
+        <br>
+        <label class="subheadinglabel" >Enter Employee Profile Details</label>
+        <br>
+        <div class="divleft"  > 
+          <label for="EmpStartDate">Work Start Date:       </label>
+          <input type="date" formControlName="empStartDate" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
+          <span style="color:red" *ngIf="empForm.get('empStartDate').errors && (empForm.get('empStartDate').touched || empForm.get('empStartDate').dirty)">
+          <span *ngIf="empForm.get('empStartDate').errors.required">Employee Start date is required.</span>
+          </span>
+        </div>
+
+        <!-- <div class="divleft"  *ngIf = "showText"> 
+          <label for="EmpStartDate">Work Start Date:       </label>
+          <input type="text" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
+        </div> -->
+
+        <div class="divleft">
+          <label for="EmpShiftsCompleted">Shifts Completed:      </label>
+          <input type="number" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" id="EmpShiftsCompleted" name="EmpShiftsCompleted"  required>
+          <span style="color:red" *ngIf="empForm.get('empShiftsCompleted').errors && (empForm.get('empShiftsCompleted').touched || empForm.get('empShiftsCompleted').dirty)">
+                <span *ngIf="empForm.get('empShiftsCompleted').errors.required">Number of shifts completed is required.</span>
+          </span>
+        </div>
+
+        <br>
+        <div class="divleft"  >
+          <button type="submit"  (click)="createEmployee()">Save Profile</button>
+          <button type="submit" (click)="cancel()">Cancel</button>
+          <button type="submit" (click)="gotoUploadImage()" >Upload Image</button>
+          <button type="submit"  (click)="gotoUploadCv()">Upload CV</button>
+        </div>
       </div>
   </div>
-</div>
-</div>
-</form>
-<button class="btn-large btn-submit" (click)="clear()">Cancel</button>
-</div>
 
-<div *ngIf='variable'>
-  <h1>Found Employee Profile</h1>
-<br>
-<div class="card"> 
-    <!--Hide dive above on  succesful find of employee-->
-    <p style="text-align: left;color: orange;"><u>General Details:</u></p>
-    <div style="width: 50%; overflow: hidden;">
-         
-        <div style="width: 300px; float: left;">
-              <label>Employee Name:</label>
-              <input type="text"name="EmpName"  value="{{service.empList.EmpName}}">
-              <label>Cell Number:</label>
-              <input type="text"  name="EmpCellNo"  value="{{service.empList.EmpCellNo}}"  >
-              <p type="text" name="cellno"></p>
-         </div>
-
-         <div style="width: 300px; float: right;">
-            <label>Employee Surname:</label>
-            <input type="text"  name="EmpSurname" value="{{service.empList.EmpSurname}}">
-            <label>Employee Email:</label>
-            <input type="email" name="EmpEmail"  value="{{service.empList.EmpEmail}}">
-            <p type="text" name="employeeemail"></p>
-       </div>
-
+  <div *ngIf = "showUpload">
+    <div class="card">
+      <button type="submit" (click)="gotoUploadImage()" >Upload Image</button>
+      <button type="submit"  (click)="gotoUploadCv()">Upload CV</button>
     </div>
 
-    <p style="text-align: left;color: orange;"><u>Enter Employee Details:</u></p>
- <div class="row">
-      <div class="input-field col s6">
-        <label>Start Date:</label>
-        <input  type="date" name="EmpStartDate" value="{{service.empList.EmpStartDate}}">
+    <div *ngIf ="showUploadImg" class="card">
+      <div class="container">
+        <div class ="row">
+          <div class="col s8 offset-2">
+            <div class="card-panel teal lighten-2">
+              <label class="subheadinglabel" >Add Employee Image</label>
+            </div>
+            <form  #imageForm = ngForm (ngSubmit)= "OnSubmit(Caption, Image, employee.EmployeeID)">
+              <div class="row">
+                <div class="input-field col s12">
+                  <label for="Caption">Caption: </label>
+                  <input type="text" formControlName="caption"  #caption ngModel name="caption" id="caption" pattern="[[a-zA-Z ]*]" required>
+                  <!-- <span style="color:red" *ngIf="imgForm.get('caption').errors && (imgForm.get('caption').touched || imgForm.get('caption').dirty)">
+                    <span *ngIf="imgForm.get('caption').errors.required">Caption is required.</span>
+                    <span *ngIf="imgForm.get('caption').errors.minlength || imgForm.get('caption').errors.maxlength">Surname must be greater that 2 characters and less than 25 characters</span>
+                    <span *ngIf="imgForm.get('caption').errors.pattern">Only text characters.</span>
+                  </span> -->
+                </div>
+              </div>
+              <img [src]="imageUrl" img style="width:350px; height: 300px"> <br>
+                <input type="file" formControlName="image" name="image" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
+                <button type="submit" class="btn-large btn-submit" [disabled]="Image.value=='' || !imageForm.valid">Submit </button> 
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="input-field col s6">
-          <label>Shifts Completed:</label>
-     <input type="number"  name="EmpShiftsCompleted" value="{{service.empList.EmpShiftsCompleted}}">
-  </div>
-
-  <div class="row">
-    <div class="input-field col s12">
-      <button class="btn-large btn-submit" (click)="goUpdate()" type="submit">Update Profile</button>
-      <button class="btn-large btn-submit"    (click)="clear()">Cancel</button>
-    </div>
-  </div>
-
-</div>
-</div>
-</div>
-
-<div *ngIf='add'>
-  <h1>Create Employee Profile</h1>
-<br>
-  <form class="mb-4"  #form='ngForm' autocomplete="off" (submit)="submitEmployee(form)">
-  <h3>Emplyee Not Found: Please add one below :)</h3>
-  <div class="card"> 
-  
-    <!--Hide dive above on  succesful find of employee-->
-    <p style="text-align: left;color: orange;"><u>General Details:</u></p>
-    <div style="width: 50%; overflow: hidden;">
-        <div style="width: 300px; float: left;">
-              <label>Employee Name:</label>
-              <input type="text"name="EmpName" #EmpName="ngModel"[(ngModel)]="formModel1.EmpName" >
-              <label>Cell Number:</label>
-              <input type="text"  name="EmpCellNo" #EmpCellNo="ngModel"[(ngModel)]="formModel1.EmpCellNo"  >
-              <p type="text" name="cellno"></p>
-         </div>
-
-         <div style="width: 300px; float: right;">
-            <label>Employee Surname:</label>
-            <input type="text"  name="EmpSurname" #EmpSurname="ngModel"[(ngModel)]="formModel1.EmpSurname">
-            <label>Employee Email:</label>
-            <input type="email" name="EmpEmail" #EmpEmail="ngModel"[(ngModel)]="formModel1.EmpEmail" >
-            <p type="text" name="employeeemail"></p>
-       </div>
-
     </div>
 
- <p style="text-align: left;color: orange;"><u>Enter Employee Details:</u></p>
- <div class="row">
-
-      <div class="input-field col s6">
-        <label>Start Date:</label>
-        <input type="date" name="EmpStartDate" #EmpStartDate="ngModel"[(ngModel)]="formModel1.EmpStartDate" >
+  <div *ngIf ="showUploadCv" class="card">
+    <div class="container">
+      <div class ="row">
+        <div class="col s8 offset-2">
+          <div class="card-panel teal lighten-2">
+            <label class="subheadinglabel" >Add Employee CV</label>
+          </div>
+          <form  #imageForm = ngForm (ngSubmit)= "OnSubmitCV(Caption, CV, employee.EmployeeID)">
+            <div class="row">
+              <div class="input-field col s12">
+                <label for="CaptionCV" visible="false">Caption: </label>
+                <input type="text" formControlName="captionCV"  #captionCV ngModel name="captionCV" id="captionCV" pattern="[[a-zA-Z ]*]" required>
+                <!-- <span style="color:red" *ngIf="cvForm.get('captionCV').errors && (cvForm.get('captionCV').touched || cvForm.get('captionCV').dirty)">
+                  <span *ngIf="cvForm.get('captionCV').errors.required">Caption is required.</span>
+                  <span *ngIf="cvForm.get('captionCV').errors.minlength || Form.get('captionCV').errors.maxlength">Surname must be greater that 2 characters and less than 25 characters</span>
+                  <span *ngIf="cvForm.get('captionCV').errors.pattern">Only text characters.</span>
+                </span> -->
+              </div>
+            </div>
+            <iframe src="/assets/doc/OrdraPDF.pdf" type="application/pdf" style="width:100%; height: 600px"> </iframe><br>
+              <input type="file" formControlName="cv" name="cv" #CV accept="pdf/*" (change)="handleFileInputCV($event.target.files)">
+              <button type="submit" class="btn-large btn-submit" >Submit </button> 
+          </form>
+        </div>
       </div>
-      <div class="input-field col s6">
-          <label>Shifts Completed:</label>
-     <input type="number"  name="EmpShiftsCompleted" #EmpShiiftsCompleted="ngModel"[(ngModel)]="formModel1.EmpShiftsCompleted">
-  </div>
-
-  <div class="row">
-    <div class="input-field col s12">
-      <button class="btn-large btn-submit" type="submit" [disabled]="form.invalid">Save Profile</button>
+    </div>
     </div>
   </div>
 
-  </div>
+    </form>
+  </body>
+    
 
-  </div>
-</form>
-<button class="btn-large btn-submit"   (click)="clear()">Cancel</button>
 
-</div>

@@ -48,8 +48,13 @@ export class CustomerOrderService {
   } 
   
   searchByOrderNo(orderNo : string){  
-    return this.http.get(this.url + '/searchByOrderNo/'+orderNo).pipe(map(result => result));  
+    return this.http.get(this.url + '/searchByOrderNo?orderNo='+orderNo).pipe(map(result => result));  
   } 
+
+  searchAll(){  
+    return this.http.get(this.url + '/searchAll').pipe(map(result => result));  
+  } 
+
 
   initiatePlaceOrder(customerID : number ){
     return this.http.get(this.url + '/initiatePlaceOrder/'+customerID).pipe(map(result => result)); 

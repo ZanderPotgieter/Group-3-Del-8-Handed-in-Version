@@ -224,8 +224,8 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
-            //try
-           // {
+            try
+           {
 
 
                 User user = db.Users.Where(z =>z.UserEmail == email).FirstOrDefault();
@@ -276,12 +276,12 @@ namespace ORDRA_API.Controllers
                 }
 
                 return toReturn;
-                //}
-                //catch
-                //{
-                //toReturn.Error = "Mail unsuccessfully sent";
-                // }
-                //return toReturn;
+                }
+                catch
+                {
+               toReturn.Error = "Mail unsuccessfully sent";
+                }
+                return toReturn;
         }
 
         //checking the entered otp with the generated otp

@@ -16,6 +16,7 @@ namespace ORDRA_API.Controllers
     [RoutePrefix("API/CustomerOrders")]
     public class CustomerOrdersController : ApiController
     {
+
         //DATABASE INITIALIZING
         OrdraDBEntities db = new OrdraDBEntities();
 
@@ -34,7 +35,26 @@ namespace ORDRA_API.Controllers
                 List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).Where(x => x.Customer.CusCell == cell).ToList();
                 if (customerOrders != null)
                 {
-                    toReturn = customerOrders;
+                    List<dynamic> orders = new List<dynamic>();
+                    foreach (var ord in customerOrders)
+                    {
+                        DateTime ordDate = Convert.ToDateTime(ord.CusOrdDate);
+                        dynamic order = new ExpandoObject();
+                        order.CustomerOrderID = ord.CustomerOrderID;
+                        order.CusName = ord.Customer.CusName;
+                        order.CusSurname = ord.Customer.CusSurname;
+                        order.CusOrdNumber = ord.CusOrdNumber;
+                        order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
+                        order.CusOrdStatus = ord.Customer_Order_Status.CODescription;
+                        orders.Add(order);
+
+
+
+                    }
+
+
+
+                    toReturn = orders;
                 }
                 else
                 {
@@ -149,9 +169,9 @@ namespace ORDRA_API.Controllers
                         cusdetails.CusEmail = order.Customer.CusEmail;
 
                         //Populate With Calculated Details
-                        calculations.TotalIncVat = TotalIncVat; //. ToString("#.##");
-                        calculations.TotalExcVat = TotalExcVat; //.ToString("#.##");
-                        calculations.Vat = vat;//.ToString("#.##");
+                        calculations.TotalIncVat = TotalIncVat.ToString("#.##");
+                        calculations.TotalExcVat = TotalExcVat.ToString("#.##");
+                        calculations.Vat = vat.ToString("#.##");
 
 
                         //set objects to return
@@ -206,7 +226,7 @@ namespace ORDRA_API.Controllers
 
 
             try
-            {   
+            {
                 //get customer details
                 Customer customer = new Customer();
                 customer = db.Customers.Where(x => x.CustomerID == customerID).FirstOrDefault();
@@ -239,21 +259,30 @@ namespace ORDRA_API.Controllers
                     toReturn.productCategories = categories;
 
                     //Get List Of products with current price
+                    List<Container_Product> containerprods = db.Container_Product.Include(x => x.Product).Where(x => x.CPQuantity < 1).ToList();
                     List<Product> productsList = db.Products.ToList();
                     List<dynamic> products = new List<dynamic>();
-                    foreach (var prod in productsList)
+                    foreach (var prod in containerprods)
                     {
                         Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).FirstOrDefault();
-                        dynamic productDetails = new ExpandoObject();
-                        productDetails.ProductCategoryID = prod.ProductCategoryID;
-                        productDetails.ProductID = prod.ProductID;
-                        productDetails.ProdDescription = prod.ProdDesciption;
-                        productDetails.Prodname = prod.ProdName;
-                        productDetails.Quantity = 0;
-                        productDetails.Price = (double)price.UPriceR;
-                        productDetails.Subtotal = 0.0;
+                        if (price != null)
+                        {
+                            double Price = (double)price.UPriceR;
+                            dynamic productDetails = new ExpandoObject();
+                            productDetails.ProductCategoryID = prod.Product.ProductCategoryID;
+                            productDetails.ProductID = prod.ProductID;
+                            productDetails.ProdDescription = prod.Product.ProdDesciption;
+                            productDetails.Prodname = prod.Product.ProdName;
+                            productDetails.Quantity = 0;
+                            productDetails.Price = Math.Round(Price, 2);
+                            productDetails.Subtotal = 0.0;
 
-                        products.Add(productDetails);
+                            products.Add(productDetails);
+                        }
+                        else
+                        {
+                            toReturn.Message = "Product not found";
+                        }
                     }
                     toReturn.products = products;
 
@@ -261,13 +290,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Something Went Wrong: Customer Not Found";
+                    toReturn.Message = " Customer Not Found";
                 }
             }
 
             catch (Exception error)
             {
-                toReturn.Message = "Something Went Wrong: " + error.Message;
+                toReturn.Message = error.Message;
             }
 
             return toReturn;
@@ -327,6 +356,14 @@ namespace ORDRA_API.Controllers
                             db.Product_Order_Line.Add(orderProd);
                             db.SaveChanges();
 
+                            Product_Backlog product_Backlog = new Product_Backlog();
+                            product_Backlog.Customer_Order = placedOrder;
+                            product_Backlog.Product = product;
+                            product_Backlog.QauntityToOrder = prod.PLQuantity;
+
+                            db.Product_Backlog.Add(product_Backlog);
+                            db.SaveChanges();
+
                         }
 
                         //Get the placed Orders Order Number
@@ -335,7 +372,7 @@ namespace ORDRA_API.Controllers
 
                     else
                     {
-                        toReturn.Message = "Something Went Wrong: Error adding Products";
+                        toReturn.Message = "Error adding Products";
                     }
 
                     //Set the return Objects
@@ -345,13 +382,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Something Went Wrong: Null Parameters Received";
+                    toReturn.Message = " Null Parameters Received";
                 }
             }
 
             catch (Exception error)
             {
-                toReturn.Message = "Something Went Wrong: " + error.Message;
+                toReturn.Message = error.Message;
             }
 
             return toReturn;
@@ -360,7 +397,7 @@ namespace ORDRA_API.Controllers
         //collect Order Function
         [HttpPost]
         [Route("collectOrder")]
-        public dynamic collectOrder(Customer_Order order)
+        public dynamic collectOrder(int CustomerOrderID)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -368,7 +405,7 @@ namespace ORDRA_API.Controllers
             try
             {
                 //Get the Order from the db
-                Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == order.CustomerOrderID).FirstOrDefault();
+                Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == CustomerOrderID).FirstOrDefault();
 
                 //get the collected customer order status
                 Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "collected").FirstOrDefault();
@@ -381,7 +418,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error.Message;
+                toReturn = error.Message;
             }
 
             return toReturn;
@@ -391,7 +428,7 @@ namespace ORDRA_API.Controllers
         //collect Order Function
         [HttpPost]
         [Route("cancelOrder")]
-        public dynamic cancelOrder(Customer_Order order)
+        public dynamic cancelOrder(int CustomerOrderID)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -399,10 +436,10 @@ namespace ORDRA_API.Controllers
             try
             {
                 //Get the Order from the db
-                Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == order.CustomerOrderID).FirstOrDefault();
+                Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == CustomerOrderID).FirstOrDefault();
 
                 //check if order is collected
-                if (order.Customer_Order_Status.CODescription == "collected")
+                if (cus_order.Customer_Order_Status.CODescription == "collected")
                 {
                     toReturn.Message = "Collected Orders Can Not Be Cancelled";
                 }
@@ -411,17 +448,31 @@ namespace ORDRA_API.Controllers
                     //get the cancelled customer order status
                     Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "cancelled").FirstOrDefault();
 
+
                     //set order status to cancelled
                     cus_order.Customer_Order_Status = order_Status;
 
                     db.SaveChanges();
 
+
+                    //get products in order
+
+                    List<Product_Order_Line> orderProduct = db.Product_Order_Line.Include(x => x.Customer_Order).Include(x => x.Product).Where(x => x.Customer_Order.CustomerOrderID == cus_order.CustomerOrderID).ToList();
+                    foreach (var prod in orderProduct)
+                    {
+                        Return_Product return_Product = new Return_Product();
+                        return_Product.Product = prod.Product;
+                        return_Product.Quantity = prod.PLQuantity;
+
+                        db.Return_Product.Add(return_Product);
+
+                    }
                 }
 
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error.Message;
+                toReturn = error.Message;
             }
 
             return toReturn;
@@ -453,7 +504,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error.Message;
+                toReturn = error.Message;
             }
 
             return toReturn;
@@ -477,18 +528,14 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error.Message;
+                toReturn = error.Message;
             }
 
             return toReturn;
 
         }
 
+
+
     }
-
-
-
-
-
 }
-

@@ -262,6 +262,10 @@ sendEmail(){
     })
   }
 
+  onHome() {
+    this.router.navigate(['/user']);
+  }
+
   resetPassword()
   {
     this.api.resetPassword(this.email, this.password).subscribe((res : any)=>{

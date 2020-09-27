@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="OrdraDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Access">
+          <Key>
+            <PropertyRef Name="AccessID" />
+          </Key>
+          <Property Name="AccessID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccessDescription" Type="varchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Area">
           <Key>
             <PropertyRef Name="AreaID" />
@@ -415,6 +422,15 @@
           <Property Name="UserTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UTypeDescription" Type="varchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="User_Type_Access">
+          <Key>
+            <PropertyRef Name="UserTypeID" />
+            <PropertyRef Name="AccessID" />
+          </Key>
+          <Property Name="UserTypeID" Type="int" Nullable="false" />
+          <Property Name="AccessID" Type="int" Nullable="false" />
+          <Property Name="AccessGranted" Type="date" />
+        </EntityType>
         <EntityType Name="VAT">
           <Key>
             <PropertyRef Name="VATID" />
@@ -433,6 +449,18 @@
             </Principal>
             <Dependent Role="Area">
               <PropertyRef Name="AreaStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Access">
+          <End Role="Access" Type="Self.Access" Multiplicity="1" />
+          <End Role="User_Type_Access" Type="Self.User_Type_Access" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Access">
+              <PropertyRef Name="AccessID" />
+            </Principal>
+            <Dependent Role="User_Type_Access">
+              <PropertyRef Name="AccessID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1012,6 +1040,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserTypeAccess">
+          <End Role="User_Type" Type="Self.User_Type" Multiplicity="1" />
+          <End Role="User_Type_Access" Type="Self.User_Type_Access" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Type">
+              <PropertyRef Name="UserTypeID" />
+            </Principal>
+            <Dependent Role="User_Type_Access">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_USShift">
           <End Role="Shift" Type="Self.Shift" Multiplicity="1" />
           <End Role="User_Shift" Type="Self.User_Shift" Multiplicity="*" />
@@ -1037,6 +1077,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="OrdraDBModelStoreContainer">
+          <EntitySet Name="Access" EntityType="Self.Access" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area_Status" EntityType="Self.Area_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
@@ -1081,10 +1122,15 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Shift" EntityType="Self.User_Shift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Type" EntityType="Self.User_Type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Type_Access" EntityType="Self.User_Type_Access" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VAT" EntityType="Self.VAT" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AAreaStatus" Association="Self.FK_AAreaStatus">
             <End Role="Area_Status" EntitySet="Area_Status" />
             <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Access" Association="Self.FK_Access">
+            <End Role="Access" EntitySet="Access" />
+            <End Role="User_Type_Access" EntitySet="User_Type_Access" />
           </AssociationSet>
           <AssociationSet Name="FK_AProvince" Association="Self.FK_AProvince">
             <End Role="Province" EntitySet="Province" />
@@ -1277,6 +1323,10 @@
           <AssociationSet Name="FK_UserType" Association="Self.FK_UserType">
             <End Role="User_Type" EntitySet="User_Type" />
             <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTypeAccess" Association="Self.FK_UserTypeAccess">
+            <End Role="User_Type" EntitySet="User_Type" />
+            <End Role="User_Type_Access" EntitySet="User_Type_Access" />
           </AssociationSet>
           <AssociationSet Name="FK_USShift" Association="Self.FK_USShift">
             <End Role="Shift" EntitySet="Shift" />
@@ -1761,6 +1811,7 @@
           <Property Name="UserTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UTypeDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Users" Relationship="Self.FK_UserType" FromRole="User_Type" ToRole="User" />
+          <NavigationProperty Name="User_Type_Access" Relationship="OrdraDBModel.FK_UserTypeAccess" FromRole="User_Type" ToRole="User_Type_Access" />
         </EntityType>
         <EntityType Name="VAT">
           <Key>
@@ -2522,6 +2573,16 @@
             <End Role="Container" EntitySet="Containers" />
             <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
+          <EntitySet Name="Accesses" EntityType="OrdraDBModel.Access" />
+          <EntitySet Name="User_Type_Access" EntityType="OrdraDBModel.User_Type_Access" />
+          <AssociationSet Name="FK_Access" Association="OrdraDBModel.FK_Access">
+            <End Role="Access" EntitySet="Accesses" />
+            <End Role="User_Type_Access" EntitySet="User_Type_Access" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTypeAccess" Association="OrdraDBModel.FK_UserTypeAccess">
+            <End Role="User_Type" EntitySet="User_Type" />
+            <End Role="User_Type_Access" EntitySet="User_Type_Access" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="One_Time_Pin">
           <Key>
@@ -2567,6 +2628,49 @@
             </Principal>
             <Dependent Role="Sale">
               <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Access">
+          <Key>
+            <PropertyRef Name="AccessID" />
+          </Key>
+          <Property Name="AccessID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccessDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User_Type_Access" Relationship="OrdraDBModel.FK_Access" FromRole="Access" ToRole="User_Type_Access" />
+        </EntityType>
+        <EntityType Name="User_Type_Access">
+          <Key>
+            <PropertyRef Name="UserTypeID" />
+            <PropertyRef Name="AccessID" />
+          </Key>
+          <Property Name="UserTypeID" Type="Int32" Nullable="false" />
+          <Property Name="AccessID" Type="Int32" Nullable="false" />
+          <Property Name="AccessGranted" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Access" Relationship="OrdraDBModel.FK_Access" FromRole="User_Type_Access" ToRole="Access" />
+          <NavigationProperty Name="User_Type" Relationship="OrdraDBModel.FK_UserTypeAccess" FromRole="User_Type_Access" ToRole="User_Type" />
+        </EntityType>
+        <Association Name="FK_Access">
+          <End Type="OrdraDBModel.Access" Role="Access" Multiplicity="1" />
+          <End Type="OrdraDBModel.User_Type_Access" Role="User_Type_Access" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Access">
+              <PropertyRef Name="AccessID" />
+            </Principal>
+            <Dependent Role="User_Type_Access">
+              <PropertyRef Name="AccessID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTypeAccess">
+          <End Type="OrdraDBModel.User_Type" Role="User_Type" Multiplicity="1" />
+          <End Type="OrdraDBModel.User_Type_Access" Role="User_Type_Access" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Type">
+              <PropertyRef Name="UserTypeID" />
+            </Principal>
+            <Dependent Role="User_Type_Access">
+              <PropertyRef Name="UserTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3029,6 +3133,23 @@
                 <ScalarProperty Name="ExpiryTime" ColumnName="ExpiryTime" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="OTPID" ColumnName="OTPID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Accesses">
+            <EntityTypeMapping TypeName="OrdraDBModel.Access">
+              <MappingFragment StoreEntitySet="Access">
+                <ScalarProperty Name="AccessDescription" ColumnName="AccessDescription" />
+                <ScalarProperty Name="AccessID" ColumnName="AccessID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Type_Access">
+            <EntityTypeMapping TypeName="OrdraDBModel.User_Type_Access">
+              <MappingFragment StoreEntitySet="User_Type_Access">
+                <ScalarProperty Name="AccessGranted" ColumnName="AccessGranted" />
+                <ScalarProperty Name="AccessID" ColumnName="AccessID" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

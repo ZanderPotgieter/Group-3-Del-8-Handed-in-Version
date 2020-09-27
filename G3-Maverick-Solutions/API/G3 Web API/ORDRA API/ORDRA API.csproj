@@ -193,6 +193,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Access.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Area.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
@@ -329,6 +332,9 @@
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User_Type.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User_Type_Access.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VAT.cs">

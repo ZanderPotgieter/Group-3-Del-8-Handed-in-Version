@@ -238,6 +238,12 @@
     <Compile Include="Models\Employee.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmployeeCV.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmployeePicture.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Location.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>

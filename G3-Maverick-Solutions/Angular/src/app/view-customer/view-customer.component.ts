@@ -49,6 +49,10 @@ export class ViewCustomerComponent implements OnInit {
   
   } 
 
+  gotoPlaceOrder(){
+    this.router.navigate(['place-order']);
+  }
+
   ngOnInit(): void {
     this.loadDisplay();  
     this.cusForm= this.bf.group({  

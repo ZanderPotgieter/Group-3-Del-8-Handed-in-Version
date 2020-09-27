@@ -12,7 +12,7 @@
      
         <div class="divleft"  style="float:left; width:40%;">
             <label for="cusName">Name:     </label>
-            <input class="searchinput"  [(ngModel)]="name" type="text" id="name" name="name" [ngModelOptions]="{standalone: true}"><br>
+            <input class="searchinput" type="text" formControlName="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" id="name" name="name" pattern="[a-zA-Z ]*" required>
                   <span style="color:red" *ngIf="cusorderForm.get('name').errors && (cusorderForm.get('name').touched || cusorderForm.get('name').dirty)">
                     <br>
                       <span *ngIf="cusorderForm.get('name').errors.required">Name is required.<br></span>

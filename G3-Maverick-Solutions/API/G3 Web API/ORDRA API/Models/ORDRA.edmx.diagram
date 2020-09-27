@@ -95,6 +95,10 @@
         <AssociationConnector Association="OrdraDBModel.FK_OTPUser" />
         <AssociationConnector Association="OrdraDBModel.FK_COContainer" />
         <AssociationConnector Association="OrdraDBModel.FK_SContainer" />
+        <EntityTypeShape EntityType="OrdraDBModel.Access" Width="1.5" PointX="1.5" PointY="54" />
+        <EntityTypeShape EntityType="OrdraDBModel.User_Type_Access" Width="1.5" PointX="3.75" PointY="53.75" />
+        <AssociationConnector Association="OrdraDBModel.FK_Access" />
+        <AssociationConnector Association="OrdraDBModel.FK_UserTypeAccess" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -34,8 +34,10 @@ export class UpdateVatComponent implements OnInit {
   }
 
   save(ndx: number){
+    this.vat.VATID = this.list[ndx].VATID;
     this.vat.VATPerc = this.list[ndx].VATPerc;
     this.vat.VATStartDate = this.list[ndx].VATStartDate;
+    this.vat.VATEndDate = this.list[ndx].VATEndDate;
     this.saveupdate( this.vat);
 
   }

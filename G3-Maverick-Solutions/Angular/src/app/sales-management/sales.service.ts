@@ -11,11 +11,13 @@ import{map} from 'rxjs/operators';
 export class SalesService {
   constructor(private http: HttpClient) { }
 
-  url = 'https://localhost:44399/API/Sale'
+    })
+  };
+
+  url = 'https://localhost:44399/Api/Sale'
 
   initiateSale(){
     return this.http.get(this.url + '/initiateMakeSale').pipe(map(result => result)); 
-
   }
 
   makeSale(sale: Sale) : Observable<Sale>{
@@ -42,6 +44,9 @@ export class SalesService {
     return this.http.get(this.url + '/getAllSales');
   }
 
+  getUserDetails(session: any){
+    return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, this.httpOptions)
+  }
 
 
 

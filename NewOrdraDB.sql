@@ -29,6 +29,27 @@ CREATE TABLE [User]
 )
 GO
 
+CREATE TABLE[Access]
+(
+	AccessID int Primary Key identity(1,1) Not Null,
+	AccessDescription varchar(100)
+)
+GO
+
+CREATE TABLE [User_Type_Access](
+	UserTypeID int, 
+	AccessID int,
+	AccessGranted Date,
+	primary key(UserTypeID,AccessID),
+	CONSTRAINT FK_UserTypeAccess
+FOREIGN KEY (UserTypeID)
+    REFERENCES User_Type(UserTypeID),
+	CONSTRAINT FK_Access FOREIGN KEY (AccessID)
+	REFERENCES Access(AccessID)
+	)
+
+	GO
+
 CREATE TABLE [Login]
 (
 	LoginID int Primary Key identity(1,1) Not Null,
@@ -536,14 +557,16 @@ GO
 use OrdraDB
 
 INSERT INTO User_Type (UTypeDescription)
-VALUES ('Manager'), 
+VALUES ('Admin'),
 	   ('Employee'),
-	   ('Admin');
+	   ('Manager')
+
 
 INSERT INTO [User] (UserTypeID,[SessionID], UserPassword, UserName, UserSurname, UserCell, UserEmail)
-VALUES ('1', '897589589akje', 'Password!01', 'James', 'Smith', '081234987', 'Jamessmith@gmail.com'),
-	   ('1','kleh93yiu', 'WillBrwn90', 'Willow', 'Brown', '0717309827', 'willowbrown@yahoo.com'),
-	   ('2','fbewiu3y27', 'CartPat33', 'Patrick', 'Carter', '0629016806', 'patrickcarter@gmail.com');
+VALUES ('1', 'b55baf57-3403-401a-b5f1-1c5fc8994e28', '4F8C15ACAD5E6B9D6BD33848EB5EE883860DDFE189685D078B684FCC2C55A08E', 'James', 'Smith', '081234987', 'Jamessmith@gmail.com'),
+	   ('2','b55baf57-3403-401a-b5f1-1c5fc8994e28', '4F8C15ACAD5E6B9D6BD33848EB5EE883860DDFE189685D078B684FCC2C55A08E', 'Willow', 'Brown', '0717309827', 'willowbrown@yahoo.com'),
+	 ('3','b55baf57-3403-401a-b5f1-1c5fc8994e28', '4F8C15ACAD5E6B9D6BD33848EB5EE883860DDFE189685D078B684FCC2C55A08E', 'Patrick', 'Carter', '0629016806', 'patrickcarter@gmail.com');
+ 
 
 INSERT INTO [Login] (UserID, LoginTime, LoginDate)
 VALUES ('2', '2020-02-11', '06:45:51'),   
@@ -554,6 +577,78 @@ INSERT INTO Logout(UserID, LogoutTime, LogoutDate)
 VALUES ('2', '2020-02-11', '17:57:44'),   
 	   ('1', '2020-05-23', '16:12:19'),
 	   ('3', '2020-08-01', '18:07:32');
+
+INSERT INTO  Access(AccessDescription)
+VALUES('Administration'),
+		('Employee'),
+		('Sales'),
+		('Customer'),
+		('Customer Order'),
+		('Supplier'),
+		('Supplier Order'),
+		('Product Category'),
+		('Product'),
+		('Container'),
+		('Location'),
+		('Donations'),
+		('Reporting'),
+		('Area'),
+		('Province'),
+		('Manager'),
+		('Creditor'),
+		('Donation Recipient'),
+		('Creditor Paymnet');
+
+
+
+
+INSERT INTO User_Type_Access(AccessID, UserTypeID, AccessGranted)
+VALUES('1','1', '2020-09-26'),
+	('2','1','2020-09-26'),
+	('3','1','2020-09-26'),
+	('4','1','2020-09-26'),
+	('5','1','2020-09-26'),
+	('6','1','2020-09-26'),
+	('7','1','2020-09-26'),
+	('8','1','2020-09-26'),
+	('9','1','2020-09-26'),
+	('10','1','2020-02-26'),
+	('11','1','2020-02-26'),
+	('12','1','2020-02-26'),
+	('13','1','2020-02-26'),
+	('14','1','2020-02-26'),
+	('15','1','2020-02-26'),
+	('16','1','2020-02-26'),
+	('17','1','2020-02-26'),
+	('18','1','2020-02-26'),
+	('19','1','2020-02-26'),
+	('3','2','2020-09-26'),
+	('4','2','2020-09-26'),
+	('5','2','2020-09-26'),
+	('2','3','2020-09-26'),
+	('3','3','2020-09-26'),
+	('4','3','2020-09-26'),
+	('5','3','2020-09-26'),
+	('6','3','2020-09-26'),
+	('7','3','2020-09-26'),
+	('8','3','2020-09-26'),
+	('9','3','2020-09-26'),
+	('10','3','2020-02-26'),
+	('11','3','2020-02-26'),
+	('12','3','2020-02-26'),
+	('13','3','2020-02-26'),
+	('14','3','2020-02-26'),
+	('15','3','2020-02-26'),
+	('16','3','2020-02-26'),
+	('17','3','2020-02-26'),
+	('18','3','2020-02-26'),
+	('19','3','2020-02-26');
+
+
+		
+		
+
+
 
 INSERT INTO Employee (UserID, EmpStartDate, EmpShiftsCompleted)
 VALUES ('2', '2019-10-15', '56'),
@@ -608,7 +703,7 @@ VALUES ('Stationery', 'writing and other office materials'),
 INSERT INTO Product (ProductCategoryID,ProdBarcode, ProdName, ProdDesciption, ProdReLevel)
 VALUES ('1', '6007652013383', 'Treeline 5000 Staples', 'Brand: Treeline, Product: Staples, Colour: Silver, Type: chisel point', '5' ),
 	   ('1', ' 8801067431934', 'Onami White eraser', 'Brand: Onami , Product: Eraser, Colour: White, Type: Proffesional', '10'),
-	   ('1', '40155000405706', 'Pritt 20ml Correction Fluid', 'Brand: Pritt, Product: Collection fluid, Size: 20 ml', '15'),
+	   ('1', '4015000405706', 'Pritt 20ml Correction Fluid', 'Brand: Pritt, Product: Collection fluid, Size: 20 ml', '15'),
 	   ('3', '7622300069476', 'Osram LED Bulb 9W', 'Brand: Osram, Product: LED Bulb, Type: 9W', '15'),
 	   ('3', '6009801827254', 'Shang Adapter 15/13A', 'Brand: Shang, Product:Adapter, Type: 15/13A', '10'),
 	   ('2', '892630118012377413', 'NetOne Micro sim card', 'Brand: NetOne, Product:Sim card, Type: Micro', '5'),

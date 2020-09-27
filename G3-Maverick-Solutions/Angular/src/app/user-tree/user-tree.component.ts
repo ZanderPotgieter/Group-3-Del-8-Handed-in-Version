@@ -3,6 +3,7 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 import {Component, Injectable, OnInit} from '@angular/core';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {BehaviorSubject} from 'rxjs';
+import {AdminService} from '../admin.service';
 
 /**
  * Node for to-do item
@@ -50,11 +51,13 @@ export class ChecklistDatabase {
 
   get data(): TodoItemNode[] { return this.dataChange.value; }
 
-  constructor() {
+  constructor(private api: AdminService) {
     this.initialize();
   }
 
   initialize() {
+    
+ 
     // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
     //     file node as children.
     const data = this.buildFileTree(TREE_DATA, 0);

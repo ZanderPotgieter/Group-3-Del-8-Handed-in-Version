@@ -19,31 +19,36 @@
 
                 <!--To Display Table-->
                 <div id="TablesDiv">
+                    <label><span style="white-space: nowrap; text-align: right;">This report shows all registered system users and the position they work in</span></label>
                     <div class="Creditorstable">
                         <table class="table" id="jsPDFTable">
-                            <h1>Creditor Report</h1>
+                            <h1>Regostered Users Report</h1>
                             <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
                             
-                            <div *ngFor="let item of TableData; let i=index">
-                                <table class = "container table-latitude" id="testing{{i}}">
-                                    <caption><strong>{{item.SupName}} <br> (Account balance: R{{item.Balance}})</strong></caption>
+                            
+                                <table class = "container table-latitude" >
                                     
                                     <thead>
                                         <tr>
-                                            <th>Payment date</th>
-                                            <th>Payment amount (R)</th>
+                                            <th>User Name</th>
+                                            <th>User Surname</th>
+                                            <th>User Position</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        <tr *ngFor="let credPayments of item.Payments">
-                                            <td>{{credPayments.CredPaymentDate | date }}</td>
-                                            <td>{{credPayments.CredPaymentAmount}}</td>
+                                        <tr *ngFor="let item of TableData; let i=index">
+                                            <td>{{item.Name}}</td>
+                                            <td>{{item.Surname}}</td>
+                                            <td>{{item.UserType}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-
+                            
+                            
+                                <h2>Total Registered Users: {{Count}}</h2>
+                           
+                            
                             <br><br>
                             <!-- <div *ngIf="TableData" id="controlBreak">
                                 <div>Total amount owed to creditors : {{totalBalance}}</div>

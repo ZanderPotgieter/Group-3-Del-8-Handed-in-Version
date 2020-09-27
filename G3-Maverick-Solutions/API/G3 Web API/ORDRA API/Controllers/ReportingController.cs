@@ -635,5 +635,56 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        //Getting all Employees
+        [HttpGet]
+        [Route("getUserReportData")]
+        public object getUserReportData()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.TableData = null;
+
+            try
+            {
+                List<User> users = db.Users.ToList();
+                List<dynamic> userList = new List<dynamic>();
+                if (users == null)
+                {
+                    toReturn.Error = "There are no registered system users";
+                }
+                else
+                {
+                    int count = 0;
+                    foreach(var item in users)
+                    {
+                        dynamic userObj = new ExpandoObject();
+                        userObj.Name = item.UserName;
+                        userObj.Surname = item.UserSurname;
+                        User_Type type = db.User_Type.Where(z => z.UserTypeID == item.UserTypeID).FirstOrDefault();
+                        if (type !=null)
+                        {
+                            userObj.UserType = type.UTypeDescription;
+                        }
+                        else
+                        {
+                            userObj.UserType = "User";
+                        }
+                        userList.Add(userObj);
+                        count++;
+                    }
+
+                    toReturn.TableData = userList;
+                    toReturn.Count = count;
+                }
+            }
+            catch (Exception)
+            {
+                toReturn.Error = "Report failed to generate" ;
+            }
+
+            return toReturn;
+
+        }
+
     }
 }

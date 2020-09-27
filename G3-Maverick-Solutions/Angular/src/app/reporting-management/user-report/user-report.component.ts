@@ -13,15 +13,16 @@ import 'jspdf-autotable';
 //var jsPDF: any;
 
 @Component({
-  selector: 'app-creditors-report',
-  templateUrl: './creditors-report.component.html',
-  styleUrls: ['./creditors-report.component.scss']
+  selector: 'app-user-report',
+  templateUrl: './user-report.component.html',
+  styleUrls: ['./user-report.component.scss']
 })
-export class CreditorsReportComponent implements OnInit {
+export class UserReportComponent implements OnInit {
 
   showErrorMessage: boolean = false;
   TableData: object;
   totalBalance: any;
+  Count: any;
 
 
   ngOnInit(): void {
@@ -48,7 +49,7 @@ export class CreditorsReportComponent implements OnInit {
       let finalY = 10;
 
       doc.setFontSize(40);
-      doc.text("Creditor Order Report", (pageWidth/2)-15,15)
+      doc.text("User Report", (pageWidth/2)-15,15)
       doc.setFontSize(14);
       for (let i=0; i<length; i++)
       {
@@ -66,14 +67,14 @@ export class CreditorsReportComponent implements OnInit {
 
   GenerateReport()
   {
-    this.reportService.getCreditorReportData().subscribe((res) =>{
+    this.reportService.getUserReportData().subscribe((res) =>{
       console.log(res);
       this.TableData = res['TableData'];
-
-      let totalBal = res['TableData'].map((z) => z.Balances);
+      this.Count = res['Count'];
+      /* let totalBal = res['TableData'].map((z) => z.Balances);
       const sum = totalBal.reduce((a,b) => a+b, 0);
       this.totalBalance = sum || 0;
-      console.log(this.totalBalance); 
+      console.log(this.totalBalance);  */
     })
   }
 

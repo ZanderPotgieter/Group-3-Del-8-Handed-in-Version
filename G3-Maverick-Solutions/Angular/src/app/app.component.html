@@ -60,7 +60,7 @@
         <h2>Register</h2>
         <div class="form-group" >
           <label for="UserName">Name:</label>
-                <input type="text" formControlName="UserName" [(ngModel)]="user.UserName" id="UserName" name="UserName" pattern="[a-zA-Z ]*" required>
+                <input type="text" formControlName="UserName" [(ngModel)]="user.UserName" id="UserName" name="UserName" pattern="[a-zA-Z ]*" required><br>
                 
                 <span style="color:red" *ngIf="regForm.get('UserName').errors && (regForm.get('UserName').touched || regForm.get('UserName').dirty)">
                     <span *ngIf="regForm.get('UserName').errors.required">Name is required.<br></span>
@@ -83,8 +83,8 @@
                 <br>
                 <span style="color:red" *ngIf="regForm.get('UserCell').errors && (regForm.get('UserCell').touched || regForm.get('UserCell').dirty)">
                     <span *ngIf="regForm.get('UserCell').errors.required">Cell is required.<br></span>
-                    <span *ngIf="regForm.get('UserCell').errors.minlength">Cell must be 10 numbers</span>
-                    <span *ngIf="regForm.get('UserCell').errors.maxlength">Cell must be 10 numbers</span>
+                    <span *ngIf="regForm.get('UserCell').errors.minlength">Cell must be 10 numbers<br></span>
+                    <span *ngIf="regForm.get('UserCell').errors.maxlength">Cell must be 10 numbers<br></span>
                     <span *ngIf="regForm.get('UserCell').errors.pattern">Only numbers allowed.<br></span>
                 </span>
         </div>
@@ -111,7 +111,7 @@
       
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"(click)="saveUser()">Register</button>
+          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (ngModelchange)="Validate()" (click)="saveUser()">Register</button>
           <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
         </div>
       </div>

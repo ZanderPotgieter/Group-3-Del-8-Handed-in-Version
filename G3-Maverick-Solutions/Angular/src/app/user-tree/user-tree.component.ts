@@ -57,10 +57,19 @@ export class ChecklistDatabase {
 
   initialize() {
     
+    var mydata;
+    var nodes;
+
+   const dta =  this.api.getUserTypeAccess().subscribe( (res:any) =>{
+    console.log(res);
+    mydata = res.datMap;
+    nodes = res.rootLevelNodes;
+
+    })
  
     // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
     //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
+    const data = this.buildFileTree(mydata, 0);
 
     // Notify the change.
     this.dataChange.next(data);

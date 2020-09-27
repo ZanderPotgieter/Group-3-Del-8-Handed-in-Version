@@ -34,6 +34,10 @@ export class LoginService {
     return this.http.post(this.url + '/getUserDetails',session, this.httpOptions)
   }
 
+  getUserTypeAccess(){
+    return this.http.get(this.url + 'https://localhost:44399/Api/Admin/getUserTypeAccess')
+  }
+
   sendEmail(email: string)
   {
     return this.http.post(this.url + '/sendEmail?email=' + email, this.httpOptions);

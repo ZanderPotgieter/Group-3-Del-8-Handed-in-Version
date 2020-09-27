@@ -11,6 +11,9 @@ import{map} from 'rxjs/operators';
 export class SalesService {
   constructor(private http: HttpClient) { }
 
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
     })
   };
 

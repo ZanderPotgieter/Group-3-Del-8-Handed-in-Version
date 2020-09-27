@@ -91,6 +91,13 @@ export class AdminService {
     return this.http.put(this.url + '/addUserType?description='+ description, this.httpOptions)
   }
 
+  getUserAccess(session: any){
+    return this.http.post(this.url + '/getUserAccess',session, this.httpOptions)
+  }
+
+  getUserTypeAccess(){
+    return this.http.get(this.url + '/getUserTypeAccess')
+  }
   
 
 }

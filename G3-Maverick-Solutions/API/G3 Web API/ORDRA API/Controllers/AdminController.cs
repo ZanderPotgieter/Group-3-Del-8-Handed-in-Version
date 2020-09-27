@@ -302,8 +302,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                Payment_Type newType = db.Payment_Type.Where(x => x.PaymentTypeID == id).FirstOrDefault();
-                newType.PTDescription = description;
+               User_Type newType = db.User_Type.Where(x => x.UserTypeID == id).FirstOrDefault();
+                newType.UTypeDescription = description;
                 db.SaveChanges();
 
                 toReturn.Message = "Update User Type Successful";

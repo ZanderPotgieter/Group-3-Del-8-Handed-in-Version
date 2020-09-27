@@ -204,15 +204,15 @@ export class SearchSaleComponent implements OnInit {
      this.showListSearchByBarcode = true;
   }
 
-  view(val: number){
+  view(val: any){
     this.SaleID = val;
-    this.getSale(val)
+    this.getSale();
     
   }
   
-  getSale(val: number){
+  getSale(){
 
-    this.api.getSale(val).subscribe( (res:any)=> {
+    this.api.getSale(this.SaleID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
@@ -224,7 +224,7 @@ export class SearchSaleComponent implements OnInit {
        
         }
  
-        this.showList = true;
+        
       })
 
       this.showSale = true;

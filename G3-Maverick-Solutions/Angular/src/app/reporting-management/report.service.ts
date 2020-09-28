@@ -28,9 +28,9 @@ export class ReportService {
     return this.http.get(this.url + "getCustomerOrderReportData?selectedOptionID=" + selectedOption).pipe(map(result => result))
   }
 
-  getSupplierOrderReportData(selectedOption: number)
+  getSupplierReportData()
   {
-    return this.http.get(this.url + "getSupplierOrderReportData?selectedOptionID=" + selectedOption).pipe(map(result => result))
+    return this.http.get(this.url + "getSupplierReportData?selectedOptionID=" ).pipe(map(result => result))
   }
 
   getMarkedOffProductReportData()

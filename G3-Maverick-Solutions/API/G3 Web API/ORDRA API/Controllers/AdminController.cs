@@ -32,8 +32,8 @@ namespace ORDRA_API.Controllers
             toReturn.userAccess = new List<dynamic>();
             toReturn.user = new ExpandoObject();
 
-            //try
-            //{
+            try
+            {
                 string sessionID = session.token;
                 var user = db.Users.Include(x => x.User_Type).Where(x => x.SessionID == sessionID).FirstOrDefault();
                 if (user != null)
@@ -48,10 +48,10 @@ namespace ORDRA_API.Controllers
 
                 List<string> access = new List<string>();
                 List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Where(x => x.UserTypeID == user.UserTypeID).ToList();
-       
-                foreach( User_Type_Access acc in userAccess)
+
+                foreach (User_Type_Access acc in userAccess)
                 {
-                    
+
                     string name = acc.Access.AccessDescription;
                     access.Add(name);
 
@@ -59,17 +59,113 @@ namespace ORDRA_API.Controllers
 
                 toReturn.userAccess = access;
 
-                
 
-            //}
-            //catch
-            //{
-               // toReturn.Error = "Search Interrupted. Retry";
-            //}
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
 
             return toReturn;
 
         }
+
+        [HttpGet]
+        [Route("getAccessForUserType/{id}")]
+        public object getAccessForUserType(int id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+           // try
+            //{
+                //getting user type access
+                List<dynamic> access = new List<dynamic>();
+                List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Where(x => x.UserTypeID == id).ToList();
+
+                foreach (User_Type_Access acc in userAccess)
+                {
+                    dynamic item = new ExpandoObject();
+                    item.id = acc.Access.AccessID;
+                    item.description = acc.Access.AccessDescription;
+                    access.Add(item);
+
+                }
+
+                toReturn.userAccess = access;
+
+
+                //getting list of all access
+                List<dynamic> all_access = new List<dynamic>();
+                List<Access> all_userAccess = db.Accesses.ToList();
+
+                foreach (Access acc in all_userAccess)
+                {
+                    dynamic item = new ExpandoObject();
+                    item.id = acc.AccessID;
+                    item.description = acc.AccessDescription;
+                    all_access.Add(item);
+
+                }
+
+                toReturn.AllAccess = all_access;
+
+
+           // }
+            //catch
+            //{
+            //    toReturn.Error = "Search Interrupted. Retry";
+            //}
+            return toReturn;
+        }
+
+        [HttpPost]
+        [Route("setUserTypeAccess")]
+        public object setUserTypeAccess(List<User_Type_Access> user_type_access)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+
+
+               foreach(User_Type_Access Uaccess in user_type_access)
+                {
+                    Access access = db.Accesses.Where(x => x.AccessID == Uaccess.AccessID).FirstOrDefault();
+                    User_Type user_Type = db.User_Type.Where(x => x.UserTypeID == Uaccess.UserTypeID).FirstOrDefault();
+                    if( access != null && user_Type != null)
+                    {
+                        User_Type_Access newaccess = new User_Type_Access();
+                        newaccess.UserTypeID = user_Type.UserTypeID;
+                        newaccess.AccessID = access.AccessID;
+                        newaccess.AccessGranted = DateTime.Now;
+                        newaccess.Access = access;
+                        newaccess.User_Type = user_Type;
+
+                    User_Type_Access found = db.User_Type_Access.Where(x => x.AccessID == newaccess.AccessID && x.UserTypeID == newaccess.AccessID).FirstOrDefault();
+                    if (found == null)
+                    {
+                        db.User_Type_Access.Add(newaccess);
+                        db.SaveChanges();
+                    }
+
+                    }
+                }
+
+            toReturn.Message = "User Type Access Updated";
+                
+            }
+            catch
+           {
+                toReturn.Error = "Updating UserType Access Failed";
+            }
+
+            return toReturn;
+        }
+
+
+
 
         [HttpGet]
         [Route("getUserTypeAccess")]
@@ -77,10 +173,10 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            List<Tuple<string, List<string>>> usertypeAccess = new List<Tuple< string, List<string>>>();
+            List<Tuple<string, List<string>>> usertypeAccess = new List<Tuple<string, List<string>>>();
             //List<string, string[]> returnList = new List<string, string[]>();
-           // dynamic[,] returnList = { { }, { } };
-            
+            // dynamic[,] returnList = { { }, { } };
+
 
             try
             {
@@ -88,9 +184,9 @@ namespace ORDRA_API.Controllers
                 List<User_Type> userstypes = db.User_Type.ToList();
 
                 List<string> userTypes = new List<string>();
-               
 
-                foreach(User_Type user_type in userstypes)
+
+                foreach (User_Type user_type in userstypes)
                 {
 
                     string name = user_type.UTypeDescription;
@@ -106,12 +202,12 @@ namespace ORDRA_API.Controllers
                         string access = user_access.Access.AccessDescription;
                         userTypeAccess.Add(access);
 
-                        
+
                     }
 
-                    
 
-                    usertypeAccess.Add(new Tuple<string, List<string>>( name, userTypeAccess));
+
+                    usertypeAccess.Add(new Tuple<string, List<string>>(name, userTypeAccess));
 
 
 
@@ -131,12 +227,52 @@ namespace ORDRA_API.Controllers
 
         }
 
-
-
-
-
-
         [HttpGet]
+        [Route("getTreeData")]
+        public object getTreeData()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.treeObject = new ExpandoObject();
+
+
+            try
+
+            {
+                List<User_Type_Access> access = db.User_Type_Access.Include(x => x.Access).Include(x => x.User_Type).ToList();
+
+                dynamic treeObject = new ExpandoObject();
+                treeObject.UserTypes = null;
+
+              //list of dynamic objects for the chart
+            var userTypeList = access.GroupBy(x => x.User_Type.UTypeDescription);
+            List<dynamic> type = new List<dynamic>();
+            foreach (var group in userTypeList)
+            {
+                dynamic usertype = new ExpandoObject();
+                usertype.name = group.Key;
+                type.Add(usertype);
+            }
+
+                treeObject.UserTypes = type;
+                return (treeObject);
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+        }
+
+
+
+
+
+
+
+            [HttpGet]
         [Route("getAllUsers")]
         public object getAllUsers()
         {

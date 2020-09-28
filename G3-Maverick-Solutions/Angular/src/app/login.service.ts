@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpClientModule} from "@angular/common/http"; 
 import { Observable } from 'rxjs'; 
 import { User} from "./user";
+import {Container} from "./container-management/container";
 
 
 

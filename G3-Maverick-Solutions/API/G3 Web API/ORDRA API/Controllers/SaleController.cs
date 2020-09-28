@@ -20,9 +20,9 @@ namespace ORDRA_API.Controllers
         OrdraDBEntities db = new OrdraDBEntities();
 
         //Make Sale
-        [HttpGet]
+        [HttpPost]
         [Route("initiateMakeSale")]
-        public object initiateMakeSale()
+        public object initiateMakeSale(dynamic session)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -32,8 +32,28 @@ namespace ORDRA_API.Controllers
             toReturn.VAT = new ExpandoObject();
 
 
-            try
+           try
             {
+                Container con = new Container();
+                //get container of current user
+                string sessionID = session.token;
+                var user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
+                
+                if ( user.ContainerID == null)
+                {
+                    return toReturn.Error = ("Curent Container Not Found");
+                    
+                }
+                con = db.Containers.Where(x => x.ContainerID == user.ContainerID).FirstOrDefault();
+                if(con == null)
+            {
+                return toReturn.Error = ("Curent Container Not Found");
+            }
+                //get products in container 
+                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x => x.CPQuantity > 0 && x.ContainerID == con.ContainerID).ToList();
+
+
+
                 //get todays date 
                 toReturn.SaleDate = DateTime.Now;
 
@@ -43,22 +63,23 @@ namespace ORDRA_API.Controllers
                 //get VAT
                 toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now && x.VATEndDate >= DateTime.Now).FirstOrDefault();
 
-
+            if (conProd != null)
+            {
                 //Get List Of products with current price
                 List<Product> productsList = db.Products.ToList();
                 List<dynamic> products = new List<dynamic>();
-                foreach (var prod in productsList)
+                foreach (var prod in conProd)
                 {
                     Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).FirstOrDefault();
                     if (price != null)
                     {
                         double Price = (double)price.UPriceR;
                         dynamic productDetails = new ExpandoObject();
-                        productDetails.ProductCategoryID = prod.ProductCategoryID;
-                        productDetails.ProductID = prod.ProductID;
-                        productDetails.ProdBarcode = prod.ProdBarcode;
-                        productDetails.ProdDescription = prod.ProdDesciption;
-                        productDetails.Prodname = prod.ProdName;
+                        productDetails.ProductCategoryID = prod.Product.ProductCategoryID;
+                        productDetails.ProductID = prod.Product.ProductID;
+                        productDetails.ProdBarcode = prod.Product.ProdBarcode;
+                        productDetails.ProdDescription = prod.Product.ProdDesciption;
+                        productDetails.Prodname = prod.Product.ProdName;
                         productDetails.Quantity = 0;
                         productDetails.Price = Math.Round(Price, 2);
                         productDetails.Subtotal = 0.0;
@@ -67,6 +88,11 @@ namespace ORDRA_API.Controllers
                     }
                 }
                 toReturn.products = products;
+            }
+            else
+            {
+                return toReturn.Message = "No Products In Stock In Container";
+            }
 
 
 
@@ -127,15 +153,40 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             try
             {
+
+
+
             //get user who made sale
             // User user = db.Users.Where(x => x.UserID == newSale.UserID).FirstOrDefault();
             int id = (int)newSale.UserID;
 
-           // User saleUser = db.Users.Where(x => x.UserID == id).FirstOrDefault();
+                // User saleUser = db.Users.Where(x => x.UserID == id).FirstOrDefault();
 
-            
+                //get list of products in new Sale
+                List<Product_Sale> product_Sales = newSale.Product_Sale.ToList();
+
+                if (newSale.ContainerID != null)
+                {
+                    foreach (var prod in product_Sales)
+                    {
+                        Container_Product container_Product = db.Container_Product.Where(x => x.ProductID == prod.ProductID && x.ContainerID == newSale.ContainerID).FirstOrDefault();
+                        container_Product.CPQuantity = (container_Product.CPQuantity - prod.PSQuantity);
+                        if (container_Product.CPQuantity < 0)
+                        {
+                            return toReturn.Error = prod.Product.ProdName + " is out of stock";
+                        }
+                        else
+                        {
+                            db.SaveChanges();
+                        }
+
+                    }
+                }
+
                 //add sale
                 Sale sale = new Sale();
+                sale.ContainerID = newSale.ContainerID;
+                sale.Container = newSale.Container;
                 sale.UserID = newSale.UserID;
                 sale.SaleDate = DateTime.Now;
                 db.Sales.Add(sale);
@@ -145,8 +196,9 @@ namespace ORDRA_API.Controllers
                 //get the sale record just added
                 Sale addedSale = db.Sales.ToList().LastOrDefault();
 
-                //get list of products in new Sale
-                List<Product_Sale> product_Sales = newSale.Product_Sale.ToList();
+               
+
+
 
 
                 //Add the Product_Sale Records for each product
@@ -165,11 +217,14 @@ namespace ORDRA_API.Controllers
 
                 }
 
+             
 
 
 
-                //Add Payment details to sale reord, note a sale can have more than one payment method
-                List<Payment> payment = newSale.Payments.ToList();
+
+
+                    //Add Payment details to sale reord, note a sale can have more than one payment method
+                    List<Payment> payment = newSale.Payments.ToList();
                 foreach (var item in payment)
                 {
                     item.Sale = addedSale;

@@ -55,6 +55,7 @@ export class SearchSaleComponent implements OnInit {
   searchedSales: Sale[] = [];
   sale: Sale = new Sale();
   saleList: Sale[] = [];
+  session: any;
   
   viewSaleList: Sale[] = [];
 
@@ -66,7 +67,8 @@ export class SearchSaleComponent implements OnInit {
       prodSelection: ['', [Validators.required]],
     }); 
 
-    this.api.initiateSale().subscribe( (res:any)=> {
+    this.session = {"token" : localStorage.getItem("accessToken")}
+      this.api.initiateSale(this.session).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;

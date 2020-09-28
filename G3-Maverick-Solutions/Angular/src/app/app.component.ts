@@ -124,8 +124,11 @@ selectContainer(val: Container){
 
 setContainer(val: Container){
   this.currentContainer = val;
+  this.user.ContainerID = val.ContainerID;
+  this.user.Container = val;
   this.containerSelected = true;
   this.showContainerNotSelected = false;
+
 }
 
 home(){
@@ -227,6 +230,21 @@ this.showInvalidPassword = false;
 this.showResetPassword = false;
 this.showEnterOTP = false;
 this.showGenerateOTP = false;
+
+this.adminEnabled = false;
+this.employeeEnabled= false;
+this.salesEnabled= false;
+this.customerEnabled= false;
+this.customerOrderEnabled = false;
+this.supplierEnabled = false;
+this.supplierOrderEnabled = false;
+this.productEnabled = false;
+this.containerEnabled= false;
+this.gpsEnabled= false;
+this.donationsEnabled= false;
+this.managerEnabled= false;
+this.creditorEnabled= false;
+this.reportingEnabled = false;
 }
 
 cancel(){
@@ -368,7 +386,13 @@ sendEmail(){
      if(item == "Reporting"){
        this.reportingEnabled = true;
      }
-     
+     if(item == "Creditor")
+     {
+       this.creditorEnabled = true;
+     }
+     if(item == "Manager"){
+       this.managerEnabled = true;
+     }
 
       
     });

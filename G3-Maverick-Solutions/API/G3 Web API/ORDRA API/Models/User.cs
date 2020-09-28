@@ -35,6 +35,7 @@ namespace ORDRA_API.Models
         public string UserCell { get; set; }
         public string UserEmail { get; set; }
         public string SessionID { get; set; }
+        public Nullable<int> ContainerID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer_Order> Customer_Order { get; set; }
@@ -53,5 +54,6 @@ namespace ORDRA_API.Models
         public virtual ICollection<Shift> Shifts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<One_Time_Pin> One_Time_Pin { get; set; }
+        public virtual Container Container { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace ORDRA_API.Models
             this.Managers = new HashSet<Manager>();
             this.Customer_Order = new HashSet<Customer_Order>();
             this.Sales = new HashSet<Sale>();
+            this.Users = new HashSet<User>();
         }
     
         public int ContainerID { get; set; }
@@ -41,5 +42,7 @@ namespace ORDRA_API.Models
         public virtual ICollection<Customer_Order> Customer_Order { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sales { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> Users { get; set; }
     }
 }

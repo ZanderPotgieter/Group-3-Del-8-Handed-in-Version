@@ -95,15 +95,16 @@
         <AssociationConnector Association="OrdraDBModel.FK_OTPUser" />
         <AssociationConnector Association="OrdraDBModel.FK_COContainer" />
         <AssociationConnector Association="OrdraDBModel.FK_SContainer" />
-        <EntityTypeShape EntityType="OrdraDBModel.Access" Width="1.5" PointX="1.5" PointY="54" />
-        <EntityTypeShape EntityType="OrdraDBModel.User_Type_Access" Width="1.5" PointX="3.75" PointY="53.75" />
-        <AssociationConnector Association="OrdraDBModel.FK_Access" />
-        <AssociationConnector Association="OrdraDBModel.FK_UserTypeAccess" />
         <EntityTypeShape EntityType="OrdraDBModel.EmployeeCV" Width="1.5" PointX="8.25" PointY="54" />
         <EntityTypeShape EntityType="OrdraDBModel.EmployeePicture" Width="1.5" PointX="8.25" PointY="47.25" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeeCV" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeePicture" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeeImage" />
+        <AssociationConnector Association="OrdraDBModel.FK_Container" />
+        <EntityTypeShape EntityType="OrdraDBModel.Access" Width="1.5" PointX="1.5" PointY="54" />
+        <EntityTypeShape EntityType="OrdraDBModel.User_Type_Access" Width="1.5" PointX="3.75" PointY="53.625" />
+        <AssociationConnector Association="OrdraDBModel.FK_Access" />
+        <AssociationConnector Association="OrdraDBModel.FK_UserTypeAccess" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpClientModule} from "@angular/common/http"; 
 import { Observable } from 'rxjs'; 
 import { User} from "./user";
+import {UserTypeAccess} from './user-type-access';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,20 @@ export class AdminService {
     return this.http.get(this.url + '/getAllTypesAndUsers')
   }
 
+
+  getTreeData(){
+    return this.http.get(this.url + '/getTreeData')
+  }
+
+  getAccessForUserType(id: number){
+    return this.http.get(this.url + '/getAccessForUserType/'+id)
+
+  }
+setUserTypeAccess(UserTypeAccess: UserTypeAccess[]){
+  return this.http.post(this.url + '/setUserTypeAccess',this.httpOptions)
+  
+
+}
   getAllUserTypes(){
     return this.http.get(this.url + '/getAllUserTypes')
   }

@@ -1,1 +1,181 @@
+<body>
+    <h1> User Type Access Management</h1>
+    <form>
+        <div>
+        <div class="card" style="float: left; width:40%; padding: 0px;" >
 
+                <div class="divleft" >
+                    <label class="displaylabel" style="width: 100%;"> Select User Type Access to Edit:</label>
+                </div>
+            <div style="width: 100;" >
+                <ul class = "list">
+                    <li class = "list">
+                         <button (click)="search()" style="border-radius: 20px; width: 10%; height:30px; background-color: rgb(255, 251, 230);" ><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>Usertypes<button style="border-radius: 10px; width: 30%; height:30px;" (click)="add()">new</button>
+                    </li>
+ 
+                <mat-list class = "list">
+                    <div *ngIf="showadd" >
+                        <mat-list-item class = "list">
+                            <div><input style="width: 70%" type="text" name="description" [(ngModel)]="addDes" required plceholder="new user type">
+                           <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230); " (click)="saveadd()"><i class="tiny material-icons" style="color: black;" >save</i></button>
+                        </div>
+                        </mat-list-item>
+                    </div>
+                     <div style="width: 80%; text-align:left;" *ngFor="let item of list; index as ndx;">
+                         <mat-list-item class = "list"><label>     </label><button  style="border-radius: 10px; width: 30px; height:30px; background-color: rgb(255, 251, 230); "(click)="update(ndx)"><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>{{item.description}}</mat-list-item>
+                         <div *ngIf="ndx == id">
+                            <mat-list>
+                               
+                            <div style="width: 100%; text-align:left;"  *ngFor="let thing of userAccess; index as ndx;">
+                                <mat-list-item class = "list">
+                                    <label>     </label>
+                                    <label>     </label>
+                                    <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);" (click)="delete(ndx)"><i class="tiny material-icons" style="color: black;">delete</i></button>
+                                    {{thing.description}}
+                                    
+                                </mat-list-item>
+                                   
+                            </div>
+                        </mat-list>
+                        </div>
+                    </div>
+                     
+                     
+                 </mat-list>
+             </ul>
+            </div>
+      
+
+
+        </div>
+        
+        
+        <div class= card  style="float: right; width:55.5%">
+            <div class="divleft">
+             
+                <label style="width: 100%;">Add Access To:{{selectedtype.description}} Usertype </label><br>
+                        <div class="divleft" >
+                            <label for="Product">Select: </label>
+                             <select required name="accessSelection" [(ngModel)]="accessSelection" (ngModelChange)="addAccess($event)">
+                                 <option *ngFor="let access of allAccess" [ngValue]="access">{{access.description}}</option>
+                             </select>
+                             <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);"(click)="listAccess()"><i class="tiny material-icons" style="color: black;">save</i></button>
+                         </div>
+                         
+            
+            
+            <div class="divleft">
+                <button type ="submit" style="width: 50%"(click)="saveAccess()">Save {{selectedtype.description}} Updates</button>
+                
+            </div>
+            <div class="divleft">
+                <button type ="submit" (click)="Cancel()">Cancel</button>
+            </div>
+        </div>
+
+        </div>
+        <div style:="float: right; width:0.05%">
+
+        </div>
+    
+    </form>
+</body>
+  
+  
+  
+  
+  
+  
+  
+ <!--<body>
+        
+        <form >
+          <div  class="card"> 
+
+            <div class="divleft" style="padding: 2px 2px;">
+              <label class="subheadinglabel" >User Types</label>
+            </div>
+
+            <div class="divleft">
+                <table>
+                    <th style="width: 5%; padding:5px"></th>
+                    <th style="text-align: left;">Description</th>
+                    <th style="width: 20%;"><button style="border-radius: 10px; width: 60%;" (click)="add()"><i class="small material-icons" >add</i></button></th>
+                   
+                  
+                    <tr *ngIf="showadd">
+                        <td ></td>
+                        <td><input style="width: 70%" type="text" name="description" [(ngModel)]="addDes" required></td>
+                        <td><button style="border-radius: 10px; width: 60%;" (click)="saveadd()"><i class="small material-icons" plceholder="new item">save</i></button></td>
+                        
+                      
+                    </tr>
+                    <tr *ngFor="let item of list; index as ndx; trackBy:trackByndx;">
+                        <td>{{ndx+1}}</td>
+                        <td><input style="width: 70%" type = "text"  name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].description"></td>
+                        <td ><button  style="border-radius: 10px; width: 60%;" (click)="update(ndx)"><i class="small material-icons" >edit</i></button></td>
+                        
+                    </tr>
+                 
+                </table>
+                <br>
+                <button type="submit" (click)="Cancel()">Cancel</button>
+            </div>
+            <br>
+        </div>
+
+            <div class="card">
+                <div class ="divleft">
+                    <label>User Type: {{selectedtype.description}} </label><br>
+                  
+                        <div class="divleft" >
+                            <label for="Product">System Access: </label>
+                             <select required name="accessSelection" [(ngModel)]="accessSelection" (ngModelChange)="addAccess($event)">
+                                 <option *ngFor="let access of allAccess" [ngValue]="access">{{access.description}}</option>
+                             </select>
+                             <button style="height: 30px;" (click)="listAccess()">Add</button>
+                         </div>
+                         
+                    
+
+                   <label>Current Access:</label> 
+                    <table>
+                        <th style="width: 5%; padding:5px"></th>
+                        <th style="text-align: left;">Access</th>
+                        <th style="width: 20%; padding:5px"></th>
+                       
+                        <tr *ngFor="let item of userAccess; index as ndx; trackBy:trackByndx;">
+                            <td>{{ndx+1}}</td>
+                            <td><input style="width: 70%" type = "text"  name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="userAccess[ndx].description"></td>
+                            <td><button style="border-radius: 10px; width: 60%;" (click)="delete(ndx)"><i class="small material-icons" >delete</i></button></td>
+                
+                        </tr>
+                     
+                    </table>
+<div>
+              
+        </div>
+                <mat-expansion-panel *ngFor="let item of list; index as ndx;">
+
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>{{item.description}}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                  
+                    <mat-selection-list>
+                      <mat-list-item *ngFor="let thing of userAccess; index as ndx;">
+                        {{thing.description}}
+                      </mat-list-item>
+                    </mat-selection-list> 
+                  
+                  </mat-expansion-panel>
+
+
+
+                    
+                    
+                </div>
+            </div>
+</form>
+</body>
+
+-->

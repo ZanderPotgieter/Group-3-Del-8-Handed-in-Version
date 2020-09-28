@@ -110,11 +110,15 @@
                     <span *ngIf="pdForm.get('SelectProduct').errors.required">Select Product required.</span>
                 </span>
               <br>
+              <div class="divleft">
+                <label for="quantity">Quantity </label>
+                <input [ngModelOptions]="{standalone: true}" style="width:60px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+                
+              </div>
+            
             <button type="submit" (click)="Link()">Link</button>
             <button type="submit" (click)="RemoveLink()">Remove Link</button>
             <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
-    </div>
-    </form>
-</body>
-
+      </div>
+      </form>

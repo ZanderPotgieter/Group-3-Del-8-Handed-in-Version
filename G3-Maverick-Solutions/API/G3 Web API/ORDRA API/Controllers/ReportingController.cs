@@ -154,6 +154,26 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        //get customer order status details
+        [HttpGet]
+        [Route("GetAllCustomerOrderStauts")]
+        public object GetAllCustomerOrderStauts()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                toReturn = db.Customer_Order_Status.ToList();
+            }
+            catch
+            {
+                toReturn.Message = "Search interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
 
         [HttpGet]
         [Route("getCustomerOrderReportData")]
@@ -163,26 +183,28 @@ namespace ORDRA_API.Controllers
             List<Customer_Order> orders = new List<Customer_Order>();
             try
             {
-                switch (selectedOptionID)
-                {
-                    case 1: //placed
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Placed")).ToList();
-                        break;
-                    case 2: //fulfilled
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Fulfilled")).ToList();
-                        break;
-                    case 3: //Collected
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Collected")).ToList();
-                        break;
-                    case 4: //Cancelled
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Cancelled")).ToList();
-                        break;
-                    case 5: //all
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).ToList();
-                        break;
-                    default:
-                        break;
-                }
+
+                orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CustomerOrderStatusID == selectedOptionID).ToList();
+                //switch (selectedOptionID)
+                //{
+                //    case 1: //placed
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Placed")).ToList();
+                //        break;
+                //    case 2: //fulfilled
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Fulfilled")).ToList();
+                //        break;
+                //    case 3: //Collected
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Collected")).ToList();
+                //        break;
+                //    case 4: //Cancelled
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Cancelled")).ToList();
+                //        break;
+                //    case 5: //all
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).ToList();
+                //        break;
+                //    default:
+                //        break;
+                //}
 
             }
             catch (Exception)

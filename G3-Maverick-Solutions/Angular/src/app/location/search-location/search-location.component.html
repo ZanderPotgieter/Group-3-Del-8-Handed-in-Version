@@ -1,28 +1,25 @@
 <body>
   <h1>Location Details</h1>
-  <form>
-      <div class="card" *ngIf = "showSearch">
+  <form #form='ngForm' class="mb-4" autocomplete="off" >
+  <div class="card" *ngIf = "showSearch">
           <br>
       <div class="divleft"  >
           <label class="subheadinglabel" >Enter Location Name to search </label>
       <br>
           <label for="name">Location Name:       </label>
-          <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
-     
+          <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" required>
+          <small style="color: coral;">required</small>
       </div>
       <br>
 
       <div class="divleft">
-          <button type="submit"(click)="searchLocation()">Search</button>
-          <button type="submit" (click)="gotoGPSManagment()">Cancel</button>
+          <button type="submit"   (click)="searchLocation()"  [disabled]="form.invalid">Search</button>
+          <button type="submit"   (click)="gotoGPSManagement()">Cancel</button>
       </div>
 
   </div>
   <br>
-
   <div class="card" *ngIf = "showResults">
-     
-
       <br>
       <div class="divleft" >
           <label class="subheadinglabel"> Searched Location Details:</label>
@@ -54,16 +51,16 @@
       <br><br>
 
       <div class="divleft" *ngIf="showButtons">
-          <button type="submit" (click)="enableInputs()">Update</button>
+          <button type="submit"  (click)="gotoGPSManagement()" >Return</button>
        </div>
 
        <div class="divleft" *ngIf="showSave" >
        <button type="submit" (click)="updateLocation()">Save</button>
-       <button type="submit" (click)="cancel()">Cancel</button>
+       <button type="submit"  (click)="gotoGPSManagement()">Cancel</button>
       </div>
       
   </div>
-  
+  <br>
   </form>
 </body>
 

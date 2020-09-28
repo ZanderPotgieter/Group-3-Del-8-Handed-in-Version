@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import {DonationRecipient} from '../../donation-recipient';
 import { NgModule } from '@angular/core';
 import {DonationService} from '../../donation.service';
-
+import { Observable } from 'rxjs';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 @Component({
   selector: 'app-search-donation-recipient',
   templateUrl: './search-donation-recipient.component.html',
@@ -11,24 +12,58 @@ import {DonationService} from '../../donation.service';
 })
 export class SearchDonationRecipientComponent implements OnInit {
 
-  constructor(private donationSerive: DonationService, private router: Router) { }
-
+  constructor(private donationSerive: DonationService, private router: Router , private fb: FormBuilder) { }
+  donForm: FormGroup;
   donationRecipient : DonationRecipient = new DonationRecipient();
   responseMessage: string = "Request Not Submitted";
 
+  showAll: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
-  showSearch: boolean = true;
+  showSearch: boolean = false;
   showResults: boolean = false;
+  allRecipients: Observable<DonationRecipient[]>;
 
   name : string;
   surname : string;
+  donNull: boolean = false;
+  ngOnInit() {
+    this.donForm= this.fb.group({  
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      surname :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      DrSurname :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrCell :  ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9 ]*")]],  
+      DrEmail :  ['', [Validators.required, Validators.email]],  
+      DrStreetNr :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(10), Validators.pattern("[0-9 ]*")]],  
+      DrStreet :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrArea :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrCode : ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern("[0-9 ]*")]],  
+      
+       
+    });
+  }
 
-  ngOnInit(): void {
+  All(){
+    this.allRecipients = this.donationSerive.getAllDonationRecipients();
+    this.showAll = true;
+    this.showSearch = false;
+  }
+
+  Input(){
+    this.showSearch = true;
+    this.showAll = false;
   }
 
   Search(){
+    if(this.name == null || this.surname ==null)
+    {
+      this.donNull = true;
+      this.showSearch = true;
+      this.showResults = false;
+    }
+    else{
     this.donationSerive.searchDonationRecipient(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
@@ -51,8 +86,11 @@ export class SearchDonationRecipientComponent implements OnInit {
       
     })
   }
+  }
 
-  Cancel(){}
+  Cancel(){
+    this.router.navigate(["donation-management"])
+  }
 
   Update(){
     this.showSave = true;

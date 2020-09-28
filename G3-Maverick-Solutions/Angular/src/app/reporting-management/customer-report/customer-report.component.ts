@@ -11,17 +11,19 @@ import { Chart } from 'chart.js';
 //import { max } from 'rxjs/operators';
 
 //var jsPDF: any;
-
+import {CustomerOrderStatus} from '../customer-order-status';
 @Component({
   selector: 'app-customer-report',
   templateUrl: './customer-report.component.html',
   styleUrls: ['./customer-report.component.scss']
 })
 export class CustomerReportComponent implements OnInit {
-
+  
+ 
+ stats: CustomerOrderStatus[];
   dateVal = new Date();
 
-  selectedOption: any;
+  selectedOption: number;
   showErrorMessage: boolean = false;
   Customers:  object;
   Products:  object;
@@ -39,9 +41,18 @@ export class CustomerReportComponent implements OnInit {
 
   constructor(private reportService: ReportService, private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(){
+    return this.reportService.getAllCustomerOrderStauts().subscribe((res: any)=>{
+      console.log(res);
+      this.stats = res;
+      if (res.Error){
+        alert(res.Error);
+      }
+    })
   }
-
+  setStatus(val: CustomerOrderStatus){
+    this.selectedOption= val.CustomerOrderStatusID;
+  }
   DownloadPDF()
   {
     this.reportService.getCustomerOrderReportData(this.selectedOption).subscribe ((res) =>
@@ -78,7 +89,7 @@ export class CustomerReportComponent implements OnInit {
   GenerateReport()
   {
     if (this.selectedOption == undefined){
-      this.showErrorMessage= true;
+     this.showErrorMessage= true;
     }
     else
     {
@@ -97,7 +108,7 @@ export class CustomerReportComponent implements OnInit {
       
     })
 
-  }
+    }
   }
 
   cancel()

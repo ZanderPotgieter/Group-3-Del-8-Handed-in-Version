@@ -21,6 +21,7 @@ import { NgModule } from '@angular/core';
     import { LoginComponent } from './login-subsystem/user/login/login.component';
     import { CreateLocationComponent } from './location/create-location/create-location.component';
     import { SearchLocationComponent } from './location/search-location/search-location.component';
+    import { UpdateLocationComponent } from './location/update-location/update-location.component';
     import { ResetpasswordComponent} from './login-subsystem/user/resetpassword/resetpassword.component';
 
     //-----gps subsystem Imports----//
@@ -106,9 +107,9 @@ import { NgModule } from '@angular/core';
     import { SearchDonationComponent } from './donation-management/search-donation/search-donation.component';
     import { UpdateDonationComponent } from './donation-management/update-donation/update-donation.component';
     import { SearchedDonationDetailsComponent } from './donation-management/searched-donation-details/searched-donation-details.component';
-import { AddPaymentComponent } from './creditor-management/add-payment/add-payment.component';
-import { SearchPaymentComponent } from './creditor-management/search-payment/search-payment.component';
-import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
+    import { AddPaymentComponent } from './creditor-management/add-payment/add-payment.component';
+    import { SearchPaymentComponent } from './creditor-management/search-payment/search-payment.component';
+    import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
    
     const routes: Routes = [
         //Routes For Users
@@ -266,6 +267,10 @@ import { SupplierDetailComponent } from './supplier-order-management/supplier-de
         {
             path: 'search-location',
             component: SearchLocationComponent,
+        },
+        {
+            path: 'update-location',
+            component: UpdateLocationComponent,
         },
 
         //---Province Subsystem Routing---//

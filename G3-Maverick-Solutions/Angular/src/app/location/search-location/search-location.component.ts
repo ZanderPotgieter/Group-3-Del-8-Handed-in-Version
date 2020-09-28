@@ -22,14 +22,15 @@ export class SearchLocationComponent implements OnInit {
   inputEnabled:boolean = true;
   showSearch: boolean = true;
   showResults: boolean = false;
-  showResultsEdit: boolean = false;
   name : string;
 
+
   ngOnInit(): void {
+
   }
 
-  gotoGPSManagement(){
-    this.router.navigate(['gps-management']);
+  gotoGPSManagement() {
+ this.router.navigate(['gps-management']);
   }
 
   searchLocation(){
@@ -40,7 +41,6 @@ export class SearchLocationComponent implements OnInit {
       alert(res.Message);
       this.showSearch = true;
       this.showResults = false;
-      this.showResultsEdit = false;
     
     }
       else{
@@ -51,7 +51,6 @@ export class SearchLocationComponent implements OnInit {
           this.location.ContainerID = res.Container.ConName;
           this.showSearch = false;
           this.showResults = true;
-          this.showResultsEdit = false;
       }     
     })
 
@@ -73,8 +72,7 @@ export class SearchLocationComponent implements OnInit {
     this.inputEnabled = false;
     this.showButtons = false;
     this.showResults = false;
-    this.showResultsEdit = true;
-
+  
   }
 
   cancel(){
@@ -84,7 +82,6 @@ export class SearchLocationComponent implements OnInit {
     
     this.showSearch = true;
     this.showResults = false;
-    this.showResultsEdit = false;
   }
 
   }

@@ -13,16 +13,13 @@
       <br>
 
       <div class="divleft">
-          <button type="submit"(click)="searchLocation()"  [disabled]="form.invalid">Search</button>
-          <button type="submit" (click)="gotoGPSManagment()">Cancel</button>
+          <button type="submit"   (click)="searchLocation()"  [disabled]="form.invalid">Search</button>
+          <button type="submit"   (click)="gotoGPSManagement()">Cancel</button>
       </div>
 
   </div>
-  
   <br>
   <div class="card" *ngIf = "showResults">
-     
-
       <br>
       <div class="divleft" >
           <label class="subheadinglabel"> Searched Location Details:</label>
@@ -54,67 +51,16 @@
       <br><br>
 
       <div class="divleft" *ngIf="showButtons">
-          <button type="submit" (click)="cancel()">Return</button>
+          <button type="submit"  (click)="gotoGPSManagement()" >Return</button>
        </div>
 
        <div class="divleft" *ngIf="showSave" >
        <button type="submit" (click)="updateLocation()">Save</button>
-       <button type="submit" (click)="cancel()">Cancel</button>
+       <button type="submit"  (click)="gotoGPSManagement()">Cancel</button>
       </div>
       
   </div>
   <br>
-
-  <div class="card" *ngIf = "showResultsEdit">
-    <br>       
-        <div class="card">
-          <div class="divleft">
-          <div class="subheadinglabel" id="location">Enter Location Details:</div>
-            <br>
-
-            <div class="divleft" >
-            <label for="LocName">Location Name:   </label>
-            <input type="text" class="form-control" [(ngModel)]="location.LocName" id="LocName" name="LocName"  required> 
-            <small style="color: coral;">required</small>
-            </div>
-
-             <div class="divleft" >
-             <label for="LocationStatusID">Location Status:   </label>
-             <!--<input type="text" class="form-control" [(ngModel)]="location.LocationStatusID" id="LocationStatusID" name="LocationStatusID"  required> -->
-             <select name="LocationStatusID" class="form-control" [(ngModel)]="location.LocationStatusID" id="LocationStatusID" name="LocationStatusID"   required>
-             <option *ngFor="let item of api.statusList" value="{{item.LocationStatusID}}">{{item.LSDescription}}
-             </option>
-             </select>
-             <small style="color: coral;">required</small>
-             </div>
-
-            <div class="divleft" >
-            <label for="AreaID">Area:   </label>
-            <!-- <input type="text" class="form-control" [(ngModel)]="location.AreaID" id="AreaID" name="AreaID"  required> -->
-            <select name="AreaID" class="form-control" [(ngModel)]="location.AreaID" id="AreaID" name="AreaID" required>
-            <option *ngFor="let item of api.areaList" value="{{item.AreaID}}">{{item.ArName}}
-            </option>
-            </select>  
-            <small style="color: coral;">required</small>
-            </div>
-
-             <div class="divleft" >
-             <label for="ContainerID">Container:   </label>
-             <!-- <input type="text" class="form-control" [(ngModel)]="location.ContainerID" id="ContainerID" name="ContainerID"  required> -->
-             <select name="ContainerID" class="form-control" [(ngModel)]="location.ContainerID" id="ContainerID" name="ContainerID"  required>
-             <option *ngFor="let item of api.containerList" value="{{item.ContainerID}}">{{item.ConName}}
-             </option>
-             </select>  
-             <small style="color: coral;">required</small>
-             </div>   
-            
-            
-            <button type="button" (click)="addLocation()" [disabled]="form.invalid">Create Location</button> 
-            <button type="button" (click)="gotoGPSManagement()">Cancel</button>
-          </div>
-        </div>
-
-  </div>
   </form>
 </body>
 

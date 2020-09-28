@@ -15,7 +15,7 @@
                         </select>-->
 
                         <label for="OptionSelect">Customer order status</label>
-                        <select required name="prodSelection" [(ngModel)] = "selectedOption" (ngModelChange)="setStatus($event)">
+                        <select required name="selectedOption" [(ngModel)] = "selectedOption" (ngModelChange)="setStatus($event)">
                             <option *ngFor="let stat of stats" [ngValue]="stat">{{stat.CODescription}}</option>
                         </select>
                     </div>
@@ -23,7 +23,7 @@
             </div> 
         </form>  
         
-        <div class="alert alert-danger" role="alert" *ngIf="showErrorMessage">
+        <div class="alert alert-danger" style="color:red" role="alert" *ngIf="showErrorMessage">
             You did not select an option. Please select one.
         </div>
             

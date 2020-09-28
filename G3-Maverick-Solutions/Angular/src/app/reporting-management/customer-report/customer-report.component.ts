@@ -88,12 +88,12 @@ export class CustomerReportComponent implements OnInit {
 
   GenerateReport()
   {
-   // if (this.selectedOption == undefined){
-    //  this.showErrorMessage= true;
-    //}
-   // else
-    //{
-    //this.showErrorMessage =false;
+    if (this.selectedOption == undefined){
+     this.showErrorMessage= true;
+    }
+    else
+    {
+    this.showErrorMessage =false;
     
     this.reportService.getCustomerOrderReportData(this.selectedOption).subscribe((res) =>{
       console.log(res);
@@ -108,7 +108,7 @@ export class CustomerReportComponent implements OnInit {
       
     })
 
- // }
+    }
   }
 
   cancel()

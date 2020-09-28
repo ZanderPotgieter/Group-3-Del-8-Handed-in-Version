@@ -357,6 +357,7 @@ namespace ORDRA_API.Controllers
         [Route("uploadImage")]
         public HttpResponseMessage uploadImage(int employeeID)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             try
             {
                 string imageName = null;
@@ -368,17 +369,17 @@ namespace ORDRA_API.Controllers
                 //create custom filename
                 imageName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
                 imageName = imageName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
-                //var filePath = Path.GetFullPath(imageName); //HttpContext.Current.Server.MapPath("~/Images/" + imageName);
                 var filePath = HttpContext.Current.Server.MapPath("~/Images/" + imageName);
-                //postedFile.SaveAs(Path.Combine(filePath));
                 postedFile.SaveAs(filePath);
 
+                Employee employee = db.Employees.Where(z => z.EmployeeID == employeeID).FirstOrDefault();
+                User user = db.Users.Where(z => z.UserID == employee.UserID).FirstOrDefault();
                 //save to db
                 using (OrdraDBEntities dbs = new OrdraDBEntities())
                 {
                     EmployeePicture image = new EmployeePicture()
                     {
-                        ImgCaption = httpRequest["ImageCaption"],
+                        ImgCaption = user.UserName +" "+ user.UserSurname + " Img" ,//httpRequest["ImageCaption"],
                         ImgName = imageName,
                         EmployeeID = employeeID,
                     };
@@ -399,6 +400,50 @@ namespace ORDRA_API.Controllers
         [Route("uploadCv")]
         public HttpResponseMessage uploadCv(int employeeID)
         {
+            db.Configuration.ProxyCreationEnabled = false;
+            try
+            {
+                string imageName = null;
+                var httpRequest = HttpContext.Current.Request;
+
+                //upload image
+                var postedFile = httpRequest.Files["image"];
+
+                //create custom filename
+                imageName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                imageName = imageName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
+                var filePath = HttpContext.Current.Server.MapPath("~/Images/" + imageName);
+                postedFile.SaveAs(filePath);
+
+                Employee employee = db.Employees.Where(z => z.EmployeeID == employeeID).FirstOrDefault();
+                User user = db.Users.Where(z => z.UserID == employee.UserID).FirstOrDefault();
+                //save to db
+                using (OrdraDBEntities dbs = new OrdraDBEntities())
+                {
+                    EmployeeCV image = new EmployeeCV()
+                    {
+                        CVCaption = user.UserName + " " + user.UserSurname + " CV",//httpRequest["ImageCaption"],
+                        CVName = imageName,
+                        EmployeeID = employeeID,
+                    };
+                    db.EmployeeCVs.Add(image);
+                    db.SaveChanges();
+
+                }
+            }
+            catch (Exception error)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error in saving the image: " + error);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.Created, "Saved successfully");
+        }
+
+
+        /*[HttpPost]
+        [Route("uploadCv")]
+        public HttpResponseMessage uploadCv(int employeeID)
+        {
             try
             {
                 string cvName = null;
@@ -410,16 +455,18 @@ namespace ORDRA_API.Controllers
                 //create custom filename
                 cvName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
                 cvName = cvName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(postedFile.FileName);
-                var filePath = Path.GetFullPath(cvName); //HttpContext.Current.Server.MapPath("~/Images/" + imageName);
-                postedFile.SaveAs(Path.Combine(filePath, postedFile.FileName));
-                //postedFile.SaveAs(filePath);
+                var filePath = HttpContext.Current.Server.MapPath("~/Images/" + cvName);
+                //postedFile.SaveAs(Path.Combine(filePath, postedFile.FileName));
+                postedFile.SaveAs(filePath);
 
+                Employee employee = db.Employees.Where(z => z.EmployeeID == employeeID).FirstOrDefault();
+                User user = db.Users.Where(z => z.UserID == employee.UserID).FirstOrDefault();
                 //save to db
                 using (OrdraDBEntities dbs = new OrdraDBEntities())
                 {
                     EmployeeCV cv = new EmployeeCV()
                     {
-                        CVCaption = httpRequest["ImageCaption"],
+                        CVCaption = user.UserName + " " + user.UserSurname + "CV",//httpRequest["CvCaption"],
                         CVName = cvName,
                         EmployeeID = employeeID,
                     };
@@ -428,13 +475,45 @@ namespace ORDRA_API.Controllers
                 }
                
             }
-            catch(Exception error)
+            catch(Exception )
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error in saving the image: " + error);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error in saving the image: ");
             }
-            return Request.CreateResponse(HttpStatusCode.Created, "Saved successfully");
+            return Request.CreateResponse(HttpStatusCode.Created, "CV Saved successfully");
+        }*/
+
+
+        [HttpGet]
+        [Route("getCvs")]
+        public dynamic getCVs(int employeeID)
+        {
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                toReturn.Cv = db.EmployeeCVs.Where(z => z.EmployeeID == employeeID).ToList();
+            }
+            catch
+            {
+                toReturn.Error = "CV not found";
+            }
+            return toReturn;
         }
 
+        [HttpGet]
+        [Route("getImages")]
+        public dynamic getImages(int employeeID)
+        {
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                toReturn.Cv = db.EmployeePictures.Where(z => z.EmployeeID == employeeID).ToList();
+            }
+            catch
+            {
+                toReturn.Error = "Images not found";
+            }
+            return toReturn;
+        }
 
         /*// GET: api/Employees
         public IQueryable<Employee> GetEmployees()

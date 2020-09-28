@@ -15,7 +15,7 @@ export class AddProductCategoryComponent implements OnInit {
   pcatForm: FormGroup;
   productCategory : ProductCategory = new ProductCategory();
   responseMessage: string = "Request Not Submitted";
-
+  categoryNull: boolean = false;
   ngOnInit(){
     this.pcatForm= this.fb.group({  
       PCatName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
@@ -26,6 +26,11 @@ export class AddProductCategoryComponent implements OnInit {
   }
 
   Save() {
+    if(this.productCategory.PCatName == null || this.productCategory.PCatDescription == null)
+    {
+      this.categoryNull = true;
+    }
+    else{
     this.productCategoryService.addProductCategory(this.productCategory).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
@@ -33,6 +38,7 @@ export class AddProductCategoryComponent implements OnInit {
         alert(this.responseMessage)
         this.router.navigate(["product-management"])
     })
+  }
   }
 
   Cancel(){

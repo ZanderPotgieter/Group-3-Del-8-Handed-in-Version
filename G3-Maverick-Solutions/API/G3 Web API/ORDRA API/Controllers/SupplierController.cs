@@ -16,9 +16,7 @@ namespace ORDRA_API.Controllers
     [RoutePrefix("API/Supplier")]
     public class SupplierController : ApiController
     {
-
-        
-        
+    
             //DATABASE INITIALIZING
             OrdraDBEntities db = new OrdraDBEntities();
 
@@ -129,14 +127,21 @@ namespace ORDRA_API.Controllers
             {
                 foundSupplier = searchSupplier(newSupplier.SupName);
 
-                if ( foundSupplier.Message == null)
+                if ( foundSupplier.Message == "Record Not Found")
                 {
-                    db.Suppliers.Add(newSupplier);
-                    db.SaveChanges();
+                    Supplier newSuppliertoAdd = new Supplier();
+                    newSuppliertoAdd.SupName = newSupplier.SupName;
+                    newSuppliertoAdd.SupCell = "0451245789";//newSupplier.SupCell;
+                    newSuppliertoAdd.SupEmail = newSupplier.SupEmail;
+                    newSuppliertoAdd.SupStreet = newSupplier.SupStreet;
+                    newSuppliertoAdd.SupStreetNr = newSupplier.SupStreetNr;
+                    newSuppliertoAdd.SupSuburb = newSupplier.SupSuburb;
+                    newSuppliertoAdd.SupCode = newSupplier.SupCode;
+                    db.Suppliers.Add(newSuppliertoAdd);
+                    db.SaveChangesAsync();
                     toReturn.Message = "Add Successful";
                 }
-                
-            
+                          
                 else
                 {
                     toReturn.Message = "Duplicate Record Found";
@@ -146,11 +151,9 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Message = "Add UnSuccessful";
 
-
                 }
 
                 return toReturn;
-
 
             }
 
@@ -171,14 +174,14 @@ namespace ORDRA_API.Controllers
                     if (objectSupplier != null)
                     {
                         objectSupplier.SupName = SupplierUpdate.SupName;
-                        objectSupplier.SupCell = SupplierUpdate.SupCell;
+                        objectSupplier.SupCell = "0143254563";//SupplierUpdate.SupCell;
                         objectSupplier.SupEmail = SupplierUpdate.SupEmail;
                         objectSupplier.SupStreetNr = SupplierUpdate.SupStreetNr;
                         objectSupplier.SupStreet = SupplierUpdate.SupStreet;
                         objectSupplier.SupCode = SupplierUpdate.SupCode;
                         objectSupplier.SupSuburb = SupplierUpdate.SupSuburb;
-
-                        db.SaveChanges();
+                        db.Entry(objectSupplier).State = EntityState.Modified;
+                        db.SaveChangesAsync();
 
                         toReturn.Message = "Update Successful";
                     }

@@ -1,28 +1,79 @@
 <body>
-    <form>
-        <h1>Add Donation Recipient</h1>
+    <h1>Add Donation Recipient</h1>
+    <form [formGroup]="donForm">
         <div class="card">
             <div class="divleft">
                 <label class="subheadinglabel">Enter Donation Recipient Details:</label>
                 <br>
-                <label for="DrName">Name:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrName" id="DrName" name="DrName" required>
+                <label for="DrName">Name:</label><input type="text" formControlName="DrName"  class="form-control" [(ngModel)]="donationRecipient.DrName" id="DrName" name="DrName" pattern="[a-zA-Z ]*" required>
                 <br>
-                <label for="DrSurname">Surname:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrSurname" id="DrSurname" name="DrSurname" required>
+                <span style="color:red" *ngIf="donForm.get('DrName').errors && (donForm.get('DrName').touched || donForm.get('DrName').dirty)">
+                    <span *ngIf="donForm.get('DrName').errors.required">Name is required.</span>
+                    <span *ngIf="donForm.get('DrName').errors.minlength || donForm.get('DrName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="donForm.get('DrName').errors.pattern">Only text characters.</span>
+                </span>
                 <br>
-                <label for="DrCell">Cell Number:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrCell" id="DrCell" name="DrCell" required>
+                <label for="DrSurname">Surname:</label><input type="text" formControlName="DrSurname" class="form-control" [(ngModel)]="donationRecipient.DrSurname" id="DrSurname" name="DrSurname" pattern="[a-zA-Z ]*" required>
                 <br>
-                <label for="DrEmail">Email:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrEmail" id="DrEmail" name="DrEmail" required>
+                <span style="color:red" *ngIf="donForm.get('DrSurname').errors && (donForm.get('DrSurname').touched || donForm.get('DrSurname').dirty)">
+                    <span *ngIf="donForm.get('DrSurname').errors.required">Surname is required.</span>
+                    <span *ngIf="donForm.get('DrSurname').errors.minlength || donForm.get('DrSurname').errors.maxlength">Surname must be greater than 2 characters and less than 35 characters</span>
+                    <span *ngIf="donForm.get('DrSurname').errors.pattern">Only text characters.</span>
+                </span>
                 <br>
-                <label for="DrStreetNr">Street No.:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrStreetNr" id="DrStreetNr" name="DrStreetNr" required>
+                <label for="DrCell">Cell Number:</label><input type="text" formControlName="DrCell" class="form-control" [(ngModel)]="donationRecipient.DrCell" id="DrCell" name="DrCell" pattern="[0-9 ]*" required>
                 <br>
-                <label for="DrStreet">Street:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrStreet" id="DrStreet" name="DrStreet" required>
+                <span style="color:red" *ngIf="donForm.get('DrCell').errors && (donForm.get('DrCell').touched || donForm.get('DrCell').dirty)">
+                    <span *ngIf="donForm.get('DrCell').errors.required">Cell number is required.</span>
+                    <span *ngIf="donForm.get('DrCell').errors.minlength || donForm.get('DrCell').errors.maxlength">Cell must be 10 numbers</span>
+                    <span *ngIf="donForm.get('DrCell').errors.pattern">Only numbers allowed.</span>
+                </span>
                 <br>
-                <label for="DrCode">Postal Code:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrCode" id="DrCode" name="DrCode"  required>
+                <label for="DrEmail">Email:</label><input type="text" formControlName="DrEmail" class="form-control" [(ngModel)]="donationRecipient.DrEmail" id="DrEmail" name="DrEmail" pattern="[a-zA-Z ]*" required>
                 <br>
-                <label for="DrArea">Suburb:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrArea" id="DrArea" name="DrArea" placeholder="Example: Hatfield" required>
+                <span style="color:red" *ngIf="donForm.get('DrEmail').errors && (donForm.get('DrEmail').touched || donForm.get('DrEmail').dirty)">
+                    <span *ngIf="donForm.get('DrEmail').errors.required">Email is required.</span>
+                    <span *ngIf="donForm.get('DrEmail').errors.email">Please enter in a valid email address.</span>
+                </span>
                 <br>
-                <button type="submit" (click)="Save()">Save</button>
+                <label for="DrStreetNr">Street No.:</label><input type="text" formControlName="DrStreetNr" class="form-control" [(ngModel)]="donationRecipient.DrStreetNr" id="DrStreetNr" name="DrStreetNr" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="donForm.get('DrStreetNr').errors && (donForm.get('DrStreetNr').touched || donForm.get('DrStreetNr').dirty)">
+                    <span *ngIf="donForm.get('DrStreetNr').errors.required">Street No. is required.</span>
+                    <span *ngIf="donForm.get('DrStreetNr').errors.minlength || donForm.get('DrStreetNr').errors.maxlength">Street No. must be greater than 2 numbers and less than 10 numbers</span>
+                    <span *ngIf="donForm.get('DrStreetNr').errors.pattern">Only numbers allowed.</span>
+                </span>
+                <br>
+                <label for="DrStreet">Street:</label><input type="text" formControlName="DrStreet" class="form-control" [(ngModel)]="donationRecipient.DrStreet" id="DrStreet" name="DrStreet" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="donForm.get('DrStreet').errors && (donForm.get('DrStreet').touched || donForm.get('DrStreet').dirty)">
+                    <span *ngIf="donForm.get('DrStreet').errors.required">Street is required.</span>
+                    <span *ngIf="donForm.get('DrStreet').errors.minlength || donForm.get('DrStreet').errors.maxlength">Street must be greater than 2 characters and less than 35 characters</span>
+                    <span *ngIf="donForm.get('DrStreet').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
+                <label for="DrCode">Postal Code:</label><input type="text" formControlName="DrCode" class="form-control" [(ngModel)]="donationRecipient.DrCode" id="DrCode" name="DrCode" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="donForm.get('DrCode').errors && (donForm.get('DrCode').touched || donForm.get('DrCode').dirty)">
+                    <span *ngIf="donForm.get('DrCode').errors.required">Postal code is required.</span>
+                    <span *ngIf="donForm.get('DrCode').errors.minlength || donForm.get('DrCode').errors.maxlength">Postal Code must be 4 numbers</span>
+                    <span *ngIf="donForm.get('DrCode').errors.pattern">Only numbers allowed.</span>
+                </span>
+                <br>
+                <label for="DrArea">Suburb:</label><input type="text" formControlName="DrArea" class="form-control" [(ngModel)]="donationRecipient.DrArea" id="DrArea" name="DrArea" placeholder="Example: Hatfield" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="donForm.get('DrArea').errors && (donForm.get('DrArea').touched || donForm.get('DrArea').dirty)">
+                    <span *ngIf="donForm.get('DrArea').errors.required">Area is required.</span>
+                    <span *ngIf="donForm.get('DrArea').errors.minlength || donForm.get('DrArea').errors.maxlength">Area must be greater than 2 characters and less than 35 characters</span>
+                    <span *ngIf="donForm.get('DrArea').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
+                <button type="submit" (click)="Save()" >Save</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
+
+                <div *ngIf="donNull" class ="divleft">
+                    <label style="color: red; font-size: 13px; width :200px">Please enter donation recipient details.</label>
+                </div>
             </div>
         </div>
     </form>

@@ -1,76 +1,69 @@
 <body>
-
-    <h1>Generate product report</h1>
-<form>
+    <h1>Generate Product Report</h1>
+    <div id="formDiv">
     
-    <div class="card" id="customerOrder">
-    <div class="divleft">
-        <label class="subheadinglabel">Please select the report criteria </label>
-       <br><br>
-        <label>Start date </label>
-        <input type="date" name="startDate">
-        <br>
-        <label>End date</label>
-        <input type="date" name="endDate">
-        <button type="submit" (click)="clickMethod('example')" >generate report</button>
-        
-   
-    </div>
-         
-     </div>
-     
-    
-    <br>
-    <button type="submit" (click)="clickMethod('example')" >Download Report</button>
-    <button type="submit" (click)="clickMethod('example')" >Print Report</button>
-    <button type="submit" (click)="clickMethod('example')" >Cancel</button>
-    <br>
-
-<div class="card"><p>report will display here</p><br><br><br><br><br><br><br></div>
-    
-    <!-- <div class="card" id="creditor">
-        <div style="text-align: left;">
-            <label><span style="white-space: nowrap; text-align: left;">This report shows information about orders placed by customers</span></label>
-            </div>  <br>
-        
-        <table title="Customers with orders">
-            <th>Name </th>
-            <th>Surname</th>
-            <th>Email</th>
-            <th>Cell number (R)</th>
-            <th>Order number (R)</th>
-            
-            <tr>
-                <td>Phoenix </td>
-                <td>Peer</td>
-                <td>pheonixpeer@gmail.com</td>
-                <td>0928374173</td>
-                <td>2363</td>
                 
-            </tr>
-            
-        </table> 
+                <div class="card" >
+                    <button type="submit" id="GenButton" (click)="GenerateReport()" >Generate Report</button>
+                    <!-- <button type="button" id="DownButton" (click)="DownloadPDF()" >Download Report</button> -->
+                    <!-- <button type="button" (click)="PrintReport" >Print Report</button> -->
+                    <button type="button" (click)="cancel()" >Cancel</button>
+                    <br><br>
+                    <!-- <div style="text-align: left;">
+                    <label><span style="white-space: nowrap; text-align: left;">This report shows creditors and details about active creditor accounts</span></label>
+                    </div> -->
+                     
+                </div>
         
-        
-    </div> -->
-    <!-- <br><br>
-    <div>
-        <table title="Products ordered">
-            <th>Product Name </th>
-            <th>Total ordered Quantity</th>
-            
-            
-            <tr>
-                <td>Top white m/meal 50kg </td>
-                <td>24</td>
-                
-            </tr>
-            
-        </table> 
-    </div> -->
+                <br><br>
 
-</form>
-<router-outlet></router-outlet>
+                <!--To Display Table-->
+                <div id="TablesDiv">
+                    <div class="divleft">
+                        <label><span style="white-space: nowrap; text-align: right;">This report shows all products and their relative prices</span></label>
+                    </div>
+                    
+                    <div class="Creditorstable">
+                        <table class="table" id="jsPDFTable">
+                            <h1>Registered Product Report</h1>
+                            <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
+                            
+                            
+                                <table class = "container table-latitude" >
+                                    
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>ReOrder Level</th>
+                                            <th>Unit Selling Price (R)</th>
+                                            <th>Unit Cost Price (R)</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let item of TableData; let i=index">
+                                            <td>{{item.Name}}</td>
+                                            <td>{{item.ReLevel}}</td>
+                                            <td>{{item.Unit}}</td>
+                                            <td>{{item.Cost}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            
+                                <br>
+                                <h2>Total Number of Products: {{Count}}</h2>
+                           
+                            
+                            <br><br>
+                            <!-- <div *ngIf="TableData" id="controlBreak">
+                                <div>Total amount owed to creditors : {{totalBalance}}</div>
+                            </div> -->
+
+                        </table>
+                    </div>
+                    
+                </div>
+    <router-outlet></router-outlet>
+</div>
+    
 </body>
-
-

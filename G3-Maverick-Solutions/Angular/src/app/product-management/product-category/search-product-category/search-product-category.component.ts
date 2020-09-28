@@ -26,7 +26,7 @@ export class SearchProductCategoryComponent implements OnInit {
   showResults: boolean = false;
   name : string;
   allCategories: Observable<ProductCategory[]>;
-
+  categoryNull: boolean = false;
   ngOnInit(){
     this.pcatForm= this.fb.group({  
       PCatName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
@@ -46,6 +46,14 @@ export class SearchProductCategoryComponent implements OnInit {
     this.showAll = false;
   }
   Search(){
+    if(this.name == null)
+    {
+      this.categoryNull = true;
+      this.showSearch = true;
+      this.showResults = false;
+    }
+    else{
+   
     this.productCategoryService.searchProductCategory(this.name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
@@ -59,9 +67,10 @@ export class SearchProductCategoryComponent implements OnInit {
       
       this.showSearch = true;
       this.showResults = true;
+      this.categoryNull = false;
       
     })
- 
+  }
   }
 
   Cancel(){

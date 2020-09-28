@@ -7,6 +7,8 @@ import {User} from '../model/user.model';
 import {Directive, HostBinding, Input} from '@angular/core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-searchemployee',
   templateUrl: './searchemployee.component.html',
@@ -38,10 +40,25 @@ export class SearchemployeeComponent implements OnInit {
   name : string;
   surname : string;
 
-  constructor(private api: EmployeeService, private router: Router, private sanitizer: DomSanitizer) { }
+  empForm: FormGroup;
+
+  constructor(private api: EmployeeService, private router: Router, private sanitizer: DomSanitizer, private fb: FormBuilder) { }
 
   ngOnInit(){
-    //this.resetForm();
+    this.empForm= this.fb.group({  
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      surname: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+      UserName: [''],
+      UserSurname: [''],
+      UserCell: [''],
+      UserEmail: [''],
+      caption: [''],
+      captionCV: [''],
+
+      EmpShiftsCompleted: ['',[Validators.required]],
+      EmpStartDate: ['',[Validators.required]],
+       
+    });  
   }
 
   public getSantizeUrl(url : string) {
@@ -188,6 +205,8 @@ export class SearchemployeeComponent implements OnInit {
     this.surname = userS;
     this.searchEmployee();
   }
+
+  
 
    
 

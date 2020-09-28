@@ -1,5 +1,5 @@
 <h1>Search Employee Profile</h1>
-<form>
+<form [formGroup] = "empForm">
     <div *ngIf = "bar" class="card">
         <button type="submit" (click) ="search()">Search</button>
         <button type="submit" (click) ="viewAll()">View all Employees</button>
@@ -9,15 +9,25 @@
             
         <div  class="divleft" >
             <br>
-            <label class="subheadinglabel" >Enter Employee Name and Surname To search:</label>
+            <label class="subheadinglabel" >Enter Registered User Name and Surname To search:</label>
             <br>
             <label for="name">Name:       </label>
-            <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
+            <input class="searchinput" formControlName ="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" pattern="[a-zA-Z ]*" required>
+            <span style="color:red" *ngIf="empForm.get('name').errors && (empForm.get('name').touched || empForm.get('name').dirty)">
+                <span *ngIf="empForm.get('name').errors.required">Name is required.</span>
+                <span *ngIf="empForm.get('name').errors.minlength || empForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                <span *ngIf="empForm.get('name').errors.pattern">Only text characters.</span>
+            </span>
             <br>
 
             <label for="cusSurname">Surname:   </label>
-            <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
-            
+            <input class="searchinput" formControlName ="surname" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
+            <span style="color:red" *ngIf="empForm.get('surname').errors && (empForm.get('surname').touched || empForm.get('surname').dirty)">
+                <span *ngIf="empForm.get('surname').errors.required">Name is required.</span>
+                <span *ngIf="empForm.get('surname').errors.minlength || empForm.get('surname').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                <span *ngIf="empForm.get('surname').errors.pattern">Only text characters.</span>
+            </span>
+
             <div class="divleft">
                 <button type="submit" (click) ="searchEmployee()">Search</button>
                 <button type="submit" (click)="gotoEmployeeManagement()">Cancel</button>
@@ -25,12 +35,12 @@
         </div>
     </div>
 
-    <div *ngIf="showUpload">
+    <!-- <div *ngIf="showUpload">
         <div>
             <button type="submit" (click)="getImg()">View Image</button>
             <button type="submit">View CV</button>
         </div>
-    </div>
+    </div> -->
 
 
 
@@ -73,17 +83,17 @@
             <br>   
             <div class="divleft" >
                 <label for="UserName">Name:       </label>
-                <input class="searchinput" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserName" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
                 <br>
 
                 <label for="UserSurname">Surname:   </label>
-                <input class="searchinput" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserSurname" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
                 <br>
                 <label for="UserCell">Cell Number:  </label>
-                <input class="searchinput" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
                 <br>
                 <label for="UserEmail">Email:      </label>
-                <input class="searchinput" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserEmail" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputEnabled">
                 <br>
             </div>
         </div>>
@@ -93,10 +103,10 @@
             <label class="subheadinglabel">Employee Work Details:</label>
             <br>
             <label for="EmployeeStartDate">Work Start Date: </label>
-            <input class="searchinput" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
+            <input class="searchinput" formControlName="EmpStartDate" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
             <br>
             <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
-            <input class="searchinput" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+            <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
         </div>
 
         <br><br>

@@ -41,6 +41,9 @@
                 <span style="color:red" *ngIf="searchSaleForm.get('date').errors && (searchSaleForm.get('date').touched || searchSaleForm.get('date').dirty)">
                   <span *ngIf="searchSaleForm.get('date').errors.required">Date is required.</span>
               </span>
+              <span class="divleft" *ngIf="error" style="color:red">
+                  Please enter a data.
+              </span>
               <br>
                   <button type="submit" (click)="searchByDate()">Search</button>
                   <button (click)=" gotoSalesManagement()">Cancel</button>

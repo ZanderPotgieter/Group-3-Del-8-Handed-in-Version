@@ -50,6 +50,10 @@
             <div class="divleft">
                 <button type="submit" (click)="Search()">Search</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
+
+                <div *ngIf="categoryNull" class ="divleft">
+                    <label style="color: red; font-size: 13px; width :200px">Please enter product category name.</label>
+                </div>
             </div>
         </div>
     </form>

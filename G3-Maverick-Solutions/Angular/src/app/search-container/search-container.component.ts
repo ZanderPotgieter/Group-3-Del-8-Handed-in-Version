@@ -26,6 +26,7 @@ export class SearchContainerComponent implements OnInit {
   showResults: boolean = false;
   name : string;
   allContainers: Observable<Container[]>;
+containerNull : boolean = false;
 
   ngOnInit() {
     this.conForm= this.fb.group({  
@@ -47,6 +48,13 @@ export class SearchContainerComponent implements OnInit {
     this.showAll = false;
   }
   Search(){
+    if(this.name == null)
+    {
+      this.containerNull = true;
+      this.showSearch = true;
+      this.showResults = false;
+    }
+    else{
     this.api.searchContainer(this.name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
@@ -60,8 +68,10 @@ export class SearchContainerComponent implements OnInit {
       
       this.showSearch = true;
       this.showResults = true;
+      this.containerNull = false;
       
     })
+  }
 
   }
 

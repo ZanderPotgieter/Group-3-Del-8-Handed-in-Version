@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { CustomerOrderStatus } from './customer-order-status';
+
+import { Observable } from 'rxjs'; 
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +26,10 @@ export class ReportService {
     return this.http.get(this.url + "getSalesReportData").pipe(map(result => result))
   }
 
+  getAllCustomerOrderStauts(): Observable<CustomerOrderStatus[]>
+  {
+    return this.http.get<CustomerOrderStatus[]>(this.url + "GetAllCustomerOrderStauts")
+  }
   getCustomerOrderReportData(selectedOption: number)
   {
     return this.http.get(this.url + "getCustomerOrderReportData?selectedOptionID=" + selectedOption).pipe(map(result => result))

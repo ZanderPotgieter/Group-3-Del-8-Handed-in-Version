@@ -69,6 +69,7 @@ export class PlaceOrderComponent implements OnInit {
  
   dateVal = new Date();
   customer: Customer = new Customer();
+  email: string;
 
   catSelection: number;
   prodSelection : number = 0;
@@ -77,7 +78,7 @@ export class PlaceOrderComponent implements OnInit {
   quantyNull: boolean = false;
   customerNull: boolean = false;
 
-  
+  errorMessage: string;
   customerOrder: CustomerOrder = new CustomerOrder();
   orderDetails: OrderDetails = new OrderDetails();
   productDetails: ProductDetails = new ProductDetails();
@@ -125,6 +126,21 @@ ngOnInit(): void {
     })
 
   }
+
+  sendOrderEmail(){
+    this.api.sendOrderEmail(this.email).subscribe((res : any)=>{
+      console.log(res);
+      if(res.Error)
+      {
+        this.errorMessage = res.Error;
+        alert(this.errorMessage);
+       
+      }
+      else{
+        alert(res.Message);
+          }
+    })
+    }
 
   getCustomer()
   {

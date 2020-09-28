@@ -86,11 +86,11 @@ namespace ORDRA_API.Controllers
             try
             {
                 //Search Location in database
-                var Location= db.Locations.Where(x => x.LocName == name).FirstOrDefault();
+                var Location= db.Locations.Include(z => z.Location_Status).Include(z => z.Container).Include(z =>z.Area).Where(x => x.LocName == name).FirstOrDefault();
 
                 if (Location != null)
                 {
-
+                    
                     toReturn = Location;
                 }
                 else

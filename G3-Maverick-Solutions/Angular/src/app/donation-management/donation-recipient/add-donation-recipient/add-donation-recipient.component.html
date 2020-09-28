@@ -1,27 +1,35 @@
 <body>
-    <form>
+    <form  #form='ngForm' class="mb-4" autocomplete="off" >
         <h1>Add Donation Recipient</h1>
         <div class="card">
             <div class="divleft">
                 <label class="subheadinglabel">Enter Donation Recipient Details:</label>
                 <br>
                 <label for="DrName">Name:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrName" id="DrName" name="DrName" required>
+                <small style="color: coral;">required</small>
                 <br>
                 <label for="DrSurname">Surname:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrSurname" id="DrSurname" name="DrSurname" required>
+                <small style="color: coral;">required</small>
                 <br>
                 <label for="DrCell">Cell Number:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrCell" id="DrCell" name="DrCell" required>
+                <small style="color: coral;">required</small>
                 <br>
-                <label for="DrEmail">Email:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrEmail" id="DrEmail" name="DrEmail" required>
+                <label for="DrEmail">Email:</label><input type="email" class="form-control" [(ngModel)]="donationRecipient.DrEmail" id="DrEmail" name="DrEmail" required>
+                <small style="color: coral;">required</small>
                 <br>
                 <label for="DrStreetNr">Street No.:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrStreetNr" id="DrStreetNr" name="DrStreetNr" required>
+                <small style="color: coral;">required</small>
                 <br>
                 <label for="DrStreet">Street:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrStreet" id="DrStreet" name="DrStreet" required>
+                <small style="color: coral;">required</small>
                 <br>
                 <label for="DrCode">Postal Code:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrCode" id="DrCode" name="DrCode"  required>
+                <small style="color: coral;">required</small>
                 <br>
                 <label for="DrArea">Suburb:</label><input type="text" class="form-control" [(ngModel)]="donationRecipient.DrArea" id="DrArea" name="DrArea" placeholder="Example: Hatfield" required>
+                <small style="color: coral;">required</small>
                 <br>
-                <button type="submit" (click)="Save()">Save</button>
+                <button type="submit" (click)="Save()" [disabled]="form.invalid">Save</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>

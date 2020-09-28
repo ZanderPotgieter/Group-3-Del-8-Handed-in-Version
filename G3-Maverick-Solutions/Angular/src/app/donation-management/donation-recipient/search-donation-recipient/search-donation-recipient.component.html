@@ -1,46 +1,57 @@
 <body>
     <h1>Search Donation Recipient</h1>
 
-   <form>
+   <form #form='ngForm' class="mb-4" autocomplete="off">
         <div class="card" *ngIf = "showSearch"> 
             <p class="subheadinglabel" >Enter Donation Recipient Name and Surname To Search:</p>
             <div class="divleft" >
-                <label for="name" >Name:</label><input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
-                <label for="DrSurname">Surname:</label><input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
+                <label for="name" >Name:</label><input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" required>
+                <small style="color: coral;">required</small>
+                <label for="DrSurname">Surname:</label><input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname" required>
+                <small style="color: coral;">required</small>
                 <br>
-                <button  type="submit" (click)="Search()">Search</button>
+                <button  type="submit" (click)="Search()" [disabled]="form.invalid">Search</button>
                 <button  type="submit" (click)="Cancel()">Cancel</button>
             </div>
         </div>
     
     <br><br>
+    <form #form='ngForm' class="mb-4" autocomplete="off">
          <div class="card" *ngIf = "showResults">
             <div class="divleft">
                 <label class="subheadinglabel">Searched Donation Recipient Details:</label>
                 <br>
                 <label for="DrName">Name:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrName" id="DrName" name="DrName" required [readonly] = "this.inputEnabled">
-               
+                <small style="color: coral;">required</small>
+
                 <br>
                  <label for="DrSurname">Surname:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrSurname" id="DrSurname" name="DrSurname" required [readonly] = "this.inputEnabled">
-                
+                 <small style="color: coral;">required</small>
+
                  <br>
                 <label for="DrCell">Cell Number:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrCell" id="DrCell" name="DrCell" required [readonly] = "this.inputEnabled">
-                
+                <small style="color: coral;">required</small>
+
                  <br>
                 <label for="DrEmail">Email:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrEmail" id="DrEmail" name="DrEmail" required [readonly] = "this.inputEnabled">
-                
+                <small style="color: coral;">required</small>
+
                  <br>
                 <label for="DrStreetNr">Street No.:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrStreetNr" id="DrStreetNr" name="DrStreetNr" required [readonly] = "this.inputEnabled">
-                
+                <small style="color: coral;">required</small>
+
                  <br>
                 <label for="DrStreet">Street:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrStreet" id="DrStreet" name="DrStreet" required [readonly] = "this.inputEnabled">
-             
+                <small style="color: coral;">required</small>
+
                  <br>
                 <label for="DrCode">Postal Code:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrCode" id="DrCode" name="DrCode" required [readonly] = "this.inputEnabled">
-               
+                <small style="color: coral;">required</small>
+
                  <br>
                 <label for="DrArea">Suburb:</label><input  input type="text" class="form-control" [(ngModel)]="donationRecipient.DrName" id="DrArea" name="DrArea" required [readonly] = "this.inputEnabled">
-                
+                <small style="color: coral;">required</small>
+
                  <br>
 
             </div>
@@ -48,7 +59,7 @@
             <div class="divleft" *ngIf="showButtons">
                 <!--label for Alt Step 10(Update)-->
                 <!--label for Alt Step 8(Search)-->
-                <button type="submit" (click)="Update()"  >Update</button>
+                <button type="submit" (click)="Update()" [disabled]="form.invalid" >Update</button>
                 <button type="submit" (click)="Delete()" > Delete</button>
             </div>
             <div class="divleft" *ngIf="showSave">
@@ -57,6 +68,7 @@
                  <button style="font-size: medium;" type="submit" (click)="cancel()"  >Cancel</button>
             </div>
          </div> 
+        </form> 
      </form>  
 </body>
 

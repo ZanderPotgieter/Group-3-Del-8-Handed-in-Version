@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DonationRecipient } from '../../donation-recipient';
 import { NgModule } from '@angular/core';
 import { DonationService } from '../../donation.service';
-
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 @Component({
   selector: 'app-add-donation-recipient',
   templateUrl: './add-donation-recipient.component.html',
@@ -11,15 +11,32 @@ import { DonationService } from '../../donation.service';
 })
 export class AddDonationRecipientComponent implements OnInit {
 
-  constructor(private donationService: DonationService, private router: Router) { }
-
+  constructor(private donationService: DonationService, private router: Router , private fb: FormBuilder) { }
+  donForm: FormGroup;
   donationRecipient : DonationRecipient = new DonationRecipient();
   responseMessage: string = "Request Not Submitted";
-
-  ngOnInit(): void {
+  donNull: boolean = false;
+  ngOnInit() {
+    this.donForm= this.fb.group({  
+      DrName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      DrSurname :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrCell :  ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9 ]*")]],  
+      DrEmail :  ['', [Validators.required, Validators.email]],  
+      DrStreetNr :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(10), Validators.pattern("[0-9 ]*")]],  
+      DrStreet :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrArea :  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35), Validators.pattern('[a-zA-Z ]*')]],  
+      DrCode : ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern("[0-9 ]*")]],  
+      
+       
+    });
   }
 
   Save(){
+    if(this.donationRecipient.DrName == null || this.donationRecipient.DrCell == null || this.donationRecipient.DrEmail == null || this.donationRecipient.DrStreetNr == null || this.donationRecipient.DrStreet == null || this.donationRecipient.DrArea == null || this.donationRecipient.DrCode == null )
+    {
+      this.donNull = true;
+    }
+    else{
     this.donationService.addDonationRecipient(this.donationRecipient).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
@@ -28,6 +45,9 @@ export class AddDonationRecipientComponent implements OnInit {
       this.router.navigate(["donation-management"])
     })
   }
+  }
 
-  Cancel(){}
+  Cancel(){
+    this.router.navigate(["donation-management"])
+  }
 }

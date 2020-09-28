@@ -68,7 +68,7 @@
                     <span *ngIf="donForm.get('DrArea').errors.pattern">Only text characters.</span>
                 </span>
                 <br>
-                <button type="submit" (click)="Save()" [disabled]="form.invalid">Save</button>
+                <button type="submit" (click)="Save()" >Save</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
 
                 <div *ngIf="donNull" class ="divleft">

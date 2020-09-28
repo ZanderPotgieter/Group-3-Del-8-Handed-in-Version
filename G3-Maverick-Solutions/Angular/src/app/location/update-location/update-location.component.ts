@@ -80,7 +80,10 @@ export class UpdateLocationComponent implements OnInit {
     this.api.containerList = [];
   }
 
-
+  gotoGPSManagement() {
+    this.router.navigate(['gps-management']);
+     }
+   
 
 
 }

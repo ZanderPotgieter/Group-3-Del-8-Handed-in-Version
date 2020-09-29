@@ -307,6 +307,11 @@ sendEmail(){
     this.router.navigate(['/user']);
   }
 
+  onNavigate()
+  {
+    window.location.href='https://u17107459.wixsite.com/mysite';
+  }
+
   resetPassword()
   {
     this.api.resetPassword(this.email, this.password).subscribe((res : any)=>{
@@ -397,10 +402,6 @@ sendEmail(){
       
     });
 
-  onNavigate()
-  {
-    window.location.href='https://u17107459.wixsite.com/mysite';
-  }
 
-
+}
 }

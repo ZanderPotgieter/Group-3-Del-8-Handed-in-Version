@@ -1,8 +1,7 @@
 
 <body>
     <h1>Create Donation</h1>
-    <form >
-        
+    <form #form='ngForm' class="mb-4" autocomplete="off"  >        
         <div class="card" *ngIf = "showSearch">
 
             
@@ -10,19 +9,18 @@
                 <label class="subheadinglabel">Enter donation recipient cell number to search:</label>
                 <br><br>
                 <label for="Name">Name</label>
-                <input type = "text" id="cell"  class="searchInput" class="form-control" [(ngModel)]="cell" name="cell">     
+                <input type = "text" id="cell"  class="searchInput" class="form-control" [(ngModel)]="cell" name="cell" required>     
+                <small style="color: coral;">required</small>
                 <br><br>
             </div> 
 
             <div class="divleft">
-                <button type="submit" (click)= "searchDonationRecipient()">Search</button>
+                <button type="submit" (click)= "searchDonationRecipient()" [disabled]="form.invalid">Search</button>
                 <button type="button" (click)= "gotoDonationManagement()">Cancel</button>
-                <button type="button" (click)= "gotoDonationManagement()">Add Recipient</button>
                 
             </div>
         </div>
-
-
+   
         <div class="card" *ngIf = "showResults">
             <label> <span style="white-space: nowrap;">Donation Recipient Details </span></label>
             <br>
@@ -42,19 +40,22 @@
 
             <div class="divleft">
                 <label for="Name">Cell Number</label>
-                <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrCell" name="DrCell" id="DrCell"  required [readonly] = "this.inputEnabled">     
+                <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrCell" name="DrCell" id="DrCell"  required [readonly] = "this.inputEnabled">  
+   
                 <br>
             </div>
 
             <div class="divleft">
                 <label for="Name">Email</label>
-                <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrEmail" name="DrEmail" id="DrEmial"  required [readonly] = "this.inputEnabled">     
+                <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrEmail" name="DrEmail" id="DrEmial"  required [readonly] = "this.inputEnabled"> 
+    
                 <br>
             </div> 
+
         </div>
-
+    
         <br><br>
-
+        <form #form1='ngForm' class="mb-4" autocomplete="off"  >
         <div class="card" *ngIf = "showAddDon">
             <label > <span style="white-space: nowrap;">Donation Details</span></label>
             <br>
@@ -63,23 +64,29 @@
             <br><br>
 
             <label>Status</label>
-            <select required class="form-control" [(ngModel)]="donation.Stat" name="DonDate" id="DonDate" >
+            <select required class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
                 <option value="0">--Select--</option>
-                <option [value]="type" *ngFor="let status of statuses">{{status.DSDescription}}</option>
+                <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
               </select>
               <small style="color: coral;">required</small>
               <br>
 
             <label for="Name">Donation Date </label>
-            <input type = "date" class="form-control" [(ngModel)]="donation.DonDate" name="DonDate" id="DonDate" > 
+            <input type = "date" class="form-control" [(ngModel)]="donation.DonDate" name="DonDate" id="DonDate" required > 
+            <small style="color: coral;">required</small>
+
             <br>
 
             <label for="Name">Donated Amount in R</label>
-            <input type = "number" class="form-control" [(ngModel)]="donation.DonAmount" name="DonAmount" id="DonAmount" >  
+            <input type = "number" class="form-control" [(ngModel)]="donation.DonAmount" name="DonAmount" id="DonAmount" required > 
+            <small style="color: coral;">required</small>
+
             <br>
 
             <label for="Name">Description</label>
-            <input type = "text" class="form-control" [(ngModel)]="donation.DonDescription" name="DonDescription" id="DonDescription" > 
+            <input type = "text" class="form-control" [(ngModel)]="donation.DonDescription" name="DonDescription" id="DonDescription" required > 
+            <small style="color: coral;">required</small>
+
             <br>
 
             <br><br>
@@ -87,7 +94,7 @@
 
             <br>
             <div class="divleft" >
-                <button type="submit" (click)="addDonation()">Save</button>
+                <button type="submit" (click)="addDonation()"  [disabled]="form1.invalid">Save</button>
                 <button type="button" (click)="cancel()">Cancel</button>
             </div>
 
@@ -128,8 +135,7 @@
            
             </div>  -->
         </div>
-
-    
+        </form>
     </form>
 
     <router-outlet></router-outlet>

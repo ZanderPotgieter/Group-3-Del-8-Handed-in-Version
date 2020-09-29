@@ -250,6 +250,29 @@ namespace ORDRA_API.Controllers
         }
 
         // To search for sales made on a specific date
+        //[HttpGet]
+        //[Route("searchSalesByDate/{date}")]
+        //public object searchSalesByDate(DateTime date)
+        //{
+        //    db.Configuration.ProxyCreationEnabled = false;
+        //    dynamic toReturn = new ExpandoObject();
+
+        //    try
+        //    {
+
+        //        List<Sale> searchedSales = db.Sales.Include(x => x.Product_Sale).Include(x => x.Payments).Include(x => x.User).Where(x => x.SaleDate == date).ToList();
+        //        toReturn = searchedSales;
+        //    }
+        //    catch 
+        //    {
+        //        toReturn.Error = "Search Interrupted. Retry";
+        //    }
+
+        //    return toReturn;
+
+
+        //}
+
         [HttpGet]
         [Route("searchSalesByDate/{date}")]
         public object searchSalesByDate(DateTime date)
@@ -259,11 +282,33 @@ namespace ORDRA_API.Controllers
 
             try
             {
+                //List<Sale> searchedSales = db.Sales.Include(x => x.Product_Sale).Include(x => x.Payments).Include(x => x.User).Where(x => x.SaleDate == date).ToList();
 
-                List<Sale> searchedSales = db.Sales.Include(x => x.Product_Sale).Include(x => x.Payments).Include(x => x.User).Where(x => x.SaleDate == date).ToList();
-                toReturn = searchedSales;
+                //toReturn = searchedSales;
+
+                //List<Sale> sales = db.Sales.Include(x => x.User).ToList();
+                List<Sale> sales = db.Sales.Include(x => x.User).Where(x => x.SaleDate == date).ToList();
+                List<dynamic> searchedsales = new List<dynamic>();
+
+                foreach(Sale sale in sales)
+                {
+
+                  //  List<Sale> search = db.Sales.Include(x => x.User).Where(x => x.SaleDate == date).ToList();
+
+                    
+                        dynamic searched =new ExpandoObject();
+                        searched.SaleID = sale.SaleID;
+                        searched.SaleDate = sale.SaleDate;
+                        searched.UserName = sale.User.UserName;
+
+                        searchedsales.Add(searched);
+                    
+
+                }
+                toReturn = searchedsales;
+
             }
-            catch 
+            catch
             {
                 toReturn.Error = "Search Interrupted. Retry";
             }

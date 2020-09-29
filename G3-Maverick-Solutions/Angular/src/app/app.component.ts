@@ -396,6 +396,10 @@ sendEmail(){
 
       
     });
+
+  onNavigate()
+  {
+    window.location.href='https://u17107459.wixsite.com/mysite';
   }
 
 

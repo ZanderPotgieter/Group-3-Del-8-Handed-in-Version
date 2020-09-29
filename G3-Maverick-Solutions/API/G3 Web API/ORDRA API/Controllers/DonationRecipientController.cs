@@ -75,7 +75,6 @@ namespace ORDRA_API.Controllers
         }
 
         //searching donation recipient by name and surname
-        [HttpGet]
         [Route("searchDonationRecipient")]
         public object searchDonationRecipient(string name, string surname)
         {

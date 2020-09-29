@@ -1,20 +1,20 @@
 <body>
     <h1>Supplier Details</h1>
-    <form #form='ngForm' class="mb-4" autocomplete="off" >
+    <form>
         <div class="card" *ngIf = "showSearch">
             <br>
         <div class="divleft"  >
             <label class="subheadinglabel" >Enter Name and Surname To search </label>
         <br>
             <label for="name">Supplier Name:       </label>
-            <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" required>
-            <small style="color: coral;">Enter valid name</small>     
+            <input class="searchinput" [(ngModel)]="name" type="text" id="name" name="name">
+       
         </div>
         <br>
 
         <div class="divleft">
-            <button type="submit"(click)="searchSupplier()" [disabled]="form.invalid">Search</button>
-            <button type="submit" (click)="cancel()">Cancel</button>
+            <button type="submit"(click)="searchSupplier()">Search</button>
+            <button type="submit" (click)="gotoSupplierManagment()">Cancel</button>
         </div>
 
     </div>
@@ -30,46 +30,44 @@
     
         <div class="divleft" >
             <label for="SupName">Name:       </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupName" id="SupName" name="SupName" required [readonly] = "this.inputEnabled">
+            <input type="text"  [(ngModel)]="supplier.SupName" id="SupName" name="SupName" required [readonly] = "this.inputEnabled">
         </div>
 
 
         <br>
         <div class="divleft" >
             <label for="SupCell">Cell Number:  </label>
-            <input type="tel"  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"  class="form-control" [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" required [readonly] = "this.inputEnabled">
-            <small style="color: coral;">Format: 123-456-7890</small>
+            <input type="text"  [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" required [readonly] = "this.inputEnabled">
         </div>
 
         <br>
         <div class="divleft"  >
             <label for="SupEmail">Email:      </label>
-            <input type="email" class="form-control" [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" required [readonly] = "this.inputEnabled">
-            <small style="color: coral;">Format: email@email.email</small>
+            <input type="text"  [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" required [readonly] = "this.inputEnabled">
         </div>
 
         <br>
         <div class="divleft" >
             <label for="SupStreetNr">Street No: </label>
-            <input  type="number" min="1" class="form-control" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required [readonly] = "this.inputEnabled"> 
+            <input type="text"  [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required [readonly] = "this.inputEnabled"> 
         </div>
 
         <br>
         <div class="divleft" >
             <label for="SupStreet">Street:    </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupStreet" id="SupStreet" name="SupStreet" required [readonly] = "this.inputEnabled"> 
+            <input type="text"  [(ngModel)]="supplier.SupStreet" id="SupStreet" name="SupStreet" required [readonly] = "this.inputEnabled"> 
         </div>
         
         <br>
         <div class="divleft" >
             <label for="SupCode">Postal Code:   </label>
-            <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required [readonly] = "this.inputEnabled"> 
+            <input type="text"  [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required [readonly] = "this.inputEnabled"> 
         </div>
  
         <br>
         <div class="divleft" >
             <label for="SupSuburb">Suburb:   </label>
-            <input type="text"  class="form-control" [(ngModel)]="supplier.SupSuburb" id="SupSuburb" name="SupSuburb" placeholder="Example: Hatfield" required [readonly] = "this.inputEnabled"> 
+            <input type="text"   [(ngModel)]="supplier.SupSuburb" id="SupSuburb" name="SupSuburb" placeholder="Example: Hatfield" required [readonly] = "this.inputEnabled"> 
         </div>
         <br><br>
 
@@ -79,16 +77,11 @@
          </div>
 
          <div class="divleft" *ngIf="showSave" >
-         <button type="submit" (click)="updateSupplier()" [disabled]="form.invalid">Save</button>
-         <button type="submit" (click)="cancel()">Cancel</button>
+         <button type="submit" (click)="updateSupplier()">Save</button>
+         <button type="submit"  (click)="gotoSupplierManagment()">Cancel</button>
         </div>
         
     </div>
     
     </form>
 </body>
-
-
-
-
-

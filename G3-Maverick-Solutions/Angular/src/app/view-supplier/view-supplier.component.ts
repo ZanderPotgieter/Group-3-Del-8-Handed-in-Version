@@ -12,11 +12,12 @@ var inputEnabled = false;
   styleUrls: ['./view-supplier.component.scss']
 })
 export class ViewSupplierComponent implements OnInit {
+  
 
   constructor(private api: SupplierService, private router: Router) { }
   supplier : Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
-
+  dateVal = new Date();
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
@@ -34,14 +35,10 @@ export class ViewSupplierComponent implements OnInit {
   searchSupplier(){
     this.api.searchSupplier(this.name).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message == "Record Not Found"){
+      if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(res.Message);
-      this.showSearch = true;
-      this.showResults = false;
-    }
-      else
-      {
+      alert(this.responseMessage)}
+      else{
           this.supplier.SupplierID = res.SupplierID;
           this.supplier.SupName = res.SupName;
           this.supplier.SupCell = res.SupCell;
@@ -50,9 +47,11 @@ export class ViewSupplierComponent implements OnInit {
           this.supplier.SupStreet = res.SupStreet;
           this.supplier.SupCode = res.SupCode;
           this.supplier.SupSuburb = res.SupSuburb;
-          this.showSearch = false;
-          this.showResults = true;
-      }      
+      }
+      
+      this.showSearch = false;
+      this.showResults = true;
+      
     })
 
   }
@@ -95,8 +94,6 @@ export class ViewSupplierComponent implements OnInit {
     
     this.showSearch = true;
     this.showResults = false;
-    this.router.navigate(["supplier-management"])
   }
-
 
 }

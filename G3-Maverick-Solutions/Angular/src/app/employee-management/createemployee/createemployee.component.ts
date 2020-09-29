@@ -46,6 +46,34 @@ export class CreateemployeeComponent implements OnInit {
   name : string;
   surname : string;
   empID: number;
+  Caption: string;
+
+  // url ;
+	// msg = "";
+	
+	// selectFile(event) {
+	// 	if(!event.target.files[0] || event.target.files[0].length == 0) {
+	// 		this.msg = 'You must select an image';
+	// 		return;
+	// 	}
+		
+	// 	var mimeType = event.target.files[0].type;
+		
+	// 	if (mimeType.match(/image\/*/) == null) {
+	// 		this.msg = "Only images are supported";
+	// 		return;
+	// 	}
+		
+	// 	var reader = new FileReader();
+	// 	reader.readAsDataURL(event.target.files[0]);
+		
+	// 	reader.onload = (_event) => {
+	// 		this.msg = "";
+  //     this.url = reader.result; 
+  //     this.Caption = this.name + this.surname;
+  //     //this.fileToUpload = der.result;
+	// 	}
+	// }
 
   handleFileInput(file: FileList)
   {
@@ -71,35 +99,36 @@ handleFileInputCV(file: FileList)
   reader.readAsDataURL(this.fileToUpload);
 }
 
- OnSubmit(Caption,Image, EmployeeID)
+ OnSubmit(Caption, Image, EmployeeID)
  {
-   this.api.postFile(Caption.value, this.fileToUpload, EmployeeID).subscribe( data=>
+   this.api.postFile(Caption, this.fileToUpload, EmployeeID).subscribe( data=>
    {
     
     console.log('done');
       this.responseMessage = "Image successfully added";
       alert(this.responseMessage);
-      Caption.value = null;
+      /* Caption.value = null;
       Image.value = null;
-      EmployeeID = null;
+      EmployeeID = null; */
      }
    )
  } 
 
- OnSubmitCV(Caption,CV, EmployeeID)
+ OnSubmitCV(Caption,Image, EmployeeID)
  {
-   this.api.postFile(Caption.value, this.fileToUpload, EmployeeID).subscribe( data=>
+   this.api.postCV(Caption, this.fileToUpload, EmployeeID).subscribe( 
+    data=>
     {
      
      console.log('done');
        this.responseMessage = "CV successfully added";
        alert(this.responseMessage);
-       Caption.value = null;
+       /* Caption.value = null;
        CV.value = null;
-       EmployeeID = null;
+       EmployeeID = null; */
        
      }
-   )
+   );
  } 
  
   

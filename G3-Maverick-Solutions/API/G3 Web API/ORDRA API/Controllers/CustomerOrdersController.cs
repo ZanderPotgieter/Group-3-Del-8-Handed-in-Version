@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.Data.Entity;
 using System.Web.Http.Cors;
 using ORDRA_API.Models;
+using System.Net.Mail;
 
 namespace ORDRA_API.Controllers
 {
@@ -545,6 +546,43 @@ namespace ORDRA_API.Controllers
 
             return toReturn;
 
+        }
+
+        //Send Order Email
+        [Route("sendOrderEmail")]
+        [HttpPost]
+        public object sendOrderEmail(string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress("ordrasa@gmail.com");
+                        mail.To.Add(email);
+                        mail.Subject = "Customer Order Placed.";
+                        mail.Body = "<h1>Success! Your order has been placed and processed. </h1>";
+                        mail.IsBodyHtml = true;
+
+                        using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            smtp.Credentials = new System.Net.NetworkCredential("ordrasa@gmail.com", "Ordra@444");
+                            smtp.EnableSsl = true;
+                            smtp.Send(mail);
+                            toReturn.Message = "Mail sent";
+                        }
+                    }
+            
+
+                return toReturn;
+            }
+            catch
+            {
+                toReturn.Error = "Mail unsuccessfully sent";
+            }
+            return toReturn;
         }
 
 

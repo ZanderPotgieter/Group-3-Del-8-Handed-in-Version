@@ -8,17 +8,22 @@
                         <label class="subheadinglabel">Please select the report criteria </label>
                         <br><br>
 
-                        <!-- Adjustable criteria  -->
+                        <!-- Adjustable criteria  
                         <label for="OptionSelect">Customer order status</label>     
                         <select class="form-control" id="OptionSelect" #optName name = "Option" [(ngModel)] = "selectedOption">
                             <option *ngFor = "let option of options" [value]= "option.id" data-name="option.data">{{option.data}}</option>
+                        </select>-->
+
+                        <label for="OptionSelect">Customer order status</label>
+                        <select required name="selectedOption" [(ngModel)] = "selectedOption" (ngModelChange)="setStatus($event)">
+                            <option *ngFor="let stat of stats" [ngValue]="stat">{{stat.CODescription}}</option>
                         </select>
                     </div>
                 </div>
             </div> 
         </form>  
         
-        <div class="alert alert-danger" role="alert" *ngIf="showErrorMessage">
+        <div class="alert alert-danger" style="color:red" role="alert" *ngIf="showErrorMessage">
             You did not select an option. Please select one.
         </div>
             
@@ -42,6 +47,7 @@
                             <h2><strong>Customer details</strong></h2>
                             <h3><strong>Customer Name:</strong> {{item.Details.CusName}} {{item.Details.CusSurname}} </h3>
                             <h3><strong>Email: </strong> {{item.Details.CusEmail}}</h3>
+                            
                             <br>
                             <div>
                                 <h2><strong>Customer Order details</strong></h2>
@@ -51,6 +57,7 @@
                                     <h3><strong>Status: </strong>  {{order.Status}}</h3>
                                     <br>
                                     <h2><strong> Products ordered details </strong></h2>
+                                    <h3>Total order value: R{{order.Total}}</h3>
                                     <div *ngFor="let prod of order.Product" id="testing{{i}}">
                                             <table class= "container table-latitude" > 
                                                 <thead>

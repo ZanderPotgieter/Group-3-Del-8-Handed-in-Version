@@ -6,7 +6,7 @@
             
         <div  class="divleft" >
             <br>
-            <label class="subheadinglabel" >Enter Employee Name and Surname To search:</label>
+            <label class="subheadinglabel" >Enter Registered User Name and Surname To search:</label>
             <br>
             <label for="name">Name:       </label>
             <input class="searchinput" formControlName="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" pattern="[a-zA-Z ]*" required>
@@ -97,8 +97,6 @@
         <div class="divleft"  >
           <button type="submit"  (click)="createEmployee()">Save Profile</button>
           <button type="submit" (click)="cancel()">Cancel</button>
-          <button type="submit" (click)="gotoUploadImage()" >Upload Image</button>
-          <button type="submit"  (click)="gotoUploadCv()">Upload CV</button>
         </div>
       </div>
   </div>
@@ -119,7 +117,7 @@
             <form  #imageForm = ngForm (ngSubmit)= "OnSubmit(Caption, Image, employee.EmployeeID)">
               <div class="row">
                 <div class="input-field col s12">
-                  <label for="Caption">Caption: </label>
+                  <!-- <label for="Caption">Caption: </label> -->
                   <input type="text" formControlName="caption"  #caption ngModel name="caption" id="caption" pattern="[[a-zA-Z ]*]" required>
                   <!-- <span style="color:red" *ngIf="imgForm.get('caption').errors && (imgForm.get('caption').touched || imgForm.get('caption').dirty)">
                     <span *ngIf="imgForm.get('caption').errors.required">Caption is required.</span>
@@ -130,7 +128,7 @@
               </div>
               <img [src]="imageUrl" img style="width:350px; height: 300px"> <br>
                 <input type="file" formControlName="image" name="image" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
-                <button type="submit" class="btn-large btn-submit" [disabled]="Image.value=='' || !imageForm.valid">Submit </button> 
+                <button type="submit" class="btn-large btn-submit" [disabled]="Image.value=='' || !imageForm.valid">Submit </button>  
             </form>
           </div>
         </div>
@@ -147,7 +145,7 @@
           <form  #imageForm = ngForm (ngSubmit)= "OnSubmitCV(Caption, CV, employee.EmployeeID)">
             <div class="row">
               <div class="input-field col s12">
-                <label for="CaptionCV" visible="false">Caption: </label>
+                <!-- <label for="CaptionCV" visible="false">Caption: </label> -->
                 <input type="text" formControlName="captionCV"  #captionCV ngModel name="captionCV" id="captionCV" pattern="[[a-zA-Z ]*]" required>
                 <!-- <span style="color:red" *ngIf="cvForm.get('captionCV').errors && (cvForm.get('captionCV').touched || cvForm.get('captionCV').dirty)">
                   <span *ngIf="cvForm.get('captionCV').errors.required">Caption is required.</span>

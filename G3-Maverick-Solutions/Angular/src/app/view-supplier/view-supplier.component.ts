@@ -34,10 +34,14 @@ export class ViewSupplierComponent implements OnInit {
   searchSupplier(){
     this.api.searchSupplier(this.name).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message != null){
+      if(res.Message == "Record Not Found"){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
-      else{
+      alert(res.Message);
+      this.showSearch = true;
+      this.showResults = false;
+    }
+      else
+      {
           this.supplier.SupplierID = res.SupplierID;
           this.supplier.SupName = res.SupName;
           this.supplier.SupCell = res.SupCell;
@@ -46,11 +50,9 @@ export class ViewSupplierComponent implements OnInit {
           this.supplier.SupStreet = res.SupStreet;
           this.supplier.SupCode = res.SupCode;
           this.supplier.SupSuburb = res.SupSuburb;
-      }
-      
-      this.showSearch = false;
-      this.showResults = true;
-      
+          this.showSearch = false;
+          this.showResults = true;
+      }      
     })
 
   }
@@ -93,6 +95,7 @@ export class ViewSupplierComponent implements OnInit {
     
     this.showSearch = true;
     this.showResults = false;
+    this.router.navigate(["supplier-management"])
   }
 
 

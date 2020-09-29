@@ -16,6 +16,7 @@ export class CreateContainerComponent implements OnInit {
   angForm: FormGroup;
   container : Container = new Container();
   responseMessage: string = "Request Not Submitted";
+  containerNull: boolean = false;
 
   ngOnInit(){
     this.angForm= this.fb.group({  
@@ -28,6 +29,11 @@ export class CreateContainerComponent implements OnInit {
 
   Save()
   {
+    if(this.container.ConName == null || this.container.ConDescription == null)
+    {
+      this.containerNull = true;
+    }
+    else{
     this.api.addContainer(this.container).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
@@ -35,6 +41,7 @@ export class CreateContainerComponent implements OnInit {
       alert(this.responseMessage)
       this.router.navigate(["container-management"])
     })
+  }
   }
 
   Cancel()

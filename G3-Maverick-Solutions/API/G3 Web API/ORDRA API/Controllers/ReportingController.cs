@@ -63,13 +63,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.message = "Information not available to generate report";
+                    toReturn.Error = "Information not available to generate report";
                 }
 
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Something went wrong " + error;
             }
             return toReturn;
         }
@@ -84,63 +84,96 @@ namespace ORDRA_API.Controllers
             toReturn.ChartData = null;
             try
             {
-                List<Product_Sale> prodSale = new List<Product_Sale>();
-                prodSale = db.Product_Sale.Include(z => z.Product).Include(z => z.Sale).ToList();
-                if (prodSale != null)
-                {
-                    //chart data 
-                    var catList = prodSale.GroupBy(z => z.Product.Product_Category.PCatName);
-                    List<dynamic> pCategories = new List<dynamic>();
-                    foreach (var item in catList)
+                DateTime today = DateTime.Now;
+                // List<Sale> sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList();
+                List<Product_Sale> sales = db.Product_Sale.Include(z => z.Product).Include(z => z.Sale).ToList();
+
+                    if (sales != null)
                     {
-                        dynamic category = new ExpandoObject();
-                        category.Name = item.Key;
-                        var rev = Convert.ToInt32(item.Average(z => z.PSQuantity), CultureInfo.InvariantCulture);
-                        category.Average = rev;
-                        pCategories.Add(category);
+                        //chart data
 
-                    }
+                        var catList = sales.GroupBy(z => z.Product.ProductCategoryID);
+                        List<dynamic> categories = new List<dynamic>();
 
-                    toReturn.ChartData = pCategories;
 
-                    //table data
-                    var categories = prodSale.GroupBy(z => z.Product.Product_Category.PCatName);
-                    List<dynamic> catGroups = new List<dynamic>();
-                    foreach (var item in categories)
-                    {
-                        dynamic category = new ExpandoObject();
-                        category.PCatName = item.Key;
-
-                        List<dynamic> products = new List<dynamic>();
-                        foreach (var prodItem in item)
+                        foreach (var item in catList)
                         {
-                            dynamic productObject = new ExpandoObject();
-                            productObject.Name = prodItem.Product.ProdName;
-                            productObject.Price = prodItem.Product.Prices.Select(z => z.UPriceR);
-                            productObject.Quantity = prodItem.PSQuantity;
-                            productObject.Total = productObject.Price * productObject.Quantity;
-                            products.Add(productObject);
+                            dynamic category = new ExpandoObject();
+                            category.Name = item.Key;
+
+
+
+                            var sum = Convert.ToInt32(item.Sum(z => z.PSQuantity), CultureInfo.InvariantCulture);
+                            category.Sum = sum;
+
+                            categories.Add(category);
+                        }
+                        toReturn.ChartData = categories;
+                    }
+                    else
+                    {
+                        toReturn.Error = "Information not available to generate report";
+                    }
+                        
+
+
+
+
+                        /*//table data
+                        var categories = prodSale.GroupBy(z => z.ContainerID);
+                        List<dynamic> catGroups = new List<dynamic>();
+                        foreach (var item in categories)
+                        {
+                            dynamic category = new ExpandoObject();
+                            category.ID = item.Key;
+
+                            List<dynamic> products = new List<dynamic>();
+                            foreach (var prodItem in item)
+                            {
+                                dynamic productObject = new ExpandoObject();
+                                productObject.Name = prodItem.Product.ProdName;
+                                productObject.Price = prodItem.Product.Prices.Select(z => z.UPriceR);
+                                productObject.Quantity = prodItem.PSQuantity;
+                                productObject.Total = productObject.Price * productObject.Quantity;
+                                products.Add(productObject);
+                            }
+
+                            category.Products = products;
+                            catGroups.Add(category);
                         }
 
-                        category.Products = products;
-                        catGroups.Add(category);
-                    }
-
-                    toReturn.TableData = catGroups;
-                }
-                else
-                {
-                    toReturn.message = "Information not available to generate report";
-                }
+                        toReturn.TableData = catGroups;*/
+                    
+                
 
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Something went wrong " + error;
             }
             return toReturn;
         }
 
+        //get customer order status details
+        [HttpGet]
+        [Route("GetAllCustomerOrderStauts")]
+        public object GetAllCustomerOrderStauts()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                toReturn = db.Customer_Order_Status.ToList();
+            }
+            catch
+            {
+                toReturn.Message = "Search interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
 
         [HttpGet]
         [Route("getCustomerOrderReportData")]
@@ -150,26 +183,28 @@ namespace ORDRA_API.Controllers
             List<Customer_Order> orders = new List<Customer_Order>();
             try
             {
-                switch (selectedOptionID)
-                {
-                    case 1: //placed
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Placed")).ToList();
-                        break;
-                    case 2: //fulfilled
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Fulfilled")).ToList();
-                        break;
-                    case 3: //Collected
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Collected")).ToList();
-                        break;
-                    case 4: //Cancelled
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Cancelled")).ToList();
-                        break;
-                    case 5: //all
-                        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).ToList();
-                        break;
-                    default:
-                        break;
-                }
+
+                orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CustomerOrderStatusID == selectedOptionID).ToList();
+                //switch (selectedOptionID)
+                //{
+                //    case 1: //placed
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Placed")).ToList();
+                //        break;
+                //    case 2: //fulfilled
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Fulfilled")).ToList();
+                //        break;
+                //    case 3: //Collected
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Collected")).ToList();
+                //        break;
+                //    case 4: //Cancelled
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z => z.Customer_Order_Status.CODescription.Equals("Cancelled")).ToList();
+                //        break;
+                //    case 5: //all
+                //        orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).ToList();
+                //        break;
+                //    default:
+                //        break;
+                //}
 
             }
             catch (Exception)
@@ -202,6 +237,7 @@ namespace ORDRA_API.Controllers
                     {
                         dynamic customer = new ExpandoObject();
                         customer.Details = item.Key;
+                        decimal Grouptot = 0;
 
                         //getting the order details
                         List<dynamic> cusOrders = new List<dynamic>();
@@ -211,6 +247,7 @@ namespace ORDRA_API.Controllers
                             List<Product_Order_Line> prodOrderLine = db.Product_Order_Line.Where(z => z.CustomerOrderID == cusItem.CustomerOrderID).ToList();
                             //getting the product details
                             List<dynamic> orderProds = new List<dynamic>();
+                            decimal total = 0;
                             foreach (var prod in prodOrderLine)
                             {
                                 List<Price> prices = db.Prices.Include(z => z.Product).ToList();
@@ -221,6 +258,7 @@ namespace ORDRA_API.Controllers
                                 productObject.Price = price.UPriceR;
                                 productObject.Quantity = prod.PLQuantity;
                                 productObject.ProdTot = Convert.ToDecimal(price.UPriceR) * Convert.ToDecimal(prod.PLQuantity);
+                                total = total + Convert.ToDecimal(price.UPriceR) * Convert.ToDecimal(prod.PLQuantity);
                                 orderProds.Add(productObject);
                             }
                             //toReturn.Products = orderProds;
@@ -231,11 +269,14 @@ namespace ORDRA_API.Controllers
                             orderObject.Product = orderProds;
                             orderObject.Date = cusItem.CusOrdDate;
                             orderObject.Status = cusItem.Customer_Order_Status.CODescription;
+                            orderObject.Total = total;
                             cusOrders.Add(orderObject);
+                            Grouptot = Grouptot + total;
 
                             //toReturn.Orders = cusOrders;
                         }
                         customer.Orders = cusOrders;
+                        customer.Total = Grouptot;
                         customerGroups.Add(customer);
 
 
@@ -246,86 +287,62 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.message = "Information not available to generate report";
+                    toReturn.Error = "Information not available to generate report";
                 }
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Something went wrong " + error;
             }
             return toReturn;
         }
 
+
         [HttpGet]
-        [Route("getSupplierOrderReportData")]
-        public dynamic getSupplierOrderReportData(int selectedOptionID)
+        [Route("getSaleReportData")]
+        public dynamic getSaleReportData()
         {
-            db.Configuration.ProxyCreationEnabled = false;
-            List<Supplier_Order> orders = new List<Supplier_Order>();
-            try
-            {
-                switch (selectedOptionID)
-                {
-                    case 1: //placed
-                        orders = db.Supplier_Order.Include(z => z.Supplier).Include(z => z.Supplier_Order_Status).Include(z => z.Supplier_Order_Product).Where(z => z.Supplier_Order_Status.SOSDescription == "Placed").ToList();
-
-                        break;
-                    case 2: //Delivered
-                        orders = db.Supplier_Order.Include(z => z.Supplier).Include(z => z.Supplier_Order_Status).Include(z => z.Supplier_Order_Product).Where(z => z.Supplier_Order_Status.SOSDescription == "Delivered").ToList();
-                        break;
-                    case 3: //Cancelled
-                        orders = db.Supplier_Order.Include(z => z.Supplier).Include(z => z.Supplier_Order_Status).Include(z => z.Supplier_Order_Product).Where(z => z.Supplier_Order_Status.SOSDescription == "Cancelled").ToList();
-                        break;
-                    case 4: //all
-                        orders = db.Supplier_Order.Include(z => z.Supplier).Include(z => z.Supplier_Order_Status).Include(z => z.Supplier_Order_Product).ToList();
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return getSupplierOrderReportObject(orders);
-        }
-
-        public dynamic getSupplierOrderReportObject(List<Supplier_Order> orders)
-        {
+            List<Sale> sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList();
             dynamic toReturn = new ExpandoObject();
             toReturn.TableData = null;
+            toReturn.Sale = null;
+            //toReturn.Customers = null;
+            toReturn.Products = null;
             try
             {
-                if (orders != null)
+                if (sales != null)
                 {
                     //table data
-                    //group by the suppliers
-                    var suppliers = orders.GroupBy(z => z.Supplier.SupName);
-                    List<dynamic> supplierGroups = new List<dynamic>();
-                    foreach (var item in suppliers)
+                    //group by the customer
+                    var categories = sales.GroupBy(z => z.ContainerID);
+
+                    //getting the customer details 
+                    List<dynamic> catGroups = new List<dynamic>();
+                    foreach (var item in categories)
                     {
-                        dynamic supplier = new ExpandoObject();
-                        supplier.Name = item.Key;
+                        dynamic category = new ExpandoObject();
+                        category.ID = item.Key;
 
-                        List<dynamic> supOrders = new List<dynamic>();
-                        foreach (var supItem in item)
+                        /*List<Container> containers = db.Containers.ToList();
+                        var id = item.Key;
+                        var con = containers.Where(z => z.ContainerID == id).FirstOrDefault();
+                        category.Name = con.ConName;*/
+
+                        //var CatName = "";
+                        //category.Name = item.Select(z => z.Container.ConName).FirstOrDefault();
+                        //getting the sale details
+                        List<dynamic> catSale = new List<dynamic>();
+                        foreach (var catItem in item)
                         {
-                            /*//get product details 
-                            //var date = DateTime.Now;
-                            var prodID = supItem.Supplier_Order_Product.Select(z => z.ProductID).FirstOrDefault().ToString();
-                            List<Product> products = db.Products.Include(z => z.Supplier_Order_Product).Include(z => z.Prices).ToList();
-                            List<Price> prices = db.Prices.Include(z => z.Product).ToList();
-                            var product = products.Where(z => Convert.ToString(z.ProductID) == prodID).FirstOrDefault();
-                            var price = prices.Where(z => Convert.ToString(z.ProductID) == prodID).FirstOrDefault();
-                            var quantity = supItem.Supplier_Order_Product.Select(z => z.SOPQuantity);
-                            //var total = price * Convert.ToDouble(quantity);*/
-
-                            List<Supplier_Order_Product> supOrderProd = db.Supplier_Order_Product.Where(z => z.SupplierOrderID == supItem.SupplierOrderID).ToList();
+                            /*List < Container >  containers = db.Containers.ToList();
+                            var id = catItem.ContainerID.ToString();
+                            var con = containers.Where(z => Convert.ToString(z.ContainerID) == id).FirstOrDefault();
+                            category.Name = con.ConName;*/
+                            List<Product_Sale> prodSale = db.Product_Sale.Where(z => z.SaleID == catItem.SaleID).ToList();
                             //getting the product details
-                            List<dynamic> orderProds = new List<dynamic>();
-                            foreach (var prod in supOrderProd)
+
+                            List<dynamic> prodList = new List<dynamic>();
+                            foreach (var prod in prodSale)
                             {
                                 List<Price> prices = db.Prices.Include(z => z.Product).ToList();
                                 var prodID = prod.ProductID.ToString();
@@ -333,38 +350,88 @@ namespace ORDRA_API.Controllers
                                 dynamic productObject = new ExpandoObject();
                                 productObject.Name = prod.Product.ProdName;
                                 productObject.Price = price.UPriceR;
-                                productObject.Quantity = prod.SOPQuantity;
-                                productObject.ProdTot = Convert.ToDecimal(price.UPriceR) * Convert.ToDecimal(prod.SOPQuantity);
-                                orderProds.Add(productObject);
+                                productObject.Quantity = prod.PSQuantity;
+                                productObject.ProdTot = Convert.ToDecimal(price.UPriceR) * Convert.ToDecimal(prod.PSQuantity);
+                                prodList.Add(productObject);
                             }
+                            //toReturn.Products = orderProds;
 
-                            //create order object 
-                            dynamic orderObject = new ExpandoObject();
-                            orderObject.OrderNum = supItem.SupplierOrderID;
-                            orderObject.Product = orderProds;
-                            orderObject.Date = supItem.SODate;
-                            orderObject.Status = supItem.Supplier_Order_Status.SOSDescription;
-                            //orderObject.Total = 
-                            supOrders.Add(orderObject);
+
+                            dynamic saleObject = new ExpandoObject();
+                            saleObject.SaleID = catItem.SaleID;
+                            saleObject.Product = prodList;
+                            saleObject.Date = catItem.SaleDate;
+                            //saleObject.Status = cusItem.Customer_Order_Status.CODescription;
+                            catSale.Add(saleObject);
+
+                            //toReturn.Orders = cusOrders;
                         }
-                        supplier.Orders = supOrders;
-                        supplierGroups.Add(supplier);
-                    }
+                        category.Sales = catSale;
+                        catGroups.Add(category);
 
-                    toReturn.TableData = supplierGroups;
+
+
+                    }
+                    toReturn.TableData = catGroups;
+                    // toReturn.TableData = customerGroups;
                 }
                 else
                 {
-                    toReturn.message = "Information not available to generate report";
+                    toReturn.Error = "Information not available to generate report";
                 }
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Something went wrong " + error;
             }
             return toReturn;
         }
 
+        [HttpGet]
+        [Route("getSupplierReportData")]
+        public dynamic getSupplierReportData()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.TableData = null;
+
+            try
+            {
+                List<dynamic> supplierList = new List<dynamic>();
+                List<Supplier> suppliers = db.Suppliers.ToList();
+                if (suppliers == null)
+                {
+                    toReturn.Error = "There are no suppliers";
+                }
+                else
+                {
+                    int count = 0;
+                    foreach (var item in suppliers)
+                    {
+                        dynamic supObj = new ExpandoObject();
+                        supObj.Name = item.SupName;
+                        supObj.Cell = item.SupCell;
+                        supObj.Email = item.SupEmail;
+                        supObj.Surburb = item.SupSuburb;
+                       
+                        supplierList.Add(supObj);
+                        count++;
+                    }
+
+                    toReturn.TableData = supplierList;
+                    toReturn.Count = count;
+                }
+
+            }
+            catch (Exception )
+            {
+                toReturn.Error = "Failed to generate report" ;
+            }
+
+            return toReturn;
+        }
+
+        
 
         [HttpGet]
         [Route("getMarkedOffProductReportData")]
@@ -471,12 +538,67 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.message = "Information not available to generate report";
+                    toReturn.Error = "Information not available to generate report";
                 }
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Something went wrong " + error;
+            }
+            return toReturn;
+        }
+
+        [HttpGet]
+        [Route("getCustomerChartData")]
+        public dynamic getCustomerChartData()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.ChartData = null;
+            List<Customer_Order> orders = new List<Customer_Order>();
+            orders = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).ToList();
+
+            try
+            {
+
+                if (orders != null)
+                {
+                    //chart data
+
+                    var statusList = orders.GroupBy(z => z.Customer_Order_Status.CODescription);
+                    List<dynamic> statuses = new List<dynamic>();
+                    //dynamic status = new ExpandoObject();
+
+                    foreach (var item in statusList)
+                    {
+                        dynamic stat = new ExpandoObject();
+                        stat.Name = item.Key;
+                        //dynamic status = new ExpandoObject();
+                        int count = 0;
+                        foreach(var ord in item)
+                        {
+                            count++;
+                        }
+                        //List<Customer_Order> ord = db.Customer_Order.Include(z => z.Customer).Include(z => z.Customer_Order_Status).Include(z => z.Product_Order_Line).Where(z=>z.Customer_Order_Status.CODescription == status).ToList();
+
+
+                        //var sum = Convert.ToInt32(item.Sum(z => z.), CultureInfo.InvariantCulture);
+                        //var sum = Convert.ToInt32(item.Count(z=>z.CustomerOrd), CultureInfo.InvariantCulture);
+                        //stat.Sum = sum;
+                        stat.Count = count;
+                        statuses.Add(stat);
+                    }
+
+                    toReturn.ChartData = statuses;
+                }
+                else
+                {
+                    toReturn.Error = "Information not available to generate report";
+                }
+            }
+            catch (Exception error)
+            {
+                toReturn.Error = "Something went wrong " + error;
             }
             return toReturn;
         }
@@ -488,40 +610,43 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            toReturn.ChartData = null;
+            toReturn.TableData = null;
 
             try
             {
-                DateTime now = DateTime.Now;
-                List<Product_Sale> products = new List<Product_Sale>();
-                products = db.Product_Sale.Include(z => z.Product).Include(z => z.Sale).ToList();
-                List<dynamic> categories = new List<dynamic>();
+                List<dynamic> prodList = new List<dynamic>();
+                List<Product> products = db.Products.Include(z=>z.Prices).Include(z=>z.Product_Category).ToList();
                 // db.Products.Include(z => z.ProductCategoryID).Include(z => z.Prices).Include(z => z.Product_Sale).ToList();
                 if (products != null)
                 {
-                    //chart data
-                    var prodList = products.GroupBy(z => z.Product.ProductCategoryID);    ///Product.Product_Category.PCatName);
-
-                    foreach (var item in prodList)
+                    //Table data
+                    // var prodList = products.GroupBy(z => z.Product.ProductCategoryID);    ///Product.Product_Category.PCatName);
+                    //List<dynamic> catGroup = products.GroupBy(z=>z.P)
+                    int count = 0;
+                    foreach (var item in products)
                     {
-                        dynamic category = new ExpandoObject();
-                        category.name = item.Key;
-                        var rev = Convert.ToDouble(item.Sum(z => z.PSQuantity), CultureInfo.InvariantCulture);
-                        category.Sum = Math.Round(rev, 2);
+                        dynamic prodObj = new ExpandoObject();
+                        prodObj.Name = item.ProdName;
+                        prodObj.ReLevel = item.ProdReLevel;
+                        var price = db.Prices.Where(z => (z.ProductID == item.ProductID)).ToList().LastOrDefault();
+                        prodObj.Unit = price.UPriceR;
+                        prodObj.Cost = price.CPriceR;
 
-                        categories.Add(category);
+                        prodList.Add(prodObj);
+                        count++;
                     }
 
-                    toReturn.ChartData = categories;
+                    toReturn.TableData = prodList;
+                    toReturn.Count = count;
                 }
                 else
                 {
-                    toReturn.message = "Information not available to generate report";
+                    toReturn.Error = "TThere are no products";
                 }
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Report failed to generate " + error;
             }
             return toReturn;
         }
@@ -625,12 +750,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.message = "Information not available to generate report";
+                    toReturn.Error = "Information not available to generate report";
                 }
             }
             catch (Exception error)
             {
-                toReturn.message = "Something went wrong " + error;
+                toReturn.Error = "Something went wrong " + error;
             }
             return toReturn;
         }

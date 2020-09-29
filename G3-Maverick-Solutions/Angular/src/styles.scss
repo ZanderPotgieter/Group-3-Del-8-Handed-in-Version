@@ -523,3 +523,10 @@ html {
   }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+//code for required 
+input:invalid
+  { 
+    border: 1px double red;
+    border-radius: 20px;
+  }

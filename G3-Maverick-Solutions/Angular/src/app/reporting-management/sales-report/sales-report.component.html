@@ -1,1 +1,74 @@
-<p>sales-report works!</p>
+<body>
+    <h1>Generate Sale report</h1>
+    <div id="FromDiv"> 
+    
+        <div class="card">
+            <br>
+            <button type="submit" (click)="GenerateReport()" >Generate Report</button> 
+            <!-- <button type="button" (click)="DownloadPDF()" >Download Report</button>-->
+            <!-- <button type="button" (click)="PrintReport()" >Print Report</button> -->
+            <button type="button" (click)="cancel()" >Cancel</button>
+            <br>
+        </div>
+        
+
+        <div class="divleft">
+            <label><span style="white-space: nowrap;">This report shows the sales made according to the containers</span></label>
+        </div>
+        
+        <br>
+            
+        <div class="card">
+            <div id="TablesDiv">
+                <div class="table">
+                    <table class="table" id="jsPdfTable">
+                        <h1>Sales Report</h1>
+                        <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
+                        
+                        <div *ngFor="let item of TableData; let i = index">
+                            <h2><strong>Container Name</strong> {{item.ID}}</h2>
+                            <div>
+                                <h2><strong>Sale details</strong></h2>
+                                <div *ngFor="let sale of item.Sales" id="testing{{i}}">
+                                    <h3><strong>Sale ID: </strong>  {{sale.SaleID}}</h3>
+                                    <h3><strong>Date: </strong> {{sale.Date | date}}</h3>
+                                   
+                                    <br>
+                                    <h2><strong> Products sold details </strong></h2>
+                                   
+                                    <div *ngFor="let prod of sale.Product" id="testing{{i}}">
+                                            <table class= "container table-latitude" > 
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product name</th>
+                                                        <th>Price(R)</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total(R)</th>
+                                                    </tr>
+                                                </thead>
+    
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{prod.Name}}</td>
+                                                        <td>{{prod.Price}}</td>
+                                                        <td>{{prod.Quantity}}</td>
+                                                        <td>{{prod.ProdTot}}</td> 
+                                                    </tr>
+                                                </tbody>                        
+                                            </table>     
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                 </table>
+             </div>
+    
+                       <!--  <div *ngIf="TableData" id="controlBreak">  
+                            <div *ngIf="selectedOption && selectedOption ==1"> Total amount for placed orders: TotalBal</div>
+                        </div> -->
+        
+            </div>
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+    </body>  

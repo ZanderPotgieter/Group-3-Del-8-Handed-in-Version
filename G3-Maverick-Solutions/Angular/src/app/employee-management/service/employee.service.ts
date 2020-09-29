@@ -61,10 +61,29 @@ postFile(caption: string, fileToUpload: File, employeeID: number)
   const endpoint = 'https://localhost:44399/API/Employee/uploadImage?employeeID=';
   const formData: FormData = new FormData();
   formData.append('Image', fileToUpload, fileToUpload.name)
-  formData.append('ImageCation', caption);
+  formData.append('ImageCaption', caption);
   return this.http.post(endpoint + employeeID, formData);
 
 }
 
+postCV(caption: string, fileToUpload: File, employeeID: number)
+{
+  const endpoint = 'https://localhost:44399/API/Employee/uploadCv?employeeID=';
+  const formData: FormData = new FormData();
+  formData.append('Image', fileToUpload, fileToUpload.name)
+  formData.append('ImageCaption', caption);
+  return this.http.post(endpoint + employeeID, formData);
+
 }
 
+getImages(employeeID: number)
+{
+  return this.http.get(this.url + '/getImages?employeeID=' + employeeID);
+}
+
+getCvs(employeeID: number)
+{
+  return this.http.get(this.url + '/getCvs?employeeID=' + employeeID);
+}
+
+}

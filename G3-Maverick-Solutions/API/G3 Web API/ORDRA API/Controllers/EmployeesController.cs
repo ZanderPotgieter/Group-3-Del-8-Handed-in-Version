@@ -75,7 +75,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn.Error = "Something Went Wrong" + error.Message;
+                toReturn.Error = "Failed to get Employee record" ;
             }
 
             return toReturn;
@@ -142,9 +142,9 @@ namespace ORDRA_API.Controllers
                 toReturn.employee = employeeList;
                 
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error.Message;
+                toReturn.Error = "Failed to get Employee records" ;
             }
 
             return toReturn;
@@ -174,9 +174,9 @@ namespace ORDRA_API.Controllers
                     toReturn.Error = "Image not available";
                 }
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error.Message;
+                toReturn.Error = "Failed to get image";
             }
 
             return toReturn;
@@ -199,9 +199,9 @@ namespace ORDRA_API.Controllers
                     toReturn.Error = "There are no employees";
                 }
             }
-            catch (Exception error)
+            catch (Exception )
             {
-                toReturn.Error = "Something Went Wrong" + error.Message;
+                toReturn.Error = "Failed to get all employees";
             }
 
             return toReturn;
@@ -233,9 +233,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch (Exception )
             {
-                toReturn.Error = "Something Went Wrong: " + error.Message;
+                toReturn.Error = "Failed to get employee record " ;
             }
 
             return toReturn;
@@ -247,8 +247,8 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            ////try
-            ///{
+            try
+            {
             //Get User Details From Input Parameter
             User user = db.Users.Where(x => x.UserID == employee.UserID).FirstOrDefault();
             Employee dupObj = db.Employees.Where(z => z.UserID == employee.UserID).FirstOrDefault();
@@ -278,11 +278,11 @@ namespace ORDRA_API.Controllers
                 toReturn.Error = "Employee already exists ";
             }
             
-            /* }
-             catch (Exception error)
+            }
+             catch (Exception )
              {
-                 toReturn = "Something Went Wrong: " + error.Message;
-             }*/
+                 toReturn = "Failed to create an employee record " ;
+             }
 
             return toReturn;
         }
@@ -313,9 +313,9 @@ namespace ORDRA_API.Controllers
                     toReturn.Error = "Employee Profile Not Found";
                 }
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong: " + error.Message;
+                toReturn.Error = "Failed to update employee record" ;
             }
 
             return toReturn;
@@ -345,9 +345,9 @@ namespace ORDRA_API.Controllers
 
                 }
             }
-            catch (Exception error)
+            catch (Exception )
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Error = "Failed to delete employee record " ;
             }
 
             return toReturn;
@@ -506,7 +506,16 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             try
             {
-                toReturn.Cv = db.EmployeePictures.Where(z => z.EmployeeID == employeeID).ToList();
+                List<EmployeePicture> imgList = new List<EmployeePicture>();
+                List<EmployeePicture> imgs = db.EmployeePictures.Where(z => z.EmployeeID == employeeID).ToList();
+                foreach(var img in imgs)
+                {
+                    dynamic obj = new ExpandoObject();
+                    obj.ImgCaption = img.ImgCaption;
+                    obj.ImgName = img.ImgName;
+                    imgList.Add(obj);
+                }
+                toReturn.Img = imgList;
             }
             catch
             {

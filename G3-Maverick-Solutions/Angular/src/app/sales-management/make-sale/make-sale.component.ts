@@ -99,15 +99,12 @@ export class MakeSaleComponent implements OnInit {
     this.api.initiateSale(this.session)
     .subscribe((value:any) =>{
     console.log(value);
-    if(value.Error){
-      alert(value.Error)
-    }
-    else{
+  
       this.productsWithPrice = value.products;
       this.saleDate = value.SaleDate;
       this.paymentTypes = value.paymentTypes;
       this.vatPerc = value.VAT.VATPerc;
-    }
+    
     
   });
    

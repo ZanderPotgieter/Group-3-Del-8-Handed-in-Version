@@ -24,6 +24,7 @@ export class CreateDonationComponent implements OnInit {
   donatedProduct: DonatedProduct = new DonatedProduct();
   responseMessage: string = "Request Not Submitted";
   donationForm: any;
+  donation1: Donation = new Donation();
 
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -61,6 +62,7 @@ export class CreateDonationComponent implements OnInit {
       }
       else
       {
+        console.log(res)
         this.donationRecipient.RecipientID = res.RecipientID;
         this.donationRecipient.DrName = res.DrName;
         this.donationRecipient.DrSurname = res.DrSurname;
@@ -79,10 +81,18 @@ export class CreateDonationComponent implements OnInit {
     })
   }
 
-  addDonation( )
+  addDonation()
   {
-    this.donationService.addDonation(this.donation).subscribe( (res:any)=> 
+   this.donation1.RecipientID = this.donationRecipient.RecipientID;
+   this.donation1.DonationStatusID = this.donation.DonationStatusID;
+   this.donation1.DonDescription = this.donation.DonDescription;
+   this.donation1.DonDate =  this.donation.DonDate;
+   this.donation1.DonAmount = this.donation.DonAmount;
+   console.log(this.donation1)
+
+    this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
     {
+
       console.log(res);
       if(res.Message)
       {

@@ -159,7 +159,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                var donationRecipient = db.Donation_Recipient.Where((x => x.DrCell == cell)).FirstOrDefault();
+                var donationRecipient = db.Donation_Recipient.Where((x => x.DrName == cell)).FirstOrDefault();
 
                 if (donationRecipient != null)
                 {
@@ -196,7 +196,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                var donationRecipient = db.Donation_Recipient.Where((x => x.DrCell == cell)).FirstOrDefault();
+                var donationRecipient = db.Donation_Recipient.Where((x => x.DrName == cell)).FirstOrDefault();
 
                 if (donationRecipient != null)
                 {

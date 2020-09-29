@@ -6,6 +6,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {User} from '../model/user.model';
 import {Directive, HostBinding, Input} from '@angular/core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { EmployeeCV } from '../model/employee-cv';
+import { EmployeePicture } from '../model/employee-picture';
 
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
@@ -27,7 +29,7 @@ export class SearchemployeeComponent implements OnInit {
   inputEnabled:boolean = true;
   showSearch: boolean = false;
   showResults: boolean = false;
-  bar: boolean = true;
+  showBar: boolean = true;
   showAll: boolean = false;
   showUpload: boolean = false;
   showImg: boolean = false;
@@ -41,6 +43,12 @@ export class SearchemployeeComponent implements OnInit {
   surname : string;
 
   empForm: FormGroup;
+  showImgs: boolean = false;
+  showCvs: boolean = false;
+  empPicture: EmployeePicture = new EmployeePicture();
+  empCV: EmployeeCV = new EmployeeCV();
+  employeeCvs: EmployeeCV[] = [];
+  employeePictures: EmployeePicture[] = [];
 
   constructor(private api: EmployeeService, private router: Router, private sanitizer: DomSanitizer, private fb: FormBuilder) { }
 
@@ -74,7 +82,10 @@ export class SearchemployeeComponent implements OnInit {
     this.showUpload =true;
     this.showResults = false;
     this.showAll = false;
-  
+    this.showImgs = false;
+    this.showCvs = false;
+    this.showBar = true;
+    this.showUpload = false;
   }
 
 
@@ -95,6 +106,8 @@ export class SearchemployeeComponent implements OnInit {
         this.showUpload =true;
         this.showResults = false;
         this.showAll = false;
+        this.showImgs = false;
+        this.showCvs = false;
       }
 
     })
@@ -131,6 +144,11 @@ export class SearchemployeeComponent implements OnInit {
         this.showResults= false; 
         this.showUpload = false;
         this.showSearch = false;
+        
+        this.showImgs = false;
+        this.showCvs = false;
+        this.showBar = true;
+        this.showUpload = false;
       }
     })
   
@@ -142,6 +160,11 @@ export class SearchemployeeComponent implements OnInit {
     this.showResults = false;
     this.showButtons = true;
     this.showUpload =false;
+    
+    this.showImgs = false;
+    this.showCvs = false;
+    this.showBar = true;
+    this.showUpload = false;
   }
 
   searchEmployee(){
@@ -170,6 +193,11 @@ export class SearchemployeeComponent implements OnInit {
       this.showSearch = false;
       this.showResults = true;
       this.showUpload = true;
+      
+      this.showImgs = false;
+      this.showCvs = false;
+      this.showBar = true;
+      this.showUpload = false;
     })
 
   }
@@ -179,6 +207,11 @@ export class SearchemployeeComponent implements OnInit {
     this.showSave = true;
     this.showButtons = false;
     this.inputEnabled = false;
+    
+    this.showImgs = false;
+    this.showCvs = false;
+    this.showBar = true;
+    this.showUpload = false;
   }
 
   Save(){
@@ -217,7 +250,7 @@ export class SearchemployeeComponent implements OnInit {
 
   
   deleteEmployee(){
-    this.api.deleteEmployee(this.employee.UserID).subscribe( (res:any)=> {
+    this.api.deleteEmployee(this.employee.EmployeeID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Error)
       {
@@ -242,6 +275,61 @@ export class SearchemployeeComponent implements OnInit {
     this.showSearch = false;
     this.showResults = false;
     this.showAll = false;
+    
+    this.showImgs = false;
+    this.showCvs = false;
+    this.showBar = false;
+    this.showUpload = false;
+  }
+
+  getImages()
+  {
+    this.api.getImages(this.employee.EmployeeID).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Error != null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage)
+      }
+      else
+      {
+
+        this.empPicture = res.Img;
+        this.showAll = false;
+        this.showResults= false; 
+        this.showUpload = false;
+        this.showSearch = false;
+        this.showImgs = false;
+        this.showCvs = false;
+        this.showBar = false;
+        this.showUpload = true;
+      }
+    });
+  }
+
+  getCvs()
+  {
+    this.api.getCvs(this.employee.EmployeeID).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Error != null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage)
+      }
+      else
+      {
+
+        this.empCV = res.EmployeeCVs;
+        this.showAll = false;
+        this.showResults= false; 
+        this.showUpload = false;
+        this.showSearch = false;
+        this.showImgs = false;
+        this.showCvs = false
+        this.showBar = false;
+        this.showUpload = true;
+      }
+    })
   }
 
 }

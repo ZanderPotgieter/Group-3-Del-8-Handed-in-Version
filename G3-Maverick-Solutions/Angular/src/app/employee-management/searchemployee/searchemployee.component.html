@@ -1,6 +1,6 @@
 <h1>Search Employee Profile</h1>
 <form [formGroup] = "empForm">
-    <div *ngIf = "bar" class="card">
+    <div *ngIf = "showBar" class="card">
         <button type="submit" (click) ="search()">Search</button>
         <button type="submit" (click) ="viewAll()">View all Employees</button>
     </div>
@@ -23,7 +23,7 @@
             <label for="cusSurname">Surname:   </label>
             <input class="searchinput" formControlName ="surname" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
             <span style="color:red" *ngIf="empForm.get('surname').errors && (empForm.get('surname').touched || empForm.get('surname').dirty)">
-                <span *ngIf="empForm.get('surname').errors.required">Name is required.</span>
+                <span *ngIf="empForm.get('surname').errors.required">Surname is required.</span>
                 <span *ngIf="empForm.get('surname').errors.minlength || empForm.get('surname').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
                 <span *ngIf="empForm.get('surname').errors.pattern">Only text characters.</span>
             </span>
@@ -35,14 +35,55 @@
         </div>
     </div>
 
-    <!-- <div *ngIf="showUpload">
+     <div *ngIf="showUpload" class = "card">
         <div>
-            <button type="submit" (click)="getImg()">View Image</button>
-            <button type="submit">View CV</button>
+            <button type="submit" (click)="getImages()">View uploaded image details</button>
+            <button type="submit" (click)="getCvs()">View uploaded CV's</button>
         </div>
-    </div> -->
+    </div> 
+
+    <div class="card" *ngIf= "showImgs"> 
+        <p class="subheadinglabel">List of all the Employees images:</p>
+
+        <table>
+            <tr>
+                <th>Img caption</th>
+                <th>Img name</th>
+            </tr>
 
 
+            <tr *ngFor="let item of empPicture">
+                
+                <td>{{item.ImgCaption}}</td>
+                <td>{{item.ImgName}}</td>
+                <!-- <td><button (click)="view(item.UserName, item.UserSurname)">View</button></td> -->
+            </tr>
+            
+        </table> 
+        <button type="submit" (click)="cancel()">Cancel</button> 
+    </div>
+
+    
+    <div class="card" *ngIf= "showCvs"> 
+        <p class="subheadinglabel">List of all the Employees CVs:</p>
+
+        <table>
+            <tr>
+                <th>CV caption</th>
+                <th>CV name</th>
+            </tr>
+
+
+            <tr *ngFor="let item of empCV">
+                
+                <td>{{item.CVCaption}}</td>
+                <td>{{item.CVName}}</td>
+                <!-- <td><button (click)="view(item.UserName, item.UserSurname)">View</button></td> -->
+            </tr>
+            
+        </table> 
+        <button type="submit" (click)="cancel()">Cancel</button> 
+    </div>
 
 
     <div *ngIf ="showImg" class="card">
@@ -108,6 +149,7 @@
             <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
             <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
         </div>
+
 
         <br><br>
         <div class="divleft" *ngIf="showButtons">

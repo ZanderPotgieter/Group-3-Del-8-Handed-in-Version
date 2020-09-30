@@ -245,11 +245,12 @@ export class MakeSaleComponent implements OnInit {
       }
 
       listProducts(){
-       if(this.quantity == 0){
-        
+       if(this.quantity == 0 || this.prodSelection == null){
+        this.prodNotSelected = true;
           this.quantyNull = true;
         }
         else{
+          this.prodNotSelected = false;
           this.quantyNull = false;
       
         this.selectedProduct.Quantity = this.quantity;

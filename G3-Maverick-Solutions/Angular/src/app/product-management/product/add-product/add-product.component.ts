@@ -48,6 +48,7 @@ export class AddProductComponent implements OnInit {
       PriceStartDate: ['', [Validators.required]], 
       SelectCon: ['', [Validators.required]], 
       SelectProduct: ['', [Validators.required]],
+      quantity: ['', [Validators.required]],
     }); 
     this.productService.getAllProducts()
     .subscribe((value:any)=> {

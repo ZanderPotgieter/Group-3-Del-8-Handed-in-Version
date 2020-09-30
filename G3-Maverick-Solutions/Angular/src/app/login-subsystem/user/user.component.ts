@@ -24,6 +24,11 @@ export class UserComponent implements OnInit {
     console.log(this.WeatherData);
   }
 
+  onNavigate()
+  {
+    window.location.href='https://u17107459.wixsite.com/mysite';
+  }
+
   getWeatherData(){
     fetch('https://api.openweathermap.org/data/2.5/weather?q=Pretoria&appid=d5d542a5b8d5fc3194d24db5d26529f9')
     .then(response=>response.json())

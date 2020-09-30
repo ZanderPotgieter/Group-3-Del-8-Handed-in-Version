@@ -89,6 +89,8 @@ export class SearchSaleComponent implements OnInit {
     this.showcriteria = false;
     this.showDate = true;
     this.showOptions = true;
+    this.showSale = false;
+    this.showListAllSales = false;
     
   }
 

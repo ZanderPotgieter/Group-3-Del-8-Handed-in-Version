@@ -36,7 +36,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                
+
 
                 //get all containers list for select box to update
                 List<Container> containersList = db.Containers.ToList();
@@ -69,12 +69,12 @@ namespace ORDRA_API.Controllers
                     Employee employee = db.Employees.Where(x => x.UserID == user.UserID).FirstOrDefault();
                     if (employee != null)
                     {
-
+                        DateTime startdate = Convert.ToDateTime(employee.EmpStartDate);
 
                         //Set Employye Details To Return Object
                         dynamic employeeDetails = new ExpandoObject();
                         employeeDetails.EmployeeID = employee.EmployeeID;
-                        employeeDetails.EmpStartDate = employee.EmpStartDate;
+                        employeeDetails.EmpStartDate = startdate.ToString("yyyy-MM-dd");
                         employeeDetails.EmpShiftsCompleted = employee.EmpShiftsCompleted;
                         toReturn.employee = employeeDetails;
                     }
@@ -196,10 +196,17 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            ////try
-            ///{
+            try
+            {
                 //Get User Details From Input Parameter
                 User user = db.Users.Where(x => x.UserID == manager.UserID).FirstOrDefault();
+
+                //get user type of manager
+                User_Type usertype = db.User_Type.Where(x => x.UTypeDescription == "Manager").FirstOrDefault();
+
+                //set usertype to manager
+                user.User_Type = usertype;
+                db.SaveChanges();
 
                 //Get Lists 0f Contains To Set In Create Dynamic Object From Input Parameter
                 List<Container> containers = manager.Containers.ToList();
@@ -207,12 +214,12 @@ namespace ORDRA_API.Controllers
 
                 foreach (var con in containers)
                 {
-                    Container container = db.Containers.Where(x => x.ContainerID == con.ContainerID).SingleOrDefault() ;
+                    Container container = db.Containers.Where(x => x.ContainerID == con.ContainerID).SingleOrDefault();
                     managedContainers.Add(container);
 
                 }
 
-                //Set Manager Details To Return object
+                //Set Manager Details To add
                 Manager managerDetails = new Manager();
                 if (manager != null)
                 {
@@ -233,11 +240,11 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Message = "Manager Profile Not Found";
                 }
-           /* }
+            }
             catch (Exception error)
             {
                 toReturn = "Something Went Wrong: " + error.Message;
-            }*/
+            }
 
             return toReturn;
         }
@@ -296,7 +303,7 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             Manager manager = new Manager();
-           // Containers containers = new Container();
+            // Containers containers = new Container();
 
             try
             {
@@ -319,13 +326,13 @@ namespace ORDRA_API.Controllers
                     }
 
 
-                      db.SaveChanges();
+                    db.SaveChanges();
 
-                        manager = db.Managers.Where(x => x.ManagerID == id).FirstOrDefault();
-                        db.Managers.Remove(manager);
-                        db.SaveChanges();
-                        toReturn.Message = "Delete Successful";
-                   
+                    manager = db.Managers.Where(x => x.ManagerID == id).FirstOrDefault();
+                    db.Managers.Remove(manager);
+                    db.SaveChanges();
+                    toReturn.Message = "Delete Successful";
+
                 }
             }
             catch (Exception error)
@@ -335,9 +342,6 @@ namespace ORDRA_API.Controllers
 
             return toReturn;
         }
-
-
-
     }
 }
 

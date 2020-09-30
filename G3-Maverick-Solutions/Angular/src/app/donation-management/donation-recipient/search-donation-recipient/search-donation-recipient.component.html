@@ -34,7 +34,7 @@
     
     </form>
    <form [formGroup]="donForm">
-        <div class="card" *ngIf = "showSearch"> 
+        <div  class="card" *ngIf = "showSearch"> 
             <p class="subheadinglabel" >Enter Donation Recipient Name and Surname To Search:</p>
             <div class="divleft" >
                 <label for="name" >Name:</label><input class="searchinput" formControlName="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" pattern="[a-zA-Z ]*" required>
@@ -53,7 +53,7 @@
                      <span *ngIf="donForm.get('surname').errors.pattern">Only text characters.</span>
                  </span>
                 <br>
-                <button  type="submit" (click)="Search()" [disabled]="form.invalid">Search</button>
+                <button  type="submit" (click)="Search()" >Search</button>
                 <button  type="submit" (click)="Cancel()">Cancel</button>
 
                 <div *ngIf="donNull" class ="divleft">
@@ -63,7 +63,7 @@
         </div>
     
     <br><br>
-    <form #form='ngForm' class="mb-4" autocomplete="off">
+    <form [formGroup]="donForm">
          <div class="card" *ngIf = "showResults">
             <div class="divleft">
                 <label class="subheadinglabel">Searched Donation Recipient Details:</label>

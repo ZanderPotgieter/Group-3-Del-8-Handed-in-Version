@@ -39,6 +39,17 @@ setUserTypeAccess(UserTypeAccess: UserTypeAccess[]){
   
 
 }
+addUserTypeAccess(accessid: number, usertypeid: number){
+  return this.http.get(this.url + '/addUserTypeAccess?accessid='+accessid+'&usertypeid='+usertypeid, this.httpOptions)
+
+
+}
+
+removeUserTypeAccess(accessid: number, usertypeid: number){
+  return this.http.get(this.url + '/removeUserTypeAccess?accessid='+accessid+'&usertypeid='+usertypeid, this.httpOptions)
+
+
+}
   getAllUserTypes(){
     return this.http.get(this.url + '/getAllUserTypes')
   }

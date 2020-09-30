@@ -137,8 +137,6 @@ export class MakeSaleComponent implements OnInit {
 
   prodPush(val: ProductDetails){
     this.selectedProduct = val;
-    //this.productSale.PSQuantity = 1;
-    //this.productSale.ProductID = 1;
     }
 
     showPayment(){
@@ -204,13 +202,15 @@ export class MakeSaleComponent implements OnInit {
         this.payment.PayAmount = this.amount;
         this.payment.PayDate = this.saleDate;
         this.payments.push(this.payment);
-        this.sale.Payments.push(this.payment);
+        //this.sale.Payments.push(this.payment);
         
       }
       
 
       makeSale(){
-       this.sale.ContainerID = this.ContainerID;
+       this.sale.ContainerID = this.user.ContainerID;
+        this.sale.Payments.push(...this.payments);
+        this.sale.Product_Sale.push(...this.prodcuctsales);
         
        /* this.prodcuctsales.forEach(item => {
           this.sale.Product_Sale.push(item);
@@ -224,12 +224,15 @@ export class MakeSaleComponent implements OnInit {
         });*/
 
 
-        this.sale.Product_Sale = this.prodcuctsales;
-        this.sale.Payments = this.payments;
+        //this.sale.Product_Sale = this.prodcuctsales;
+        //this.sale.Payments = this.payments;
 
         if ( this.total == 0){
           this.sale.UserID = this.user.UserID;
           this.api.makeSale(this.sale).subscribe((res:any) =>{
+            if(res.Error){
+              alert(res.Error);
+            }
         if (res.Message != null){
           this.responseMessage = res.Message
           alert(this.responseMessage);
@@ -276,8 +279,8 @@ export class MakeSaleComponent implements OnInit {
       this.productSale.PSQuantity = this.quantity;
       this.productSale.ProductID = this.selectedProduct.ProductID;
 
-      //this.prodcuctsales.push(this.productSale);
-      this.sale.Product_Sale.push(this.productSale);
+      this.prodcuctsales.push(this.productSale);
+      //this.sale.Product_Sale.push(this.productSale);
        
       
       this.showTable = true;

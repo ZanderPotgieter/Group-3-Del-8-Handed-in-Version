@@ -119,6 +119,7 @@ import {ViewStatusesComponent} from './adminModels/view-statuses/view-statuses.c
 import {MatRadioModule} from '@angular/material/radio';
 import { UserTreeComponent } from './user-tree/user-tree.component';
 import { UserReportComponent } from './reporting-management/user-report/user-report.component';
+import { SearchUsersComponent } from './search-users/search-users.component';
 
 
 
@@ -217,6 +218,7 @@ import { UserReportComponent } from './reporting-management/user-report/user-rep
     ViewStatusesComponent,
     UserTreeComponent,
     UserReportComponent,
+    SearchUsersComponent,
   ],
   imports: [
     BrowserModule,

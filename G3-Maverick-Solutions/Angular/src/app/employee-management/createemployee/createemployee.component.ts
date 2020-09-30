@@ -99,9 +99,10 @@ handleFileInputCV(file: FileList)
   reader.readAsDataURL(this.fileToUpload);
 }
 
- OnSubmit(Caption, Image, EmployeeID)
+ OnSubmit(Caption, Image)
  {
-   this.api.postFile(Caption, this.fileToUpload, EmployeeID).subscribe( data=>
+  this.searchEmployee();
+   this.api.postFile(Caption, this.fileToUpload, this.employee.EmployeeID).subscribe( data=>
    {
     
     console.log('done');
@@ -116,6 +117,7 @@ handleFileInputCV(file: FileList)
 
  OnSubmitCV(Caption,Image, EmployeeID)
  {
+   this.searchEmployee();
    this.api.postCV(Caption, this.fileToUpload, EmployeeID).subscribe( 
     data=>
     {

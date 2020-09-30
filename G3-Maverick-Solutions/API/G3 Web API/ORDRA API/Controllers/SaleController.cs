@@ -91,7 +91,7 @@ namespace ORDRA_API.Controllers
             }
             else
             {
-                return toReturn.Message = "No Products In Stock In Container";
+                return toReturn.Message = "There are no products in stock for the operating Container";
             }
 
 
@@ -238,12 +238,12 @@ namespace ORDRA_API.Controllers
                 int saleMadeID = addedSale.SaleID;
 
                 toReturn.saleID = saleMadeID;
-                toReturn.Message = "Sale Completed Succuessfully";
+                toReturn.Message = "Success! Sale has been made and processed successfully";
            
            }
             catch
             {
-                toReturn.Error = "Sale Unsuccessfully Completed";
+                toReturn.Error = "Oops! Something went wrong.";
             }
 
             return toReturn;

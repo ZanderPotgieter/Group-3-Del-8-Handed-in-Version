@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Supplier} from '../supplier-management/supplier';
 import { NgModule } from '@angular/core';
 import {SupplierService} from '../supplier-management/supplier.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -12,11 +13,22 @@ import {SupplierService} from '../supplier-management/supplier.service';
 })
 export class AddSupplierComponent implements OnInit {
 
-  constructor(private api: SupplierService, private router: Router) { }
+  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder) { }
+  supForm: FormGroup;
   supplier : Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
 
   ngOnInit(): void {
+
+    this.supForm= this.fb.group({  
+      SupName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      SupCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
+      SupEmail: ['', [Validators.required, Validators.email]], 
+      SupStreetNr: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(8), Validators.pattern('[0-9 ]*')]],
+      SupStreet: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      SupCode: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]], 
+      SupSuburb: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],       
+    }); 
   }
 
   addSupplier(){

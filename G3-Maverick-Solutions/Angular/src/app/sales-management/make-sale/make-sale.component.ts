@@ -84,27 +84,30 @@ export class MakeSaleComponent implements OnInit {
   showName: boolean = false;
   barcodeFound: boolean = false;
   ngOnInit(): void {
-    this.api.initiateSale()
-    .subscribe((value:any) =>{
-      if (value != null){
-        this.productsWithPrice = value.products;
-        this.saleDate = value.SaleDate;
-        this.paymentTypes = value.paymentTypes;
-        this.vatPerc = value.VAT.VATPerc;
 
-      }
-    })
+
     if(!localStorage.getItem("accessToken")){
       this.router.navigate([""]);
     }
     else {
       this.session = {"token" : localStorage.getItem("accessToken")}
+
       this.api.getUserDetails(this.session).subscribe( (res:any) =>{
         this.user = res;
       })
 
-      console.log(this.ConName);
-      console.log(this.ContainerID);
+    this.api.initiateSale(this.session)
+    .subscribe((value:any) =>{
+    console.log(value);
+  
+      this.productsWithPrice = value.products;
+      this.saleDate = value.SaleDate;
+      this.paymentTypes = value.paymentTypes;
+      this.vatPerc = value.VAT.VATPerc;
+    
+    
+  });
+   
   }
 
   this.searchForm= this.fb.group({ 
@@ -242,11 +245,12 @@ export class MakeSaleComponent implements OnInit {
       }
 
       listProducts(){
-       if(this.quantity == 0){
-        
+       if(this.quantity == 0 || this.prodSelection == null){
+        this.prodNotSelected = true;
           this.quantyNull = true;
         }
         else{
+          this.prodNotSelected = false;
           this.quantyNull = false;
       
         this.selectedProduct.Quantity = this.quantity;

@@ -97,7 +97,10 @@
             <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
            </select>
            <br>
-           
+           <span style="color:red" *ngIf="pdForm.get('SelectCon').errors && (pdForm.get('SelectCon').touched || pdForm.get('SelectCon').dirty)">
+            <span *ngIf="pdForm.get('SelectCon').errors.required">Select Container required.</span>
+        </span>
+      <br>
         
           <br>
           <label for="ProductID">Product:</label>
@@ -110,11 +113,19 @@
                     <span *ngIf="pdForm.get('SelectProduct').errors.required">Select Product required.</span>
                 </span>
               <br>
+              <div class="divleft">
+                <label for="quantity">Quantity </label>
+                <input [ngModelOptions]="{standalone: true}" style="width:60px;" type="number" formControlName="quantity" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+                <br>
+                  <span style="color:red" *ngIf="pdForm.get('quantity').errors && (pdForm.get('quantity').touched || pdForm.get('quantity').dirty)">
+                    <span *ngIf="pdForm.get('quantity').errors.required">Quantity required.</span>
+                </span>
+              <br>
+              </div>
+            
             <button type="submit" (click)="Link()">Link</button>
             <button type="submit" (click)="RemoveLink()">Remove Link</button>
             <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
-    </div>
-    </form>
-</body>
-
+      </div>
+      </form>

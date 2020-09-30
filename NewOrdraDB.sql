@@ -14,6 +14,14 @@ CREATE TABLE User_Type
 )
 GO
 
+CREATE TABLE Container
+(
+	ContainerID int Primary Key identity(1,1) Not Null,
+	ConName varchar(25),
+	ConDescription varchar(255)
+)
+GO
+
 CREATE TABLE [User]
 (
 	UserID int Primary Key identity(1,1) Not Null,
@@ -24,6 +32,9 @@ CREATE TABLE [User]
 	UserSurname varchar(35),
 	UserCell varchar(10),
 	UserEmail varchar(75),
+	ContainerID int,
+	Constraint FK_Container FOREIGN KEY (ContainerID)
+	REFERENCES Container(ContainerID),
 	CONSTRAINT FK_UserType FOREIGN KEY (UserTypeID)
     REFERENCES User_Type(UserTypeID)
 )
@@ -37,10 +48,10 @@ CREATE TABLE[Access]
 GO
 
 CREATE TABLE [User_Type_Access](
-	UserTypeID int, 
+	UserAccessID int Primary Key identity(1,1) Not Null,
+	UserTypeID int,
 	AccessID int,
 	AccessGranted Date,
-	primary key(UserTypeID,AccessID),
 	CONSTRAINT FK_UserTypeAccess
 FOREIGN KEY (UserTypeID)
     REFERENCES User_Type(UserTypeID),
@@ -131,13 +142,7 @@ CREATE TABLE Manager
 )
 GO
 
-CREATE TABLE Container
-(
-	ContainerID int Primary Key identity(1,1) Not Null,
-	ConName varchar(25),
-	ConDescription varchar(255)
-)
-GO
+
 
 CREATE TABLE Manager_Container
 (
@@ -618,7 +623,7 @@ VALUES('Administration'),
 		('Manager'),
 		('Creditor'),
 		('Donation Recipient'),
-		('Creditor Paymnet');
+		('Creditor Payment');
 
 
 
@@ -789,10 +794,16 @@ VALUES ('1', '3', '34'),
 	   ('2', '2', '19'),
 	   ('3', '3', '24'),
 	   ('3', '1', '32'),
-	   ('3', '2', '21');
+	   ('3', '2', '21'),
+	   ('1','4','0'),
+	   ('2','5','0'),
+	   ('3','6','0'),
+	   ('1','5','0'),
+	   ('2','6','0'),
+	   ('3','4','0');
 
-INSERT INTO VAT (VATPerc, VATStartDate)
-VALUES ('15', '2018-04-01');
+INSERT INTO VAT (VATPerc, VATStartDate, VATEndDate)
+VALUES ('15', '2018-04-01','2010-09-30')
 
 INSERT INTO Product_Order_Line (CustomerOrderID, ProductID, PLQuantity)
 VALUES ('2', '1', '50'),

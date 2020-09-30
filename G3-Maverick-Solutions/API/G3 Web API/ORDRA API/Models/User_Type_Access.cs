@@ -14,8 +14,9 @@ namespace ORDRA_API.Models
     
     public partial class User_Type_Access
     {
-        public int UserTypeID { get; set; }
-        public int AccessID { get; set; }
+        public int UserAccessID { get; set; }
+        public Nullable<int> UserTypeID { get; set; }
+        public Nullable<int> AccessID { get; set; }
         public Nullable<System.DateTime> AccessGranted { get; set; }
     
         public virtual Access Access { get; set; }

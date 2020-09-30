@@ -117,6 +117,7 @@ import { NgModule } from '@angular/core';
     import {UsertableComponent} from './usertable/usertable.component';
     import {AdminComponent} from './admin/admin.component';
    import {ViewStatusesComponent} from './adminModels/view-statuses/view-statuses.component';
+   import {UsersComponent} from './adminModels/statuses/users.component';
 
     const routes: Routes = [
 
@@ -155,6 +156,7 @@ import { NgModule } from '@angular/core';
         {path: 'admin', component: AdminComponent},
         {path: 'user-table', component: UsertableComponent},
         {path: 'view-statuses', component: ViewStatusesComponent},
+        {path: 'user-access', component: UsersComponent},
 
         //Management routes 
 

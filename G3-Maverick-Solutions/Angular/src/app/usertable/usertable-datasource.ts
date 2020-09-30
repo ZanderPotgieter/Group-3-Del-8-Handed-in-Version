@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import {Users} from '../adminModels/users';
 import {AdminService} from '../admin.service';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import { OnInit } from '@angular/core';
 
 
 // TODO: replace this with real data from your application
@@ -18,11 +19,11 @@ import { Observable, of as observableOf, merge } from 'rxjs';
 export class UsertableDataSource {
  
 
-  constructor( ) {
+  constructor( private api: AdminService ) {
    
   }
 
-  private api: AdminService
+ 
   dataList: Users[] = [];
 
   getAllUsers(){
@@ -31,8 +32,8 @@ export class UsertableDataSource {
       this.dataList = res;
 
     })
-
-    return this.dataList;
+    
+    return this.dataList
     
   }
 

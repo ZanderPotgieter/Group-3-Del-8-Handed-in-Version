@@ -30,7 +30,7 @@
             <tr *ngFor="let item of list; index as ndx; trackBy:trackByndx;">
                 <td>{{ndx+1}}</td>
                 <td><input style="width: 70%" type = "text"  name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].description"></td>
-                <td ><button  style="border-radius: 10px; width: 60%;" (click)="update()"><i class="small material-icons" >edit</i></button></td>
+                <td ><button  style="border-radius: 10px; width: 60%;" (click)="update(ndx)"><i class="small material-icons" >edit</i></button></td>
                 <td><button style="border-radius: 10px; width: 60%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
                 <!--<td><button style="border-radius: 10px; width: 60%;" (click)="delete(ndx)"><i class="small material-icons" >delete</i></button></td>-->
     
@@ -40,9 +40,4 @@
         <br>
         <button type="submit" (click)="Cancel()">Cancel</button>
     </div>
-    
-
-      
-
-    </form>
-</body>
+ 

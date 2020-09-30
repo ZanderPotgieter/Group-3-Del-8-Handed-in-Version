@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
   }
 
   gotoUserAccess(){
-    this.router.navigate(['user-tree']);
+    this.router.navigate(['user-access']);
   }
 
   gotoUserType(){

@@ -46,21 +46,30 @@ const TREE_DATA = {
  * If a node is a category, it has children items and new items can be added under the category.
  */
 @Injectable()
-export class ChecklistDatabase {
+export class ChecklistDatabase{
   dataChange = new BehaviorSubject<TodoItemNode[]>([]);
 
   get data(): TodoItemNode[] { return this.dataChange.value; }
 
   constructor(private api: AdminService) {
+   
     this.initialize();
   }
 
+  mydata: any;
+
+
   initialize() {
-    
+   
+    this.api.getTreeData().subscribe( (res:any) =>{
+      console.log(res);
+      this.mydata = res["UserTypes"];
+  
+      })
  
     // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
     //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
+    const data = this.buildFileTree(this.mydata, 0);
 
     // Notify the change.
     this.dataChange.next(data);

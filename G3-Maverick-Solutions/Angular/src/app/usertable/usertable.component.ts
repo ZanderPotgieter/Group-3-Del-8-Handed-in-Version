@@ -5,6 +5,8 @@ import { MatTable } from '@angular/material/table';
 import { UsertableDataSource } from './usertable-datasource';
 import {Users} from '../adminModels/users';
 
+import {AdminService} from '../admin.service';
+
 @Component({
   selector: 'app-usertable',
   templateUrl: './usertable.component.html',
@@ -16,11 +18,19 @@ export class UsertableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable) table: MatTable<Users>;
   dataSource: UsertableDataSource;
 
+  constructor(private api: AdminService){}
+  dataList: Users[] = [];
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['UserName', 'UserSurname', 'UserCell', 'UserEmail', 'UserType'];
 
   ngOnInit() {
-    this.dataSource = new UsertableDataSource();
+    this.api.getAllUsers().subscribe( (res:any)=> {
+      console.log(res);
+      this.dataSource = res;
+
+    })
+    //new UsertableDataSource();
   }
 
   ngAfterViewInit() {

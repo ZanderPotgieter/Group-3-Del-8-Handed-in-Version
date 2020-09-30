@@ -99,8 +99,11 @@
                 </div>
 
                 <div class="divleft" style="float:left; width:50%;">   
-                <label  class="displaylabel" for="cusCell" style="width:100px">Email:</label>
-                <label id="cusCell" name="cusCell" >{{customer.CusEmail}}</label>
+                    <div class="form-group" [ngClass] ="{}">
+                <label  class="displaylabel" for="cusEmail" style="width:100px">Email:</label>
+                <label id="email"  name="email" [(ngModel)]="email" id="txtEmail" >{{customer.CusEmail}}</label>
+      
+            </div>
                 </div>
             </div>
          </div>
@@ -182,7 +185,7 @@
 
               
             <div class="divleft">
-                <button type="submit" (click)="placeOrder()">Place Order</button>
+                <button type="submit" (click)="placeOrder()" (click)="sendOrderEmail()">Place Order</button>
                 <button type="submit" (click)="gotoCustomerOrderManagement()">Cancel</button>
             </div>
         </div>

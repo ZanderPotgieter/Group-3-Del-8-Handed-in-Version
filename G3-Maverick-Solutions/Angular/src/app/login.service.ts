@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpClientModule} from "@angular/common/http"; 
 import { Observable } from 'rxjs'; 
 import { User} from "./user";
+import {Container} from "./container-management/container";
 
 
 
@@ -14,6 +15,7 @@ export class LoginService {
  constructor(private http: HttpClient) { }
 
   url = 'https://localhost:44399/Api/Login'
+  urladmin = 'https://localhost:44399/Api/Admin'
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -32,6 +34,14 @@ export class LoginService {
 
   getUserDetails(session: any){
     return this.http.post(this.url + '/getUserDetails',session, this.httpOptions)
+  }
+
+  getUserTypeAccess(){
+    return this.http.get( this.urladmin + '/getUserTypeAccess')
+  }
+
+  getUserAccess( session: any){
+    return this.http.post(this.urladmin+ '/getUserAccess',session, this.httpOptions)
   }
 
   sendEmail(email: string)

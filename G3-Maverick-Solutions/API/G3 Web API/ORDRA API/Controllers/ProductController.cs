@@ -646,35 +646,61 @@ namespace ORDRA_API.Controllers
         //add product to container
         [HttpPut]
         [Route("addProductToContainer")]
-        public object addProductToContainer(int containerID, int productID)
+        public object addProductToContainer(int containerID, int productID, int quantity)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
 
-            try
+           try
             {
 
                 Product prod = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
                 Container con = db.Containers.Where(x => x.ContainerID == containerID).FirstOrDefault();
 
-                Container_Product conProd = new Container_Product();
-                conProd.Product = prod;
-                conProd.Container = con;
-                db.Container_Product.Add(conProd);
-                db.SaveChanges();
-
-                toReturn.Message = "Product Successfully Added To Container";
-
-
+            if ( con == null){
+                return toReturn.Message = "Container Not Found";
 
             }
+            if (prod == null)
+            {
+                return toReturn.Message = "Product Not Found";
+
+            }
+            else
+            {
+                Container_Product conProd = new Container_Product();
+                conProd.ContainerID = con.ContainerID;
+                conProd.ProductID = prod.ProductID;
+                conProd.CPQuantity = quantity;
+                conProd.Product = prod;
+                conProd.Container = con;
+
+                Container_Product found = db.Container_Product.Where(x => x.ContainerID == conProd.ContainerID && x.ProductID == conProd.ProductID).FirstOrDefault();
+
+                if (found == null)
+                {
+                    db.Container_Product.Add(conProd);
+                    db.SaveChanges();
+
+                    toReturn.Message = "Product Added To Container";
+                }
+                else
+                {
+                    toReturn.Message= " Product Already Linked To Container";
+                    
+                }
+
+            }
+
+
+           }
             catch (Exception)
             {
                 toReturn.Message = "Adding Product To Container UnSuccsessful";
 
             }
-            return toReturn;
+           return toReturn;
         }
 
         //ADD PRICE
@@ -829,10 +855,18 @@ namespace ORDRA_API.Controllers
 
 
                 Container_Product conProd = db.Container_Product.Where(x => x.ContainerID == containerID && x.ProductID == productID).FirstOrDefault();
-                db.Container_Product.Remove(conProd);
-                db.SaveChanges();
+                if (conProd != null)
+                {
+                    db.Container_Product.Remove(conProd);
+                    db.SaveChanges();
+                    toReturn.Message = "Product Removed From Container";
+                }
+                else
+                {
+                    toReturn.Message = "Product Not Found In Container";
+                }
 
-                toReturn.Message = "Product Successfully Removed From Container";
+               
 
 
 

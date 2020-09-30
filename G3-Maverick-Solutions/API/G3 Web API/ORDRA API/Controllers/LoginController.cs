@@ -107,11 +107,29 @@ namespace ORDRA_API.Controllers
                 {
                     Guid guid = Guid.NewGuid();
                     user.SessionID = guid.ToString();
+                    if(userInput.ContainerID != null)
+                    {
+                        user.ContainerID = userInput.ContainerID;
+                    }
+
+
+                    if (userInput.Container != null)
+                    {
+                        
+                        Container con = db.Containers.Where(x => x.ContainerID == userInput.ContainerID).FirstOrDefault();
+
+                        if (con != null)
+                        {
+                            user.Container = con;
+                        }
+                    }
+                   
 
                     db.Entry(user).State = EntityState.Modified; // Checks if anything from the user here is diffent from the user in the db
 
                     db.SaveChanges();
                     toReturn.sessionID = guid.ToString();
+
 
 
                 }
@@ -132,6 +150,41 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        [Route("setUserContainer")]
+        [HttpPost]
+        public object setUserContainer(dynamic session, Container container)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                string sessionID = session.token;
+                User user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
+                if ( container != null)
+                {
+                    Container conFound = db.Containers.Where(x => x.ContainerID == container.ContainerID).FirstOrDefault();
+                    if (conFound != null)
+                    {
+                        user.Container = container;
+
+                    }
+                    user.ContainerID = container.ContainerID;
+                }
+                
+               
+                db.SaveChanges();
+
+                toReturn.Message = "Container Set";
+
+            }
+             catch
+            {
+                toReturn.Error = "Setting Current Container Faild";
+
+            }
+
+            return toReturn;
+        }
 
         [Route("getUserDetails")]
         [HttpPost]

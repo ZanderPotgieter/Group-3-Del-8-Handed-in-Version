@@ -102,9 +102,9 @@ export class ProductService {
     vat, httpOptions);  
   }  
 
-  linkContainer(containerID: number, productID: number){
+  linkContainer(containerID: number, productID: number, quantity:number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.put("https://localhost:44399/Api/Product/addProductToContainer?containerID=" +containerID +"&productID=" + productID
+    return this.http.put("https://localhost:44399/Api/Product/addProductToContainer?containerID=" +containerID +"&productID=" + productID +"&quantity="+quantity
     , httpOptions); 
   }
 

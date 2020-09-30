@@ -96,7 +96,7 @@ s
         <div class="divleft" > 
             <label class="subheadinglabel">Searched Product Result:</label>
             <br>
-            <label for="ProductCategoryID">Product Category:</label><input type="number"  formControlName="ProductCategoryID" class="form-control" [(ngModel)]="Product.ProductCategoryID" id="ProductCategoryID" name="ProductCategoryID" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
+            <label for="ProductCategoryID"  hidden = "true" >Product Category:</label><input type="number"  hidden = "true"  formControlName="ProductCategoryID" class="form-control" [(ngModel)]="Product.ProductCategoryID" id="ProductCategoryID" name="ProductCategoryID" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
             <label for="ProdName">Name:</label><input type="text" formControlName="ProdName" class="form-control" [(ngModel)]="Product.ProdName"  id="ProdName"  name ="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
             <br>
@@ -109,11 +109,11 @@ s
             <br>
             <label class="subheadinglabel">Current Price:</label>
             <br>
-            <label for="CPriceR">Cost Price(R):</label><input type="number"  formControlName="CPriceR" class="form-control" [(ngModel)]="Price.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
+            <label for="CPriceR">Cost Price(R):</label><input type="number" disabled="true" formControlName="CPriceR" class="form-control" [(ngModel)]="Price.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="UPriceR">Unit Price(R):</label><input type="number"  formControlName="UPriceR" class="form-control" [(ngModel)]="Price.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
+            <label for="UPriceR">Unit Price(R):</label><input type="number" disabled="true"  formControlName="UPriceR" class="form-control" [(ngModel)]="Price.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="PriceStartDate">Price Start Date:</label><input type="string" formControlName="PriceStartDate" class="form-control" [(ngModel)]="Price.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required [readonly] = "this.inputEnabled">
+            <label for="PriceStartDate">Price Start Date:</label><input disabled="true" type="string" formControlName="PriceStartDate" class="form-control" [(ngModel)]="Price.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required [readonly] = "this.inputEnabled">
             <br>
             <Label class="subheadinglabel">Price list:</Label>
             <br>

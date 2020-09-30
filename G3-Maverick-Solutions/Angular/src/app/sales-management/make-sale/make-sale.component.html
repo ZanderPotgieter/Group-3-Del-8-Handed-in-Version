@@ -17,13 +17,13 @@
 
       
        <div *ngIf="showBarcode" class="divleft" [formGroup]="searchForm">
-         <label for="prodBarcode">Barcode:</label><input type="text" formControlName="prodBarcode" class="form-control" [(ngModel)]="prodBarcode" id="prodBarcode" name="prodBarcode" pattern="[0-9 ]*" required>
+         <label for="prodBarcode">Barcode:</label><input type="number" formControlName="prodBarcode" class="form-control" [(ngModel)]="prodBarcode" id="prodBarcode" name="prodBarcode" pattern="[0-9 ]*" required>
         <br>
-       <!-- <span style="color:red" *ngIf="searchForm.get('prodBarcode').errors && (searchForm.get('prodBarcode').touched || searchForm.get('prodBarcode').dirty)">
+       <span style="color:red" *ngIf="searchForm.get('prodBarcode').errors && (searchForm.get('prodBarcode').touched || searchForm.get('prodBarcode').dirty)">
           <span *ngIf="searchForm.get('prodBarcode').errors.required">Barcode is required.</span>
           <span *ngIf="searchForm.get('prodBarcode').errors.minlength || searchForm.get('ProdBarcode').errors.maxlength">Barcode must be greater than 5 numbers and less than 50 numbers.</span>
           <span *ngIf="searchForm.get('prodBarcode').errors.pattern">Only numbers allowed.</span>
-      </span>-->
+      </span>
         <br>
         <div hidden="true" class="divleft" *ngIf="showSearch">
           <button style="width:60px; border-radius: 10px;" type="submit" (click)="getProduct()"><i class="tiny material-icons">search</i></button>
@@ -50,7 +50,7 @@
          </div>
          <div class="divleft">
             <label for="quantity">Quantity </label>
-            <input  style="width:40px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+            <input  style="width:60px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
             <button style="height: 30px;" (click)="listProducts()">Add</button>
           </div>
         </div>
@@ -69,7 +69,7 @@
      
       <label style="width: 200px">Date: {{saleDate | date: 'yyyy-MM-dd'}}</label>
       <label style="width: 300px">Cashier: {{user.UserName}} {{user.UserSurname}}</label>
-     <!--<label style="width: 300px">Container: {{ConName}}</label>-->
+     <!--<label style="width: 300px">Container: {{user.Container.ConName}}</label>-->
   </div>
     <br>
         <table>    
@@ -137,9 +137,9 @@
           <button style="height: 30px;" (click)="makePayment()">Make Payment</button>
         </div>
         <div class="divleft" *ngIf="ShowOustanding">
-          <label style="width :100px">Outstanding: R{{outstandingAmt}}</label>
+          <label style="width :100px">Outstanding Amount: R{{outstandingAmt}}</label>
         </div>
-        <div class="divleft" *ngIf="showChange">
+        <div class="divleft" *ngIf="showChange" hidden="true">
            <label style="width :100px">Change: R{{change}}</label>
          </div>
    

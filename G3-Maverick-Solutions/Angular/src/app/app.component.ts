@@ -6,6 +6,7 @@ import {LoginService} from './login.service';
 import {Container} from './container-management/container';
 import {FormBuilder, Validators} from '@angular/forms';
 import { FormGroup, FormControl} from '@angular/forms';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
 
 
@@ -48,6 +49,24 @@ showGenerateOTP: boolean = false;
 showEnterOTP: boolean = false;
 showResetPassword: boolean = false;
 containersLoaded : boolean = false;
+
+userAccess : string [] = [];
+adminEnabled: boolean = false;
+employeeEnabled: boolean = false;
+salesEnabled: boolean = false;
+customerEnabled: boolean = false;
+customerOrderEnabled: boolean = false;
+supplierEnabled: boolean = false;
+supplierOrderEnabled: boolean = false;
+productEnabled: boolean = false;
+containerEnabled: boolean = false;
+gpsEnabled: boolean = false;
+donationsEnabled: boolean = false;
+managerEnabled: boolean = false;
+creditorEnabled: boolean = false;
+reportingEnabled: boolean = false;
+
+
   ngOnInit(){
     this.api.getAllContainers().subscribe((res:any) =>{
       console.log(res);
@@ -90,6 +109,8 @@ login(){
       this.showEnterOTP = false;
       this.showGenerateOTP = false;
 
+        this.getUserAccess();
+
         }
     })}
     else{
@@ -103,8 +124,11 @@ selectContainer(val: Container){
 
 setContainer(val: Container){
   this.currentContainer = val;
+  this.user.ContainerID = val.ContainerID;
+  this.user.Container = val;
   this.containerSelected = true;
   this.showContainerNotSelected = false;
+
 }
 
 home(){
@@ -206,6 +230,21 @@ this.showInvalidPassword = false;
 this.showResetPassword = false;
 this.showEnterOTP = false;
 this.showGenerateOTP = false;
+
+this.adminEnabled = false;
+this.employeeEnabled= false;
+this.salesEnabled= false;
+this.customerEnabled= false;
+this.customerOrderEnabled = false;
+this.supplierEnabled = false;
+this.supplierOrderEnabled = false;
+this.productEnabled = false;
+this.containerEnabled= false;
+this.gpsEnabled= false;
+this.donationsEnabled= false;
+this.managerEnabled= false;
+this.creditorEnabled= false;
+this.reportingEnabled = false;
 }
 
 cancel(){
@@ -291,4 +330,78 @@ sendEmail(){
     })
   }
 
+  getUserAccess(){
+    if(!localStorage.getItem("accessToken")){
+      this.router.navigate([""]);
+    }
+    else {
+      this.session = {"token" : localStorage.getItem("accessToken")}
+      this.api.getUserAccess(this.session).subscribe( (res:any) =>{
+        console.log(res);
+        this.user = res.user;
+        this.userAccess = res.userAccess;
+
+        this.setUserAccess(this.userAccess);
+      })
+
+  }
+  }
+
+  setUserAccess(access: string[]){
+   access.forEach(item => {
+     if (item == "Administration")
+     {
+       this.adminEnabled = true;
+     }
+     if (item =="Employee"){
+       this.employeeEnabled = true;
+     }
+     if (item == "Sales"){
+       this.salesEnabled = true;
+     }
+     if (item == "Customer"){
+       this.customerEnabled = true;
+     }
+     if (item == "Customer Order"){
+       this.customerOrderEnabled = true;
+     }
+     if (item == "Supplier"){
+       this.supplierEnabled = true;
+     }
+     if (item == "Supplier Order"){
+       this.supplierOrderEnabled = true;
+     }
+     if(item == "Product" || item == "Product Category" ){
+      this.productEnabled = true;
+     }
+     if(item == "Container"){
+       this.containerEnabled = true;
+     }
+     if(item == "Location" || item == "Area" || item=="Province"){
+       this.gpsEnabled = true;
+     }
+     if(item == "Donations" || item == "Donation Recepient"){
+       this.donationsEnabled = true;
+     }
+     if(item == "Reporting"){
+       this.reportingEnabled = true;
+     }
+     if(item == "Creditor")
+     {
+       this.creditorEnabled = true;
+     }
+     if(item == "Manager"){
+       this.managerEnabled = true;
+     }
+
+      
+    });
+
+  onNavigate()
+  {
+    window.location.href='https://u17107459.wixsite.com/mysite';
+  }
+
+
+}
 }

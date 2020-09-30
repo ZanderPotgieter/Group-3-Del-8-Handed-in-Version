@@ -24,6 +24,7 @@ export class AddProductComponent implements OnInit {
   newProduct : Product = new Product();
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
+  quantity: number;
  
   Select: number;
   selectedCatID: number;
@@ -47,6 +48,7 @@ export class AddProductComponent implements OnInit {
       PriceStartDate: ['', [Validators.required]], 
       SelectCon: ['', [Validators.required]], 
       SelectProduct: ['', [Validators.required]],
+      quantity: ['', [Validators.required]],
     }); 
     this.productService.getAllProducts()
     .subscribe((value:any)=> {
@@ -130,7 +132,7 @@ export class AddProductComponent implements OnInit {
 
 
   Link(){
-    return this.productService.linkContainer(this.selectedProductID, this.selectedContainerID).subscribe( (res: any)=> {
+    return this.productService.linkContainer( this.selectedContainerID, this.selectedProductID, this.quantity).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;
@@ -146,7 +148,7 @@ export class AddProductComponent implements OnInit {
   }
 
   RemoveLink(){
-    return this.productService.removeContainer(this.selectedProductID, this.selectedContainerID).subscribe( (res: any)=> {
+    return this.productService.removeContainer( this.selectedContainerID,this.selectedProductID,).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;

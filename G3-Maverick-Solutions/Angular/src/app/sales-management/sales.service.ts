@@ -11,12 +11,17 @@ import{map} from 'rxjs/operators';
 export class SalesService {
   constructor(private http: HttpClient) { }
 
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
    
 
   url = 'https://localhost:44399/Api/Sale';
 
-  initiateSale(){
-    return this.http.get(this.url + '/initiateMakeSale').pipe(map(result => result)); 
+  initiateSale( session : any){
+    return this.http.post(this.url + '/initiateMakeSale', session, this.httpOptions); 
   }
 
   makeSale(sale: Sale) : Observable<Sale>{

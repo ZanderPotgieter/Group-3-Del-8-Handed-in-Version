@@ -334,6 +334,16 @@ label {
     padding-left: 20px;
 }
 
+.list{
+    font-size: $label-font;
+    font-family: $text-font;
+    color: $text-colour;
+    text-align: left;
+    padding: 0px;
+    padding-left: 0px;
+}
+
+
 .displaylabel {
     font-size: $label-font;
     font-family: $text-font;

@@ -43,6 +43,12 @@ export class CustomerOrderService {
 
   urlcus = 'https://localhost:44399/Api/Customer'
 
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+
   searchByCell(cell : string){  
     return this.http.get(this.url + '/searchByCell/'+cell).pipe(map(result => result));  
   } 
@@ -59,6 +65,11 @@ export class CustomerOrderService {
   initiatePlaceOrder(customerID : number ){
     return this.http.get(this.url + '/initiatePlaceOrder/'+customerID).pipe(map(result => result)); 
 
+  }
+
+  sendOrderEmail(email: string)
+  {
+    return this.http.post(this.url + '/sendOrderEmail?email=' + email, this.httpOptions);
   }
 
   placeOrder(order: CustomerOrder) : Observable<CustomerOrder>{

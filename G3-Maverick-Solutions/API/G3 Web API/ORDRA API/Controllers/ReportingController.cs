@@ -614,30 +614,60 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<dynamic> prodList = new List<dynamic>();
                 List<Product> products = db.Products.Include(z=>z.Prices).Include(z=>z.Product_Category).ToList();
-                // db.Products.Include(z => z.ProductCategoryID).Include(z => z.Prices).Include(z => z.Product_Sale).ToList();
                 if (products != null)
                 {
                     //Table data
-                    // var prodList = products.GroupBy(z => z.Product.ProductCategoryID);    ///Product.Product_Category.PCatName);
-                    //List<dynamic> catGroup = products.GroupBy(z=>z.P)
+                    var prodList = products.GroupBy(z => z.Product_Category.PCatName);    ///Product.Product_Category.PCatName);
+                    List<dynamic> catGroup = new List<dynamic>();
                     int count = 0;
-                    foreach (var item in products)
+
+                    foreach (var item in prodList)
                     {
-                        dynamic prodObj = new ExpandoObject();
-                        prodObj.Name = item.ProdName;
-                        prodObj.ReLevel = item.ProdReLevel;
-                        var price = db.Prices.Where(z => (z.ProductID == item.ProductID)).ToList().LastOrDefault();
-                        prodObj.Unit = price.UPriceR;
-                        prodObj.Cost = price.CPriceR;
+                        dynamic cat = new ExpandoObject();
+                        cat.Name = item.Key;
+                        List<dynamic> catList = new List<dynamic>();
 
-                        prodList.Add(prodObj);
-                        count++;
+                        foreach (var prodItem in item)
+                        {
+                            dynamic prodObj = new ExpandoObject();
+                            prodObj.ProdName = prodItem.ProdName;
+                            prodObj.ProdReLevel = prodItem.ProdReLevel;
+                            var price = db.Prices.Where(z => (z.ProductID == prodItem.ProductID)).ToList().LastOrDefault();
+                            prodObj.ProdUnit = price.UPriceR;
+                            prodObj.ProdCost = price.CPriceR;
+
+                            catList.Add(prodObj);
+                            count++;
+                        }
+
+                        cat.Products = catList;
+                        catGroup.Add(cat);
                     }
+                 
 
-                    toReturn.TableData = prodList;
+                    toReturn.TableData = catGroup;
                     toReturn.Count = count;
+
+                    /*
+                    foreach(var item in roles)
+                    {
+                        dynamic role = new ExpandoObject();
+                        role.Name = item.Key;
+                        List<dynamic> userList = new List<dynamic>();
+                        foreach (var userItem in item)
+                        {
+                            dynamic user = new ExpandoObject();
+                            user.UserName = userItem.UserName;
+                            user.UserSurname = userItem.UserSurname;
+                            user.UserEmail = userItem.UserEmail;
+                            userList.Add(user);
+                            count++;
+                        }
+                        role.Users = userList;
+                        roleGroups.Add(role);
+                        
+                    }*/
                 }
                 else
                 {
@@ -769,43 +799,47 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             toReturn.TableData = null;
 
-            try
-            {
-                List<User> users = db.Users.ToList();
-                List<dynamic> userList = new List<dynamic>();
+            /*try
+            {*/
+                List<User> users = db.Users.Include(z=>z.User_Type).ToList();
+               
                 if (users == null)
                 {
                     toReturn.Error = "There are no registered system users";
                 }
                 else
                 {
+                    var roles = users.GroupBy(z => z.User_Type.UTypeDescription);
                     int count = 0;
-                    foreach(var item in users)
+                    List<dynamic> roleGroups = new List<dynamic>();
+                    foreach(var item in roles)
                     {
-                        dynamic userObj = new ExpandoObject();
-                        userObj.Name = item.UserName;
-                        userObj.Surname = item.UserSurname;
-                        User_Type type = db.User_Type.Where(z => z.UserTypeID == item.UserTypeID).FirstOrDefault();
-                        if (type !=null)
+                        dynamic role = new ExpandoObject();
+                        role.Name = item.Key;
+                        List<dynamic> userList = new List<dynamic>();
+                        foreach (var userItem in item)
                         {
-                            userObj.UserType = type.UTypeDescription;
+                            dynamic user = new ExpandoObject();
+                            user.UserName = userItem.UserName;
+                            user.UserSurname = userItem.UserSurname;
+                            user.UserEmail = userItem.UserEmail;
+                            userList.Add(user);
+                            count++;
                         }
-                        else
-                        {
-                            userObj.UserType = "User";
-                        }
-                        userList.Add(userObj);
-                        count++;
+                        role.Users = userList;
+                        roleGroups.Add(role);
+                        
                     }
 
-                    toReturn.TableData = userList;
+                    toReturn.TableData = roleGroups;
                     toReturn.Count = count;
+
                 }
-            }
+            /*}
             catch (Exception)
             {
                 toReturn.Error = "Report failed to generate" ;
-            }
+            }*/
 
             return toReturn;
 

@@ -1,6 +1,6 @@
 <body>
     <h1>Add Supplier</h1>
-    <form #form='ngForm' class="mb-4" autocomplete="off" >
+    <form [formGroup]="supForm">
         
         <br>
         <div class="card">
@@ -8,58 +8,89 @@
             <br><br>
             <label class="subheadinglabel">Enter supplier Details:</label>
         <br><br>
-        <div class="divleft" >
-            <label for="SupName">Name:       </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupName" id="SupName" name="SupName" required>
-            <small style="color: coral;">required</small>
-        </div>
+        <div class="divleft">
+            <label for="SupName">Name:     </label>
+                  <input type="text" formControlName="SupName" [(ngModel)]="supplier.SupName" id="SupName" name="SupName" pattern="[a-zA-Z ]*" required>
+                  <br>
+                  <span style="color:red" *ngIf="supForm.get('SupName').errors && (supForm.get('SupName').touched || supForm.get('SupName').dirty)">
+                      <span *ngIf="supForm.get('SupName').errors.required">Name is required.<br></span>
+                      <span *ngIf="supForm.get('SupName').errors.pattern">Only text characters.<br></span>
+                  </span>
+          </div>
 
 
         <br>
         <div class="divleft" >
-            <label for="SupCell">Cell Number:  </label>
-            <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"  class="form-control" [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" required>
-            <small style="color: coral;">Format: 123-456-7890</small>
+            <label for="SupCell">Cell:</label>
+                <input type="text" formControlName="SupCell" [(ngModel)]="supplier.SupCell" id="SupCell" name="SupCell" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="supForm.get('SupCell').errors && (supForm.get('SupCell').touched || supForm.get('SupCell').dirty)">
+                    <span *ngIf="supForm.get('SupCell').errors.required">Cell is required.<br></span>
+                    <span *ngIf="supForm.get('SupCell').errors.minlength">Cell must be 10 numbers</span>
+                    <span *ngIf="supForm.get('SupCell').errors.maxlength">Cell must be 10 numbers</span>
+                    <span *ngIf="supForm.get('SupCell').errors.pattern">Only numbers allowed.<br></span>
+                </span>
         </div>
 
         <br>
         <div class="divleft"  >
             <label for="SupEmail">Email:</label>
-            <input type="email" class="form-control" [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" required >
-            <small style="color: coral;">Format: email@email.email</small>
-
+              <input type="text" formControlName="SupEmail" [(ngModel)]="supplier.SupEmail" id="SupEmail" name="SupEmail" pattern="[a-zA-Z ]*" required>
+              <br>
+              <span style="color:red" *ngIf="supForm.get('SupEmail').errors && (supForm.get('SupEmail').touched || supForm.get('SupEmail').dirty)">
+                  <span *ngIf="supForm.get('SupEmail').errors.required">Email is required.<br></span>
+                  <span *ngIf="supForm.get('SupEmail').errors.email">Please enter in a valid email address.<br></span>
+              </span>
         </div>
 
         <br>
         <div class="divleft" >
-            <label for="SupStreetNr">Street No: </label>
-            <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" required> 
-            <small style="color: coral;">required</small>
+            <label for="SupStreetNr">Street No:</label>
+                <input type="text" formControlName="SupStreetNr" [(ngModel)]="supplier.SupStreetNr" id="SupStreetNr" name="SupStreetNr" pattern="[0-9 ]*" required>
+                <br>
+                <span style="color:red" *ngIf="supForm.get('SupStreetNr').errors && (supForm.get('SupStreetNr').touched || supForm.get('SupStreetNr').dirty)">
+                    <span *ngIf="supForm.get('SupStreetNr').errors.required">Street No is required.<br></span>
+                    <span *ngIf="supForm.get('SupStreetNr').errors.maxlength">Max 8 numbers.</span>
+                    <span *ngIf="supForm.get('SupStreetNr').errors.pattern">Only numbers allowed.<br></span>
+                </span>
         </div>
 
         <br>
         <div class="divleft" >
             <label for="SupStreet">Street:    </label>
-            <input type="text" class="form-control" [(ngModel)]="supplier.SupStreet" id="SupStreet" name="SupStreet" required> 
-            <small style="color: coral;">required</small>
+                  <input type="text" formControlName="SupStreet" [(ngModel)]="supplier.SupStreet" id="SupStreet" name="SupStreet" pattern="[a-zA-Z ]*" required>
+                  <br>
+                  <span style="color:red" *ngIf="supForm.get('SupStreet').errors && (supForm.get('SupStreet').touched || supForm.get('SupStreet').dirty)">
+                      <span *ngIf="supForm.get('SupStreet').errors.required">Street is required.<br></span>
+                  </span>
         </div>
         
         <br>
         <div class="divleft" >
-            <label for="SupCode">Postal Code:   </label>
-            <input type="number" min="1" class="form-control" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" placeholder="0000" required> 
-            <small style="color: coral;">required</small>
+            <label for="SupCode">Postal Code:</label>
+                <input type="text" formControlName="SupCode" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" pattern="[0-9 ]*" required placeholder="0000">
+                <br>
+                <span style="color:red" *ngIf="supForm.get('SupCode').errors && (supForm.get('SupCode').touched || supForm.get('SupCode').dirty)">
+                    <span *ngIf="supForm.get('SupCode').errors.required">Postal Code is required.<br></span>
+                    <span *ngIf="supForm.get('SupCode').errors.minlength">Postal Code is 4 digits.</span>
+                    <span *ngIf="supForm.get('SupCode').errors.maxlength">Postal Code is 4 digits.</span>
+                    <span *ngIf="supForm.get('SupCode').errors.pattern">Only numbers allowed.<br></span>
+                </span>
         </div>
  
         <br>
         <div class="divleft" >
-            <label for="SupSuburb">Suburb:   </label>
-            <input type="text"  class="form-control" [(ngModel)]="supplier.SupSuburb" id="SupSuburb" name="SupSuburb" placeholder="Example: Hatfield" required> 
-            <small style="color: coral;">required</small>
+            <label for="SupSuburb">Suburb:</label>
+                <input type="text" formControlName="SupSuburb" [(ngModel)]="supplier.SupSuburb" id="SupSuburb" name="SupSuburb" pattern="[a-zA-Z ]*" required placeholder="Example: Hatfield">
+                <br>
+                <span style="color:red" *ngIf="supForm.get('SupSuburb').errors && (supForm.get('SupSuburb').touched || supForm.get('SupSuburb').dirty)">
+                    <span *ngIf="supForm.get('SupSuburb').errors.required">Suburb is required.<br></span>
+                    <span *ngIf="supForm.get('SupSuburb').errors.pattern">Only text characters.<br></span>
+                </span> 
         </div>
         <br><br>
         <div class="divleft" >
-            <button type="submit" (click)="addSupplier()" [disabled]="form.invalid">Save</button> 
+            <button type="submit" (click)="addSupplier()" >Save</button> 
             <button type="submit" (click)="gotoSupplierManagement()">Cancel</button>
          </div>
          <br><br>

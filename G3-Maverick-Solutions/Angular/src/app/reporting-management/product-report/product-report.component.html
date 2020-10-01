@@ -20,7 +20,7 @@
                 <!--To Display Table-->
                 <div id="TablesDiv">
                     <div class="divleft">
-                        <label><span style="white-space: nowrap; text-align: right;">This report shows all products and their relative prices</span></label>
+                        <label><span style="white-space: nowrap; text-align: right;">This report shows all products and their relative prices, grouped according to product categories</span></label>
                     </div>
                     
                     <div class="Creditorstable">
@@ -28,9 +28,9 @@
                             <h1>Registered Product Report</h1>
                             <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
                             
-                            
+                            <div *ngFor="let data of TableData; let i=index">
                                 <table class = "container table-latitude" >
-                                    
+                                    <caption><strong>{{data.Name}}</strong></caption>
                                     <thead>
                                         <tr>
                                             <th>Product Name</th>
@@ -41,24 +41,21 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr *ngFor="let item of TableData; let i=index">
-                                            <td>{{item.Name}}</td>
-                                            <td>{{item.ReLevel}}</td>
-                                            <td>{{item.Unit}}</td>
-                                            <td>{{item.Cost}}</td>
+                                        <tr *ngFor="let item of data.Products; let i=index">
+                                            <td>{{item.ProdName}}</td>
+                                            <td>{{item.ProdReLevel}}</td>
+                                            <td>{{item.ProdUnit}}</td>
+                                            <td>{{item.ProdCost}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                <br><br>
+                                <!-- <div *ngIf="TableData" id="controlBreak">
+                                    <div>Total amount owed to creditors : {{totalBalance}}</div>
+                                </div> -->
+                            </div>
                             
-                                <br>
-                                <h2>Total Number of Products: {{Count}}</h2>
-                           
-                            
-                            <br><br>
-                            <!-- <div *ngIf="TableData" id="controlBreak">
-                                <div>Total amount owed to creditors : {{totalBalance}}</div>
-                            </div> -->
-
+                            <h2>Total Number of Products: {{Count}}</h2>
                         </table>
                     </div>
                     

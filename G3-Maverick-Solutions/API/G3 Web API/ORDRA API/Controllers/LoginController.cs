@@ -41,10 +41,11 @@ namespace ORDRA_API.Controllers
             try
             {
 
+
                 User newUser = new User();
 
-
-                var hash = GenerateHash(ApplySalt(user.UserPassword));
+                var password = user.UserPassword;
+                var hash = GenerateHash(ApplySalt(password));
 
                 User foundUser = db.Users.Where(x => x.UserEmail == user.UserEmail).FirstOrDefault();
 

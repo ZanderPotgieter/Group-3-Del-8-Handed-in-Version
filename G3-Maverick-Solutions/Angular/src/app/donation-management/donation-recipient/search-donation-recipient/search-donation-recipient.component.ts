@@ -57,7 +57,7 @@ export class SearchDonationRecipientComponent implements OnInit {
   }
 
   Search(){
-    if(this.name == null || this.surname ==null)
+    if(this.name == null || this.surname == null)
     {
       this.donNull = true;
       this.showSearch = true;

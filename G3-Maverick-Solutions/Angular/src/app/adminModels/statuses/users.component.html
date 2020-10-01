@@ -25,10 +25,9 @@
                          <mat-list-item class = "list"><label>     </label><button  style="border-radius: 10px; width: 30px; height:30px; background-color: rgb(255, 251, 230); "(click)="update(ndx)"><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>{{item.description}}</mat-list-item>
                          <div *ngIf="ndx == id">
                             <mat-list>
-                               
+                                <div class="divleft" >
                             <div style="width: 100%; text-align:left;"  *ngFor="let thing of userAccess; index as ndx;">
-                                <mat-list-item class = "list">
-                                    <label>     </label>
+                                <mat-list-item style="width: 100%;" class = "list">
                                     <label>     </label>
                                     <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);" (click)="delete(ndx)"><i class="tiny material-icons" style="color: black;">delete</i></button>
                                     {{thing.description}}
@@ -36,6 +35,7 @@
                                 </mat-list-item>
                                    
                             </div>
+                                </div>
                         </mat-list>
                         </div>
                     </div>

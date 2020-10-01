@@ -61,7 +61,7 @@ namespace ORDRA_API.Controllers
                 toReturn.paymentTypes = db.Payment_Type.ToList();
 
                 //get VAT
-                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now && x.VATEndDate >= DateTime.Now).FirstOrDefault();
+                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).FirstOrDefault();
 
             if (conProd != null)
             {
@@ -114,8 +114,8 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            try
-            {
+            //try
+           /// {
                 List<Sale> sales = db.Sales.ToList();
                 List<dynamic> Sales = new List<dynamic>();
 
@@ -135,11 +135,11 @@ namespace ORDRA_API.Controllers
                 }
 
                 toReturn.Sales = Sales;
-            }
-            catch
-            {
-                toReturn.Error = "Search Interrupted. Retry";
-            }
+           // }
+           // catch
+            //{
+               // toReturn.Error = "Search Interrupted. Retry";
+            //}
 
             return toReturn;
         }
@@ -155,13 +155,6 @@ namespace ORDRA_API.Controllers
             {
 
 
-
-            //get user who made sale
-            // User user = db.Users.Where(x => x.UserID == newSale.UserID).FirstOrDefault();
-            int id = (int)newSale.UserID;
-
-                // User saleUser = db.Users.Where(x => x.UserID == id).FirstOrDefault();
-
                 //get list of products in new Sale
                 List<Product_Sale> product_Sales = newSale.Product_Sale.ToList();
 
@@ -170,54 +163,57 @@ namespace ORDRA_API.Controllers
                     foreach (var prod in product_Sales)
                     {
                         Container_Product container_Product = db.Container_Product.Where(x => x.ProductID == prod.ProductID && x.ContainerID == newSale.ContainerID).FirstOrDefault();
-                        container_Product.CPQuantity = (container_Product.CPQuantity - prod.PSQuantity);
-                        if (container_Product.CPQuantity < 0)
+                     
+                        if (container_Product.CPQuantity < prod.PSQuantity)
                         {
-                            return toReturn.Error = prod.Product.ProdName + " is out of stock";
+                            return toReturn.Error = "Not Enough " + prod.Product.ProdName + " in stock";
                         }
                         else
                         {
+                            container_Product.CPQuantity = (container_Product.CPQuantity - prod.PSQuantity);
                             db.SaveChanges();
                         }
 
                     }
-                }
-
-                //add sale
-                Sale sale = new Sale();
-                sale.ContainerID = newSale.ContainerID;
-                sale.Container = newSale.Container;
-                sale.UserID = newSale.UserID;
-                sale.SaleDate = DateTime.Now;
-                db.Sales.Add(sale);
-                db.SaveChanges();
-
-
-                //get the sale record just added
-                Sale addedSale = db.Sales.ToList().LastOrDefault();
-
-               
 
 
 
-
-                //Add the Product_Sale Records for each product
-                foreach (var prod in product_Sales)
-                {
-                    Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
-                    Product_Sale prodSale = new Product_Sale();
-                    prodSale.SaleID = addedSale.SaleID;
-                    prodSale.ProductID = product.ProductID;
-                    prodSale.PSQuantity = prod.PSQuantity;
-                    prodSale.Product = product;
-                    prodSale.Sale = addedSale;
-
-                    db.Product_Sale.Add(prodSale);
+                    //add sale
+                    Sale sale = new Sale();
+                    sale.ContainerID = newSale.ContainerID;
+                    sale.Container = newSale.Container;
+                    sale.UserID = newSale.UserID;
+                    sale.SaleDate = DateTime.Now;
+                    db.Sales.Add(sale);
                     db.SaveChanges();
 
-                }
 
-             
+                    //get the sale record just added
+                    Sale addedSale = db.Sales.ToList().LastOrDefault();
+
+
+                    //Add the Product_Sale Records for each product
+                    foreach (var prod in product_Sales)
+                    {
+                        Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
+                        Product_Sale prodSale = new Product_Sale();
+                        prodSale.SaleID = addedSale.SaleID;
+                        prodSale.ProductID = product.ProductID;
+                        prodSale.PSQuantity = prod.PSQuantity;
+                        prodSale.Product = product;
+                        prodSale.Sale = addedSale;
+                        Product_Sale found = db.Product_Sale.Where(x => x.SaleID == prodSale.SaleID && x.ProductID == prodSale.ProductID).FirstOrDefault();
+                        if (found == null)
+                        {
+                            db.Product_Sale.Add(prodSale);
+                            db.SaveChanges();
+                        }
+
+                        
+
+                    }
+
+
 
 
 
@@ -225,21 +221,25 @@ namespace ORDRA_API.Controllers
 
                     //Add Payment details to sale reord, note a sale can have more than one payment method
                     List<Payment> payment = newSale.Payments.ToList();
-                foreach (var item in payment)
-                {
-                    item.Sale = addedSale;
-                    item.PayDate = DateTime.Now;
-                    addedSale.Payments.Add(item);
-                    db.SaveChanges();
+                    foreach (var item in payment)
+                    {
+                        item.Sale = addedSale;
+                        item.PayDate = DateTime.Now;
+                        addedSale.Payments.Add(item);
+                        db.SaveChanges();
+                    }
+
+
+                    //get sale ID OF record made(incase you immediately wanr to see the details after or print to a receipt
+                    int saleMadeID = addedSale.SaleID;
+
+                    toReturn.saleID = saleMadeID;
+                    toReturn.Message = "Sale Completed Succuessfully";
                 }
-
-
-                //get sale ID OF record made(incase you immediately wanr to see the details after or print to a receipt
-                int saleMadeID = addedSale.SaleID;
-
-                toReturn.saleID = saleMadeID;
-                toReturn.Message = "Success! Sale has been made and processed successfully";
-           
+                else
+                {
+                    toReturn.Message = "Could Not Recieve Container Details";
+                }
            }
             catch
             {

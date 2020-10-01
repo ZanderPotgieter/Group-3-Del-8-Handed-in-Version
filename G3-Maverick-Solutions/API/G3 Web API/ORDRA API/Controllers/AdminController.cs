@@ -78,8 +78,8 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
-           // try
-            //{
+           try
+            {
                 //getting user type access
                 List<dynamic> access = new List<dynamic>();
                 List<User_Type_Access> userAccess = db.User_Type_Access.Include(x => x.Access).Where(x => x.UserTypeID == id).ToList();
@@ -112,11 +112,104 @@ namespace ORDRA_API.Controllers
                 toReturn.AllAccess = all_access;
 
 
-           // }
-            //catch
-            //{
-            //    toReturn.Error = "Search Interrupted. Retry";
-            //}
+           }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+            return toReturn;
+        }
+
+        [HttpGet]
+        [Route("addUserTypeAccess")]
+        public object addUserTypeAccess(int accessid, int usertypeid)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                if(accessid == 0)
+                {
+                    return toReturn.Message = "Add Unsuccesful: Access Not Selected";
+                }
+                if (usertypeid == 0)
+                {
+                    return toReturn.Message = "Add Unsuccesful: User Type Not Selected";
+                }
+                Access access = db.Accesses.Where(x => x.AccessID == accessid).FirstOrDefault();
+                User_Type user_Type = db.User_Type.Where(x => x.UserTypeID == usertypeid).FirstOrDefault();
+                if (access != null && user_Type != null)
+                {
+                    User_Type_Access newaccess = new User_Type_Access();
+                    newaccess.UserTypeID = user_Type.UserTypeID;
+                    newaccess.AccessID = access.AccessID;
+                    newaccess.AccessGranted = DateTime.Now;
+                    newaccess.Access = access;
+                    newaccess.User_Type = user_Type;
+
+                    User_Type_Access found = db.User_Type_Access.Where(x => x.AccessID == newaccess.AccessID && x.UserTypeID == newaccess.AccessID).FirstOrDefault();
+                    if (found == null)
+                    {
+                        db.User_Type_Access.Add(newaccess);
+                        db.SaveChanges();
+                        toReturn.Message = "User Type Access Added";
+                    }
+                    else
+                    {
+                        toReturn.Message = "User Type Access Is Already Set";
+                    }
+                    
+
+                }
+
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Adding Access Unsuccesful ";
+            }
+
+            return toReturn;
+        }
+
+        [HttpGet]
+        [Route("removeUserTypeAccess")]
+        public object removeUserTypeAccess(int accessid, int usertypeid)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                if (accessid == 0)
+                {
+                    return toReturn.Message = "Remove Unsuccesful: Access Not Selected";
+                }
+                if (usertypeid == 0)
+                {
+                    return toReturn.Message = "Remove Unsuccesful: User Type Not Selected";
+                }
+                
+
+                    User_Type_Access found = db.User_Type_Access.Where(x => x.AccessID == accessid && x.UserTypeID == usertypeid).FirstOrDefault();
+                    if (found != null)
+                    {
+                        db.User_Type_Access.Remove(found);
+                        db.SaveChanges();
+                        toReturn.Message = "User Type Access Removed";
+                    }
+                    else
+                    {
+                        toReturn.Error = "Cannot Remove Access Not Set";
+                    }
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Adding Access Unsuccesful ";
+            }
+
             return toReturn;
         }
 

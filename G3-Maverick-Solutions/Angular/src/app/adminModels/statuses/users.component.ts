@@ -29,7 +29,10 @@ export class UsersComponent implements OnInit {
   selectedAccess: Items = new Items();
   accessSelection: Items= new Items();
   userTA: UserTypeAccess = new UserTypeAccess();
-  userTA_list: UserTypeAccess[] ;
+  userTA_list: UserTypeAccess[] = [];
+
+  message: string;
+  showError: Boolean = false;
 
 
   ngOnInit(){
@@ -122,11 +125,28 @@ export class UsersComponent implements OnInit {
 
   AccessPush(val: Items){
     this.selectedAccess = val;
+    
   
     }
 
   listAccess(){
       this.userAccess.push(this.selectedAccess)
+      //this.userTA.AccessID = this.selectedAccess.id;
+     // this.userTA.UserTypeID = this.selectedtype.id;
+      this.api.addUserTypeAccess(this.selectedAccess.id, this.selectedtype.id).subscribe((res:any) =>{
+        console.log(res);
+        if(res.Error){
+          alert(res.Error)
+        }
+        if(res.Message){
+          this.message = res.Message;
+          this.showError = true;
+    setTimeout(() => {
+      this.showError = false;
+    }, 5000);
+        }
+        
+      })
       
       
     }
@@ -135,11 +155,34 @@ export class UsersComponent implements OnInit {
 
   delete(ndx: number){
     this.userAccess.splice(ndx,1);
+    //this.userTA.AccessID = this.selectedAccess.id;
+    //this.userTA.UserTypeID = this.selectedtype.id;
+    //call service to remove user access
+
+    this.api.removeUserTypeAccess(this.selectedAccess.id, this.selectedtype.id).subscribe((res:any) =>{
+      console.log(res);
+      if(res.Error){
+        alert(res.Error)
+      }
+      if(res.Message){
+        this.message = res.Message;
+        this.showError = true;
+  setTimeout(() => {
+    this.showError = false;
+  }, 5000);
+      }
+      
+    })
   }
 
 
   Cancel(){
     this.router.navigate(['admin']);
+  }
+  Done(){
+    alert("Access Changes Saved");
+    this.router.navigate(['admin']);
+
   }
 
   saveAccess(){
@@ -157,9 +200,14 @@ export class UsersComponent implements OnInit {
 
   }
 
+  saveChoosenAccess(){
+
+  }
+
   setAccess(){
     for(var item of this.userAccess) 
     {
+
       this.userTA.AccessID = item.id;
       this.userTA.UserTypeID = this.selectedtype.id;
       this.userTA_list.push(this.userTA);

@@ -39,13 +39,14 @@ export class MakeSaleComponent implements OnInit {
   outstandingAmt = 0;
   responseMessage: string = "Request Not Submitted";
   dateVal: Date;
+  
 
   showProd = true;
   prodNotSelected: boolean = false;
   paymentNotSelected= false;
   quantyNull: boolean = true;
   showTable: boolean = true;
-  showChange: boolean = false;
+  showChange: boolean = true;
   ShowOustanding: boolean = true;
  
   displayTotal  ="0";
@@ -55,6 +56,7 @@ export class MakeSaleComponent implements OnInit {
   TotalIncVat: number;
   TotalExcVat: number;
   Vat: number;
+  amountpaid : number;
 
   paymentID = 0;
   saleDate: Date;
@@ -83,6 +85,8 @@ export class MakeSaleComponent implements OnInit {
   showBarcode: boolean = false;
   showName: boolean = false;
   barcodeFound: boolean = false;
+  prodFound: boolean = false;
+
   ngOnInit(): void {
 
 
@@ -159,8 +163,15 @@ export class MakeSaleComponent implements OnInit {
         for(let prod of this.productsWithPrice ){
           if (prod.ProdBarcode == this.prodBarcode){
             this.selectedProduct = prod;
-            this.showQuantity = true;
+            if (this.selectedProduct.Quantity == this.selectedProduct.CPQuantity){
+              alert("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock");
+            }
+            else{
+            this.quantity = this.selectedProduct.Quantity + 1;
+           // this.showQuantity = true;
             this.barcodeFound = true;
+            this.updateList();
+          }
           }
           
         }
@@ -169,6 +180,8 @@ export class MakeSaleComponent implements OnInit {
         }
 
         this.barcodeFound = false;
+        this.quantity = 0;
+        
 
       }
 
@@ -176,11 +189,12 @@ export class MakeSaleComponent implements OnInit {
         
         this.showBarcode = false;
         this.showName = false;
+        this.amountpaid = this.amountpaid + this.amountpaid
 
         if(this.total > this.amount){
           this.outstandingAmt = this.total - this.amount;
           this.total = this.outstandingAmt;
-          this.change = 0;
+          this.change = this.TotalIncVat - this.amountpaid;
 
           this.ShowOustanding = true;
         }
@@ -188,13 +202,11 @@ export class MakeSaleComponent implements OnInit {
           this.total = 0;
           this.change = 0;
           this.outstandingAmt = 0;
-          this.showChange = true;
         }
         else if ( this.total < this.amount){
           this.change = this.amount - this.change
           this.total = 0;
           this.outstandingAmt = 0;
-          this.showChange = true;
           
         }
 
@@ -202,7 +214,6 @@ export class MakeSaleComponent implements OnInit {
         this.payment.PayAmount = this.amount;
         this.payment.PayDate = this.saleDate;
         this.payments.push(this.payment);
-        //this.sale.Payments.push(this.payment);
         
       }
       
@@ -211,21 +222,7 @@ export class MakeSaleComponent implements OnInit {
        this.sale.ContainerID = this.user.ContainerID;
         this.sale.Payments.push(...this.payments);
         this.sale.Product_Sale.push(...this.prodcuctsales);
-        
-       /* this.prodcuctsales.forEach(item => {
-          this.sale.Product_Sale.push(item);
-          
-        });
-
-
-        this.payments.forEach(item => {
-          this.sale.Payments.push(item);
-          
-        });*/
-
-
-        //this.sale.Product_Sale = this.prodcuctsales;
-        //this.sale.Payments = this.payments;
+      
 
         if ( this.total == 0){
           this.sale.UserID = this.user.UserID;
@@ -247,6 +244,45 @@ export class MakeSaleComponent implements OnInit {
         }
       }
 
+
+    updateList(){
+      for(let prod of this.saleProducts){
+        if(prod.ProdBarcode == this.selectedProduct.ProdBarcode ){
+
+          prod.Quantity = this.quantity
+          prod.Subtotal = (this.quantity * prod.Price)
+        
+        
+          this.total = this.total + prod.Subtotal;
+        
+          this.TotalIncVat = this.total;
+          this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
+          this.TotalExcVat = this.total - this.Vat;
+         
+        
+          this.saleDetails.TotalIncVat = this.TotalIncVat;
+          this.saleDetails.Vat  = this.Vat;
+          this.saleDetails.TotalExcVat = this.TotalExcVat;
+        
+         this.displayTotal = this.TotalIncVat.toFixed(2);
+         this.displayVat = this.Vat.toFixed(2);
+         this.displaySubtotal = this.TotalExcVat.toFixed(2);
+       
+        
+        //this.productSale.PSQuantity = this.quantity;
+        //this.productSale.ProductID = this.selectedProduct.ProductID;
+  
+        //this.prodcuctsales.push(this.productSale);
+         
+        
+        this.showTable = true;
+        this.showQuantity = false;
+
+
+      }
+    }
+  }
+
       listProducts(){
        if(this.quantity == 0){
         
@@ -254,7 +290,9 @@ export class MakeSaleComponent implements OnInit {
         }
         else{
           this.quantyNull = false;
-      
+          if(this.quantity < this.selectedProduct.CPQuantity)
+          {
+           
         this.selectedProduct.Quantity = this.quantity;
         this.selectedProduct.Subtotal = (this.quantity * this.selectedProduct.Price)
         this.saleProducts.push(this.selectedProduct);
@@ -276,22 +314,24 @@ export class MakeSaleComponent implements OnInit {
        this.displaySubtotal = this.TotalExcVat.toFixed(2);
      
       
-      this.productSale.PSQuantity = this.quantity;
-      this.productSale.ProductID = this.selectedProduct.ProductID;
+      //this.productSale.PSQuantity = this.quantity;
+      //this.productSale.ProductID = this.selectedProduct.ProductID;
 
-      this.prodcuctsales.push(this.productSale);
-      //this.sale.Product_Sale.push(this.productSale);
+     // this.prodcuctsales.push(this.productSale);
        
       
       this.showTable = true;
       this.showQuantity = false;
       
-
-    }
+          }else{
+            alert("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock")
+          }
+      }
       
       }
 
       remove(index: any){
+        if(this.saleProducts.length != 1){
         this.total = this.total - this.saleProducts[index].Subtotal;
         this.TotalIncVat = this.total;
         this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
@@ -310,10 +350,26 @@ export class MakeSaleComponent implements OnInit {
 
        this.prodcuctsales.splice(index,1);
       }
+  else{
+        this.total = 0;
+        this.TotalExcVat = 0;
+        this.TotalIncVat = 0;
+        this.Vat = 0;
 
+        this.saleProducts.splice(index,1);
+        
+      
+        this.displayTotal = this.TotalIncVat.toFixed(2);
+       this.displayVat = this.Vat.toFixed(2);
+       this.displaySubtotal = this.TotalExcVat.toFixed(2);
 
+       this.prodcuctsales.splice(index,1);
 
+    
 
+      }
+
+      }
 
 
 

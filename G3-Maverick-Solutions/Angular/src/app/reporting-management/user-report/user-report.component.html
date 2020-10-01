@@ -19,42 +19,47 @@
 
                 <!--To Display Table-->
                 <div id="TablesDiv">
-                    <label><span style="white-space: nowrap; text-align: right;">This report shows all registered system users and the position they work in</span></label>
-                    <div class="Creditorstable">
+                    <div class="divleft">
+                        <label><span style="white-space: nowrap; text-align: right;">This report shows all registered system users sorted according to user types</span></label>
+                    </div>
+                     <div class="Creditorstable">
                         <table class="table" id="jsPDFTable">
+
                             <h1>Registered Users Report</h1>
                             <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
                             
-                            
+                            <div *ngFor="let data of TableData; let i=index">
                                 <table class = "container table-latitude" >
-                                    
+                                    <caption><strong>{{data.Name}}</strong></caption>
                                     <thead>
                                         <tr>
                                             <th>User Name</th>
                                             <th>User Surname</th>
-                                            <th>User Position</th>
+                                            <th>User Email</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        <tr *ngFor="let item of TableData; let i=index">
-                                            <td>{{item.Name}}</td>
-                                            <td>{{item.Surname}}</td>
-                                            <td>{{item.UserType}}</td>
+                                        <tr *ngFor="let item of data.Users; let i=index">
+                                            <td>{{item.UserName}}</td>
+                                            <td>{{item.UserSurname}}</td>
+                                            <td>{{item.UserEmail}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             
                                 <br>
-                                <h2>Total Registered Users: {{Count}}</h2>
+                                
                            
                             
-                            <br><br>
-                            <!-- <div *ngIf="TableData" id="controlBreak">
-                                <div>Total amount owed to creditors : {{totalBalance}}</div>
-                            </div> -->
-
+                                <br><br>
+                                <!-- <div *ngIf="TableData" id="controlBreak">
+                                    <div>Total amount owed to creditors : {{totalBalance}}</div>
+                                </div> -->
+                            </div>
+                            <h2>Total Registered Users: {{Count}}</h2>
                         </table>
+                        
                     </div>
                     
                 </div>

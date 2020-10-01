@@ -182,7 +182,7 @@ showRP()
 
 
 saveUser(){
-  this.user.UserPassword = this.password;
+  //this.user.UserPassword = this.password;
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
@@ -194,7 +194,7 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
     }, 5000);
   }else{
     alert(res.Message);
-  this.UserPassword = "";
+  //this.UserPassword = "";
 
   this.showLogin= true;
   this.showNav = false;

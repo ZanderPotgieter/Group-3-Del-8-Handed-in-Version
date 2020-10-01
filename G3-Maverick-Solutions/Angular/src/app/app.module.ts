@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { ToastrModule } from 'ngx-toastr';
 /*run npm i @angular/material - npm i @material/dialog*/
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatDialog } from '@angular/material/dialog';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeManagementComponent } from './employee-management/employee-management.component';
@@ -120,6 +120,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { UserTreeComponent } from './user-tree/user-tree.component';
 import { UserReportComponent } from './reporting-management/user-report/user-report.component';
 import { SearchUsersComponent } from './search-users/search-users.component';
+import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 
 
 
@@ -219,11 +220,13 @@ import { SearchUsersComponent } from './search-users/search-users.component';
     UserTreeComponent,
     UserReportComponent,
     SearchUsersComponent,
+    MatConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatDialogModule,
     MatListModule,
     HttpClientModule,
     FormsModule,  

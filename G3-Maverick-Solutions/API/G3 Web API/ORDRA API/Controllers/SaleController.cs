@@ -61,7 +61,7 @@ namespace ORDRA_API.Controllers
                 toReturn.paymentTypes = db.Payment_Type.ToList();
 
                 //get VAT
-                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).FirstOrDefault();
+                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).LastOrDefault();
 
             if (conProd != null)
             {
@@ -80,6 +80,7 @@ namespace ORDRA_API.Controllers
                         productDetails.ProdBarcode = prod.Product.ProdBarcode;
                         productDetails.ProdDescription = prod.Product.ProdDesciption;
                         productDetails.Prodname = prod.Product.ProdName;
+                        productDetails.CPQuantity = prod.CPQuantity;
                         productDetails.Quantity = 0;
                         productDetails.Price = Math.Round(Price, 2);
                         productDetails.Subtotal = 0.0;
@@ -151,6 +152,7 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            
             try
             {
 
@@ -166,10 +168,12 @@ namespace ORDRA_API.Controllers
                      
                         if (container_Product.CPQuantity < prod.PSQuantity)
                         {
-                            return toReturn.Error = "Not Enough " + prod.Product.ProdName + " in stock";
+                            toReturn.Error = "Not Enough " + prod.Product.ProdName + " in stock";
+                            return toReturn;
                         }
                         else
                         {
+                          
                             container_Product.CPQuantity = (container_Product.CPQuantity - prod.PSQuantity);
                             db.SaveChanges();
                         }
@@ -180,7 +184,7 @@ namespace ORDRA_API.Controllers
 
                     //add sale
                     Sale sale = new Sale();
-                    sale.ContainerID = newSale.ContainerID;
+                    //sale.ContainerID = newSale.ContainerID;
                     sale.Container = newSale.Container;
                     sale.UserID = newSale.UserID;
                     sale.SaleDate = DateTime.Now;
@@ -197,8 +201,8 @@ namespace ORDRA_API.Controllers
                     {
                         Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
                         Product_Sale prodSale = new Product_Sale();
-                        prodSale.SaleID = addedSale.SaleID;
-                        prodSale.ProductID = product.ProductID;
+                        //prodSale.SaleID = addedSale.SaleID;
+                       // prodSale.ProductID = product.ProductID;
                         prodSale.PSQuantity = prod.PSQuantity;
                         prodSale.Product = product;
                         prodSale.Sale = addedSale;
@@ -234,6 +238,7 @@ namespace ORDRA_API.Controllers
                     int saleMadeID = addedSale.SaleID;
 
                     toReturn.saleID = saleMadeID;
+                    toReturn.Sale = db.Sales.Include(x => x.Payments).Include(x => x.Container).Include(x => x.Product_Sale).Include(x => x.User).FirstOrDefault();
                     toReturn.Message = "Sale Completed Succuessfully";
                 }
                 else

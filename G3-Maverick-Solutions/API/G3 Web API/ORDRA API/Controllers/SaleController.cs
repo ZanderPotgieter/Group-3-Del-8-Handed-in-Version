@@ -60,8 +60,7 @@ namespace ORDRA_API.Controllers
                 //get payment types
                 toReturn.paymentTypes = db.Payment_Type.ToList();
 
-                //get VAT
-                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).LastOrDefault();
+                
 
             if (conProd != null)
             {
@@ -89,7 +88,10 @@ namespace ORDRA_API.Controllers
                     }
                 }
                 toReturn.products = products;
-            }
+
+                    //get VAT
+                    toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).FirstOrDefault();
+                }
             else
             {
                 return toReturn.Message = "No Products In Stock In Container";

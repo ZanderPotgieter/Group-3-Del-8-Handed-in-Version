@@ -30,6 +30,7 @@ export class CustomerReportComponent implements OnInit {
   Orders: object;
   TableData: object;
   totalBalance: any;
+  responseMessage: string = "request not submitted";
 
   options = [
     {id: 1, data: 'Placed'},
@@ -95,19 +96,23 @@ export class CustomerReportComponent implements OnInit {
     {
     this.showErrorMessage =false;
     
-    this.reportService.getCustomerOrderReportData(this.selectedOption).subscribe((res) =>{
+    this.reportService.getCustomerOrderReportData(this.selectedOption).subscribe((res:any) =>{
       console.log(res);
-      this.Customers = res['Customers'];
-      
-
-       let totalTot = res['Customers'].map((z) => z.ProdTot);
-      const sum = totalTot.reduce((a,b) => a+b, 0);
-      this.totalBalance = sum || 0;
-      console.log(this.totalBalance); 
-
-      
+      if (res.Error != null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage);
+        
+      }
+      else
+      {
+        this.Customers = res['Customers'];
+        let totalTot = res['Customers'].map((z) => z.ProdTot);
+        const sum = totalTot.reduce((a,b) => a+b, 0);
+        this.totalBalance = sum || 0;
+        console.log(this.totalBalance);
+      }
     })
-
     }
   }
 

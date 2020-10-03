@@ -22,6 +22,7 @@ export class CreditorsReportComponent implements OnInit {
   showErrorMessage: boolean = false;
   TableData: object;
   totalBalance: any;
+  responseMessage: string =  "Request not submitted";
 
 
   ngOnInit(): void {
@@ -66,14 +67,22 @@ export class CreditorsReportComponent implements OnInit {
 
   GenerateReport()
   {
-    this.reportService.getCreditorReportData().subscribe((res) =>{
+    this.reportService.getCreditorReportData().subscribe((res: any) =>{
       console.log(res);
-      this.TableData = res['TableData'];
+      if(res.Error!=null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage);
+      }
+      else
+      {
+        this.TableData = res['TableData'];
 
-      let totalBal = res['TableData'].map((z) => z.Balances);
-      const sum = totalBal.reduce((a,b) => a+b, 0);
-      this.totalBalance = sum || 0;
-      console.log(this.totalBalance); 
+        let totalBal = res['TableData'].map((z) => z.Balances);
+        const sum = totalBal.reduce((a,b) => a+b, 0);
+        this.totalBalance = sum || 0;
+        console.log(this.totalBalance);
+      } 
     })
   }
 

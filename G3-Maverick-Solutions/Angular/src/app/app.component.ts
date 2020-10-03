@@ -182,7 +182,7 @@ showRP()
 
 
 saveUser(){
-  
+  this.user.UserPassword = this.password;
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
@@ -208,7 +208,7 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
 }
 
 Validate() {
-        if (this.user.UserPassword != this.ConfirmPassword) {
+        if (this.password != this.ConfirmPassword) {
            this.showInvalidPassword = true;
 
         }else{

@@ -14,6 +14,7 @@ export class UpdateVatComponent implements OnInit {
   constructor(private productService: ProductService, private router: Router) { }
 
   vat : Vat = new Vat();
+  date = new Date();
   newVat: Vat = new Vat();
   list: Vat[] =[];  
   addDes : string;

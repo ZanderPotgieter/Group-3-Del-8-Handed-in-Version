@@ -1,0 +1,30 @@
+<form>
+    <body>
+        <h1>Low Stock Notification</h1>
+<div class="card">
+    <div class="divleft">
+        <label class="subheadinglabel">Products Low In Stock</label>
+        <br>
+        <span *ngIf="showNone">No Products Found</span>
+        <br>
+        <div style="width: 90%">
+        <table>
+            <th >Product Name</th>
+            <th > Reorder Level</th>
+            <th >Quantity On Hand</th>
+           
+            <tr *ngFor="let item of list; index as ndx;">
+                <td>{{item.Prodname}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.CPQuantity}}</td>
+            </tr>
+         
+        </table> 
+    </div>
+   </div>
+   <div  class="divleft">
+    <button type="submit" (click)="BackLog()">Add To Backlog</button>
+    <button type="submit" (click)="Cancel()">Cancel</button>
+
+   </div>
+ </div>

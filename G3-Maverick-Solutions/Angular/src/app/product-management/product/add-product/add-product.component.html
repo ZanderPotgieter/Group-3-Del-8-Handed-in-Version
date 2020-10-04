@@ -1,13 +1,13 @@
 <body>
   <h1>Add Product</h1>
   <form>
-    <div class="card" > 
+    <!--<div class="card" > 
       <p class="subheadinglabel">Select An Add Option:</p>
       <div class="divleft">
           <button type="submit" (click)="AddToSystem()">Add Product to System</button>
           <button type="submit" (click)="LinkToContainer()">Link Product to Container</button>
       </div>
-  </div>
+  </div>-->
   </form >
 
     <form [formGroup]="pdForm">
@@ -42,23 +42,23 @@
               </span>
               <br>
               
-                <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="newProduct.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required>
+                <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="newProduct.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" min="0" required>
               <br>
               <span style="color:red" *ngIf="pdForm.get('ProdReLevel').errors && (pdForm.get('ProdReLevel').touched || pdForm.get('ProdReLevel').dirty)">
                 <span *ngIf="pdForm.get('ProdReLevel').errors.required">Reorder level is required.</span>
-                <span *ngIf="pdForm.get('ProdReLevel').errors.minlength || pdForm.get('ProdReLevel').errors.maxlength">Reorder level must be greater than 1 number and less than 2 number.</span>
+                <span *ngIf="pdForm.get('ProdReLevel').errors.minlength || pdForm.get('ProdReLevel').errors.maxlength">Reorder level must be greater than 1.</span>
                 <span *ngIf="pdForm.get('ProdReLevel').errors.pattern">Only numbers allowed.</span>
               </span>
             <br>
-                <label for="CPriceR">Cost Price(R):</label><input type="number"  formControlName="CPriceR" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+                <label for="CPriceR">Cost Price(R):</label><input type="number"  formControlName="CPriceR" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" min="0" required>
             <br>
             <span style="color:red" *ngIf="pdForm.get('CPriceR').errors && (pdForm.get('CPriceR').touched || pdForm.get('CPriceR').dirty)">
               <span *ngIf="pdForm.get('CPriceR').errors.required">Cost Price is required.</span>
-              <span *ngIf="pdForm.get('CPriceR').errors.minlength || pdForm.get('CPriceR').errors.maxlength">Cost Price must be greater than 1 number and less than 2 number.</span>
+              <span *ngIf="pdForm.get('CPriceR').errors.minlength || pdForm.get('CPriceR').errors.maxlength">Cost Price must be greater than 1 number.</span>
               <span *ngIf="pdForm.get('CPriceR').errors.pattern">Only numbers allowed.</span>
             </span>
             <br>
-                <label for="UPriceR">Unit Price(R):</label><input type="number"  formControlName="UPriceR" class="form-control" [(ngModel)]="price.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+                <label for="UPriceR">Unit Price(R):</label><input type="number"  formControlName="UPriceR" class="form-control" [(ngModel)]="price.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*"  min="0" required>
             <br>
             <span style="color:red" *ngIf="pdForm.get('UPriceR').errors && (pdForm.get('UPriceR').touched || pdForm.get('UPriceR').dirty)">
               <span *ngIf="pdForm.get('UPriceR').errors.required">Unit Price is required.</span>
@@ -86,20 +86,13 @@
         </div>
     </form>
 
-    <form [formGroup]="pdForm">
+    <form [formGroup]="pdForm"> 
       <div class="card" *ngIf= "linkToContainer"> 
-        <p class="subheadinglabel">Select Container and Product:</p>
+        <p class="subheadinglabel">Move Product</p>
         <div class="divleft">
     
           <br>
-          <label for="ProductCategoryID">Container:</label><select  required formControlName="SelectCon" name="SelectCon" (ngModelChange)="setContainer($event)">
-                         
-            <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
-           </select>
-           <br>
-           <span style="color:red" *ngIf="pdForm.get('SelectCon').errors && (pdForm.get('SelectCon').touched || pdForm.get('SelectCon').dirty)">
-            <span *ngIf="pdForm.get('SelectCon').errors.required">Select Container required.</span>
-        </span>
+          
       <br>
         
           <br>
@@ -113,15 +106,9 @@
                     <span *ngIf="pdForm.get('SelectProduct').errors.required">Select Product required.</span>
                 </span>
               <br>
-              <div class="divleft">
-                <label for="quantity">Quantity </label>
-                <input [ngModelOptions]="{standalone: true}" style="width:60px;" type="number" formControlName="quantity" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
-                <br>
-                  <span style="color:red" *ngIf="pdForm.get('quantity').errors && (pdForm.get('quantity').touched || pdForm.get('quantity').dirty)">
-                    <span *ngIf="pdForm.get('quantity').errors.required">Quantity required.</span>
-                </span>
-              <br>
-              </div>
+            
+
+              
             
             <button type="submit" (click)="Link()">Link</button>
             <button type="submit" (click)="RemoveLink()">Remove Link</button>

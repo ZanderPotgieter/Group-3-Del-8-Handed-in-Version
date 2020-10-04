@@ -14,7 +14,7 @@
     <div *ngIf = "showLogin" style='width: 80%!important;' >
 
     <div class="wrapperlogin">
-        <div class="wrapped-div-login">
+        <div class="wrapped-div-login" style="padding:0px">
     <img src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png" class="mx-auto d-block" style="height:90px;width:200px">
     <form   #form='ngForm' autocomplete="off" >
         <h2>Login</h2>
@@ -37,12 +37,12 @@
       <span style="color:red" *ngIf="showContainerNotSelected">
         select container</span>
         
-    
+    <br>
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="login()">Login </button>
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="register()">Register </button>
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="generateOTP()">Reset Password</button>
+          <button style="background-color:rgba(251,113,0,1);color:white; width: 20%;" type="submit"  (click)="login()">Login </button>
+          <button style="background-color:rgba(251,113,0,1);color:white; width: 20%;" type="submit"  (click)="register()">Register </button>
+          <button style="background-color:rgba(251,113,0,1);color:white; width: 20%;" type="submit"  (click)="generateOTP()">Reset Password</button>
         </div>
       </div>
     </form>

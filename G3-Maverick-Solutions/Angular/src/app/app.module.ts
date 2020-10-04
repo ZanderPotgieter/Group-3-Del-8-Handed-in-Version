@@ -120,6 +120,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { UserTreeComponent } from './user-tree/user-tree.component';
 import { UserReportComponent } from './reporting-management/user-report/user-report.component';
 import { SearchUsersComponent } from './search-users/search-users.component';
+import { LowstockComponent } from './product-management/lowstock/lowstock.component';
 
 
 
@@ -219,6 +220,7 @@ import { SearchUsersComponent } from './search-users/search-users.component';
     UserTreeComponent,
     UserReportComponent,
     SearchUsersComponent,
+    LowstockComponent,
   ],
   imports: [
     BrowserModule,

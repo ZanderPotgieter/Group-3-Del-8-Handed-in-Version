@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
     import { RouterModule, Routes } from '@angular/router';
     import { AppComponent } from './app.component';
     import { EmployeeManagementComponent } from './employee-management/employee-management.component';
@@ -90,6 +90,7 @@ import { NgModule } from '@angular/core';
     import { StockTakeComponent } from './product-management/product/stock-take/stock-take.component';
     import { AddVatComponent } from './product-management/vat/add-vat/add-vat.component';
     import { UpdateVatComponent } from './product-management/vat/update-vat/update-vat.component';
+    import {LowstockComponent} from './product-management/lowstock/lowstock.component';
 
     //---Reporting Order Subsystem Imports---//
     import { CreditorsReportComponent } from './reporting-management/creditors-report/creditors-report.component';
@@ -410,6 +411,10 @@ import { NgModule } from '@angular/core';
             path: 'update-vat',
             component: UpdateVatComponent,
         },
+        {
+            path: 'lowstock',
+            component: LowstockComponent,
+        }
 
     ];
 

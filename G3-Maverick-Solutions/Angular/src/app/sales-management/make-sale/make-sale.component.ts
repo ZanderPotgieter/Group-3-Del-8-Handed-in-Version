@@ -32,7 +32,7 @@ export class MakeSaleComponent implements OnInit {
   userID: number = 1; //Should be changed;
   subtotal:number = 0;
   total: number = 0;
-  quantity: number = 0;
+  quantity: number = 1;
   vatPerc: number = 15;
   amount = 0;
   change = 0;
@@ -47,7 +47,7 @@ export class MakeSaleComponent implements OnInit {
   quantyNull: boolean = true;
   showTable: boolean = true;
   showChange: boolean = true;
-  ShowOustanding: boolean = true;
+  ShowOustanding: boolean = false;
  
   displayTotal  ="0";
   displaySubtotal ="0";
@@ -56,7 +56,7 @@ export class MakeSaleComponent implements OnInit {
   TotalIncVat: number;
   TotalExcVat: number;
   Vat: number;
-  amountpaid : number;
+  amountpaid : number = 0;
 
   paymentID = 0;
   saleDate: Date;
@@ -76,6 +76,7 @@ export class MakeSaleComponent implements OnInit {
   paymentTypes: PaymentType[] =[];
   user : User = new User();
 
+
   session : any;
   paySelection = 0;
   prodSelection = 0;
@@ -86,6 +87,10 @@ export class MakeSaleComponent implements OnInit {
   showName: boolean = false;
   barcodeFound: boolean = false;
   prodFound: boolean = false;
+  lowStock: boolean = false;
+
+  productID = 0;
+  removeQuantity = 0;
 
   ngOnInit(): void {
 
@@ -97,7 +102,9 @@ export class MakeSaleComponent implements OnInit {
       this.session = {"token" : localStorage.getItem("accessToken")}
 
       this.api.getUserDetails(this.session).subscribe( (res:any) =>{
+        console.log(res);
         this.user = res;
+        
       })
 
     this.api.initiateSale(this.session)
@@ -105,7 +112,8 @@ export class MakeSaleComponent implements OnInit {
     console.log(value);
   
       this.productsWithPrice = value.products;
-      this.saleDate = value.SaleDate;
+      this.sale = value.Sale;
+      this.saleDate = value.Sale.SaleDate;
       this.paymentTypes = value.paymentTypes;
       this.vatPerc = value.VAT.VATPerc;
     
@@ -122,7 +130,8 @@ export class MakeSaleComponent implements OnInit {
   }
 
   useBardode(){
-
+    
+    this.selectedProduct = new ProductDetails();
     this.showBarcode = true;
     this.showName = false;
   }
@@ -141,6 +150,7 @@ export class MakeSaleComponent implements OnInit {
 
   prodPush(val: ProductDetails){
     this.selectedProduct = val;
+    this.prodBarcode = val.ProdBarcode;
     }
 
     showPayment(){
@@ -160,27 +170,28 @@ export class MakeSaleComponent implements OnInit {
       }
 
       getProduct(){
+
         for(let prod of this.productsWithPrice ){
           if (prod.ProdBarcode == this.prodBarcode){
             this.selectedProduct = prod;
-            if (this.selectedProduct.Quantity == this.selectedProduct.CPQuantity){
+            this.barcodeFound = true;
+            if (this.selectedProduct.Quantity >= this.selectedProduct.CPQuantity){
               alert("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock");
             }
             else{
             this.quantity = this.selectedProduct.Quantity + 1;
-           // this.showQuantity = true;
-            this.barcodeFound = true;
             this.updateList();
           }
           }
           
         }
+
         if(this.barcodeFound == false){
           alert("Product Not In Stock");
         }
 
         this.barcodeFound = false;
-        this.quantity = 0;
+        this.quantity = 1;
         
 
       }
@@ -189,59 +200,42 @@ export class MakeSaleComponent implements OnInit {
         
         this.showBarcode = false;
         this.showName = false;
-        this.amountpaid = this.amountpaid + this.amountpaid
+        if( this.amountpaid >= this.TotalIncVat){
+          alert("Payment Resticted: R"+ this.amountpaid+ " already paid")
+        }
+        else{
+        this.amountpaid = this.amountpaid + this.amount;
 
-        if(this.total > this.amount){
-          this.outstandingAmt = this.total - this.amount;
+        if(this.TotalIncVat > this.amountpaid){
+          this.outstandingAmt = this.total - this.amountpaid;
           this.total = this.outstandingAmt;
-          this.change = this.TotalIncVat - this.amountpaid;
-
+          this.change = 0;
           this.ShowOustanding = true;
         }
-        else if(this.total == this.amount ){
+        else if(this.TotalIncVat == this.amountpaid){
           this.total = 0;
           this.change = 0;
           this.outstandingAmt = 0;
+          this.ShowOustanding = false;
         }
-        else if ( this.total < this.amount){
-          this.change = this.amount - this.change
+        else if ( this.TotalIncVat < this.amountpaid){
+          this.change = this.amountpaid - this.TotalIncVat
           this.total = 0;
           this.outstandingAmt = 0;
+          this.ShowOustanding = false;
           
         }
 
-        this.payment.PaymentTypeID = this.selectedPayment.PaymentTypeID;
-        this.payment.PayAmount = this.amount;
-        this.payment.PayDate = this.saleDate;
-        this.payments.push(this.payment);
+
+        this.api.makeSalePayment(this.sale.SaleID, this.amount,this.selectedPayment.PaymentTypeID).subscribe((res:any) => {
+          console.log(res);
+          if(res.Error)(
+            alert(res.Error)
+          )
+        })
+      }
+       
         
-      }
-      
-
-      makeSale(){
-       this.sale.ContainerID = this.user.ContainerID;
-        this.sale.Payments.push(...this.payments);
-        this.sale.Product_Sale.push(...this.prodcuctsales);
-      
-
-        if ( this.total == 0){
-          this.sale.UserID = this.user.UserID;
-          this.api.makeSale(this.sale).subscribe((res:any) =>{
-            if(res.Error){
-              alert(res.Error);
-            }
-        if (res.Message != null){
-          this.responseMessage = res.Message
-          alert(this.responseMessage);
-          this.router.navigate(['sales-management']);
-
-      }
-      })
-
-        }
-        else{
-          alert("Make Payment for oustanding Amount")
-        }
       }
 
 
@@ -249,10 +243,11 @@ export class MakeSaleComponent implements OnInit {
       for(let prod of this.saleProducts){
         if(prod.ProdBarcode == this.selectedProduct.ProdBarcode ){
 
-          prod.Quantity = this.quantity
-          prod.Subtotal = (this.quantity * prod.Price)
-        
-        
+          this.total = this.total-prod.Subtotal;
+          
+          prod.Quantity = this.quantity;
+          prod.Subtotal = (this.quantity * prod.Price);
+          
           this.total = this.total + prod.Subtotal;
         
           this.TotalIncVat = this.total;
@@ -267,20 +262,31 @@ export class MakeSaleComponent implements OnInit {
          this.displayTotal = this.TotalIncVat.toFixed(2);
          this.displayVat = this.Vat.toFixed(2);
          this.displaySubtotal = this.TotalExcVat.toFixed(2);
+
+        this.api.addSaleProduct(this.selectedProduct.ProductID, this.sale.SaleID, 1).subscribe((res: any) =>{
+          console.log(res);
+          if (res.Error){
+            alert(res.Error);
+          }
+          
+        })
        
-        
-        //this.productSale.PSQuantity = this.quantity;
-        //this.productSale.ProductID = this.selectedProduct.ProductID;
-  
-        //this.prodcuctsales.push(this.productSale);
          
         
         this.showTable = true;
         this.showQuantity = false;
+        this.prodFound = true;
 
 
       }
+     
     }
+
+    if(this.prodFound == false){
+      this.listProducts();
+    }
+
+    this.prodFound = false
   }
 
       listProducts(){
@@ -291,7 +297,7 @@ export class MakeSaleComponent implements OnInit {
         else{
           this.prodNotSelected = false;
           this.quantyNull = false;
-          if(this.quantity < this.selectedProduct.CPQuantity)
+          if(this.quantity <= this.selectedProduct.CPQuantity)
           {
            
         this.selectedProduct.Quantity = this.quantity;
@@ -315,14 +321,16 @@ export class MakeSaleComponent implements OnInit {
        this.displaySubtotal = this.TotalExcVat.toFixed(2);
      
       
-      //this.productSale.PSQuantity = this.quantity;
-      //this.productSale.ProductID = this.selectedProduct.ProductID;
-
-     // this.prodcuctsales.push(this.productSale);
-       
-      
       this.showTable = true;
       this.showQuantity = false;
+
+      this.api.addSaleProduct(this.selectedProduct.ProductID, this.sale.SaleID, this.quantity).subscribe((res: any) =>{
+        console.log(res);
+        if (res.Error){
+          alert(res.Error);
+        }
+        
+      })
       
           }else{
             alert("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock")
@@ -332,6 +340,11 @@ export class MakeSaleComponent implements OnInit {
       }
 
       remove(index: any){
+        
+        this.productID = this.saleProducts[index].ProductID;
+        this.removeQuantity = this.saleProducts[index].Quantity;
+
+
         if(this.saleProducts.length != 1){
         this.total = this.total - this.saleProducts[index].Subtotal;
         this.TotalIncVat = this.total;
@@ -350,12 +363,21 @@ export class MakeSaleComponent implements OnInit {
        this.displaySubtotal = this.TotalExcVat.toFixed(2);
 
        this.prodcuctsales.splice(index,1);
+
+       this.api.removeSaleProduct(this.productID, this.sale.SaleID, this.removeQuantity).subscribe((res: any) =>{
+        console.log(res);
+        if (res.Error){
+          alert(res.Error);
+        }
+        
+      })
       }
   else{
         this.total = 0;
         this.TotalExcVat = 0;
         this.TotalIncVat = 0;
         this.Vat = 0;
+
 
         this.saleProducts.splice(index,1);
         
@@ -364,7 +386,25 @@ export class MakeSaleComponent implements OnInit {
        this.displayVat = this.Vat.toFixed(2);
        this.displaySubtotal = this.TotalExcVat.toFixed(2);
 
+       
+       this.api.removeSaleProduct(this.productID, this.sale.SaleID, this.removeQuantity).subscribe((res: any) =>{
+        console.log(res);
+        if (res.Error){
+          alert(res.Error);
+        }
+        
+      })
+
        this.prodcuctsales.splice(index,1);
+       this.prodcuctsales = [];
+       this.saleProducts = [];
+       this.selectedProduct = new ProductDetails();
+       this.showTable = false;
+
+
+       for(let item of this.productsWithPrice){
+        item.Quantity = 0;
+     }
 
     
 
@@ -372,7 +412,32 @@ export class MakeSaleComponent implements OnInit {
 
       }
 
+      completeSale()
+        {
+          if ( this.outstandingAmt == 0){
+            this.api.checkStock(this.sale.ContainerID).subscribe((res: any)=>{
+              console.log(res);
+              this.lowStock = res;
+              if(res == true){
 
+                alert("Sale Completed Successfully");
+                alert("Some Products are now low in stock. Click OK to view");
+                this.router.navigate(['lowstock'])
+              }
+              if(res == false){
+                
+              alert("Sale Completed Successfully");
+              this.router.navigate(['sales-management']);
+              }
+
+            })
+  
+          }
+          else{
+            alert("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
+          }
+
+        }
 
 
       onLogout() {
@@ -385,7 +450,16 @@ export class MakeSaleComponent implements OnInit {
       }
 
       gotoSaleManagement(){
-        this.router.navigate(['sales-management']);
+        this.api.cancelSale(this.sale.SaleID).subscribe((res: any)=> {
+          console.log(res);
+          if(res.Message){
+            alert(res.Message);
+            this.router.navigate(['sales-management']);
+            
+          }
+        } )
       }
+
+     
 
 }

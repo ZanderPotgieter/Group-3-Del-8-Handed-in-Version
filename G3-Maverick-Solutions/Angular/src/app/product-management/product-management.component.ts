@@ -9,10 +9,35 @@ import { Router } from '@angular/router';
 })
 export class ProductManagementComponent implements OnInit {
 
+  showProd: boolean = false;
+  showProdCat: boolean = false;
+  showvat: boolean = false;
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
+
+  showProduct(){
+    this.showProd = true;
+    this.showProdCat = false;
+    this.showvat = false;
+  }
+
+  showProductCategory(){
+    this.showProdCat = true;
+    this.showvat = false;
+    this.showProd = false;
+  }
+
+  showVat(){
+    this.showvat = true;
+    this.showProdCat = false;
+    this.showProd = false;
+  }
+
+
+
 
   //Product Category
   gotoAddProductCategory(){
@@ -44,5 +69,7 @@ export class ProductManagementComponent implements OnInit {
   gotoUpdateVAT(){
     this.router.navigate(['update-vat']);
   }
+
+ 
 
 }

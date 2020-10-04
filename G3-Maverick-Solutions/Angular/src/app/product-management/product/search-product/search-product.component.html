@@ -28,7 +28,7 @@
                 <button type="submit" (click)="SearchBarcode()">Search</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
-s
+
             <div class="divleft" *ngIf="showSelectProduct" >
                 <p class="subheadinglabel">Select Product:</p>
 
@@ -52,7 +52,7 @@ s
                 <p class="subheadinglabel">Select Product Category:</p>
 
                 <div class="divleft">
-                    <label for="ProductCategoryID">Product Category:</label><select  required formControlName="SelectProdC" name="SelectProdC" (ngModelChange)="selectCategory($event)">
+                    <label for="ProductCategoryID">Product Category:</label><select  required formControlName="SelectProdC" name="SelectProdC" (ngModelChange)="setCategory($event)">
               
                          <option  *ngFor="let category of categories" [ngValue]="category" >{{category.PCatName}}</option>
                         </select>
@@ -84,7 +84,7 @@ s
                      <button type="submit" (click)="SearchContainer()">Search</button>
                      <button type="submit" (click)="Cancel()">Cancel</button>
                 </div>
-            </div>>
+            </div>
 
             <div class="divleft" *ngIf="showSearchBtn">
                 <button type="submit" (click)="SearchAllProducts()">Search</button>
@@ -96,12 +96,13 @@ s
         <div class="divleft" > 
             <label class="subheadinglabel">Searched Product Result:</label>
             <br>
-            <label for="ProductCategoryID"  hidden = "true" >Product Category:</label><input type="number"  hidden = "true"  formControlName="ProductCategoryID" class="form-control" [(ngModel)]="Product.ProductCategoryID" id="ProductCategoryID" name="ProductCategoryID" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
+            <label for="ProductCategoryID" hidden="true" ></label><input type="number" hidden ="true" formControlName="ProductCategoryID" class="form-control" [(ngModel)]="Product.ProductCategoryID" id="ProductCategoryID" name="ProductCategoryID" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
             <label for="ProdName">Name:</label><input type="text" formControlName="ProdName" class="form-control" [(ngModel)]="Product.ProdName"  id="ProdName"  name ="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
             <br>
             <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="Product.ProdDesciption"  id="ProdDesciption"  name ="ProdDesciption" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
             <br>
+            
             
             <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="Product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
             <br>
@@ -109,27 +110,60 @@ s
             <br>
             <label class="subheadinglabel">Current Price:</label>
             <br>
-            <label for="CPriceR">Cost Price(R):</label><input type="number" disabled="true" formControlName="CPriceR" class="form-control" [(ngModel)]="Price.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
+            <label >Cost Price(R):</label><label>{{Price.CPriceR}}</label>
             <br>
-            <label for="UPriceR">Unit Price(R):</label><input type="number" disabled="true"  formControlName="UPriceR" class="form-control" [(ngModel)]="Price.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
+            <label>Unit Price(R):</label><label>{{Price.UPriceR}}</label>
             <br>
-            <label for="PriceStartDate">Price Start Date:</label><input disabled="true" type="string" formControlName="PriceStartDate" class="form-control" [(ngModel)]="Price.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required [readonly] = "this.inputEnabled">
+            <label>Price Start Date:</label><label>{{Price.PriceStartDate}}</label>
+           
             <br>
+            <div *ngIf="showadd" class="divleft">
+            <label class="subheadinglabel">Enter New Price Details</label>
+            <br>
+
+            <label for="CPriceR">Cost Price(R):</label>
+            <input style="width:80px;" type="number"  min="1"  formControlName="CPriceR" class="form-control" [(ngModel)]="newPrice.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+            <br>
+            <span style="color:red" *ngIf="pdForm.get('CPriceR').errors && (pdForm.get('CPriceR').touched || pdForm.get('CPriceR').dirty)">
+                <span *ngIf="searchForm.get('CPriceR').errors.required">Cost Price is required.</span>
+                <span *ngIf="pdForm.get('CPriceR').errors.minlength || pdForm.get('CPriceR').errors.maxlength">Cost Price must be greater than 1 number.</span>
+                <span *ngIf="pdForm.get('CPriceR').errors.pattern">Only numbers allowed.</span>
+              </span>
+              <br>
+            <label for="UPriceR">Unit Price(R):</label>
+            <input style="width:80px;" type="number"  min="1"  formControlName="UPriceR" class="form-control" [(ngModel)]="newPrice.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+            <br>
+            <span style="color:red" *ngIf="pdForm.get('UPriceR').errors && (pdForm.get('UPriceR').touched || pdForm.get('UPriceR').dirty)">
+              <span *ngIf="searchForm.get('UPriceR').errors.required">Unit Price is required.</span>
+              <span *ngIf="searchForm.get('UPriceR').errors.minlength || pdForm.get('UPriceR').errors.maxlength">Unit Price must be greater than 1 number and less than 2 number.</span>
+              <span *ngIf="searchForm.get('UPriceR').errors.pattern">Only numbers allowed.</span>
+            </span>
+            <br>
+            <label for="PriceStartDate" style="width: 200px">Price Start Date:</label>
+            <input matInput [min]="minDate" [matDatepicker]="picker"  formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <!--<input type="date" [min]="mydate" formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>-->
+            <br>
+            <span style="color:red" *ngIf="pdForm.get('PriceStartDate').errors && (pdForm.get('PriceStartDate').touched || pdForm.get('PriceStartDate').dirty)">
+              <span *ngIf="searchForm.get('PriceStartDate').errors.required">Price start date is required.</span>
+            </span>
+            <br>
+            <button type="submit" (click)="saveadd()">Save</button>
+        </div>
+
+            <br>
+            </div>
+           
+            <div *ngIf="showPriceList" class="divleft">
             <Label class="subheadinglabel">Price list:</Label>
             <br>
             <table>
                 <th style="text-align: left;">Cost Price(R)</th>
                 <th style="text-align: left;">Unit Price(R)</th>
                 <th style="text-align: left;"> Price Start Date:</th>
-                <th style="width: 30%; padding:5px"><button style="border-radius: 10px; width: 60%;" (click)="showAdd()"><i class="small material-icons" plceholder="new item">add</i></button></th>
+                <th style="width: 30%; padding:5px"></th>
 
-                <tr *ngIf="showadd">
-                    <td><input style="width: 70%" type="number" min="1" name="CPriceR" [(ngModel)]="newPrice.CPriceR" [ngModelOptions]="{standalone: true}"></td>
-                    <td><input style="width: 70%" type="number" min="1" name="UPriceR" [(ngModel)]="newPrice.UPriceR" [ngModelOptions]="{standalone: true}"></td>
-                    <td><input style="width: 70%" type="date" name="PriceStartDate" [(ngModel)]="newPrice.PriceStartDate" [ngModelOptions]="{standalone: true}"></td>
-                    <td><button style="border-radius: 10px; width: 60%;" (click)="saveadd()"><i class="small material-icons" plceholder="new item">save</i></button></td>
-                   
-                </tr>
                
                 <tr *ngFor="let item of pricelist; index as ndx;">
                     <td>{{item.CPriceR}}</td>
@@ -139,14 +173,36 @@ s
                 </tr>
              
             </table>
+        </div>
+
+            <br>
+            <div class="divleft">
+               
+                <table>
+                    <th style="text-align: left;">Container</th>
+                    <th style="text-align: left;"> Quantity On Hand</th>
+                <th style="width: 30%; padding:5px"></th>
+
+                    
+                   
+                    <tr *ngFor="let item of product_conlist; index as ndx;">
+                        <td>{{item.Container}}</td>
+                        <td>{{item.CPQuantity}}</td>
+                        <td ><button  style="border-radius: 10px; width: 90%;" (click)="move(ndx)">Move</button></td>
+                    </tr>
+                 
+                </table> 
+           </div>
+           <div class="divleft">
+            <button type="submit" (click)="Update()"> Update</button>
+            <button type="submit" (click)="Delete()">Delete</button>
+            <button  type="submit" (click)="showAdd()">New Price</button>
+            <button type="submit" (click)="showPrice()">Show Price List</button>
+            <button type="submit" (click)="Cancel()">Cancel</button>
+        </div>
         
         </div>
-        <div class="divleft">
-        <button type="submit" (click)="Update()"> Update</button>
-        <button type="submit" (click)="Delete()">Delete</button>
-        <button type="submit" (click)="Cancel()">Cancel</button>
-    </div>
-    </div>
+        
 
     <div class="card" *ngIf="showAllProductsResults">
         <div class="divleft">
@@ -173,27 +229,63 @@ s
         <div class="divleft">
             <label class="subheadinglabel">Searched Container Results:</label>
             <br>
+            <div style="width: 90%">
             <table>
-                <th style="text-align: left;">Product Name</th>
-                <th style="text-align: left;">Description</th>
-                <th style="text-align: left;"> Reorder Level</th>
-                <th style="width: 20%; padding:5px"></th>
+                <th >Product Name</th>
+                <th > Reorder Level</th>
+                <th >Quantity On Hand</th>
+                <th style="width:10,;padding: 0px"></th>
                
                 <tr *ngFor="let item of list; index as ndx;">
-                    <td>{{item.ProdName}}</td>
-                    <td>{{item.Description}}</td>
-                    <td>{{item.ProdReLevel}}</td>
-                    <td>{{item.PCQuantiy}}</td>
-                    <td ><button  style="border-radius: 10px; width: 60%;" (click)="update(ndx)">view</button></td>
+                    <td>{{item.Prodname}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.CPQuantity}}</td>
+                    <td ><button  style="border-radius: 10px; width: 90%;" (click)="update(ndx)">view</button></td>
                 </tr>
              
             </table> 
+        </div>
        </div>
-       <button type="submit" (click)="Cancel()">Cancel</button>
-     </div>
+       <div  class="divleft">
+        <button type="submit" (click)="Cancel()">Cancel</button>
 
- 
-        
-     </form>  
-</body>
+       </div>
+     </div>
+    </form> 
+
+    <form [formGroup]="pdForm"> 
+        <div class="card" *ngIf= "moveToContainer">
+
+     <!--Move Product-->
+     <div class="divleft">
+    <label class="subheadinglabel" style="width: 500px" > Move {{Product.ProdName}} </label> <br>
+
+    <label style="width: 300px">From Container:</label>
+    <label style="width: 300px">{{conProduct.Container}}</label><br>
+
+    <label style="width: 300px">Quantity On Hand:</label><label>{{conProduct.CPQuantity}}</label><br>
+
+    <label style="width: 300px" for="ProductCategoryID">Move To Container:</label><select  required formControlName="SelectCon" name="SelectCon" (ngModelChange)="setContainer($event)">
+                         
+        <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
+       </select>
+       <br>
+       <span style="color:red" *ngIf="pdForm.get('SelectCon').errors && (pdForm.get('SelectCon').touched || pdForm.get('SelectCon').dirty)">
+        <span *ngIf="pdForm.get('SelectCon').errors.required">Container required.</span>
+    </span>
+
+
+   
+        <label style="width: 300px" for="quantity">Quantity To Move </label>
+        <input [ngModelOptions]="{standalone: true}" style="width:80px;" type="number" formControlName="quantity" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
+        <br>
+          <span style="color:red" *ngIf="pdForm.get('quantity').errors && (pdForm.get('quantity').touched || pdForm.get('quantity').dirty)">
+            <span *ngIf="pdForm.get('quantity').errors.required">Quantity required.</span>
+        </span>
+      <br>
+
+      <button type="submit" (click)="Link()">Move</button>
+        <button type="submit" (click)="Cancel()">Cancel</button>
+      </div>
+
 

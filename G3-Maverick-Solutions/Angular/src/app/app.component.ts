@@ -194,7 +194,6 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
     }, 5000);
   }else{
     alert(res.Message);
-  this.UserPassword = "";
 
   this.showLogin= true;
   this.showNav = false;

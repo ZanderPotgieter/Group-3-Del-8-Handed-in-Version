@@ -94,7 +94,7 @@ $heading_padding: 50px;
 $input-border: none;
 $boarder-style: solid;
 $input-size: 30px;
-$input-width: 30%;
+$input-width: 40%;
 
 //button
 $button-padding: 0px;
@@ -113,8 +113,8 @@ $menu-button-padding: 10px 25px;
 
 //label
 $label-font: 20px;
-$label-width: 130px;
-$subheadinglabel-width: 60%;
+$label-width: 200px;
+$subheadinglabel-width: 80%;
 
 //select
 $select-height: 28px;
@@ -321,6 +321,19 @@ input {
     height: $height;
     background-color: $card-colour;
     color: $text-colour;
+}
+
+.numberInput{
+   
+        border: none;
+        size: $input-size;
+        border-bottom: 1px $boarder-style $ComplementoryColour;
+        font-size: $text-FontSize;
+        width: 10%;
+        height: $height;
+        background-color: $card-colour;
+        color: $text-colour;
+    
 }
 
 label {

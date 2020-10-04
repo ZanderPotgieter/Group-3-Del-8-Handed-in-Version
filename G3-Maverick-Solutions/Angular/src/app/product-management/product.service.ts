@@ -45,9 +45,20 @@ export class ProductService {
     return this.http.post(this.url + "/getProductByName?prodName=" + prodName, httpOptions);
   }
 
-  getProductByCategory(prodCategory: string){
+  getProductByCategory(categoryID: number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
-    return this.http.post<Product>(this.url + "/getProductByCategory?prodCategory=" + prodCategory, httpOptions);
+    return this.http.get<Product>(this.url + "/getProductByCategory?categoryID=" + categoryID, httpOptions);
+  }
+
+  moveProduct(fromConID : number, productID: number, quantity: number, toConID : number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.get("https://localhost:44399/Api/Product/moveProduct?fromConID=" +fromConID +"&productID=" + productID +"&quantity="+quantity + "&toConID=" + toConID
+    , httpOptions);
+  }
+
+  getLowStock(containerID: number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
+    return this.http.get(this.url + '/getLowStock?containerID='+containerID, httpOptions)
   }
 
   

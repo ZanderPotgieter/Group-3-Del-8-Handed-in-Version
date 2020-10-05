@@ -100,7 +100,7 @@ namespace ORDRA_API.Controllers
             catch (Exception)
             {
                 toReturn.Message = "Record Not Found";
-                //toReturn = "Something Went Wrong " + error.Message;
+                toReturn = "Something Went Wrong ";
             }
 
             return toReturn;
@@ -108,61 +108,49 @@ namespace ORDRA_API.Controllers
 
         }
 
-        //adding a new creditor
         [HttpPost]
-        [Route("addCreditor")]
-        public object addCreditor(Creditor creditor)
+        [Route("AddCreditor")]
+        public object AddCreditor(Creditor creditor)
         {
-
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
+
             try
             {
-                var searchedCred = db.Suppliers.Where(z => z.SupplierID == creditor.SupplierID).Any();
-                // searchCreditor(newCreditor.Supplier.SupName);
-                //db.Creditors.Include(s => s.Supplier).Where(x => x.CreditorID == newCreditor.CreditorID).FirstOrDefault();
-                // var supplier = db.Suppliers.Where(s => s.SupName == name).FirstOrDefault();
-                var id = creditor.SupplierID;
-                var check = false;
-                List<Supplier> suppliers = db.Suppliers.ToList();
-                foreach (var item in suppliers)
+                //get supplier
+                Supplier sup = db.Suppliers.Where(x => x.SupplierID == creditor.Supplier.SupplierID).FirstOrDefault();
+                if (sup != null)
                 {
-                    if (item.SupplierID == id)
-                    {
-                        check = true;
-                    }
-                }
 
-                if (check == true)
-                {
-                    toReturn.Message = "Duplicate record";
-                }
-                else if (check == false)
-                {
-                    db.Creditors.Add(creditor);
+
+                    //save new creditor
+                    Creditor addCred = new Creditor();
+                    addCred.Supplier.SupplierID = creditor.Supplier.SupplierID;
+                    addCred.CredBank = creditor.CredBank;
+                    addCred.CredAccount = creditor.CredAccount;
+                    addCred.CredType = creditor.CredType;
+                    addCred.CredBranch = creditor.CredBranch;
+                    addCred.CredAccountBalance = creditor.CredAccountBalance;
+                    db.Creditors.Add(addCred);
                     db.SaveChanges();
-                    toReturn.Message = "Add Succsessful";
+
+                    toReturn.Message = "Add Creditor Succsessful";
                 }
-
-
-                /*if (searchedCred == false) // check if the supplier is already a creditor
+                else
                 {
-                     
+                    toReturn.Message = "Add Creditor Unsuccsessful: Supplier already a creditor.";
                 }
-                 else
-                 {
-                     toReturn.Message = "Duplicate record";
-                 }*/
-
 
             }
             catch (Exception)
             {
-                toReturn.Message = "Add UnSuccsessful";
+                toReturn.Message = "Add Creditor unsuccessful";
+
             }
             return toReturn;
         }
+
 
 
         //Update creditor

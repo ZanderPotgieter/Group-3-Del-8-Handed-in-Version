@@ -124,8 +124,6 @@ export class ViewCustomerComponent implements OnInit {
 
   }
 
-
-
   enableInputs(){
     this.showSave = true;
     this.inputEnabled = false;
@@ -146,10 +144,5 @@ export class ViewCustomerComponent implements OnInit {
   gotoCustomerManagment(){
     this.router.navigate(['customer-management']);
   }
-
-   //gotoPlaceOrder(){
-     //this.interaction.sendCustomerID(this.customer.CustomerID);
-    //this.router.navigate(['place-order']);
-  //}
 
 }

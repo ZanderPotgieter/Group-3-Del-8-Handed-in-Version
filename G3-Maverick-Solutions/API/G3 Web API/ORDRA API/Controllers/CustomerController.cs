@@ -99,7 +99,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     
-                    toReturn.Message = "Customer Not Found";
+                    toReturn.Message = "The customer was not found. Please check the search criteria.";
                     
                 }
             }
@@ -132,7 +132,7 @@ namespace ORDRA_API.Controllers
 
                     db.Customers.Add(newcustomer);
                     db.SaveChanges();
-                    toReturn.Message = "Add Successful";
+                    toReturn.Message = newcustomer.CusName + " " + newcustomer.CusSurname + " has been added successfully.";
                 }
                 else
                 {
@@ -177,7 +177,7 @@ namespace ORDRA_API.Controllers
 
                     db.SaveChanges();
 
-                    toReturn.Message = "Update Successful";
+                    toReturn.Message = customerUpdate.CusName + " " + customerUpdate.CusSurname + " has successfully been updated.";
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception)
             {
-                toReturn.Message = "Update UnSuccessful";
+                toReturn.Message = "Oops! The customer has not been updated.";
                
             }
 
@@ -217,7 +217,7 @@ namespace ORDRA_API.Controllers
                 {
                     db.Customers.Remove(objectCustomer);
                     db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    toReturn.Message = "The customer has successfully been Deleted.";
                 }
 
             }

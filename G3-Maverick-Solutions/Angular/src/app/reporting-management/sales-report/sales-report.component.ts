@@ -28,6 +28,7 @@ export class SalesReportComponent implements OnInit {
   Orders: object;
   TableData: object;
   totalBalance: any;
+  responseMessage: string = "request not submitted"
 
   constructor(private reportService: ReportService, private router: Router) { }
 
@@ -70,15 +71,22 @@ export class SalesReportComponent implements OnInit {
   GenerateReport()
   {
     
-    this.reportService.getSaleReportData().subscribe((res) =>{
+    this.reportService.getSaleReportData().subscribe((res: any) =>{
       console.log(res);
-      this.TableData= res['TableData'];
-      
-
-       let totalTot = res['TableData'].map((z) => z.ProdTot);
-      const sum = totalTot.reduce((a,b) => a+b, 0);
-      this.totalBalance = sum || 0;
-      console.log(this.totalBalance); 
+      if(res.Error!=null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage);
+      }
+      else
+      {
+        this.TableData= res['TableData'];
+        let totalTot = res['TableData'].map((z) => z.ProdTot);
+        const sum = totalTot.reduce((a,b) => a+b, 0);
+        this.totalBalance = sum || 0;
+        console.log(this.totalBalance);
+      }
+       
     })
   }
 

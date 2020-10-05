@@ -1,4 +1,4 @@
-<div class="grid-container">
+<!-- <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
   <mat-grid-list cols="2" rowHeight="350px">
     <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
@@ -22,3 +22,10 @@
     </mat-grid-tile>
   </mat-grid-list>
 </div>
+ -->
+
+ <div class="chart-display">
+   <div style="width: 100%">
+    <canvas id="bar"></canvas>
+  </div>
+ </div>

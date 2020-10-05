@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.Data.Entity;
 using System.Web.Http.Cors;
 using ORDRA_API.Models;
+using System.Globalization;
 
 namespace ORDRA_API.Controllers
 {
@@ -1046,6 +1047,81 @@ namespace ORDRA_API.Controllers
 
             return toReturn;
 
+        }
+
+        [HttpGet]
+        [Route("getSaleReportData")]
+        public dynamic getSaleReportData()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            List<Marked_Off> markedProducts = new List<Marked_Off>();
+            List<Product> products = new List<Product>();
+            DateTime today = DateTime.Today;
+
+            List<Sale> sales = new List<Sale>();
+            try
+            {
+                sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList();//Where(z => z.SaleDate == today)
+                    //db.Marked_Off.Include(z => z.Product).Include(z => z.Marked_Off_Reason).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return getSaleReportObject(sales);
+        }
+        public dynamic getSaleReportObject(List<Sale> sales)
+        {
+            dynamic toReturn = new ExpandoObject();
+            //toReturn.TableData = null;
+            toReturn.ChartData = null;
+            try
+            {
+
+                if (sales != null)
+                {
+                    //chart data
+
+                    var conList = sales.GroupBy(z => z.ContainerID);
+                    List<dynamic> containers = new List<dynamic>();
+
+
+                    foreach (var item in conList)
+                    {
+                        if (item!=null || item.Key!=null)
+                        {
+                            dynamic container = new ExpandoObject();
+                            container.ID = item.Key;
+                            // var id = item.Key;
+                            //List<Product_Sale> saleProds = db.Product_Sale.Where(z => z.SaleID == id).ToList();
+
+
+                            var sum = Convert.ToInt32(item.Sum(z => z.SaleID), CultureInfo.InvariantCulture);
+                            container.Sum = sum;
+
+                            containers.Add(container);
+                        }
+                        else
+                        {
+                            toReturn.Error = "Conatiner information not available to generate report";
+                        }
+                    }
+
+                    toReturn.ChartData = containers;
+
+                    
+                }
+                else
+                {
+                    toReturn.Error = "Sale information not available to generate report";
+                }
+            }
+            catch (Exception )
+            {
+                toReturn.Error = "Failed to generate report";
+            }
+            return toReturn;
         }
 
 

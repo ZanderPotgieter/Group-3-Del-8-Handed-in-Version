@@ -184,16 +184,32 @@ CREATE TABLE Product_Category
 )
 GO
 
+CREATE TABLE Supplier
+(
+	SupplierID int Primary Key identity(1,1) Not Null,
+	SupName varchar(50),
+	SupCell varchar(10),
+	SupEmail varchar(75),
+	SupStreetNr varchar(10),
+	SupStreet varchar(35),
+	SupSuburb varchar(35),
+	SupCode varchar(4)
+)
+GO
+
 CREATE TABLE Product
 (
 	ProductID int Primary Key identity(1,1) Not Null,
 	ProductCategoryID int,
+	SupplierID int,
 	ProdBarcode varchar(50),
 	ProdName varchar(50),
 	ProdDesciption varchar(255),
 	ProdReLevel int,
 	CONSTRAINT FK_ProdPCat FOREIGN KEY (ProductCategoryID)
-    REFERENCES [Product_Category](ProductCategoryID)
+    REFERENCES [Product_Category](ProductCategoryID),
+    CONSTRAINT FK_ProdSup FOREIGN KEY (SupplierID)
+    REFERENCES [Supplier](SupplierID)
 
 )
 GO
@@ -368,24 +384,15 @@ CREATE TABLE Price
 )
 GO
 
-CREATE TABLE Supplier
-(
-	SupplierID int Primary Key identity(1,1) Not Null,
-	SupName varchar(50),
-	SupCell varchar(10),
-	SupEmail varchar(75),
-	SupStreetNr varchar(10),
-	SupStreet varchar(35),
-	SupSuburb varchar(35),
-	SupCode varchar(4)
-)
-GO
-
 CREATE TABLE Creditor
 (
 	CreditorID int Primary Key identity(1,1) Not Null,
 	SupplierID int,
 	CredAccountBalance float(2),
+	CredBank varchar(30),
+	CredBranch varchar(40),
+	CredAccount int,
+	CredType varchar(20),
 	CONSTRAINT FK_CredSupplier FOREIGN KEY (SupplierID)
     REFERENCES Supplier(SupplierID)
 )
@@ -399,18 +406,6 @@ CREATE TABLE Creditor_Payment
 	CredPaymentAmount float(2),
 	CONSTRAINT FK_CredPayment FOREIGN KEY (CreditorID)
     REFERENCES Creditor(CreditorID)
-)
-GO
-
-CREATE TABLE Product_Supplier
-(
-	ProductID int,
-	SupplierID int,
-	Primary Key (ProductID, SupplierID),
-	CONSTRAINT FK_PSProduct FOREIGN KEY (ProductID)
-    REFERENCES Product(ProductID),
-	CONSTRAINT FK_PSSupplier FOREIGN KEY (SupplierID)
-    REFERENCES Supplier(SupplierID)
 )
 GO
 
@@ -536,11 +531,9 @@ GO
 CREATE TABLE Product_Backlog
 (
 	ProductBackLogID int Primary Key identity(1,1) Not Null,
-	CustomerOrderID int, 
 	ProductID int, 
-	QauntityToOrder int,
-	CONSTRAINT FK_PBLogCustomerOrder FOREIGN KEY (CustomerOrderID)
-    REFERENCES Customer_Order(CustomerOrderID),
+	QuantityToOrder int,
+	DateModified dateTime,
 	CONSTRAINT FK_PBLogProduct FOREIGN KEY (ProductID)
     REFERENCES Product(ProductID),
 )
@@ -726,14 +719,14 @@ VALUES ('Stationery', 'writing and other office materials'),
 	   ('Blu-tel' , 'airtime and other Communication materials'),
 	   ('Electronics', 'Electronic devices and technology');
 
-INSERT INTO Product (ProductCategoryID,ProdBarcode, ProdName, ProdDesciption, ProdReLevel)
-VALUES ('1', '6007652013383', 'Treeline 5000 Staples', 'Brand: Treeline, Product: Staples, Colour: Silver, Type: chisel point', '5' ),
-	   ('1', ' 8801067431934', 'Onami White eraser', 'Brand: Onami , Product: Eraser, Colour: White, Type: Proffesional', '10'),
-	   ('1', '4015000405706', 'Pritt 20ml Correction Fluid', 'Brand: Pritt, Product: Collection fluid, Size: 20 ml', '15'),
-	   ('3', '7622300069476', 'Osram LED Bulb 9W', 'Brand: Osram, Product: LED Bulb, Type: 9W', '15'),
-	   ('3', '6009801827254', 'Shang Adapter 15/13A', 'Brand: Shang, Product:Adapter, Type: 15/13A', '10'),
-	   ('2', '892630118012377413', 'NetOne Micro sim card', 'Brand: NetOne, Product:Sim card, Type: Micro', '5'),
-	   ('2', '892630118010969226', 'NetOne Nano sim card', 'Brand: NetOne, Product:Sim card, Type: Nano', '5');
+INSERT INTO Product (ProductCategoryID,ProdBarcode, ProdName, ProdDesciption, ProdReLevel, SupplierID)
+VALUES ('1', '6007652013383', 'Treeline 5000 Staples', 'Brand: Treeline, Product: Staples, Colour: Silver, Type: chisel point', '5','1' ),
+	   ('1', ' 8801067431934', 'Onami White eraser', 'Brand: Onami , Product: Eraser, Colour: White, Type: Proffesional', '10','2'),
+	   ('1', '4015000405706', 'Pritt 20ml Correction Fluid', 'Brand: Pritt, Product: Collection fluid, Size: 20 ml', '15','2'),
+	   ('3', '7622300069476', 'Osram LED Bulb 9W', 'Brand: Osram, Product: LED Bulb, Type: 9W', '15','3'),
+	   ('3', '6009801827254', 'Shang Adapter 15/13A', 'Brand: Shang, Product:Adapter, Type: 15/13A', '10','1'),
+	   ('2', '892630118012377413', 'NetOne Micro sim card', 'Brand: NetOne, Product:Sim card, Type: Micro', '5','3'),
+	   ('2', '892630118010969226', 'NetOne Nano sim card', 'Brand: NetOne, Product:Sim card, Type: Nano', '5','1');
 	   
 
 
@@ -825,19 +818,14 @@ VALUES ('Mash Wholesale distributors' , '0123252134', 'mashwholesale@gmail.com',
 	   ('PWA Stationery', '0127521345', 'PWAStationery@yahoo.com', '54', 'Tony Avenue', 'Arcadia', '0018'),
 	   ('Makro Mamelodi', '0123471092', 'Makro@gmail.com', '12', 'Tshukulu Road', 'Mamelodi', '0122');
 
-INSERT INTO Creditor (SupplierID, CredAccountBalance)
-VALUES ('1', '20120.00'),
-	   ('2', '12789.50');
+INSERT INTO Creditor (SupplierID, CredAccountBalance, CredBank, CredBranch, CredAccount, CredType)
+VALUES ('1', '20120.00', 'ABSA', 'Hatfield','1339543203', 'Check'),
+	   ('2', '12789.50','FNB', 'Lynnwood','1235543503', 'Check');
 
 INSERT INTO Creditor_Payment (CreditorID, CredPaymentDate, CredPaymentAmount)
 VALUES ('2' , '2020-03-21', '6050.00'),
 	   ('1' , '2020-05-30', '12500.00'),
 	   ('2', '2020-07-10', '15900.00');
-
-INSERT INTO Product_Supplier (ProductID, SupplierID)
-VALUES ('1' , '2'),
-	   ('2', '3'),
-	   ('3', '1');
 
 INSERT INTO Supplier_Order_Status (SOSDescription)
 VALUES ('Placed'),
@@ -889,11 +877,10 @@ VALUES ('1', '2', '10'),
 	   ('3', '1', '15'),
 	   ('2', '2', '20');
 
-INSERT INTO Product_Backlog (CustomerOrderID, ProductID, QauntityToOrder)
-VALUES ('2', '2', '15'),
-	   ('1', '2', '20'),
-	   ('2', '1', '50'),
-	   ('3', '3', '30');
+INSERT INTO Product_Backlog (ProductID, QuantityToOrder, DateModified)
+VALUES ('2', '30', '2020-04-10'),
+	   ('1', '25', '2020-04-14'),
+	   ('3', '15', '2020-02-27');
 
 
 

@@ -23,6 +23,7 @@ export class UserReportComponent implements OnInit {
   TableData: object;
   totalBalance: any;
   Count: any;
+  responseMessage: string = "Request not submitted";
 
 
   ngOnInit(): void {
@@ -67,14 +68,22 @@ export class UserReportComponent implements OnInit {
 
   GenerateReport()
   {
-    this.reportService.getUserReportData().subscribe((res) =>{
+    this.reportService.getUserReportData().subscribe((res: any ) =>{
       console.log(res);
-      this.TableData = res['TableData'];
-      this.Count = res['Count'];
-      /* let totalBal = res['TableData'].map((z) => z.Balances);
-      const sum = totalBal.reduce((a,b) => a+b, 0);
-      this.totalBalance = sum || 0;
-      console.log(this.totalBalance);  */
+      if (res.Error != null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage);
+      }
+      else
+      {
+        this.TableData = res['TableData'];
+        this.Count = res['Count'];
+        /* let totalBal = res['TableData'].map((z) => z.Balances);
+        const sum = totalBal.reduce((a,b) => a+b, 0);
+        this.totalBalance = sum || 0;
+        console.log(this.totalBalance);  */
+      }
     })
   }
 

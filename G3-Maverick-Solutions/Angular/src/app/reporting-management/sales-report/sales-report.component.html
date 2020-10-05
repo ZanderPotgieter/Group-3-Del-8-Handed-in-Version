@@ -1,12 +1,84 @@
-<body>
+<<body>
     <h1>Generate Sale report</h1>
     <div id="FromDiv"> 
     
         <div class="card">
             <br>
             <button type="submit" (click)="GenerateReport()" >Generate Report</button> 
-            <!-- <button type="button" (click)="DownloadPDF()" >Download Report</button>-->
-            <!-- <button type="button" (click)="PrintReport()" >Print Report</button> -->
+            <!--  <button type="button" (click)="DownloadPDF()" >Download Report</button>
+            <button type="button" (click)="PrintReport()" >Print Report</button>  -->
+            <button type="button" (click)="cancel()" >Cancel</button>
+            <br>
+        </div>
+        
+
+        <div class="divleft">
+            <label><span style="white-space: nowrap;">This report shows the sales made according to the containers</span></label>
+        </div>
+        
+        <br>
+            
+        <div class="card">
+            <div id="TablesDiv">
+                <div class="table">
+                    <table class="table" id="jsPdfTable">
+                        <h1>Sales Report</h1>
+                        <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
+                        
+                        <div *ngFor="let item of TableData; let i = index">
+                            <h2><strong>Container Name: </strong> {{item.ID}}</h2>
+                            <h3><strong>Total Container sales amount: </strong>  R{{item.ConTotal}}</h3>
+                            <div>
+                                <div *ngFor="let sale of item.Sales" id="testing{{i}}">
+                                    <table class= "container table-latitude" >
+                                        <thead>
+                                            <tr>
+                                                <th>Sale ID</th>
+                                                <th>Sale date</th>
+                                                <th>Product name</th> 
+                                                <th>Price(R)</th>
+                                                <th>Quantity</th>
+                                                <th>Total(R)</th> 
+                                            </tr>
+                                        </thead>
+                                    
+                                        <tbody *ngFor="let prod of sale.Product">
+                                            <tr>
+                                                <td> {{sale.SaleID}}</td>
+                                                <td>{{sale.Date | date}}</td>
+                                                <td>{{prod.Name}}</td>
+                                                <td>{{prod.Price}}</td>
+                                                <td>{{prod.Quantity}}</td>
+                                                <td>{{prod.ProdTot}}</td> 
+                                            </tr>
+                                        </tbody>                        
+                                       
+                                    </table> 
+                                    <div class= "divleft">
+                                        <h3>Total sale amount: R{{sale.Total}}</h3>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                 </table>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+    </body>   
+
+    <!--<body>
+    <h1>Generate Sale report</h1>
+    <div id="FromDiv"> 
+    
+        <div class="card">
+            <br>
+            <button type="submit" (click)="GenerateReport()" >Generate Report</button> 
+             <button type="button" (click)="DownloadPDF()" >Download Report</button>
+            <button type="button" (click)="PrintReport()" >Print Report</button> 
             <button type="button" (click)="cancel()" >Cancel</button>
             <br>
         </div>
@@ -63,12 +135,12 @@
                  </table>
              </div>
     
-                       <!--  <div *ngIf="TableData" id="controlBreak">  
+                        <div *ngIf="TableData" id="controlBreak">  
                             <div *ngIf="selectedOption && selectedOption ==1"> Total amount for placed orders: TotalBal</div>
-                        </div> -->
+                        </div> 
         
             </div>
         </div>
     </div>
     <router-outlet></router-outlet>
-    </body>  
+    </body>  -->

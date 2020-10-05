@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {Supplier} from '../supplier-management/supplier';
 import { NgModule } from '@angular/core';
+import {Product} from 'src/app/product-management/product';
 import {SupplierService} from '../supplier-management/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -29,6 +30,7 @@ export class ViewSupplierComponent implements OnInit {
   showTable: boolean = true;
   name : string;
   suppliers: Supplier[] = [];
+  products: Product[] = [];
 
   
 
@@ -51,8 +53,6 @@ export class ViewSupplierComponent implements OnInit {
         alert(this.responseMessage)}
         else{
       this.suppliers = res;
-      this.showSearch = true;
-      this.showResults = false;
     }
     })
   }
@@ -68,7 +68,8 @@ export class ViewSupplierComponent implements OnInit {
       this.responseMessage = res.Message;
       alert(this.responseMessage)}
       else{
-          this.supplier = res;
+          this.supplier = res.supplier;
+
       this.showSearch = false;
       this.showResults = true;
       this.showTable = false;

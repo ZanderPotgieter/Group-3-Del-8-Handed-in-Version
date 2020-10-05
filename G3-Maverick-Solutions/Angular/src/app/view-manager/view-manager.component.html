@@ -1,6 +1,6 @@
 
     <h1>Search Manager Profile</h1>
-    <form [formGroup] = 'empForm'>
+    <form [formGroup] = "empForm">
     <div  class="card" >
         <div class="divleft" >
             <mat-radio-group aria-label="Select Option To Search">
@@ -94,7 +94,7 @@
 
 
     <div  class ="divleft">
-        <label class="subheadinglabel">Select Containers Managed:</label> 
+        <label class="subheadinglabel">Containers Managed:</label> 
     <br>
         <label for="containers">Container: </label>
         <select required name="selection" formControlName="container" [(ngModel)]="selection" (ngModelChange)="addContainer($event)">
@@ -204,6 +204,7 @@
        </div>
     
 </div>
-
-
+</div>
+</div>
+</form>
 

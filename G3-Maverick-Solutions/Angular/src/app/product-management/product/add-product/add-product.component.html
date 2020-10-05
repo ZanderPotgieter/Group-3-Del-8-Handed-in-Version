@@ -25,6 +25,16 @@
                   <span *ngIf="pdForm.get('Select').errors.required">Select Product Category required.</span>
               </span>
                 <br>
+                <label for="SupplierID">Supplier:</label>
+                  <select  required formControlName="SelectSup" name="SelectSup" [(ngModel)]="SelectSup" (ngModelChange)="loadSupplier($event)">
+                     
+                    <option  *ngFor="let supplier of suppliers" [ngValue]="supplier">{{supplier.SupName}}</option>
+                  </select>
+                  <br>
+                <span style="color:red" *ngIf="pdForm.get('SelectSup').errors && (pdForm.get('SelectSup').touched || pdForm.get('SelectSup').dirty)">
+                  <span *ngIf="pdForm.get('SelectSup').errors.required">Select Supplier required.</span>
+              </span>
+                <br>
                 <label for="ProdName">Name:</label><input type="text" formControlName="ProdName"  class="form-control" [(ngModel)]="newProduct.ProdName" id="ProdName" name="ProdName" pattern="[a-zA-Z ]*" required>
                 <br>
                 <span style="color:red" *ngIf="pdForm.get('ProdName').errors && (pdForm.get('ProdName').touched || pdForm.get('ProdName').dirty)">

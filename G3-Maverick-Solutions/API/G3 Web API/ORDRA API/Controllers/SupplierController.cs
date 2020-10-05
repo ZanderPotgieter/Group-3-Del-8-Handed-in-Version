@@ -94,7 +94,15 @@ namespace ORDRA_API.Controllers
                     if (Supplier != null)
                     {
 
-                        toReturn = Supplier;
+                        toReturn.supplier = Supplier;
+
+                         List<Product> products = db.Products.Where(x => x.SupplierID == Supplier.SupplierID).ToList();
+                            if(products != null)
+                            {
+                                toReturn.products = products;
+
+                            }
+
                     }
                     else
                     {
@@ -104,9 +112,9 @@ namespace ORDRA_API.Controllers
                     }
                 }
 
-                catch (Exception error)
+                catch
                 {
-                    toReturn = "Something Went Wrong " + error.Message;
+                    toReturn.Message = "Search Interrupted. Retry";
                 }
 
                 return toReturn;

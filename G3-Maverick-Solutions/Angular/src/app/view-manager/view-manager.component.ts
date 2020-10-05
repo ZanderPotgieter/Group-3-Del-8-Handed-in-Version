@@ -79,15 +79,16 @@ export class SearchManagerComponent implements OnInit {
   search(){
     this.showSearch = true;
     this.showViewAll = false;
-    this.api.getAllManagers().subscribe((res:any)=>{
-      console.log(res);
-      this.managers = res.managers;
-    })
+   
   }
 
   viewAll(){
     this.showSearch = false;
     this.showViewAll = true;
+    this.api.getAllManagers().subscribe((res:any)=>{
+      console.log(res);
+      this.managers = res.managers;
+    })
   }
 
   view(ndx: number){
@@ -95,24 +96,42 @@ export class SearchManagerComponent implements OnInit {
     this.surname = this.managers[ndx].UserSurname;
     this.api.searchManager(this.managers[ndx].UserName,this.managers[ndx].UserSurname).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message){
+      if(res.Message != null){
         this.responseMessage = res.Message;
         alert(this.responseMessage)}
+        else{
+        //Get Manager Details
+        this.manager.ManagerID = res.manager.ManagerID;
+        this.manager.ManQualification = res.manager.ManQualification;
+        this.manager.ManNationality = res.manager.ManNationality;
+        this.manager.ManIDNumber = res.manager.ManIDNumber;
+        this.manager.ManNextOfKeenFName = res.manager.ManNextOfKeenFName;
+        this.manager.ManNextOfKeenCell = res.manager.ManNextOfKeenCell;
+        this.manager.Containers =  res.Containers;
 
-        if(res.containersManaged != null)
-        {
           this.selectedContainers = res.containersManaged;
-        }
         
-        this.manager = res.manager;
-        this.user = res.user
-        this.employee = res.employee;
-        this.containers = res.containers;
-      
 
-      
+        //Get User Details
+        this.user.UserID = res.user.UserID;
+        this.user.UserName = res.user.UserName;
+        this.user.UserSurname = res.user.UserSurname;
+        this.user.UserCell = res.user.UserCell;
+        this.user.UserEmail = res.user.UserEmail;
+
+        //Get Employee Details
+        this.employee.EmployeeID = res.employee.EmployeeID;
+        this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
+        this.employee.EmpStartDate = res.employee.EmpStartDate;
+
+        //Get list Of Containers
+        this.containers = res.containers;
+        
       this.showSearch = false;
       this.showResults = true;
+      
+      }
+
       
     })
     

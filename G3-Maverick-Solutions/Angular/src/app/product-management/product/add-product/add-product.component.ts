@@ -8,6 +8,7 @@ import { Container } from '../../../container-management/container';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import {LoginService} from 'src/app/login.service';
+import {Supplier} from 'src/app/supplier-management/supplier';
 
 @Component({
   selector: 'app-add-product',
@@ -27,6 +28,8 @@ export class AddProductComponent implements OnInit {
   quantity: number;
  
   Select: number;
+  SelectSup: number;
+  suppliers: Supplier[] = [];
   selectedCatID: number;
 
   addToSystem: boolean = true;
@@ -39,6 +42,7 @@ export class AddProductComponent implements OnInit {
   ngOnInit(){
     this.pdForm= this.fb.group({
       Select:  ['', [Validators.required]],
+      SelectSup:  ['', [Validators.required]],
       ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
@@ -65,6 +69,13 @@ export class AddProductComponent implements OnInit {
         alert(res.Error);
       }
       
+    });
+
+    this.productService.getAllSuppliers() .subscribe((value:any)=> {
+      console.log(value);
+      if (value != null) {
+        this.suppliers = value;
+      }
     });
 
     this.productService.getAllProductCategory()
@@ -96,6 +107,15 @@ export class AddProductComponent implements OnInit {
 
   addCategory(val : ProductCategory){
     this.selectedCategory = val;
+  }
+
+  loadSupplier(val: Supplier){
+   
+    this.addSupplier(val);
+  }
+
+  addSupplier(val : Supplier){
+    this.newProduct.SupplierID;
   }
 
   setProducts(val : Product){

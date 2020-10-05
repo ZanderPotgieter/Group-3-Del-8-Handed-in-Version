@@ -144,11 +144,12 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                toReturn = db.Users.Include(x => x.Managers).Include(x => x.Employees).ToList();
+                List<User> users = db.Users.Include(x => x.Managers).Where(x => x.UserTypeID == 3).ToList();
+                toReturn.managers = users;
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong" + error.Message;
+                toReturn.Message = "Search Inturrupted. Retry";
             }
 
             return toReturn;
@@ -176,13 +177,13 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn = searchManager(manager.User.UserName, manager.User.UserSurname);
+                    toReturn.manager = searchManager(manager.User.UserName, manager.User.UserSurname);
                 }
 
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn = "Search Interrupted";
             }
 
             return toReturn;
@@ -241,9 +242,9 @@ namespace ORDRA_API.Controllers
                     toReturn.Message = "Manager Profile Not Found";
                 }
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn = "Search Interrupted.Retry";
             }
 
             return toReturn;

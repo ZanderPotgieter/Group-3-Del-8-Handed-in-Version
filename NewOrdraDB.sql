@@ -714,6 +714,11 @@ VALUES ('2', '1','2020-07-23'),
 	   ('3', '1', '2020-01-16'),
 	   ('1', '3', '2020-05-12');
 
+INSERT INTO Supplier (SupName, SupCell, SupEmail,SupStreetNr, SupStreet, SupSuburb, SupCode)
+VALUES ('Mash Wholesale distributors' , '0123252134', 'mashwholesale@gmail.com', '23', 'Francis Baard street', 'Hatfield' ,'0018'),
+	   ('PWA Stationery', '0127521345', 'PWAStationery@yahoo.com', '54', 'Tony Avenue', 'Arcadia', '0018'),
+	   ('Makro Mamelodi', '0123471092', 'Makro@gmail.com', '12', 'Tshukulu Road', 'Mamelodi', '0122');
+
 INSERT INTO Product_Category (PCatName, PCatDescription)
 VALUES ('Stationery', 'writing and other office materials'),
 	   ('Blu-tel' , 'airtime and other Communication materials'),
@@ -813,10 +818,7 @@ VALUES ('1', '10.00', '2020-01-20','2020-12-12' ,'5.50'),
 	   ('6', '18.00', '2020-01-12', '2020-12-12' ,'14.00'),
 	   ('7', '15.50', '2020-01-12', '2020-12-12' ,'10.00');
 
-INSERT INTO Supplier (SupName, SupCell, SupEmail,SupStreetNr, SupStreet, SupSuburb, SupCode)
-VALUES ('Mash Wholesale distributors' , '0123252134', 'mashwholesale@gmail.com', '23', 'Francis Baard street', 'Hatfield' ,'0018'),
-	   ('PWA Stationery', '0127521345', 'PWAStationery@yahoo.com', '54', 'Tony Avenue', 'Arcadia', '0018'),
-	   ('Makro Mamelodi', '0123471092', 'Makro@gmail.com', '12', 'Tshukulu Road', 'Mamelodi', '0122');
+
 
 INSERT INTO Creditor (SupplierID, CredAccountBalance, CredBank, CredBranch, CredAccount, CredType)
 VALUES ('1', '20120.00', 'ABSA', 'Hatfield','1339543203', 'Check'),
@@ -878,9 +880,9 @@ VALUES ('1', '2', '10'),
 	   ('2', '2', '20');
 
 INSERT INTO Product_Backlog (ProductID, QuantityToOrder, DateModified)
-VALUES ('2', '30', '2020-04-10'),
-	   ('1', '25', '2020-04-14'),
-	   ('3', '15', '2020-02-27');
+VALUES ('2', '30', '2020-01-01'),
+	   ('1', '25', '2020-04-01'),
+	   ('3', '15', '2020-02-01');
 
 
 

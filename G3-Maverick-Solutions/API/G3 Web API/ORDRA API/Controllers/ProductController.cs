@@ -586,6 +586,7 @@ namespace ORDRA_API.Controllers
                         Product.ProdName = objectProduct.ProdName;
                         Product.ProdDesciption = objectProduct.ProdDesciption;
                         Product.ProdReLevel = objectProduct.ProdReLevel;
+                        
 
 
                         DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
@@ -670,6 +671,9 @@ namespace ORDRA_API.Controllers
                         toReturn.ProductContainers = ProductCons;
 
                     }
+
+                    Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                    toReturn.supplier = supplier;
                 }
                 else
                 {

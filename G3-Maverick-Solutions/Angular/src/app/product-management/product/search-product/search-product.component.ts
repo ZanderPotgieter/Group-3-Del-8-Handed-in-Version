@@ -9,6 +9,7 @@ import {LoginService} from 'src/app/login.service';
 import {Container} from 'src/app/container-management/container';
 import {ProductDetails} from 'src/app/customer-order-management/product-details';
 import {ContainerProduct} from '../../container-product';
+import {Supplier} from 'src/app/supplier-management/supplier';
 
 @Component({
   selector: 'app-search-product',
@@ -72,6 +73,7 @@ export class SearchProductComponent implements OnInit {
 
   moveToContainer: boolean = false;
   selectedContainerID: number;
+  supplier: Supplier = new Supplier();
   
 
   ngOnInit() {
@@ -237,10 +239,13 @@ export class SearchProductComponent implements OnInit {
           this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
           this.Price.ProductID = res.Product.ProductID;
 
+          
+
           this.pricelist = res.PriceList;
           this.category = res.ProductCategory;
           
           this.product_conlist = res.ProductContainers;
+          this.supplier = res.supplier;
 
       }
       this.showBarcodeInput = false;

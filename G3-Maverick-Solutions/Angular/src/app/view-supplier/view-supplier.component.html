@@ -20,7 +20,7 @@
 
         <div class="divleft">
             <button type="submit"(click)="searchSupplier()">Search</button>
-            <button type="submit" (click)="gotoSupplierManagment()">Cancel</button>
+            <button type="submit" (click)="gotoSupplierManagement()">Cancel</button>
         </div>
         <div *ngIf="showTable">
         <table >    
@@ -131,17 +131,34 @@
                     <span *ngIf="supForm.get('SupSuburb').errors.pattern">Only text characters.<br></span>
                 </span> 
         </div>
-        <br><br>
+        <br>
+        <div>
+            <table  class="table" id="Table">
+    
+            
+                <tr>
+                    <th>Products Supplied</th>
+    
+                </tr>
+    
+                <tr *ngFor="let item of  products; index as ndx;">
+                    <td>{{item.ProdName}}</td>
+
+                    </tr>
+            </table>
+        </div>
+        
+        <br>
 
         <div class="divleft" *ngIf="showButtons">
             <button type="submit" (click)="enableInputs()">Update</button>
             <button type="submit" (click)="deleteSupplier()">Delete</button>
-         <button type="submit"  (click)="gotoSupplierManagment()">Cancel</button>
+         <button type="submit"  (click)="gotoSupplierManagement()">Cancel</button>
          </div>
 
          <div class="divleft" *ngIf="showSave" >
          <button type="submit" (click)="updateSupplier()">Save</button>
-         <button type="submit"  (click)="gotoSupplierManagment()">Cancel</button>
+         <button type="submit"  (click)="gotoSupplierManagement()">Cancel</button>
         </div>
         
     </div>

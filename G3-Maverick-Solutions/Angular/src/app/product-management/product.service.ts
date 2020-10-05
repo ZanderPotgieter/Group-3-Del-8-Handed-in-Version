@@ -9,6 +9,7 @@ import { Price } from './price';
 import { StockTake } from './stock-take';
 import { MarkedOff } from './marked-off';
 import { MarkedOffReason } from './marked-off-reason';
+import {Supplier} from 'src/app/supplier-management/supplier';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,9 @@ export class ProductService {
   url = 'https://localhost:44399/API/Product'
   constructor(private http: HttpClient) { }
 
-  
+  getAllSuppliers(): Observable<Supplier[]> {  
+    return this.http.get<Supplier[]>('https://localhost:44399/Api/Supplier' + '/getAllSuppliers');  
+  }
   getAllProductCategory(): Observable<ProductCategory[]> {  
     return this.http.get<ProductCategory[]>(this.url + '/GetAllProductCategories');  
   } 

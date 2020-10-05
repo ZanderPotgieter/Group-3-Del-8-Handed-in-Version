@@ -58,11 +58,10 @@
         </div>
     
         <div class="divleft">
-            <label for="CusName">Name:     </label>
+            <label for="CusName">Name:</label>
                   <input type="text" formControlName="CusName" [(ngModel)]="customer.CusName" [ngModelOptions]="{standalone: true}" id="CusName" name="CusName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
-                  <br>
                   <span style="color:red" *ngIf="cusForm.get('CusName').errors && (cusForm.get('CusName').touched || cusForm.get('CusName').dirty)">
-                      <span *ngIf="cusForm.get('CusName').errors.required">Name is required.<br></span>
+                    <br> <span *ngIf="cusForm.get('CusName').errors.required"><br>Name is required.<br></span>
                       <span *ngIf="cusForm.get('CusName').errors.pattern">Only text characters.<br></span>
                   </span>
           </div>
@@ -71,9 +70,8 @@
         <div class="divleft" >
             <label for="CusSurname">Surname:</label>
                 <input type="text" formControlName="CusSurname" [(ngModel)]="customer.CusSurname" [ngModelOptions]="{standalone: true}" id="CusSurname" name="CusSurname" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
-                <br>
                 <span style="color:red" *ngIf="cusForm.get('CusSurname').errors && (cusForm.get('CusSurname').touched || cusForm.get('CusSurname').dirty)">
-                    <span *ngIf="cusForm.get('CusSurname').errors.required">Surname is required.<br></span>
+                    <br><span *ngIf="cusForm.get('CusSurname').errors.required">Surname is required.<br></span>
                     <span *ngIf="cusForm.get('CusSurname').errors.pattern">Only text characters.<br></span>
                 </span>
         </div>

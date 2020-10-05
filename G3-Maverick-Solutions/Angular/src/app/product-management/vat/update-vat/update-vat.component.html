@@ -22,7 +22,7 @@
                     </tr>
                     <tr *ngFor="let item of list; index as ndx; trackBy:trackByndx;">
                         <td><input style="width: 70%" type = "number" min="1" name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].VATPerc" [ngModelOptions]="{standalone: true}"></td>
-                        <td><input style="width: 70%" type = "text" name="b{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].VATStartDate" [ngModelOptions]="{standalone: true}"></td>
+                        <td><input style="width: 70%" type = "text" name="b{{ndx}}" disabled="true" [(ngModel)] ="list[ndx].VATStartDate" [ngModelOptions]="{standalone: true}"></td>
                         <td ><button  style="border-radius: 10px; width: 60%;" (click)="update()"><i class="small material-icons" >edit</i></button></td>
                         <td><button style="border-radius: 10px; width: 60%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
             

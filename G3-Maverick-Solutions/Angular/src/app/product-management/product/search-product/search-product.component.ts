@@ -7,6 +7,8 @@ import { Product } from '../../product';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import {LoginService} from 'src/app/login.service';
 import {Container} from 'src/app/container-management/container';
+import {ProductDetails} from 'src/app/customer-order-management/product-details';
+import {ContainerProduct} from '../../container-product';
 
 @Component({
   selector: 'app-search-product',
@@ -17,9 +19,11 @@ export class SearchProductComponent implements OnInit {
 
   constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private api: LoginService) { }
   searchForm: FormGroup;
+  pdForm: FormGroup;
   categories: ProductCategory[];
   containers: Container[];
   product : Product = new Product();
+  minDate: Date = new Date();
 
   showBarcodeInput: boolean = false;
   showSelectProduct: boolean = false;
@@ -43,14 +47,32 @@ export class SearchProductComponent implements OnInit {
   Price: Price = new Price();
   pricelist: Price[] =[];
   productList: Product[] = [];
+  list: ProductDetails[] = [];
+  category : ProductCategory = new ProductCategory();
+  product_conlist: ContainerProduct[] = [];
+  conProduct: ContainerProduct = new ContainerProduct();
+
   products: Product[] = [];
-  newPrice: Price = new Price;
+  newPrice: Price = new Price();
+  found = false;
 
   showadd: boolean=false;
   containerID: number;
   productName: number;
   productID: number;
   CategoryName: string;
+  categoryID: number;
+
+  quantity: number;
+  mydate: Date =new Date();
+ 
+  Select: number;
+  selectedCatID: number;
+  showPriceList : boolean = false;
+
+  moveToContainer: boolean = false;
+  selectedContainerID: number;
+  
 
   ngOnInit() {
 
@@ -68,7 +90,13 @@ export class SearchProductComponent implements OnInit {
       PriceStartDate: ['', [Validators.required]],
       PriceEndDate: [''],
       ProductCategoryID: [''],
-    }); 
+    });
+    
+    this.pdForm= this.fb.group({
+      SelectCon: ['', [Validators.required]], 
+      SelectProduct: ['', [Validators.required]],
+      quantity: ['', [Validators.required]],
+    });
 
     this.productService.getAllProductCategory()
     .subscribe(value => {
@@ -93,6 +121,10 @@ export class SearchProductComponent implements OnInit {
       }
       
     });
+  }
+
+  showPrice(){
+    this.showPriceList = true;
   }
 
   barcodeInput(){
@@ -132,6 +164,14 @@ export class SearchProductComponent implements OnInit {
     this.showSelectProduct = false;
     this.showSelectContainer = false;
     this.showSearchBtn = false;
+
+    
+    this.showBarcodeInput = false;
+    this.showBarcodeResult = false;
+    this.showProductResult = false;
+    this.showCategoryResults = false;
+    this.showContainerResults = false;
+    this.showAllProductsResults = false;
   }
   
   selectContainer(){
@@ -169,7 +209,7 @@ export class SearchProductComponent implements OnInit {
   }
 
   setCategory(val: ProductCategory){
-      this.CategoryName= val.PCatName;
+      this.categoryID = val.ProductCategoryID;
   }
 
   setProduct(val: Product){
@@ -198,6 +238,9 @@ export class SearchProductComponent implements OnInit {
           this.Price.ProductID = res.Product.ProductID;
 
           this.pricelist = res.PriceList;
+          this.category = res.ProductCategory;
+          
+          this.product_conlist = res.ProductContainers;
 
       }
       this.showBarcodeInput = false;
@@ -231,6 +274,8 @@ export class SearchProductComponent implements OnInit {
           this.Price.ProductID = res.Product.ProductID;
 
           this.pricelist = res.PriceList;
+          this.product_conlist = res.ProductContainers;
+
 
       }
     this.showBarcodeResult = false;
@@ -241,7 +286,7 @@ export class SearchProductComponent implements OnInit {
   }
 
   SearchCategory(){
-    return this.productService.getProductByCategory(this.CategoryName).subscribe((res: any)=>{
+    return this.productService.getProductByCategory(this.categoryID).subscribe((res: any)=>{
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
@@ -266,7 +311,7 @@ export class SearchProductComponent implements OnInit {
       this.responseMessage = res.Message;
       alert(this.responseMessage)}
       else{
-        this.productList = res.Products;
+        this.list = res.products;
 
         
       }
@@ -312,15 +357,30 @@ export class SearchProductComponent implements OnInit {
   saveadd(){
     this.newPrice.ProductID = this.Product.ProductID;
     
-    this.productService.addPrice(this.newPrice)
-    .subscribe((res: any) => {
-      console.log(res);
-      if(res.Message)
-      {
-      alert(res.Message)
+    for(let item of this.pricelist){
+      if(item.PriceStartDate == this.newPrice.PriceStartDate){
+        this.found = true;
+        
+      }
     }
-    });
+    if(this.found == false){
+      this.productService.addPrice(this.newPrice)
+      .subscribe((res: any) => {
+        console.log(res);
+        if(res.Message)
+        {
+        alert(res.Message)
+      }
+      });
+    }
+    if(this.found == true){
+      alert("Duplicate Price Start Date Found")
+    }
+
+
   }
+
+  
 
   update(ndx: number){
     this.prodBarcode = this.productList[ndx].ProdBarcode;
@@ -347,6 +407,32 @@ export class SearchProductComponent implements OnInit {
       alert(this.responseMessage)}
       this.router.navigate(["product-management"])
       })
+  }
+
+  move(ndx: number){
+    this.conProduct = this.product_conlist[ndx];
+    this.showProductResult = false;
+    this.moveToContainer = true;
+    
+  }
+ 
+
+
+  Link(){
+    return this.productService.moveProduct(this.conProduct.ContainerID, this.conProduct.ProductID, this.quantity, this.containerID).subscribe( (res: any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.showProductResult = true;
+        this.moveToContainer = false;}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
+    })
+
+
   }
   
 }

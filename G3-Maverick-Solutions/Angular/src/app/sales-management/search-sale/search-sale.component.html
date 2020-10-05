@@ -144,7 +144,8 @@
           <div  class="divleft">
            <label class="subheadinglabel" >Sale Details:</label>
            <br>
-           <label for="saleDate">Date:</label><label  id="saleDate" name="saleDate">{{saleDate}}</label>
+           <label style="width: 200px">Date: {{saleDate | date: 'yyyy-MM-dd'}}</label>
+           <!--<label style="width: 300px">Cashier: {{user.UserName}} {{user.UserSurname}}</label>-->
 
            <table>
              <tr>

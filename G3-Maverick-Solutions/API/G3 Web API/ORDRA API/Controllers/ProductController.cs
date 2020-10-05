@@ -69,36 +69,33 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Container_Product> conProducts = db.Container_Product.Where(x => x.Container.ContainerID == containerID).ToList();
-                List<dynamic> productWithQuantity = new List<dynamic>();
-                if (conProducts != null)
+                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x => x.CPQuantity > 0 && x.ContainerID == containerID).ToList();
+                if (conProd != null)
                 {
-                    foreach (Container_Product Cprod in conProducts)
+                    //Get List Of products with current price
+                    List<Product> productsList = db.Products.ToList();
+                    List<dynamic> products = new List<dynamic>();
+                    foreach (var prod in conProd)
                     {
-                        dynamic prod = new ExpandoObject();
-                        
-
-                        Product p = db.Products.Where(x => x.ProductID == Cprod.ProductID).FirstOrDefault();
-                        if (p != null)
+                        Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).ToList().LastOrDefault();
+                        if (price != null)
                         {
-                           
-                            prod.ProductID = p.ProductID;
-                            prod.ProdName = p.ProdName;
-                            prod.ProdReLevel = p.ProdReLevel;
-                            prod.ProdDescription = p.ProdDesciption;
-                            prod.ProdBarcode = p.ProdBarcode;
-                            prod.ProductCategoryID = p.ProductCategoryID;
-                            prod.CPQuantity = Cprod.CPQuantity;
+                            double Price = (double)price.UPriceR;
+                            dynamic productDetails = new ExpandoObject();
+                            productDetails.ProductCategoryID = prod.Product.ProductCategoryID;
+                            productDetails.ProductID = prod.Product.ProductID;
+                            productDetails.ProdBarcode = prod.Product.ProdBarcode;
+                            productDetails.ProdDescription = prod.Product.ProdDesciption;
+                            productDetails.Prodname = prod.Product.ProdName;
+                            productDetails.CPQuantity = prod.CPQuantity;
+                            productDetails.Quantity = prod.Product.ProdReLevel;
+                            productDetails.Price = Math.Round(Price, 2);
+                            productDetails.Subtotal = 0.0;
 
-                            productWithQuantity.Add(prod);
+                            products.Add(productDetails);
                         }
-                        else
-                        {
-                            toReturn.Message = "No Products In Container";
-                        }
-
                     }
-                    toReturn.Products = productWithQuantity;
+                    toReturn.products = products;
                 }
                 else
                 {
@@ -348,12 +345,17 @@ namespace ORDRA_API.Controllers
                     {
                         foreach (Container_Product conProd in container_Product)
                         {
-                            dynamic ProdCon = new ExpandoObject();
-                            ProdCon.Container = conProd.Container.ConName;
-                            ProdCon.ContainerID = conProd.ContainerID;
-                            ProdCon.ProductID = conProd.ProductID;
-                            ProdCon.CPQuantity = conProd.CPQuantity;
-                            ProductCons.Add(ProdCon);
+                            Container con = db.Containers.Where(x => x.ContainerID == conProd.ContainerID).FirstOrDefault();
+                            if (con != null)
+                            {
+
+                                dynamic ProdCon = new ExpandoObject();
+                                ProdCon.Container = conProd.Container.ConName; 
+                                ProdCon.ContainerID = conProd.ContainerID;
+                                ProdCon.ProductID = conProd.ProductID;
+                                ProdCon.CPQuantity = conProd.CPQuantity;
+                                ProductCons.Add(ProdCon);
+                            }
                         }
 
                         toReturn.ProductContainers = ProductCons;
@@ -499,12 +501,17 @@ namespace ORDRA_API.Controllers
                     {
                         foreach (Container_Product conProd in container_Product)
                         {
-                            dynamic ProdCon = new ExpandoObject();
-                            ProdCon.Container = conProd.Container.ConName;
-                            ProdCon.ContainerID = conProd.ContainerID;
-                            ProdCon.ProductID = conProd.ProductID;
-                            ProdCon.CPQuantity = conProd.CPQuantity;
-                            ProductCons.Add(ProdCon);
+                            Container con = db.Containers.Where(x => x.ContainerID == conProd.ContainerID).FirstOrDefault();
+                            if (con != null)
+                            {
+
+                                dynamic ProdCon = new ExpandoObject();
+                                ProdCon.Container = conProd.Container.ConName;
+                                ProdCon.ContainerID = conProd.ContainerID;
+                                ProdCon.ProductID = conProd.ProductID;
+                                ProdCon.CPQuantity = conProd.CPQuantity;
+                                ProductCons.Add(ProdCon);
+                            }
                         }
 
                         toReturn.ProductContainers = ProductCons;
@@ -647,12 +654,17 @@ namespace ORDRA_API.Controllers
                     {
                         foreach (Container_Product conProd in container_Product)
                         {
-                            dynamic ProdCon = new ExpandoObject();
-                            ProdCon.Container = conProd.Container.ConName;
-                            ProdCon.ContainerID = conProd.ContainerID;
-                            ProdCon.ProductID = conProd.ProductID;
-                            ProdCon.CPQuantity = conProd.CPQuantity;
-                            ProductCons.Add(ProdCon);
+                            Container con = db.Containers.Where(x => x.ContainerID == conProd.ContainerID).FirstOrDefault();
+                            if (con != null)
+                            {
+
+                                dynamic ProdCon = new ExpandoObject();
+                                ProdCon.Container = conProd.Container.ConName;
+                                ProdCon.ContainerID = conProd.ContainerID;
+                                ProdCon.ProductID = conProd.ProductID;
+                                ProdCon.CPQuantity = conProd.CPQuantity;
+                                ProductCons.Add(ProdCon);
+                            }
                         }
 
                         toReturn.ProductContainers = ProductCons;
@@ -665,7 +677,7 @@ namespace ORDRA_API.Controllers
                     toReturn.Message = "Prodcut Not Found";
                 }
 
-           }
+        }
             catch
             {
                 toReturn.Message = "Search interrupted. Retry";
@@ -678,34 +690,32 @@ namespace ORDRA_API.Controllers
 
 
         //Getting product by Product Category
-        [HttpPost]
+        [HttpGet]
         [Route("getProductByCategory")]
 
-        public object getProductByCategory(string prodCategory)
+        public object getProductByCategory(int categoryID)
         {
             db.Configuration.ProxyCreationEnabled = false;
 
-            List<Product> objectProducts = new List<Product>();
-            Price objectPrice = new Price();
             dynamic toReturn = new ExpandoObject();
-            toReturn.Products = new List<Product>();
+            toReturn.Products = new ExpandoObject();
 
             try
             {
-                objectProducts = db.Products.Include(x => x.Product_Category).Where(x => x.Product_Category.PCatName == prodCategory).ToList();
+                List<Product> objectProducts = db.Products.Where(x => x.ProductCategoryID == categoryID).ToList();
 
              
 
                 
                 if (objectProducts != null)
                 {
-                    List<Product> products = db.Products.Include(x => x.Prices).ToList();
-                    List<Product> productsList = new List<Product>();
-                    foreach (var item in products)
-                    {
-                        Product product = new Product();
+                   
+                    List<dynamic> productsList = new List<dynamic>();
+                    foreach (var item in objectProducts)
+                    {   dynamic product = new ExpandoObject();
                         product.ProductID = item.ProductID;
                         product.ProdName = item.ProdName;
+                        product.CPQuantity = 0;
                         product.ProdReLevel = item.ProdReLevel;
                         product.ProductCategoryID = item.ProductCategoryID;
                         productsList.Add(product);
@@ -1038,7 +1048,7 @@ namespace ORDRA_API.Controllers
             try
             {
                 Container_Product conProd = db.Container_Product.Where(x => x.ProductID == id).FirstOrDefault();
-                if (conProd == null)
+                if (conProd != null)
                 {
                     found = true;
                      return found;
@@ -1046,7 +1056,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     Product_Sale product_Sale = db.Product_Sale.Where(x => x.ProductID == id).FirstOrDefault();
-                    if (product_Sale == null)
+                    if (product_Sale != null)
                     {
                         found = true;
                         return found;
@@ -1054,7 +1064,7 @@ namespace ORDRA_API.Controllers
                     else
                     {
                         Supplier_Order_Product supplier_Order_Product = db.Supplier_Order_Product.Where(x => x.ProductID == id).FirstOrDefault();
-                        if (supplier_Order_Product == null)
+                        if (supplier_Order_Product != null)
                         {
                             found = true;
                             return found;
@@ -1062,7 +1072,7 @@ namespace ORDRA_API.Controllers
                         else
                         {
                             Donated_Product donated_Product = db.Donated_Product.Where(x => x.ProductID == id).FirstOrDefault();
-                            if (donated_Product == null)
+                            if (donated_Product != null)
                             {
                                 found = true;
                                 return found;
@@ -1086,9 +1096,10 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
+                //toReturn.Error = "Delete Request Error";
 
             }
-            return toReturn;
+            return found;
         }
 
         //delete product
@@ -1103,7 +1114,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                product= db.Products.Include(x=>x.Prices).Where(x => x.ProductID == id).FirstOrDefault();
+                product = db.Products.Where(x => x.ProductID == id).FirstOrDefault();
 
                 if (product == null)
                 {
@@ -1112,7 +1123,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     bool found = checkProductDelete(id);
-                    if (found == true)
+                    if (found != true)
                     {
 
                         //delete all product prices
@@ -1430,5 +1441,61 @@ namespace ORDRA_API.Controllers
         }
 
 
+        [HttpGet]
+        [Route("getLowStock")]
+        public object getLowStock( int containerID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.Products = new List<dynamic>();
+
+            try
+            {
+                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x=> x.ContainerID == containerID).ToList();
+                if (conProd != null)
+                {
+                    //Get List Of products with current price
+                    List<Product> productsList = db.Products.ToList();
+                    List<dynamic> products = new List<dynamic>();
+                    foreach (var prod in conProd)
+                    {
+                        if (prod.CPQuantity <= prod.Product.ProdReLevel)
+                        {
+
+                            Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).ToList().LastOrDefault();
+                            if (price != null)
+                            {
+                                double Price = (double)price.UPriceR;
+                                dynamic productDetails = new ExpandoObject();
+                                productDetails.ProductCategoryID = prod.Product.ProductCategoryID;
+                                productDetails.ProductID = prod.Product.ProductID;
+                                productDetails.ProdBarcode = prod.Product.ProdBarcode;
+                                productDetails.ProdDescription = prod.Product.ProdDesciption;
+                                productDetails.Prodname = prod.Product.ProdName;
+                                productDetails.CPQuantity = prod.CPQuantity;
+                                productDetails.Quantity = prod.Product.ProdReLevel;
+                                productDetails.Price = Math.Round(Price, 2);
+                                productDetails.Subtotal = 0.0;
+
+                                products.Add(productDetails);
+                            }
+                        }
+                        toReturn.products = products;
+                    }
+                }
+                else
+                {
+                    toReturn.Message = "Container Not Found";
+
+                }
+
+            }
+            catch
+            {
+                toReturn.Message = "Search interrupted. Retry";
+            }
+
+            return toReturn;
+        }
     }
 }

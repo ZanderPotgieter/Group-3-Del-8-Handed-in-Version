@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.Data.Entity;
 using System.Web.Http.Cors;
 using ORDRA_API.Models;
+using System.Security.Permissions;
 
 namespace ORDRA_API.Controllers
 {
@@ -27,7 +28,7 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             toReturn.products = new ExpandoObject();
-            toReturn.SaleDate = new ExpandoObject();
+            toReturn.Sale = new Sale();
             toReturn.paymetTypes = new ExpandoObject();
             toReturn.VAT = new ExpandoObject();
 
@@ -55,13 +56,12 @@ namespace ORDRA_API.Controllers
 
 
                 //get todays date 
-                toReturn.SaleDate = DateTime.Now;
+                DateTime SaleDate = DateTime.Now;
 
                 //get payment types
                 toReturn.paymentTypes = db.Payment_Type.ToList();
 
-                //get VAT
-                toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).LastOrDefault();
+                
 
             if (conProd != null)
             {
@@ -70,7 +70,7 @@ namespace ORDRA_API.Controllers
                 List<dynamic> products = new List<dynamic>();
                 foreach (var prod in conProd)
                 {
-                    Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).FirstOrDefault();
+                    Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).ToList().LastOrDefault();
                     if (price != null)
                     {
                         double Price = (double)price.UPriceR;
@@ -89,7 +89,24 @@ namespace ORDRA_API.Controllers
                     }
                 }
                 toReturn.products = products;
-            }
+
+                    //get VAT
+                    toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).ToList().LastOrDefault();
+
+                    //set up sale
+                    Sale newSale = new Sale();
+                    newSale.SaleDate = SaleDate;
+                    newSale.UserID = user.UserID;
+                    newSale.User = user;
+                    newSale.Container = con;
+                    newSale.ContainerID = con.ContainerID;
+                    db.Sales.Add(newSale);
+                    db.SaveChanges();
+
+                    //getsale
+                    toReturn.Sale = db.Sales.ToList().LastOrDefault();
+
+                }
             else
             {
                 return toReturn.Message = "No Products In Stock In Container";
@@ -110,13 +127,191 @@ namespace ORDRA_API.Controllers
         }
 
         [HttpGet]
+        [Route("addSaleProduct")]
+        public object addSaleProduct(int productID, int saleID, int quantity)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+                if (product != null)
+                {
+                    Sale sale = db.Sales.Where(x => x.SaleID == saleID).FirstOrDefault();
+                    if(sale != null)
+                    {
+                        Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == sale.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
+                        if (container_Product != null)
+                        {
+                            container_Product.CPQuantity = (container_Product.CPQuantity - quantity);
+                            db.SaveChanges();
+
+                            Product_Sale product_Sale = db.Product_Sale.Where(x => x.ProductID == product.ProductID && x.SaleID == sale.SaleID).FirstOrDefault();
+                            if (product_Sale == null)
+                            {
+                                Product_Sale newProduct_Sale = new Product_Sale();
+                                newProduct_Sale.ProductID = product.ProductID;
+                                newProduct_Sale.Product = product;
+                                newProduct_Sale.SaleID = sale.SaleID;
+                                newProduct_Sale.Sale = sale;
+                                newProduct_Sale.PSQuantity = quantity;
+                                db.Product_Sale.Add(newProduct_Sale);
+                                db.SaveChanges();
+
+                                toReturn.Product_Sale = db.Product_Sale.ToList().LastOrDefault();
+
+                            }
+                            else
+                            {
+                                product_Sale.PSQuantity = product_Sale.PSQuantity + quantity;
+                                db.SaveChanges();
+
+                                toReturn.Product_Sale = product_Sale;
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Error = "Container Not Found";
+                        }
+
+
+                    }
+                    else
+                    {
+                        toReturn.Error = "Sale Not Found";
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "Product Not Found";
+                }
+
+            }
+            catch
+            {
+                toReturn.Error = "Product Add Unsuccessful";
+            }
+
+            return toReturn;
+        }
+
+        [HttpGet]
+        [Route("removeSaleProduct")]
+        public object removeSaleProduct(int productID, int saleID, int quantity)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+                if (product != null)
+                {
+                    Sale sale = db.Sales.Where(x => x.SaleID == saleID).FirstOrDefault();
+                    if (sale != null)
+                    {
+                        Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == sale.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
+                        if (container_Product != null)
+                        {
+                                container_Product.CPQuantity = (container_Product.CPQuantity + quantity);
+                            db.SaveChanges();
+
+                            Product_Sale product_Sale = db.Product_Sale.Where(x => x.ProductID == product.ProductID && x.SaleID == sale.SaleID).FirstOrDefault();
+                            if (product_Sale != null)
+                            {
+
+                                db.Product_Sale.Remove(product_Sale);
+                                db.SaveChanges();
+
+                                toReturn.Product_Sale = product_Sale;
+                            }
+                        }
+                         else
+                         {
+                                toReturn.Error = "Container Not Found";
+                         }
+
+
+                }
+                    else
+                    {
+                        toReturn.Error = "Sale Not Found";
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "Product Not Found";
+                }
+
+            }
+            catch
+            {
+                toReturn.Error = "Product Removal Unsuccessful";
+            }
+
+            return toReturn;
+        }
+
+
+        [HttpGet]
+        [Route("makeSalePayment")]
+        public object makeSalePayment(int saleID, float payAmount, int paymentTypeID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Sale sale = db.Sales.Where(x => x.SaleID == saleID).FirstOrDefault();
+                if (sale != null)
+                {
+                    Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
+                    if(paymentType != null)
+                    {
+                        Payment payment = new Payment();
+                        payment.SaleID = sale.SaleID;
+                        payment.Sale = sale;
+                        payment.PayAmount = payAmount;
+                        payment.PayDate = DateTime.Now;
+                        payment.PaymentTypeID = paymentTypeID;
+                        db.Payments.Add(payment);
+                        db.SaveChanges();
+
+                        toReturn.Payment = db.Payments.ToList().LastOrDefault();
+                    }
+                    else
+                    {
+                        toReturn.Error = "Payment Type Not Found";
+                    }
+
+                  
+
+
+                }
+                else
+                {
+                    toReturn.Error = "Sale Not Found";
+                }
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Payment Add Unsuccessful";
+            }
+
+            return toReturn;
+        }
+
+
+
+
+        [HttpGet]
         [Route("getAllSales")]
         public object getAllSales()
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            //try
-           /// {
+            try
+            {
                 List<Sale> sales = db.Sales.ToList();
                 List<dynamic> Sales = new List<dynamic>();
 
@@ -136,119 +331,102 @@ namespace ORDRA_API.Controllers
                 }
 
                 toReturn.Sales = Sales;
-           // }
-           // catch
-            //{
-               // toReturn.Error = "Search Interrupted. Retry";
-            //}
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
 
             return toReturn;
         }
 
-        //Make Sale
-        [HttpPost]
-        [Route("makeSale")]
-        public object makeSale(Sale newSale)
+       // Cancel Sale
+        [HttpGet]
+        [Route("cancelSale")]
+        public object cancelSale(int saleID)
         {
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-            
+           db.Configuration.ProxyCreationEnabled = false;
+           dynamic toReturn = new ExpandoObject();
+
             try
             {
+                //get sale
+                Sale newSale = db.Sales.Where(x => x.SaleID == saleID).FirstOrDefault();
+                if (newSale != null) {
+
+                    //get container
+                 Container container = db.Containers.Where(x => x.ContainerID == newSale.ContainerID).FirstOrDefault();
 
 
-                //get list of products in new Sale
-                List<Product_Sale> product_Sales = newSale.Product_Sale.ToList();
 
-                if (newSale.ContainerID != null)
-                {
-                    foreach (var prod in product_Sales)
+                    //get list of products in Sale
+                    List<Product_Sale> product_Sales = newSale.Product_Sale.ToList();
+
+                    if (container != null)
                     {
-                        Container_Product container_Product = db.Container_Product.Where(x => x.ProductID == prod.ProductID && x.ContainerID == newSale.ContainerID).FirstOrDefault();
-                     
-                        if (container_Product.CPQuantity < prod.PSQuantity)
+                        if (product_Sales != null)
                         {
-                            toReturn.Error = "Not Enough " + prod.Product.ProdName + " in stock";
-                            return toReturn;
-                        }
-                        else
-                        {
-                          
-                            container_Product.CPQuantity = (container_Product.CPQuantity - prod.PSQuantity);
-                            db.SaveChanges();
-                        }
+                            foreach (var prod in product_Sales)
+                            {
+                                Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
+                                if (product != null)
+                                {
+                                   
+                                        Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == newSale.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
+                                        if (container_Product != null)
+                                        {
+                                            container_Product.CPQuantity = (container_Product.CPQuantity + prod.PSQuantity);
+                                            db.SaveChanges();
 
+                                            Product_Sale product_Sale = db.Product_Sale.Where(x => x.ProductID == product.ProductID && x.SaleID == newSale.SaleID).FirstOrDefault();
+                                            if (product_Sale != null)
+                                            {
+
+                                                db.Product_Sale.Remove(product_Sale);
+                                                db.SaveChanges();
+                                            }
+                                        }
+                                     
+                                }
+                                else
+                                {
+                                    toReturn.Error = "Product Not Found";
+                                }
+
+
+                            }
+                            //get list of payment
+                            List<Payment> payments = db.Payments.Where(x => x.SaleID == newSale.SaleID).ToList();
+                            if (payments != null)
+                            {
+                                foreach (Payment payment in payments)
+                                {
+                                    db.Payments.Remove(payment);
+                                    db.SaveChanges();
+                                }
+                            }
+
+
+
+                            toReturn.Message = "Sale Cancelled";
+                        }
+                       
                     }
-
-
-
-                    //add sale
-                    Sale sale = new Sale();
-                    //sale.ContainerID = newSale.ContainerID;
-                    sale.Container = newSale.Container;
-                    sale.UserID = newSale.UserID;
-                    sale.SaleDate = DateTime.Now;
-                    db.Sales.Add(sale);
-                    db.SaveChanges();
-
-
-                    //get the sale record just added
-                    Sale addedSale = db.Sales.ToList().LastOrDefault();
-
-
-                    //Add the Product_Sale Records for each product
-                    foreach (var prod in product_Sales)
+                    else
                     {
-                        Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
-                        Product_Sale prodSale = new Product_Sale();
-                        //prodSale.SaleID = addedSale.SaleID;
-                       // prodSale.ProductID = product.ProductID;
-                        prodSale.PSQuantity = prod.PSQuantity;
-                        prodSale.Product = product;
-                        prodSale.Sale = addedSale;
-                        Product_Sale found = db.Product_Sale.Where(x => x.SaleID == prodSale.SaleID && x.ProductID == prodSale.ProductID).FirstOrDefault();
-                        if (found == null)
-                        {
-                            db.Product_Sale.Add(prodSale);
-                            db.SaveChanges();
-                        }
-
-                        
-
+                        toReturn.Error = "Container Not Found";
                     }
-
-
-
-
-
-
-
-                    //Add Payment details to sale reord, note a sale can have more than one payment method
-                    List<Payment> payment = newSale.Payments.ToList();
-                    foreach (var item in payment)
-                    {
-                        item.Sale = addedSale;
-                        item.PayDate = DateTime.Now;
-                        addedSale.Payments.Add(item);
-                        db.SaveChanges();
-                    }
-
-
-                    //get sale ID OF record made(incase you immediately wanr to see the details after or print to a receipt
-                    int saleMadeID = addedSale.SaleID;
-
-                    toReturn.saleID = saleMadeID;
-                    toReturn.Sale = db.Sales.Include(x => x.Payments).Include(x => x.Container).Include(x => x.Product_Sale).Include(x => x.User).FirstOrDefault();
-                    toReturn.Message = "Sale Completed Succuessfully";
                 }
+
+                   
                 else
                 {
-                    toReturn.Message = "Could Not Recieve Container Details";
+                    toReturn.Error = "Cancel Failed: Sale Not Found";
                 }
-           }
+            }
             catch
             {
-                toReturn.Error = "Sale Unsuccessfully Completed";
+                toReturn.Error = "Sale Cancellation Unsuccessfully Completed";
             }
 
             return toReturn;
@@ -452,12 +630,48 @@ namespace ORDRA_API.Controllers
                 }
             }
 
-            catch (Exception error)
+            catch 
             {
-                toReturn.Message = error.Message;
+                toReturn.Message = "Sale Search Inturrupted, Retry";
             }
 
             return toReturn;
         }
+
+
+        [HttpGet]
+        [Route("checkStock")]
+        public bool checkStock(int containerID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            bool found = false;
+
+            try
+            {
+               List<Container_Product> container_Product = db.Container_Product.Where(x => x.ContainerID == containerID).ToList();
+                if (container_Product != null)
+                { 
+                    foreach(Container_Product conProd in container_Product){
+                        Product product = db.Products.Where(x => x.ProductID == conProd.ProductID).FirstOrDefault();
+                        if(product.ProdReLevel >= conProd.CPQuantity)
+                        {
+                            found = true;
+                        }
+                    }
+                }
+
+               
+
+            }
+            catch
+            {
+                
+            }
+
+            return found;
+        }
+
+
     }
 }

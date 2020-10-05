@@ -51,7 +51,7 @@
          <div class="divleft">
             <label for="quantity">Quantity </label>
             <input  style="width:60px;" type="number" min="0" name="quantity" [(ngModel)]="quantity" id="quantity" required>
-            <button style="height: 30px;" (click)="listProducts()">Add</button>
+            <button style="height: 30px;" (click)="getProduct()">Add</button>
           </div>
         </div>
        
@@ -92,8 +92,8 @@
                 
                 <th></th>
                 <th></th>
-                <th>Subtotal (Exc VAT):</th>
-                <th>R{{displaySubtotal}}</th>
+                <th></th>
+                <th></th>
             </tr>
 
             <tr>
@@ -115,9 +115,9 @@
       
       <div class="divleft">
         
-          <div class="divleft">
+          <div class="divleft" *ngIf = "!showPay">
               <button type="submit" (click)="showPayment()">Make Payment</button>
-              <button type="submit" (click)="gotoSaleManagement()">Cancel</button>
+              <button type="submit" (click)="gotoSaleManagement()">Cancel Sale</button>
           </div>
       </div>
     </div>
@@ -134,17 +134,19 @@
        <div class="divleft">
           <label for="quantity">Amount </label>
           <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
-          <button style="height: 30px;" (click)="makePayment()">Make Payment</button>
+          
         </div>
         <div class="divleft" *ngIf="ShowOustanding">
-          <label style="width :100px">Outstanding Amount: R{{outstandingAmt}}</label>
+          <label style="width :300px">Outstanding Amount: R{{outstandingAmt}}</label>
         </div>
-        <div class="divleft" *ngIf="showChange" hidden="true">
-           <label style="width :100px">Change: R{{change}}</label>
+        <div class="divleft" *ngIf="showChange">
+           <label style="width :300px">Change: R{{change}}</label>
          </div>
    
        <div class="divleft">
-        <button type="submit" (click)="makeSale()">Complete Sale</button>
+        <button type="submit" (click)="makePayment()">Make Payment</button>
+        <button type="submit" (click)="completeSale()">Complete Sale</button>
+        <button type="submit" (click)="gotoSaleManagement()">Cancel Sale</button>
        </div>
 
       </div>

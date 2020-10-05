@@ -29,7 +29,7 @@ export class AddProductComponent implements OnInit {
   Select: number;
   selectedCatID: number;
 
-  addToSystem: boolean = false;
+  addToSystem: boolean = true;
   linkToContainer: boolean = false;
   selectedContainerID: number;
  
@@ -74,6 +74,7 @@ export class AddProductComponent implements OnInit {
       }
     });
 
+    
 
     
   }

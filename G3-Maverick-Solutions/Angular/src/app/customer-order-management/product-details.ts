@@ -8,5 +8,6 @@ ProductCategoryID: number;
 ProductID: number;
 Quantity: number;
 Subtotal: number;
+CPQuantity: number;
 
 }

@@ -7,7 +7,7 @@
                 <br>
                 <label for="VATPerc">VAT Percentage:</label><input type="text" class="form-control" [(ngModel)]="vat.VATPerc" id="VATPerc" name="VATPerc" required>
                 <br>
-                <label for="VATStartDate">VAT Start Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATStartDate" id="VATStartDate" name="VATStartDate" required>
+                <label for="VATStartDate">VAT Start Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATStartDate" id="VATStartDate" name="VATStartDate" min= "{{date | date: 'MM/dd/yyyy'}}" required>
                 <button type="submit" (click)="Save()">Add VAT</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>

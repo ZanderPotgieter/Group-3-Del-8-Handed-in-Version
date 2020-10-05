@@ -123,7 +123,7 @@
                     <span *ngIf="donForm.get('DrCode').errors.pattern">Only numbers allowed.</span>
                 </span>
                  <br>
-                <label for="DrArea">Suburb:</label><input  input type="text" formControlName="DrArea" class="form-control" [(ngModel)]="donationRecipient.DrName" id="DrArea" name="DrArea" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <label for="DrArea">Suburb:</label><input  input type="text" formControlName="DrArea" class="form-control" [(ngModel)]="donationRecipient.DrArea" id="DrArea" name="DrArea" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
                 <br>
                 <span style="color:red" *ngIf="donForm.get('DrArea').errors && (donForm.get('DrArea').touched || donForm.get('DrArea').dirty)">
                     <span *ngIf="donForm.get('DrArea').errors.required">Area is required.</span>

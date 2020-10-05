@@ -26,7 +26,7 @@ export class MarkedoffProductReportComponent implements OnInit {
 
   selectedOption: any;
   showErrorMessage: boolean = false;
-  chart: CharacterData;
+  chart: Chart;
   TableData: object;
   totalBalance: any;
 
@@ -86,7 +86,7 @@ export class MarkedoffProductReportComponent implements OnInit {
 
    if (this.chart)
    {
-     //this.chart.destroy();
+      this.chart.destroy();
    }
 
  

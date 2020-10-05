@@ -25,6 +25,7 @@ namespace ORDRA_API.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Access> Accesses { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Area_Status> Area_Status { get; set; }
         public virtual DbSet<Container> Containers { get; set; }
@@ -39,6 +40,8 @@ namespace ORDRA_API.Models
         public virtual DbSet<Donation_Recipient> Donation_Recipient { get; set; }
         public virtual DbSet<Donation_Status> Donation_Status { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<EmployeeCV> EmployeeCVs { get; set; }
+        public virtual DbSet<EmployeePicture> EmployeePictures { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Location_Status> Location_Status { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
@@ -46,6 +49,7 @@ namespace ORDRA_API.Models
         public virtual DbSet<Manager> Managers { get; set; }
         public virtual DbSet<Marked_Off> Marked_Off { get; set; }
         public virtual DbSet<Marked_Off_Reason> Marked_Off_Reason { get; set; }
+        public virtual DbSet<One_Time_Pin> One_Time_Pin { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Payment_Type> Payment_Type { get; set; }
         public virtual DbSet<Price> Prices { get; set; }
@@ -65,11 +69,7 @@ namespace ORDRA_API.Models
         public virtual DbSet<Supplier_Order_Status> Supplier_Order_Status { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<User_Type> User_Type { get; set; }
-        public virtual DbSet<VAT> VATs { get; set; }
-        public virtual DbSet<One_Time_Pin> One_Time_Pin { get; set; }
-        public virtual DbSet<EmployeeCV> EmployeeCVs { get; set; }
-        public virtual DbSet<EmployeePicture> EmployeePictures { get; set; }
-        public virtual DbSet<Access> Accesses { get; set; }
         public virtual DbSet<User_Type_Access> User_Type_Access { get; set; }
+        public virtual DbSet<VAT> VATs { get; set; }
     }
 }

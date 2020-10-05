@@ -23,6 +23,10 @@ namespace ORDRA_API.Models
         public int CreditorID { get; set; }
         public Nullable<int> SupplierID { get; set; }
         public Nullable<float> CredAccountBalance { get; set; }
+        public string CredBank { get; set; }
+        public string CredBranch { get; set; }
+        public Nullable<int> CredAccount { get; set; }
+        public string CredType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Creditor_Payment> Creditor_Payment { get; set; }

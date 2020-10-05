@@ -372,13 +372,7 @@ namespace ORDRA_API.Controllers
                             db.Product_Order_Line.Add(orderProd);
                             db.SaveChanges();
 
-                            Product_Backlog product_Backlog = new Product_Backlog();
-                            product_Backlog.Customer_Order = placedOrder;
-                            product_Backlog.Product = product;
-                            product_Backlog.QauntityToOrder = prod.PLQuantity;
-
-                            db.Product_Backlog.Add(product_Backlog);
-                            db.SaveChanges();
+                   
 
                         }
 

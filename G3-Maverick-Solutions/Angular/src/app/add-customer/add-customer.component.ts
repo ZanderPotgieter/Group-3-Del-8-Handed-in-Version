@@ -6,6 +6,7 @@ import {CustomerService} from '../customer-management/customer.service';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
+import { DialogService } from '../shared/dialog.service';
 
 @Component({
   selector: 'app-add-customer',
@@ -14,7 +15,7 @@ import { Validators } from '@angular/forms';
 })
 export class AddCustomerComponent implements OnInit {
 
-  constructor(private api: CustomerService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: CustomerService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   cusForm: FormGroup;
    customer : Customer = new Customer();
    responseMessage: string = "Request Not Submitted";
@@ -35,18 +36,23 @@ export class AddCustomerComponent implements OnInit {
   }
 
   addCustomer(){
-    this.api.addCustomer(this.customer).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
-      this.router.navigate(["customer-management"])
-    })
-
+    this.dialogService.openConfirmDialog('Are you sure you want to add the customer?')
+    .afterClosed().subscribe(res => {
+      if(res){
+      this.api.addCustomer(this.customer).subscribe( (res:any)=> {
+        console.log(res);
+        if(res.Message){
+      this.dialogService.openAlertDialog(res.Message);}
+        this.router.navigate(["customer-management"])
+      })
+    }
+    });
   }
+
+  
 
   gotoCustomerManagment(){
     this.router.navigate(['customer-management']);
   }
 
-}
+    }

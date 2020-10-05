@@ -23,14 +23,14 @@ namespace ORDRA_API.Models
     
         public int SaleID { get; set; }
         public Nullable<int> UserID { get; set; }
-        public Nullable<System.DateTime> SaleDate { get; set; }
         public Nullable<int> ContainerID { get; set; }
+        public Nullable<System.DateTime> SaleDate { get; set; }
     
+        public virtual Container Container { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payment> Payments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product_Sale> Product_Sale { get; set; }
         public virtual User User { get; set; }
-        public virtual Container Container { get; set; }
     }
 }

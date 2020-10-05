@@ -42,7 +42,7 @@ import { CreateemployeeComponent } from './employee-management/createemployee/cr
 import { UpdateemployeeComponent } from './employee-management/updateemployee/updateemployee.component';
 import { SearchemployeeComponent } from './employee-management/searchemployee/searchemployee.component';
 import { CreateManagerComponent } from './create-manager/create-manager.component';
-import { SearchManagerComponent } from './search-manager/search-manager.component';
+import { SearchManagerComponent } from './view-manager/view-manager.component';
 import { UpdateManagerComponent } from './update-manager/update-manager.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatListModule} from '@angular/material/list';

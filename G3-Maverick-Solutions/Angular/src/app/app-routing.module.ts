@@ -62,7 +62,8 @@ import { Component, NgModule } from '@angular/core';
     //---Manager Subsystem Imports---//
     import {CreateManagerComponent} from './create-manager/create-manager.component';
     import { UpdateManagerComponent} from './update-manager/update-manager.component';
-    import {SearchManagerComponent} from './search-manager/search-manager.component';
+    //import {SearchManagerComponent} from './search-manager/search-manager.component';
+    import {SearchManagerComponent} from './view-manager/view-manager.component'
 
     
     //---Customer Order Subsystem Imports---//

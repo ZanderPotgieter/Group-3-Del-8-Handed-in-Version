@@ -6,14 +6,24 @@
             
         <div  class="divleft" >
             <br>
-            <label class="subheadinglabel" >Enter Manager Name and Surname To search:</label>
+            <label class="subheadinglabel" >Enter User Name and Surname To search:</label>
         <br>
         <label for="name">Name:       </label>
-        <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name">
-   
+        <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" required minlength="2" maxlength="25">
+        <br>
+        <span style="color:red" *ngIf="empForm.get('name').errors && (empForm.get('name').touched || empForm.get('name').dirty)">
+            <span *ngIf="empForm.get('name').errors.required">Name is required.</span>
+            <span *ngIf="empForm.get('name').errors.minlength || empForm.get('name').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+            <span *ngIf="empForm.get('name').errors.pattern">Only text characters.</span>
+          </span>
+          <br>
         <label for="cusSurname">Surname:   </label>
-        <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname">
-        
+        <input class="searchinput" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname" required minlength="2" maxlength="25">
+        <br><span style="color:red" *ngIf="empForm.get('surname').errors && (empForm.get('surname').touched || empForm.get('surname').dirty)">
+            <span *ngIf="empForm.get('surname').errors.required">Surname is required.</span>
+            <span *ngIf="empForm.get('surname').errors.minlength || empForm.get('surname').errors.maxlength">Surname must be greater that 2 characters and less than 25 characters</span>
+            <span *ngIf="empForm.get('surname').errors.pattern">Only text characters.</span>
+          </span><br>
             <div class="divleft">
                 <button type="submit" (click) ="searchManager()">Search</button>
                 <button type="submit" (click)="gotoManagerManagement()">Cancel</button>
@@ -68,6 +78,10 @@
             <option *ngFor="let container of containers" [ngValue]="container">{{container.ConName}}</option>
         </select>
         <!--<button type="submit">Add Container</button> name="selection" [(ngModel)]="selection"-->
+        <br>
+        <span style="color:red" *ngIf="empForm.get('container').errors && (empForm.get('container').touched || empForm.get('container').dirty)">
+            <span *ngIf="empForm.get('container').errors.required">Container is required.</span>
+          </span>
     </div>
 
     <div *ngIf ="showTable">
@@ -90,17 +104,38 @@
     <label class="subheadinglabel" >Enter Manager Profile Details</label>
 <br>
         <label for="ManQualification">Qualification:       </label>
-        <input type="text" [(ngModel)]="manager.ManQualification" id="ManQualification" name="ManQualification" required>
+        <input type="text" [(ngModel)]="manager.ManQualification" id="ManQualification" name="ManQualification" required minlength="2" maxlength="50">
+        <br>
+        <span style="color:red" *ngIf="empForm.get('ManQualification').errors && (empForm.get('ManQualification').touched || empForm.get('ManQualification').dirty)">
+            <span *ngIf="empForm.get('ManQualification').errors.required">Qualification is required.</span>
+            <span *ngIf="empForm.get('ManQualification').errors.minlength || empForm.get('ManQualification').errors.maxlength">Qualification must be greater that 2 characters and less than 50 characters</span>
+            <span *ngIf="empForm.get('ManQualification').errors.pattern">Only text characters.</span>
+          </span>
+          <br>
     </div>
 
     <div class="divleft">
         <label for="ManNationality">Nationality:       </label>
-        <input type="text" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" required>
+        <input type="text" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" required minlength="2" maxlength="25">
+        <br>
+        <span style="color:red" *ngIf="empForm.get('ManNationality').errors && (empForm.get('ManNationality').touched || empForm.get('ManNationality').dirty)">
+            <span *ngIf="empForm.get('ManNationality').errors.required">Nationality is required.</span>
+            <span *ngIf="empForm.get('ManNationality').errors.minlength || empForm.get('ManNationality').errors.maxlength">Nationality must be greater that 2 characters and less than 25 characters</span>
+            <span *ngIf="empForm.get('ManNationality').errors.pattern">Only text characters.</span>
+          </span>
+          <br>
     </div>
 
     <div class="divleft">
         <label for="ManIDNumber">ID Number:       </label>
-        <input type="text" [(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" required >
+        <input type="text" [(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" required minlength="13" maxlength="13">
+        <br>
+        <span style="color:red" *ngIf="empForm.get('ManIDNumber').errors && (empForm.get('ManIDNumber').touched || empForm.get('ManIDNumber').dirty)">
+            <span *ngIf="empForm.get('ManIDNumber').errors.required">cell number is required.</span>
+            <span *ngIf="empForm.get('ManIDNumber').errors.minlength || empForm.get('ManIDNumber').errors.maxlength">Surname must be 13 digits</span>
+            <span *ngIf="empForm.get('ManIDNumber').errors.pattern">Only text characters.</span>
+          </span>
+          <br>
     </div>
     <br>
 
@@ -109,12 +144,26 @@
         <label class="subheadinglabel">Enter Next Of Keen Details:</label>
         <br>
         <label for="ManNextOfKeenFName">Full Name:       </label>
-        <input type="text" [(ngModel)]="manager.ManNextOfKeenFName" id="ManNextOfKeenFName" name="ManNextOfKeenFName" required>
+        <input type="text" [(ngModel)]="manager.ManNextOfKeenFName" id="ManNextOfKeenFName" name="ManNextOfKeenFName" required minlength="2" maxlength="25">
+        <br>
+        <span style="color:red" *ngIf="empForm.get('ManNextOfKeenFName').errors && (empForm.get('ManNextOfKeenFName').touched || empForm.get('ManNextOfKeenFName').dirty)">
+            <span *ngIf="empForm.get('ManNextOfKeenFName').errors.required">Name is required.</span>
+            <span *ngIf="empForm.get('ManNextOfKeenFName').errors.minlength || empForm.get('ManNextOfKeenFName').errors.maxlength">Name must be greater that 2 characters and less than 25 characters</span>
+            <span *ngIf="empForm.get('ManNextOfKeenFName').errors.pattern">Only text characters.</span>
+          </span>
+          <br>
     </div>
 
     <div class="divleft">
         <label for="ManNextOfKeenCell">Cell Number:       </label>
-        <input type="text" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required>
+        <input type="text" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required minlength="10" maxlength="10">
+        <br>
+        <span style="color:red" *ngIf="empForm.get('ManNextOfKeenCell').errors && (empForm.get('ManNextOfKeenCell').touched || empForm.get('ManNextOfKeenCell').dirty)">
+            <span *ngIf="empForm.get('ManNextOfKeenCell').errors.required">cell number is required.</span>
+            <span *ngIf="empForm.get('ManNextOfKeenCell').errors.minlength || empForm.get('ManNextOfKeenCell').errors.maxlength">Cell number must be 10 digits</span>
+            <span *ngIf="empForm.get('ManNextOfKeenCell').errors.pattern">Only numbers.</span>
+          </span>
+          <br>
     </div>
     <br>
 

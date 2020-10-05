@@ -3,6 +3,7 @@
     <form [formGroup]="supForm">
         <div class="card" *ngIf = "showSearch">
             <br>
+            
         <div class="divleft"  >
             <label class="subheadinglabel" >Enter Supplier Name: </label>
         <br>
@@ -21,27 +22,23 @@
             <button type="submit"(click)="searchSupplier()">Search</button>
             <button type="submit" (click)="gotoSupplierManagment()">Cancel</button>
         </div>
-
-        <table class="table table-striped">  
-            <thead class="thead-dark">  
+        <div *ngIf="showTable">
+        <table >    
               <tr>  
                 <th>Name</th>
                 <th>Cell No</th>  
-                <th>Email</th>  
-                <th>Suburb</th>
-                <th>Postal Code</th>  
+                <th>Email</th>   
+                <th  style="width: 10%;"></th>
               </tr>  
-            </thead>  
-            <tbody>  
-              <tr *ngFor="let sup of allSup | async">  
+              <tr *ngFor="let sup of suppliers; index as ndx">  
                 <td>{{sup.SupName}}</td>  
                 <td>{{sup.SupCell}}</td>  
-                <td>{{sup.SupEmail}}</td>  
-                <td>{{sup.SupSuburb}}</td> 
-                <td>{{sup.SupCode}}</td>  
-              </tr>  
-            </tbody>  
-          </table>  
+                <td>{{sup.SupEmail}}</td> 
+                <td><button  style="border-radius: 10px; width: 60%;" (click)="view(ndx)">View</button></td> 
+
+              </tr>   
+          </table> 
+        </div> 
 
     </div>
     <br>
@@ -139,6 +136,7 @@
         <div class="divleft" *ngIf="showButtons">
             <button type="submit" (click)="enableInputs()">Update</button>
             <button type="submit" (click)="deleteSupplier()">Delete</button>
+         <button type="submit"  (click)="gotoSupplierManagment()">Cancel</button>
          </div>
 
          <div class="divleft" *ngIf="showSave" >

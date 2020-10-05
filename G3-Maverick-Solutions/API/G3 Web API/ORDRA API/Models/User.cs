@@ -22,21 +22,22 @@ namespace ORDRA_API.Models
             this.Logins = new HashSet<Login>();
             this.Logouts = new HashSet<Logout>();
             this.Managers = new HashSet<Manager>();
+            this.One_Time_Pin = new HashSet<One_Time_Pin>();
             this.Sales = new HashSet<Sale>();
             this.Shifts = new HashSet<Shift>();
-            this.One_Time_Pin = new HashSet<One_Time_Pin>();
         }
     
         public int UserID { get; set; }
         public Nullable<int> UserTypeID { get; set; }
+        public string SessionID { get; set; }
         public string UserPassword { get; set; }
         public string UserName { get; set; }
         public string UserSurname { get; set; }
         public string UserCell { get; set; }
         public string UserEmail { get; set; }
-        public string SessionID { get; set; }
         public Nullable<int> ContainerID { get; set; }
     
+        public virtual Container Container { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer_Order> Customer_Order { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -48,12 +49,11 @@ namespace ORDRA_API.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Manager> Managers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<One_Time_Pin> One_Time_Pin { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sales { get; set; }
         public virtual User_Type User_Type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Shift> Shifts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<One_Time_Pin> One_Time_Pin { get; set; }
-        public virtual Container Container { get; set; }
     }
 }

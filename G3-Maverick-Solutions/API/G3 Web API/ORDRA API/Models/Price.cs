@@ -17,9 +17,9 @@ namespace ORDRA_API.Models
         public int PriceID { get; set; }
         public Nullable<int> ProductID { get; set; }
         public Nullable<float> UPriceR { get; set; }
-        public Nullable<float> CPriceR { get; set; }
         public Nullable<System.DateTime> PriceStartDate { get; set; }
         public Nullable<System.DateTime> PriceEndDate { get; set; }
+        public Nullable<float> CPriceR { get; set; }
     
         public virtual Product Product { get; set; }
     }

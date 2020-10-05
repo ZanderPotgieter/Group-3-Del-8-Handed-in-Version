@@ -26,15 +26,15 @@ namespace ORDRA_API.Models
             this.Product_Sale = new HashSet<Product_Sale>();
             this.Return_Product = new HashSet<Return_Product>();
             this.Supplier_Order_Product = new HashSet<Supplier_Order_Product>();
-            this.Suppliers = new HashSet<Supplier>();
         }
     
         public int ProductID { get; set; }
         public Nullable<int> ProductCategoryID { get; set; }
+        public Nullable<int> SupplierID { get; set; }
+        public string ProdBarcode { get; set; }
         public string ProdName { get; set; }
         public string ProdDesciption { get; set; }
         public Nullable<int> ProdReLevel { get; set; }
-        public string ProdBarcode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Container_Product> Container_Product { get; set; }
@@ -51,11 +51,10 @@ namespace ORDRA_API.Models
         public virtual Product_Category Product_Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product_Sale> Product_Sale { get; set; }
+        public virtual Supplier Supplier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Return_Product> Return_Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Supplier_Order_Product> Supplier_Order_Product { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Supplier> Suppliers { get; set; }
     }
 }

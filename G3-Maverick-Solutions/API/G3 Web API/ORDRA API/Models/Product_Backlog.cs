@@ -15,11 +15,10 @@ namespace ORDRA_API.Models
     public partial class Product_Backlog
     {
         public int ProductBackLogID { get; set; }
-        public Nullable<int> CustomerOrderID { get; set; }
         public Nullable<int> ProductID { get; set; }
-        public Nullable<int> QauntityToOrder { get; set; }
+        public Nullable<int> QuantityToOrder { get; set; }
+        public Nullable<System.DateTime> DateModified { get; set; }
     
-        public virtual Customer_Order Customer_Order { get; set; }
         public virtual Product Product { get; set; }
     }
 }

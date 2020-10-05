@@ -26,7 +26,7 @@
                         <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
                         
                         <div *ngFor="let item of TableData; let i = index">
-                            <h2><strong>Container Name: </strong> {{item.ID}}</h2>
+                            <h2><strong>Container Name: </strong> {{item.Name}}</h2>
                             <h3><strong>Total Container sales amount: </strong>  R{{item.ConTotal}}</h3>
                             <div>
                                 <div *ngFor="let sale of item.Sales" id="testing{{i}}">

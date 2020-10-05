@@ -52,7 +52,7 @@
                             <h3><strong>Email: </strong> {{item.Details.CusEmail}}</h3>
                             <div>
                                 <div *ngFor="let order of item.Orders" id="testing{{i}}">
-                                    <div *ngFor="let prod of order.Product" id="testing{{i}}">
+                                    
                                             <table class= "container table-latitude" > 
                                                 <thead>
                                                     <tr>
@@ -66,7 +66,7 @@
                                                 </thead>
     
                                                 <tbody>
-                                                    <tr>
+                                                    <tr *ngFor="let prod of order.Product">
                                                         <td>{{order.OrderNum}}</td>
                                                         <td>{{order.Date | date}}</td>
                                                         <td>{{prod.Name}}</td>
@@ -76,7 +76,7 @@
                                                     </tr>
                                                 </tbody>                        
                                             </table>    
-                                        </div>
+                                        
                                 </div>
                             </div>
 

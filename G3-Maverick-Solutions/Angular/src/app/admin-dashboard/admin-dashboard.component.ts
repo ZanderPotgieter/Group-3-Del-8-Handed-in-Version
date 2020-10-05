@@ -83,14 +83,14 @@ export class AdminDashboardComponent {
         console.log(this.totalBalance);  
  
         var ctx = document.getElementById('canvas');
-        this.chart = new Chart(ctx,{
+        this.chart = new Chart('bar',{
         type: 'bar',
         data: {
           labels: keys,
           datasets: [
             {
-            label:'Revenue of sales per container ',
-            data: Vals,
+            label:'Sales Revenue per container for current year',
+            data: Vals, 
             fill: false,
             barPercentage: 0.70,
             backgroundColor: [
@@ -135,7 +135,6 @@ export class AdminDashboardComponent {
                 display: true,
                 ticks:{
                 beginAtZero: true,
-                  
                 }
               }],
             }

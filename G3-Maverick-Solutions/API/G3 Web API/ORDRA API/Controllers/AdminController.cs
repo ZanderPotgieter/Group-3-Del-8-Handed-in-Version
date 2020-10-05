@@ -1056,12 +1056,16 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             List<Marked_Off> markedProducts = new List<Marked_Off>();
             List<Product> products = new List<Product>();
-            DateTime today = DateTime.Today;
+            //DateTime today = DateTime.Today;
+            int year = DateTime.Now.Year;
+
+            DateTime begin = new DateTime(year, 01, 01);
+            DateTime end = new DateTime(year, 12, 31, 23, 59, 0);
 
             List<Sale> sales = new List<Sale>();
             try
             {
-                sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList();//Where(z => z.SaleDate == today)
+                sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).Where(z=> (z.SaleDate >= begin) || (z.SaleDate<=end)).ToList();//Where(z => z.SaleDate == today)
                     //db.Marked_Off.Include(z => z.Product).Include(z => z.Marked_Off_Reason).ToList();
             }
             catch (Exception)
@@ -1085,26 +1089,41 @@ namespace ORDRA_API.Controllers
 
                     var conList = sales.GroupBy(z => z.ContainerID);
                     List<dynamic> containers = new List<dynamic>();
-
+                    
 
                     foreach (var item in conList)
                     {
+                        dynamic name = new ExpandoObject();
+                        decimal rev = 0;
                         if (item!=null || item.Key!=null)
                         {
                             dynamic container = new ExpandoObject();
                             container.ID = item.Key;
-                            // var id = item.Key;
+                            var id = item.Key;
                             //List<Product_Sale> saleProds = db.Product_Sale.Where(z => z.SaleID == id).ToList();
+                            Container nameObj = db.Containers.Where(z => z.ContainerID == id).FirstOrDefault();
+                            name = nameObj.ConName;
+                            var sum = 0;    //Convert.ToInt32(item.Sum(z => z.SaleID), CultureInfo.InvariantCulture);
 
+                            //calculating revenue
+                            var saleId = item.Select(z => z.SaleID).FirstOrDefault();
+                            List<Product_Sale> prodSale = db.Product_Sale.Where(z => z.SaleID == saleId).ToList();
+                            foreach (var prod in prodSale)
+                            {
+                                var quantity = Convert.ToDecimal(prod.PSQuantity);
+                                var prodId = prod.ProductID;
+                                Price price = db.Prices.Where(z => z.ProductID == prodId).ToList().LastOrDefault();
+                                var salePrice = Convert.ToDecimal(price.UPriceR);
+                                rev = rev + (quantity * salePrice);
+                            }
 
-                            var sum = Convert.ToInt32(item.Sum(z => z.SaleID), CultureInfo.InvariantCulture);
-                            container.Sum = sum;
-
+                            container.Sum = rev;
+                            container.Name = name;
                             containers.Add(container);
                         }
                         else
                         {
-                            toReturn.Error = "Conatiner information not available to generate report";
+                            toReturn.Error = "Container information not available to generate report";
                         }
                     }
 

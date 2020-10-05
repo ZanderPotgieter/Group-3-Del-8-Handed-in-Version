@@ -121,6 +121,7 @@ import { UserTreeComponent } from './user-tree/user-tree.component';
 import { UserReportComponent } from './reporting-management/user-report/user-report.component';
 import { SearchUsersComponent } from './search-users/search-users.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
+import { MatAlertDialogComponent } from './mat-alert-dialog/mat-alert-dialog.component';
 
 
 
@@ -221,6 +222,7 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
     UserReportComponent,
     SearchUsersComponent,
     MatConfirmDialogComponent,
+    MatAlertDialogComponent,
   ],
   imports: [
     BrowserModule,

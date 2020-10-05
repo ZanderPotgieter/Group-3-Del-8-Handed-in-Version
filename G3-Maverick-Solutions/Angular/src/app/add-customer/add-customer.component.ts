@@ -42,8 +42,7 @@ export class AddCustomerComponent implements OnInit {
       this.api.addCustomer(this.customer).subscribe( (res:any)=> {
         console.log(res);
         if(res.Message){
-        this.responseMessage = res.Message;}
-        alert(this.responseMessage)
+      this.dialogService.openAlertDialog(res.Message);}
         this.router.navigate(["customer-management"])
       })
     }

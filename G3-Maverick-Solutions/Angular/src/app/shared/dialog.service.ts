@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { MatAlertDialogComponent } from '../mat-alert-dialog/mat-alert-dialog.component';
 import { MatConfirmDialogComponent } from './../mat-confirm-dialog/mat-confirm-dialog.component';
 
 @Injectable({
@@ -15,10 +16,20 @@ return this.dialog.open(MatConfirmDialogComponent,{
   width: '390px',
       panelClass: 'confirm-dialog-container',
       disableClose: true,
-      position:{top:"10px"},
       data:{
         message: msg
       }
 })
   }
+
+  openAlertDialog(msg){
+    return this.dialog.open(MatAlertDialogComponent,{
+      width: '390px',
+          panelClass: 'confirm-dialog-container',
+          disableClose: true,
+          data:{
+            message: msg
+          }
+    })
+      }
 }

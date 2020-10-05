@@ -106,10 +106,10 @@
             
             <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="Product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="Product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
+            <label for="ProdBarcode">Barcode:</label><input type="text" formControlName="ProdBarcode" class="form-control" [(ngModel)]="Product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
         
             <br>
-            <label>Supplier:</label><label>{{supplier.SupName}}</label>
+            <label>Supplier:</label><label style="width:500px">{{supplier}}</label>
             <br>
             <label class="subheadinglabel">Current Price:</label>
             <br>

@@ -125,9 +125,9 @@ namespace ORDRA_API.Controllers
 
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn.Message = "Something Went Wrong" + error.Message;
+                toReturn.Message = "Search Inturrupted. Retry";
             }
 
             return toReturn;
@@ -181,9 +181,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Search Interrupted";
+                toReturn = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -308,11 +308,13 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                manager = db.Managers.Include(x => x.Containers).Where(x => x.ManagerID == id).FirstOrDefault();
+                
+                manager = db.Managers.Include(x => x.Containers).Include(x => x.User).Where(x => x.ManagerID == id).FirstOrDefault();
 
                 if (manager == null)
                 {
                     toReturn.Message = "Record Not Found";
+                    
                 }
                 else
                 {
@@ -321,6 +323,14 @@ namespace ORDRA_API.Controllers
 
                     foreach (var con in containers)
                     {
+                        User user = db.Users.Where(x => x.UserID == manager.User.UserID).FirstOrDefault();
+                        //get user type of manager
+                        User_Type usertype = db.User_Type.Where(x => x.UTypeDescription == "Employee").FirstOrDefault();
+
+                        //set usertype to manager
+                        user.User_Type = usertype;
+                        db.SaveChanges();
+
                         Container container = db.Containers.Where(x => x.ContainerID == con.ContainerID).FirstOrDefault();
                         manager.Containers.Remove(container);
 

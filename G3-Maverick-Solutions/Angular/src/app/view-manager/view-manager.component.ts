@@ -66,11 +66,11 @@ export class SearchManagerComponent implements OnInit {
       empShiftsCompleted: [''],
       empStartDate: [''],
 
-      ManNationality: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')]],
-      ManQualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('[a-zA-Z]*')]],
+      ManNationality: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      ManQualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('[a-zA-Z ]*')]],
       ManIDNumber: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), Validators.pattern('[0-9]*')]],
       ManNextOfKeenCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('0-9]*')]],
-      ManNextOfKeenFName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')]],
+      ManNextOfKeenFName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
       container: ['', [Validators.required]]
     }); 
 

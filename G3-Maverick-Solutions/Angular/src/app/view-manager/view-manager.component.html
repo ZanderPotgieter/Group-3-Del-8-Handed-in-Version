@@ -3,6 +3,7 @@
     <form [formGroup] = "empForm">
     <div  class="card" >
         <div class="divleft" >
+            <br>
             <mat-radio-group aria-label="Select Option To Search">
                 <mat-radio-button value= 1 (click)="search()">Search Manager</mat-radio-button>
                 <mat-radio-button value= 2 (click)="viewAll()">View All Managers</mat-radio-button>
@@ -26,7 +27,8 @@
                     <td><button style="border-radius: 10px; width: 90%;" (click)="view(ndx)">View</button></td>
                 </tr>
             </table>
-
+            <br>
+            <button type="submit" (click)="gotoManagerManagement()">Cancel</button>
         </div>
             
         <div  class="divleft" *ngIf="showSearch" >
@@ -153,7 +155,7 @@
 
     <div class="divleft">
         <label for="ManIDNumber">ID Number:       </label>
-        <input type="text" [(ngModel)]="ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "this.allowEdit">
+        <input type="text" [(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "this.allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManIDNumber').errors && (empForm.get('ManIDNumber').touched || empForm.get('ManIDNumber').dirty)">
             <span *ngIf="empForm.get('ManIDNumber').errors.required">cell number is required.</span>

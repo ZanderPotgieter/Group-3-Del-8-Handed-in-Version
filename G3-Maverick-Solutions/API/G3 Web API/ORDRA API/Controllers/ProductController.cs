@@ -359,6 +359,12 @@ namespace ORDRA_API.Controllers
                         }
 
                         toReturn.ProductContainers = ProductCons;
+                        if (objectProduct.SupplierID != null)
+                        {
+                            Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                            toReturn.supplier = supplier.SupName;
+                        }
+
 
                     }
 
@@ -397,8 +403,8 @@ namespace ORDRA_API.Controllers
             toReturn.ProductCategory = new ExpandoObject();
             toReturn.ProductContainers = new List<dynamic>();
 
-            try
-            {
+            //try
+            //{
                 objectProduct = db.Products.Include(x => x.Product_Category).Where(x => x.ProdName == prodName).FirstOrDefault();
 
 
@@ -516,6 +522,12 @@ namespace ORDRA_API.Controllers
 
                         toReturn.ProductContainers = ProductCons;
 
+                        if (objectProduct.SupplierID != null)
+                        {
+                            Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                            toReturn.supplier = supplier.SupName;
+                        }
+
                     }
                 }
                 else
@@ -523,11 +535,11 @@ namespace ORDRA_API.Controllers
 
                     toReturn.Message = "Prodcut Not Found";
                 }
-            }
-            catch
-            {
-                toReturn.Message = "Search interrupted. Retry";
-            }
+            //}
+            //catch
+            //{
+            //    toReturn.Message = "Search interrupted. Retry";
+            //}
 
             return toReturn;
         }
@@ -672,8 +684,11 @@ namespace ORDRA_API.Controllers
 
                     }
 
-                    Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
-                    toReturn.supplier = supplier;
+                    if (objectProduct.SupplierID != null)
+                    {
+                        Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                        toReturn.supplier = supplier.SupName;
+                    }
                 }
                 else
                 {
@@ -777,7 +792,8 @@ namespace ORDRA_API.Controllers
             {
                 //get category for product
                 Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == newProduct.Product.ProductCategoryID).FirstOrDefault();
-                if (cat != null)
+                Supplier sup = db.Suppliers.Where(x => x.SupplierID == newProduct.Product.SupplierID).FirstOrDefault();
+                if (cat != null & sup != null)
                 {
 
 
@@ -785,9 +801,10 @@ namespace ORDRA_API.Controllers
                     Product addProd = new Product();
                     addProd.ProdName = newProduct.Product.ProdName;
                     addProd.ProdBarcode = newProduct.Product.ProdBarcode;
-
+                    addProd.SupplierID = sup.SupplierID;
                     addProd.ProdDesciption = newProduct.Product.ProdDesciption;
                     addProd.ProdReLevel = newProduct.Product.ProdReLevel;
+                    addProd.Supplier = sup;
                     addProd.Product_Category = cat;
                     db.Products.Add(addProd);
                     db.SaveChanges();

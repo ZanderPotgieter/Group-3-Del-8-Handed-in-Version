@@ -107,25 +107,27 @@ export class MakeSaleComponent implements OnInit {
         
       })
 
-    this.api.initiateSale(this.session)
-    .subscribe((value:any) =>{
-    console.log(value);
-  
-      this.productsWithPrice = value.products;
-      this.sale = value.Sale;
-      this.saleDate = value.Sale.SaleDate;
-      this.paymentTypes = value.paymentTypes;
-      this.vatPerc = value.VAT.VATPerc;
-    
-    
-  });
    
   }
 
   this.searchForm= this.fb.group({ 
     prodBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
   
-  }); 
+  });
+  
+  
+  this.api.initiateSale(this.session)
+  .subscribe((value:any) =>{
+  console.log(value);
+
+    this.productsWithPrice = value.products;
+    this.sale = value.Sale;
+    this.saleDate = value.Sale.SaleDate;
+    this.paymentTypes = value.paymentTypes;
+    this.vatPerc = value.VAT.VATPerc;
+  
+  
+});
 
   }
 

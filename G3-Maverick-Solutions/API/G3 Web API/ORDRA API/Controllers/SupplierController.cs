@@ -85,8 +85,10 @@ namespace ORDRA_API.Controllers
 
                 db.Configuration.ProxyCreationEnabled = false;
                 dynamic toReturn = new ExpandoObject();
+                toReturn.supplier = new ExpandoObject();
+                 toReturn.products = new ExpandoObject();
 
-                try
+            try
                 {
                     //Search Supplier in database
                     var Supplier = db.Suppliers.Where(x => x.SupName == name ).FirstOrDefault();
@@ -94,12 +96,36 @@ namespace ORDRA_API.Controllers
                     if (Supplier != null)
                     {
 
-                        toReturn.supplier = Supplier;
+                        Supplier newSupplier = new Supplier();
+                        newSupplier.SupName = Supplier.SupName;
+                        newSupplier.SupCell = Supplier.SupCell;
+                        newSupplier.SupEmail = Supplier.SupEmail;
+                        newSupplier.SupStreet = Supplier.SupStreet;
+                        newSupplier.SupStreetNr = Supplier.SupStreetNr;
+                        newSupplier.SupSuburb = Supplier.SupSuburb;
+                        newSupplier.SupCode = Supplier.SupCode;
+
+                         toReturn.supplier = newSupplier;
 
                          List<Product> products = db.Products.Where(x => x.SupplierID == Supplier.SupplierID).ToList();
                             if(products != null)
                             {
-                                toReturn.products = products;
+                                List<dynamic> returnProducts = new List<dynamic>();
+                                foreach(Product objectProduct in products)
+                                {
+                                    dynamic Product = new ExpandoObject();
+                                    Product.ProductID = objectProduct.ProductID;
+                                    Product.SupplierID = objectProduct.SupplierID;
+                                    Product.ProductCategoryID = objectProduct.ProductCategoryID;
+                                    Product.ProdBarcode = objectProduct.ProdBarcode;
+                                    Product.ProdName = objectProduct.ProdName;
+                                    Product.ProdDesciption = objectProduct.ProdDesciption;
+                                    Product.ProdReLevel = objectProduct.ProdReLevel;
+                                    returnProducts.Add(Product);
+                                }
+
+
+                                toReturn.products = returnProducts;
 
                             }
 
@@ -139,7 +165,7 @@ namespace ORDRA_API.Controllers
                 {
                     Supplier newSuppliertoAdd = new Supplier();
                     newSuppliertoAdd.SupName = newSupplier.SupName;
-                    newSuppliertoAdd.SupCell = "0451245789";//newSupplier.SupCell;
+                    newSuppliertoAdd.SupCell = newSupplier.SupCell;
                     newSuppliertoAdd.SupEmail = newSupplier.SupEmail;
                     newSuppliertoAdd.SupStreet = newSupplier.SupStreet;
                     newSuppliertoAdd.SupStreetNr = newSupplier.SupStreetNr;
@@ -182,7 +208,7 @@ namespace ORDRA_API.Controllers
                     if (objectSupplier != null)
                     {
                         objectSupplier.SupName = SupplierUpdate.SupName;
-                        objectSupplier.SupCell = "0143254563";//SupplierUpdate.SupCell;
+                        objectSupplier.SupCell = SupplierUpdate.SupCell;
                         objectSupplier.SupEmail = SupplierUpdate.SupEmail;
                         objectSupplier.SupStreetNr = SupplierUpdate.SupStreetNr;
                         objectSupplier.SupStreet = SupplierUpdate.SupStreet;

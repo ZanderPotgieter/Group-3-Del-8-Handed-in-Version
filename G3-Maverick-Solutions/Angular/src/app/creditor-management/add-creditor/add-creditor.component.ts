@@ -4,6 +4,7 @@ import { CreditorService } from '../creditor.service';
 import { Creditor } from '../creditor';
 import { Router } from '@angular/router';
 import { Supplier} from '../supplier';
+import { SupplierService } from 'src/app/supplier-management/supplier.service';
 
 @Component({
   selector: 'app-add-creditor',
@@ -16,14 +17,17 @@ export class AddCreditorComponent implements OnInit {
   creditorForm : any;
   provinceIDUpdate = null;
   message = null;
+  selectedSupplier: Supplier;
+  selectedSupID: number;
 
-  constructor(private creditorService: CreditorService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private creditorService: CreditorService, private supplierService: SupplierService,private formBuilder: FormBuilder, private router: Router) { }
 
   creditor : Creditor = new Creditor();
   supplier: Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
 
   showSave: boolean = false;
+  suppliers: Supplier[] = [];
   showButtons: boolean = true;
   inputEnabled:boolean = true;
   showSearch: boolean = true;
@@ -35,6 +39,39 @@ export class AddCreditorComponent implements OnInit {
      this.creditorForm = this.formBuilder.group({
       ProvName: ['', [Validators.required]],
     }) 
+
+    this.supplierService.getAllSuppliers().subscribe((res:any) =>{
+      console.log(res);
+      this.suppliers = res; 
+      if (res.Error){
+        alert(res.Error);
+      }
+  })
+}
+
+  loadSuppliers(val: Supplier){
+   
+    this.addSupplier(val);
+  }
+
+  addSupplier(val : Supplier){
+    this.selectedSupplier= val;
+  }
+
+  Save(){
+    this.creditor.SupplierID = 3 //this.selectedSupplier.SupplierID = 3;
+    this.creditorService.addCreditor(this.creditor).subscribe( (res: any)=> {
+      console.log(res);
+      if(res.Message){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+        this.router.navigate(["creditor-management"]);}
+        else if (res.Error){
+          alert(res.Error);
+        }
+       
+    })
+    
   }
 
   gotoCreditorManagement()
@@ -42,12 +79,7 @@ export class AddCreditorComponent implements OnInit {
     this.router.navigate(['creditor-management']);
   }
 
-  Save()
-{
-  this.dataSaved = false;
-  const creditor = this.creditorForm.value;
-  this.addCreditor();
-}
+ 
 
 searchSupplier(name: string)
 {

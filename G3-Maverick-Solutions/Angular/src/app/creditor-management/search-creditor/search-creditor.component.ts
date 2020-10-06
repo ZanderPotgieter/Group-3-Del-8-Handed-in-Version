@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Creditor } from '../creditor';
 import { Supplier } from '../supplier';
 import { CreditorService } from '../creditor.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-search-creditor',
@@ -12,12 +13,20 @@ import { CreditorService } from '../creditor.service';
   styleUrls: ['./search-creditor.component.scss']
 })
 export class SearchCreditorComponent implements OnInit {
+  private _allCred: Observable<Creditor[]>;  
+  public get allCred(): Observable<Creditor[]> {  
+    return this._allCred;  
+  }  
+  public set allCred(value: Observable<Creditor[]>) {  
+    this._allCred = value;  
+  }  
 
-  constructor(private creditorService: CreditorService, private router: Router ) { }
+  constructor(private creditorService: CreditorService, private router: Router, private bf: FormBuilder ) { }
 
   creditor: Creditor = new Creditor();
   supplier: Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
+  credForm: FormGroup;
 
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -26,7 +35,16 @@ export class SearchCreditorComponent implements OnInit {
   showResults: boolean = false;
   name : string;
 
+  loadDisplay(){  
+    debugger;  
+    this.allCred= this.creditorService.getAllCreditors();  
+  
+  } 
+
   ngOnInit(): void {
+    this.credForm= this.bf.group({  
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],       
+    }); 
   }
 
   gotoCreditorManagement()
@@ -49,7 +67,11 @@ export class SearchCreditorComponent implements OnInit {
       {
         this.creditor.SupplierID = res.SupplierID;
         this.creditor.CreditorID = res.CreditorID;
-        this.creditor.CredAccountBalance = res.CredAccountBalance
+        this.creditor.CredAccountBalance = res.CredAccountBalance;
+        this.creditor.CredBank = res.CredBank;
+        this.creditor.CredAccount = res.CredAccount;
+        this.creditor.CredBranch = res.CredBranch;
+        this.creditor.CredType = res.CredType;
         this.supplier.SupName = res.Supplier.SupName;
         this.supplier.SupCell = res.Supplier.SupCell;
         this.supplier.SupEmail = res.Supplier.SupEmail;

@@ -3,6 +3,9 @@
     <div id="FromDiv"> 
     
         <div class="card">
+            <div class="divleft">
+                <label><span style="white-space: nowrap;">This report shows the sales made according to the containers</span></label>
+            </div>
             <br>
             <button type="submit" (click)="GenerateReport()" >Generate Report</button> 
             <!--  <button type="button" (click)="DownloadPDF()" >Download Report</button>
@@ -12,9 +15,7 @@
         </div>
         
 
-        <div class="divleft">
-            <label><span style="white-space: nowrap;">This report shows the sales made according to the containers</span></label>
-        </div>
+        
         
         <br>
             
@@ -26,8 +27,11 @@
                         <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
                         
                         <div *ngFor="let item of TableData; let i = index">
-                            <h2><strong>Container Name: </strong> {{item.Name}}</h2>
-                            <h3><strong>Total Container sales amount: </strong>  R{{item.ConTotal}}</h3>
+                            <div class="divleft">
+                                <h2><strong>Container Name: </strong> {{item.Name}}</h2>
+                                <h3><strong>Total Container sales amount: </strong>  R{{item.ConTotal}}</h3>
+                            </div>
+                            
                             <div>
                                 <div *ngFor="let sale of item.Sales" id="testing{{i}}">
                                     <table class= "container table-latitude" >

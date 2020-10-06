@@ -32,7 +32,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Error = "Something Went Wrong" + error;
             }
 
             return toReturn;
@@ -53,7 +53,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Error = "Something Went Wrong" + error;
             }
             return toReturn;
         }
@@ -72,7 +72,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Error = "Something Went Wrong" + error;
             }
             return toReturn;
         }
@@ -107,7 +107,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Error = "Something Went Wrong" + error;
             }
 
             return toReturn;
@@ -131,7 +131,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Error = "Record Not Found";
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Error = "Something Went Wrong: " + error.Message;
             }
 
             return toReturn;
@@ -150,8 +150,8 @@ namespace ORDRA_API.Controllers
 
         [HttpGet]
         //searching donation by recipient cell
-        [Route("searchDonations")]
-        public object searchDonations(string cell)
+        [Route("searchDonationsByCell")]
+        public object searchDonationsByCell(string cell)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -159,7 +159,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                var donationRecipient = db.Donation_Recipient.Where((x => x.DrName == cell)).FirstOrDefault();
+                var donationRecipient = db.Donation_Recipient.Where((x => x.DrCell == cell)).FirstOrDefault();
 
                 if (donationRecipient != null)
                 {
@@ -171,7 +171,82 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Error = "Record Not Found";
+
+                }
+            }
+
+            catch (Exception error)
+            {
+                toReturn.Error = "Something Went Wrong " + error.Message;
+            }
+
+            return toReturn;
+        }
+
+        [HttpGet]
+        //searching donation by recipient cell
+        [Route("searchDonationsByName")]
+        public object searchDonationsByName(string name, string surname)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.recipient = new ExpandoObject();
+            toReturn.donations = new ExpandoObject();
+            toReturn.products = new ExpandoObject();
+
+            try
+            {
+                var donationRecipient = db.Donation_Recipient.Where(x => (x.DrName == name) && (x.DrSurname==surname)).FirstOrDefault();
+
+                if (donationRecipient != null)
+                {
+                    /*dynamic recipientDet = new ExpandoObject();
+                    recipientDet.DrName = donationRecipient.DrName;
+                    recipientDet.DrSurname = donationRecipient.DrSurname;
+                    recipientDet.DrEmail = donationRecipient.DrEmail;
+                    recipientDet.DrCell = donationRecipient.DrCell;
+
+                    toReturn.recipient = recipientDet;
+
+                    List<dynamic> donList = new List<dynamic>();*/
+                    List<Donation> donations = db.Donations.Include(z => z.Donation_Recipient).Include(z => z.Donation_Status).Include(z => z.Donated_Product).Where(z => z.RecipientID == donationRecipient.RecipientID).ToList();
+                   // toReturn = donations
+                    /*if(donations!=null)
+                    {
+                      
+                        foreach (var obj in donations)
+                        {
+                            dynamic don = new ExpandoObject();
+                            don.DonAmount = obj.DonAmount;
+                            don.DonDate = obj.DonDate;
+                            don.DonDescription = obj.DonDescription;
+                            don.DonStatus = obj.Donation_Status.DSDescription;
+                            List<dynamic> prodList = new List<dynamic>();
+
+                            foreach (var prodObj in obj.Donated_Product)
+                            {
+                                dynamic prod = new ExpandoObject();
+                                prod.DPQuantity = prodObj.DPQuantity;
+                                prod.ProductID = prodObj.ProductID;
+                                prod.ProdName = prodObj.Product.ProdName;
+                                prodList.Add(prod);
+                            }
+                            don.Products = prodList;
+                            donList.Add(don);
+                        }
+                        toReturn.donations = donList;
+                    }
+                    else
+                    {
+                        toReturn.Error = "Donation records not found";
+                    }*/
+                }
+                else
+                {
+
+                    toReturn.Error = "Record Not Found";
 
                 }
             }
@@ -187,8 +262,8 @@ namespace ORDRA_API.Controllers
 
         [HttpGet]
         //searching donation by recipient cell
-        [Route("searchDonationRecipient")]
-        public object searchDonationRecipient(string cell)
+        [Route("searchDonationRecipientByCell")]
+        public object searchDonationRecipientByCell(string cell)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -196,7 +271,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                var donationRecipient = db.Donation_Recipient.Where((x => x.DrName == cell)).FirstOrDefault();
+                var donationRecipient = db.Donation_Recipient.Where((x => x.DrCell == cell)).FirstOrDefault();
 
                 if (donationRecipient != null)
                 {
@@ -206,7 +281,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Error = "Record Not Found";
 
                 }
             }
@@ -214,6 +289,40 @@ namespace ORDRA_API.Controllers
             catch (Exception error)
             {
                 toReturn = "Something Went Wrong " + error.Message;
+            }
+
+            return toReturn;
+        }
+
+        [HttpGet]
+        //searching donation by recipient name
+        [Route("searchDonationRecipientByName")]
+        public object searchDonationRecipientByName(string name, string surname)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                var donationRecipient = db.Donation_Recipient.Where(x => (x.DrName == name) && (x.DrSurname == surname) ).FirstOrDefault();
+
+                if (donationRecipient != null)
+                {
+                    //List<Donation> donation = db.Donations.Where(z => z.RecipientID == donationRecipient.RecipientID).ToList();
+                    toReturn = donationRecipient;
+                }
+                else
+                {
+
+                    toReturn.Error = "Record Not Found";
+
+                }
+            }
+
+            catch (Exception error)
+            {
+                toReturn.Error = "Something Went Wrong " + error.Message;
             }
 
             return toReturn;
@@ -236,7 +345,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Message = "Add UnSuccsessful";
+                toReturn.Error = "Add UnSuccsessful";
 
 
             }
@@ -261,7 +370,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Message = "Add UnSuccsessful";
+                toReturn.Error = "Add UnSuccsessful";
 
 
             }

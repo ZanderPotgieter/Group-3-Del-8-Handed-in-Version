@@ -4,6 +4,9 @@
     
                 
                 <div class="card" >
+                    <div class="divleft">
+                        <label><span style="white-space: nowrap; text-align: right;">This report shows all registered system users sorted according to user types</span></label>
+                    </div>
                     <button type="submit" id="GenButton" (click)="GenerateReport()" >Generate Report</button>
                     <!-- <button type="button" id="DownButton" (click)="DownloadPDF()" >Download Report</button> -->
                     <!-- <button type="button" (click)="PrintReport" >Print Report</button> -->
@@ -19,9 +22,7 @@
 
                 <!--To Display Table-->
                 <div id="TablesDiv">
-                    <div class="divleft">
-                        <label><span style="white-space: nowrap; text-align: right;">This report shows all registered system users sorted according to user types</span></label>
-                    </div>
+                    
                      <div class="Creditorstable">
                         <table class="table" id="jsPDFTable">
 

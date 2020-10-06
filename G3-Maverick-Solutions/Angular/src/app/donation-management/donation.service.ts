@@ -75,9 +75,14 @@ export class DonationService {
   }
 
   //search donation 
-  searchDonations(cell: string): Observable<Donation[]>
+  searchDonationsByCell(cell: string): Observable<Donation[]>
   {
-    return this.http.get<Donation[]>(this.Donurl + '/searchDonations?cell=' +cell);
+    return this.http.get<Donation[]>(this.Donurl + '/searchDonationsByCell?cell=' +cell);
+  }
+
+  searchDonationsByName(name: string, surname: string): Observable<Donation[]>
+  {
+    return this.http.get<Donation[]>(this.Donurl + '/searchDonationsByName?name=' +name+'&surname='+surname);
   }
 
   //add donation
@@ -126,10 +131,16 @@ export class DonationService {
  
   }
 
-  searchDonDonationRecipient(cell: string): Observable<DonationRecipient>
+  searchDonationRecipientByCell(cell: string): Observable<DonationRecipient>
   {
-    return this.http.get<DonationRecipient>(this.Donurl + '/searchDonationRecipient?cell=' +cell);
+    return this.http.get<DonationRecipient>(this.Donurl + '/searchDonationRecipientByCell?cell=' +cell);
   }
+
+  searchDonationRecipientByName(name: string, surname: string): Observable<DonationRecipient>
+  {
+    return this.http.get<DonationRecipient>(this.Donurl + '/searchDonationRecipientByName?name=' +name+'&surname='+surname);
+  }
+
 
  /*  searchSupplier(name: string): Observable<any>
   {

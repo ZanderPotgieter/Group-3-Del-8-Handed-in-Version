@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core'
-//import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DonationService } from '../donation.service';
 import { DonatedProduct } from '../donated-product';
 import { Donation } from '../donation';
@@ -9,6 +9,7 @@ import { DonationStatus } from '../donation-status';
 import { Container } from '../container'
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-create-donation',
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
 })
 export class CreateDonationComponent implements OnInit {
 
-  constructor(private donationService: DonationService, private router: Router) { }
+  constructor(private donationService: DonationService, private router: Router, private fb: FormBuilder) { }
 
   donation: Donation = new Donation();
   donationRecipient: DonationRecipient = new DonationRecipient();
@@ -29,13 +30,23 @@ export class CreateDonationComponent implements OnInit {
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
-  showSearch: boolean = true;
   showAddDon: boolean = false
   showResults: boolean = false;
   cell : string;
+  
+  showSearch: boolean = true;
+  showCell: boolean = false;
+  showName: boolean = false;
 
   statuses: DonationStatus[];
   containers: Container[];
+
+  name: string;
+  surname: string;
+
+  //donForm: FormGroup;
+
+  
 
   ngOnInit(): void {
     this.donationService.getDonationStatuses().subscribe(value => {
@@ -43,6 +54,41 @@ export class CreateDonationComponent implements OnInit {
           this.statuses = value;
         }
       });
+
+      /* this.donForm= this.fb.group({  
+        name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+        surname: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+        cell: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
+        
+         
+      }); */ 
+
+
+  }
+
+  showSearchByCell()
+  {
+    this.showCell = true;
+    this.showName = false;
+    this.showSave = false;
+    this.inputEnabled = false;
+    this.showButtons = true;
+    
+    this.showSearch = true;
+    this.showResults = false; 
+    this.showAddDon = false;
+  }
+
+  showSearchByName()
+  {
+    this.showName = true;
+    this.showCell = false;this.showSave = false;
+    this.inputEnabled = false;
+    this.showButtons = true;
+    
+    this.showSearch = true;
+    this.showResults = false; 
+    this.showAddDon = false;
   }
 
   gotoDonationManagement()
@@ -50,14 +96,18 @@ export class CreateDonationComponent implements OnInit {
     this.router.navigate(['donation-management']);
   }
 
-  searchDonationRecipient()
+  gotoAddDonationRecipient(){
+    this.router.navigate(['add-donation-recipient']);
+  }
+
+  searchDonationRecipientByCell()
   {
-    this.donationService.searchDonDonationRecipient(this.cell).subscribe( (res:any) =>
+    this.donationService.searchDonationRecipientByCell(this.cell).subscribe( (res:any) =>
     {
       console.log(res);
-      if(res.Message != null)
+      if(res.Error != null)
       {
-        this.responseMessage = res.Message;
+        this.responseMessage = res.Error;
         alert(this.responseMessage)
       }
       else
@@ -68,14 +118,40 @@ export class CreateDonationComponent implements OnInit {
         this.donationRecipient.DrSurname = res.DrSurname;
         this.donationRecipient.DrCell = res. DrCell;
         this.donationRecipient.DrEmail = res.DrEmail;
-      }
 
-      if (res.Message != "Record Not Found")
-      {
         this.showSearch = true;
         this.showResults = true;
         this.showAddDon = true;
       }
+      
+
+    })
+  }
+
+  searchDonationRecipientByName()
+  {
+    this.donationService.searchDonationRecipientByName(this.name, this.surname).subscribe( (res:any) =>
+    {
+      console.log(res);
+      if(res.Error != null)
+      {
+        this.responseMessage = res.Error;
+        alert(this.responseMessage)
+      }
+      else
+      {
+        console.log(res)
+        this.donationRecipient.RecipientID = res.RecipientID;
+        this.donationRecipient.DrName = res.DrName;
+        this.donationRecipient.DrSurname = res.DrSurname;
+        this.donationRecipient.DrCell = res. DrCell;
+        this.donationRecipient.DrEmail = res.DrEmail;
+
+        this.showSearch = true;
+        this.showResults = true;
+        this.showAddDon = true;
+      }
+
       
 
     })

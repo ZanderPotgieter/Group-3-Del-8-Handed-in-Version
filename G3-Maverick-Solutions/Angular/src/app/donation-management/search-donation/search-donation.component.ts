@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core'
-//import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DonationService } from '../donation.service';
 import { DonatedProduct } from '../donated-product';
 import { Donation } from '../donation';
@@ -32,6 +32,8 @@ export class SearchDonationComponent implements OnInit {
   showAddDon: boolean = false
   showResults: boolean = false;
   cell : string;
+  name: string;
+  surname: string;
 
   statuses: DonationStatus[];
   containers: Container[];
@@ -44,14 +46,54 @@ export class SearchDonationComponent implements OnInit {
     this.router.navigate(['donation-management']);
   }
 
-   searchDonations()
+   searchDonationsByCell()
   {
-    this.donationService.searchDonations(this.cell).subscribe( (res: any) =>
+    this.donationService.searchDonationsByCell(this.cell).subscribe( (res: any) =>
     {
       console.log(res);
       if (res.Message != null)
       {
         this.responseMessage = res.Message;
+        alert(this.responseMessage)
+
+      }
+      else 
+      {
+        this.donations = res;
+        //this.donationRecipient = res['DonationRecipient']
+         /*
+        this.donation.DonationID = res.DonationID;
+        this.donation.RecipientID = res.RecipientID;
+        this.donation.DonationStatusID= res.DonationStatusID
+        this.donation.DonDate = res.DonDate;
+        this.donation.DonAmount= res.DonAmount;
+        this.donationRecipient.DrName = res.DonationRecipient.DrName;
+        this.donationRecipient.DrSurname = res.DrSurname;
+        this.donationRecipient.DrEmail= res.DrEmail;
+        this.donationRecipient.DrCell = res.DrCell;
+        this.donatedProduct.DPQuantity = res.DPQuantity;
+        this.donatedProduct.ProductID = res.ProductID;
+        this.donatedProduct.DonationID = res.DonationID;
+       // this.donations = res['Donations']; */
+        
+        //this.supplier.SupCell = res.Supplier.SupCell;
+        //this.supplier.SupEmail = res.Supplier.SupEmail;
+        this.showSearch = true;
+        this.showResults = true; 
+      }
+
+      
+    })
+  }
+
+  searchDonationsByName()
+  {
+    this.donationService.searchDonationsByName(this.name, this.surname).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if (res.Error != null)
+      {
+        this.responseMessage = res.Error;
         alert(this.responseMessage)
 
       }

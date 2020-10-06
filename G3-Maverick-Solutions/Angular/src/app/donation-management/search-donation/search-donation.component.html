@@ -1,7 +1,7 @@
 
 <body>
     <h1>Search Donation</h1>
-<form  #form='ngForm' class="mb-4" autocomplete="off">
+<form >
     
     <div class="card" *ngIf = "showSearch">
 
@@ -9,13 +9,13 @@
         <div class="divleft">
             <label class="subheadinglabel">Enter donation recipient cell number to search:</label>
             <br><br>
-            <label for="Name">Name</label>
+            <label for="Cell">Cell</label>
             <input type = "text" id="cell"  class="searchInput" class="form-control" [(ngModel)]="cell" name="cell" required>     
             <br><br>
         </div> 
 
         <div class="divleft">
-            <button type="submit" (click)= "searchDonations()">Search</button>
+            <button type="submit" (click)= "searchDonationsByCell()">Search</button>
             <button type="button" (click)= "gotoDonationManagement()">Cancel</button>
             <button type="button" (click)= "gotoAddDonationRecipient()">Add Recipient</button>
             

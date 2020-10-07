@@ -9,7 +9,7 @@ import {ManagerService} from '../manager-management/manager.service';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
-
+import { DialogService } from '../shared/dialog.service';
 
 
 
@@ -20,7 +20,7 @@ import { Validators } from '@angular/forms';
 })
 export class CreateManagerComponent implements OnInit {
 
-  constructor(private api:ManagerService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api:ManagerService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   manager: Manager = new Manager();
   user: User = new User();
   employee: Employee = new Employee();
@@ -127,15 +127,19 @@ export class CreateManagerComponent implements OnInit {
     /*this.selectedContainers.forEach(element => {
       this.manager.containersManaged.push(element);   
        });*/
-
+       this.dialogService.openConfirmDialog('Are you sure you want to add the manager?')
+       .afterClosed().subscribe(res => {
+         if(res){
        this.manager.UserID = this.user.UserID;
       this.api.createManager(this.manager).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
+      //alert(this.responseMessage)
       this.router.navigate(["manager-management"])
     })
+  }
+})
 
   }
   gotoManagerManagement(){

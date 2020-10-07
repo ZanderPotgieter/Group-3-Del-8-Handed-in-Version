@@ -10,6 +10,7 @@ import {Container} from 'src/app/container-management/container';
 import {ProductDetails} from 'src/app/customer-order-management/product-details';
 import {ContainerProduct} from '../../container-product';
 import {Supplier} from 'src/app/supplier-management/supplier';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-search-product',
@@ -18,7 +19,7 @@ import {Supplier} from 'src/app/supplier-management/supplier';
 })
 export class SearchProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private api: LoginService) { }
+  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private api: LoginService, private dialogService: DialogService) { }
   searchForm: FormGroup;
   pdForm: FormGroup;
   categories: ProductCategory[];
@@ -394,14 +395,18 @@ export class SearchProductComponent implements OnInit {
   }
 
   Update(){
-    
+    this.dialogService.openConfirmDialog('Are you sure you want to update this product?')
+    .afterClosed().subscribe(res => {
+      if(res){
     return this.productService.updateProduct(this.Product).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(res.Message);}
       this.router.navigate(["product-management"])
       })
+    }
+  })
 
   }
 

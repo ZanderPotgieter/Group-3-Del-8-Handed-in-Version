@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProductCategoryService } from '../../product-category.service';
 import { ProductCategory } from '../../product-category';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-add-product-category',
@@ -11,7 +12,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class AddProductCategoryComponent implements OnInit {
 
-  constructor(private productCategoryService: ProductCategoryService, private router: Router,  private fb: FormBuilder) { }
+  constructor(private productCategoryService: ProductCategoryService, private router: Router,  private fb: FormBuilder, private dialogService: DialogService) { }
   pcatForm: FormGroup;
   productCategory : ProductCategory = new ProductCategory();
   responseMessage: string = "Request Not Submitted";
@@ -31,13 +32,17 @@ export class AddProductCategoryComponent implements OnInit {
       this.categoryNull = true;
     }
     else{
+      this.dialogService.openConfirmDialog('Are you sure you want to add the product category?')
+          .afterClosed().subscribe(res => {
+            if(res){
     this.productCategoryService.addProductCategory(this.productCategory).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
-        this.responseMessage = res.Message;}
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
         this.router.navigate(["product-management"])
     })
+  }
+  })
   }
   }
 

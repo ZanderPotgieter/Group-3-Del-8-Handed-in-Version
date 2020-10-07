@@ -4,6 +4,7 @@ import { Container } from '../container-management/container';
 import { NgModule } from '@angular/core';
 import {ContainerService} from '../container-management/container.service';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../shared/dialog.service';
 
 @Component({
   selector: 'app-create-container',
@@ -12,7 +13,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class CreateContainerComponent implements OnInit {
 
-  constructor(private api: ContainerService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: ContainerService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   angForm: FormGroup;
   container : Container = new Container();
   responseMessage: string = "Request Not Submitted";
@@ -34,15 +35,19 @@ export class CreateContainerComponent implements OnInit {
       this.containerNull = true;
     }
     else{
-    this.api.addContainer(this.container).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
-      this.router.navigate(["container-management"])
-    })
-  }
-  }
+          this.dialogService.openConfirmDialog('Are you sure you want to add the container?')
+          .afterClosed().subscribe(res => {
+            if(res){
+            this.api.addContainer(this.container).subscribe( (res:any)=> {
+              console.log(res);
+              if(res.Message){
+                this.dialogService.openAlertDialog(res.Message);}
+              this.router.navigate(["container-management"])
+            })
+          }
+          })
+        }
+}
 
   Cancel()
   {this.router.navigate(['container-management']);}

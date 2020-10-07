@@ -4,6 +4,8 @@ import { DonationRecipient } from '../../donation-recipient';
 import { NgModule } from '@angular/core';
 import { DonationService } from '../../donation.service';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../../../shared/dialog.service';
+
 @Component({
   selector: 'app-add-donation-recipient',
   templateUrl: './add-donation-recipient.component.html',
@@ -11,7 +13,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class AddDonationRecipientComponent implements OnInit {
 
-  constructor(private donationService: DonationService, private router: Router , private fb: FormBuilder) { }
+  constructor(private donationService: DonationService, private router: Router , private fb: FormBuilder, private dialogService: DialogService) { }
   donForm: FormGroup;
   donationRecipient : DonationRecipient = new DonationRecipient();
   responseMessage: string = "Request Not Submitted";
@@ -37,13 +39,17 @@ export class AddDonationRecipientComponent implements OnInit {
       this.donNull = true;
     }
     else{
+      this.dialogService.openConfirmDialog('Are you sure you want to add the recipient?')
+          .afterClosed().subscribe(res => {
+            if(res){
     this.donationService.addDonationRecipient(this.donationRecipient).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
       this.router.navigate(["donation-management"])
     })
+  }
+  })
   }
   }
 

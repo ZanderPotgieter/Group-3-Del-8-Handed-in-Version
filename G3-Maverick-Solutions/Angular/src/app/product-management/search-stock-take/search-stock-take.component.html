@@ -1,0 +1,44 @@
+<body>
+    <form>
+        <h1>Search Stock Take</h1>
+        <div class = "card">
+            <div >
+                <mat-radio-group  aria-label="Select Option To View">
+                <mat-radio-button  value = 1 (click)="getAll()" >All Stock Takes</mat-radio-button>
+                <mat-radio-button value = 2 (click)="getComplete()" >Completed</mat-radio-button>
+                <mat-radio-button value = 3 (click)="getIncomplete()" >Incomplete</mat-radio-button>
+                <mat-radio-button value = 4 (click)="getByContainer()" >By Container</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf = "showContainer">
+            <label>Select Container</label><select  required formControlName="SelectContainer" name="SelectContainer" (ngModelChange)="selectConTAINER($event)">
+                <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
+               </select>
+               <br>
+               <div *ngIf="showError">
+                <span>container selection required</span>
+            </div>
+               <button type="submit" (click)="searchByContainer()">Search</button>
+             
+        </div>
+            
+            <div *ngIf="showList">
+                <table>
+                    <th></th>
+                    <th>StockTake Date</th>
+                    <th>Is Completed</th>
+                    <th></th>
+
+                    <tr *ngFor="let item of stocktakes, index as ndx">
+                        <th>{{ndx+1}}</th>
+                        <td>{{item.Date | date: 'yyyy-MM-dd' }}</td>
+                        <td>{{item.isCompleted}}</td>
+                        <td><button style="border-radius: 10px; width: 95%;" (click)="Start(ndx)">View</button></td>
+
+                    </tr>
+                </table>
+            </div>
+
+            <button type="submit" (click)="Save()">Cancel</button>
+        </div>
+

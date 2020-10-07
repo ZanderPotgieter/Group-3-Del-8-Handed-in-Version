@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 /*run npm i ngx-toastr */
 import { ToastrModule } from 'ngx-toastr';
 /*run npm i @angular/material - npm i @material/dialog*/
@@ -123,6 +122,9 @@ import { SearchUsersComponent } from './search-users/search-users.component';
 import { LowstockComponent } from './product-management/lowstock/lowstock.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 import { MatAlertDialogComponent } from './mat-alert-dialog/mat-alert-dialog.component';
+import { StockTakeFormComponent } from './product-management/stock-take-form/stock-take-form.component';
+import { CompleteStockTakeComponent } from './product-management/complete-stock-take/complete-stock-take.component';
+import { SearchStockTakeComponent } from './product-management/search-stock-take/search-stock-take.component';
 
 
 
@@ -225,6 +227,9 @@ import { MatAlertDialogComponent } from './mat-alert-dialog/mat-alert-dialog.com
     LowstockComponent,
     MatConfirmDialogComponent,
     MatAlertDialogComponent,
+    StockTakeFormComponent,
+    CompleteStockTakeComponent,
+    SearchStockTakeComponent,
   ],
   imports: [
     BrowserModule,

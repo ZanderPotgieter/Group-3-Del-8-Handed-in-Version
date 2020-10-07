@@ -92,7 +92,7 @@ export class MakeSaleComponent implements OnInit {
   productID = 0;
   removeQuantity = 0;
 
-  ngOnInit(): void {
+  ngOnInit() {
 
 
     if(!localStorage.getItem("accessToken")){
@@ -104,6 +104,19 @@ export class MakeSaleComponent implements OnInit {
       this.api.getUserDetails(this.session).subscribe( (res:any) =>{
         console.log(res);
         this.user = res;
+
+        this.api.initiateSale(this.session)
+        .subscribe((value:any) =>{
+        console.log(value);
+      
+          this.productsWithPrice = value.products;
+          this.sale = value.Sale;
+          this.saleDate = value.Sale.SaleDate;
+          this.paymentTypes = value.paymentTypes;
+          this.vatPerc = value.VAT.VATPerc;
+        
+        
+      });
         
       })
 
@@ -116,20 +129,12 @@ export class MakeSaleComponent implements OnInit {
   });
   
   
-  this.api.initiateSale(this.session)
-  .subscribe((value:any) =>{
-  console.log(value);
 
-    this.productsWithPrice = value.products;
-    this.sale = value.Sale;
-    this.saleDate = value.Sale.SaleDate;
-    this.paymentTypes = value.paymentTypes;
-    this.vatPerc = value.VAT.VATPerc;
-  
-  
-});
 
   }
+  
+  
+  
 
   useBardode(){
     

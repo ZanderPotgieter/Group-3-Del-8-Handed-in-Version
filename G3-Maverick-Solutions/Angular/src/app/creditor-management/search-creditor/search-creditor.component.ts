@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Creditor } from '../creditor';
 import { Supplier } from '../supplier';
 import { CreditorService } from '../creditor.service';
+import { DialogService } from 'src/app/shared/dialog.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -13,6 +14,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./search-creditor.component.scss']
 })
 export class SearchCreditorComponent implements OnInit {
+
   private _allCred: Observable<Creditor[]>;  
   public get allCred(): Observable<Creditor[]> {  
     return this._allCred;  
@@ -21,30 +23,39 @@ export class SearchCreditorComponent implements OnInit {
     this._allCred = value;  
   }  
 
-  constructor(private creditorService: CreditorService, private router: Router, private bf: FormBuilder ) { }
+  constructor(private api: CreditorService,private creditorService: CreditorService, private router: Router, private dialogService: DialogService, private bf: FormBuilder ) { }
+  credForm: FormGroup;
+  loadDisplay(){  
+    debugger;  
+    this.allCred= this.api.getAllCreditors();  
+  
+  } 
 
   creditor: Creditor = new Creditor();
   supplier: Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
-  credForm: FormGroup;
 
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
+  inputDisabled:boolean = true;
   showSearch: boolean = true;
   showResults: boolean = false;
   name : string;
 
-  loadDisplay(){  
-    debugger;  
-    this.allCred= this.creditorService.getAllCreditors();  
-  
-  } 
-
   ngOnInit(): void {
+    debugger;  
+    this.allCred= this.api.getAllCreditors();  
+
+    this.loadDisplay();  
     this.credForm= this.bf.group({  
-      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],       
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],  
+      CredBank: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],   
+      CredBranch: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],
+      CredAccount: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
+      CredType: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],      
     }); 
+    
   }
 
   gotoCreditorManagement()
@@ -59,8 +70,7 @@ export class SearchCreditorComponent implements OnInit {
       console.log(res);
       if (res.Message != null)
       {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
 
       }
       else 
@@ -69,13 +79,13 @@ export class SearchCreditorComponent implements OnInit {
         this.creditor.CreditorID = res.CreditorID;
         this.creditor.CredAccountBalance = res.CredAccountBalance;
         this.creditor.CredBank = res.CredBank;
-        this.creditor.CredAccount = res.CredAccount;
         this.creditor.CredBranch = res.CredBranch;
+        this.creditor.CredAccount = res.CredAccount;
         this.creditor.CredType = res.CredType;
         this.supplier.SupName = res.Supplier.SupName;
         this.supplier.SupCell = res.Supplier.SupCell;
         this.supplier.SupEmail = res.Supplier.SupEmail;
-        this.showSearch = true;
+        this.showSearch = false;
         this.showResults = true;
       }
 
@@ -84,50 +94,60 @@ export class SearchCreditorComponent implements OnInit {
   }
 
   updateCreditor(){
+    this.dialogService.openConfirmDialog('Are you sure you want to update this creditor?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.creditorService.updateCreditor(this.creditor).subscribe( (res: any) =>
     {
       console.log(res);
       if(res.Message)
       {
-        this.responseMessage = res.Message;
+        this.dialogService.openAlertDialog(res.Message);
       }
-      alert(this.responseMessage)
       this.router.navigate(["creditor-management"])
     })
   }
+});
+}
 
-  removeCreditor()
-  {
-    this.creditorService.removeCreditor(this.creditor.CreditorID).subscribe( (res:any) =>
-    {
-      console.log(res);
-      if (res.Message)
-      {
-        this.responseMessage = res.Message;
-      }
-      alert(this.responseMessage)
+
+removeCreditor(){
+  this.dialogService.openConfirmDialog('Are you sure you want to remove this supplier as creditor?')
+  .afterClosed().subscribe(res => {
+    if(res){
+  this.api.removeCreditor(this.creditor.CreditorID).subscribe( (res:any)=> {
+    console.log(res);
+    if(res.Message != null){
+      this.dialogService.openAlertDialog(res.Message);
       this.router.navigate(["creditor-management"])
-    })
   }
+  else{
+    this.dialogService.openAlertDialog('Unable to delete supplier as creditor. Payments were made to this creditor.');
+  }
+  })
+}
+});
+
+}
 
   enableInputs()
   {
     this.showSave = true;
     this.inputEnabled = false;
+    this.inputDisabled = true;
     this.showButtons = false;
   }
     
   cancel()
   {
-    /* this.showSave = false;
-    this.inputEnabled = false;
-    this.showButtons = true;
-    
-    this.showSearch = true;
-    this.showResults = false; */
-
-    this.router.navigate(["creditor-management"])
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed().subscribe(res => {
+      if(res){
+        
   }
+});
+
+}
       
     
   

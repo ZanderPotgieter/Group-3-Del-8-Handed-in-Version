@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="OrdraDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OrdraDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Access">
           <Key>
             <PropertyRef Name="AccessID" />
@@ -230,6 +230,9 @@
           <Property Name="MarkedOffID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductID" Type="int" />
           <Property Name="ReasonID" Type="int" />
+          <Property Name="ContainerID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="StockTakeID" Type="int" />
           <Property Name="MoQuantity" Type="int" />
           <Property Name="MoDate" Type="date" />
         </EntityType>
@@ -296,6 +299,7 @@
             <PropertyRef Name="ProductBackLogID" />
           </Key>
           <Property Name="ProductBackLogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContainerID" Type="int" />
           <Property Name="ProductID" Type="int" />
           <Property Name="QuantityToOrder" Type="int" />
           <Property Name="DateModified" Type="datetime" />
@@ -365,11 +369,19 @@
             <PropertyRef Name="StockTakeID" />
           </Key>
           <Property Name="StockTakeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EmployeeID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="ContainerID" Type="int" />
           <Property Name="STakeDate" Type="date" />
-          <Property Name="STakeQuantity" Type="int" />
-          <Property Name="ProdCategory" Type="varchar" MaxLength="25" />
-          <Property Name="ProdName" Type="varchar" MaxLength="50" />
+          <Property Name="isCompleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Stock_Take_Product">
+          <Key>
+            <PropertyRef Name="StockTakeProductID" />
+          </Key>
+          <Property Name="StockTakeProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StockTakeID" Type="int" />
+          <Property Name="ProductID" Type="int" />
+          <Property Name="STProductCount" Type="int" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -780,6 +792,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MOContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MOProduct">
           <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
           <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
@@ -804,6 +828,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MOSTake">
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="0..1" />
+          <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock_Take">
+              <PropertyRef Name="StockTakeID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="StockTakeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MOUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OTPUser">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="One_Time_Pin" Type="Self.One_Time_Pin" Multiplicity="*" />
@@ -825,6 +873,18 @@
             </Principal>
             <Dependent Role="Payment">
               <PropertyRef Name="PaymentTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PBContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Product_Backlog" Type="Self.Product_Backlog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Product_Backlog">
+              <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1044,15 +1104,51 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_STakeEmployee">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+        <Association Name="FK_STake">
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="0..1" />
+          <End Role="Stock_Take_Product" Type="Self.Stock_Take_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock_Take">
+              <PropertyRef Name="StockTakeID" />
+            </Principal>
+            <Dependent Role="Stock_Take_Product">
+              <PropertyRef Name="StockTakeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STakeContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
           <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
             </Principal>
             <Dependent Role="Stock_Take">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STakeProduct">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Stock_Take_Product" Type="Self.Stock_Take_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Stock_Take_Product">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Stock_Take">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1144,6 +1240,7 @@
           <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shift" EntityType="Self.Shift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stock_Take" EntityType="Self.Stock_Take" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock_Take_Product" EntityType="Self.Stock_Take_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier_Order" EntityType="Self.Supplier_Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier_Order_Product" EntityType="Self.Supplier_Order_Product" Schema="dbo" store:Type="Tables" />
@@ -1261,12 +1358,24 @@
             <End Role="Manager" EntitySet="Manager" />
             <End Role="Manager_Container" EntitySet="Manager_Container" />
           </AssociationSet>
+          <AssociationSet Name="FK_MOContainer" Association="Self.FK_MOContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
           <AssociationSet Name="FK_MOProduct" Association="Self.FK_MOProduct">
             <End Role="Product" EntitySet="Product" />
             <End Role="Marked_Off" EntitySet="Marked_Off" />
           </AssociationSet>
           <AssociationSet Name="FK_MOReason" Association="Self.FK_MOReason">
             <End Role="Marked_Off_Reason" EntitySet="Marked_Off_Reason" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MOSTake" Association="Self.FK_MOSTake">
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MOUser" Association="Self.FK_MOUser">
+            <End Role="User" EntitySet="User" />
             <End Role="Marked_Off" EntitySet="Marked_Off" />
           </AssociationSet>
           <AssociationSet Name="FK_OTPUser" Association="Self.FK_OTPUser">
@@ -1276,6 +1385,10 @@
           <AssociationSet Name="FK_PaymentType" Association="Self.FK_PaymentType">
             <End Role="Payment_Type" EntitySet="Payment_Type" />
             <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PBContainer" Association="Self.FK_PBContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Product_Backlog" EntitySet="Product_Backlog" />
           </AssociationSet>
           <AssociationSet Name="FK_PBLogProduct" Association="Self.FK_PBLogProduct">
             <End Role="Product" EntitySet="Product" />
@@ -1349,8 +1462,20 @@
             <End Role="Supplier" EntitySet="Supplier" />
             <End Role="Supplier_Order" EntitySet="Supplier_Order" />
           </AssociationSet>
-          <AssociationSet Name="FK_STakeEmployee" Association="Self.FK_STakeEmployee">
-            <End Role="Employee" EntitySet="Employee" />
+          <AssociationSet Name="FK_STake" Association="Self.FK_STake">
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STakeContainer" Association="Self.FK_STakeContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STakeProduct" Association="Self.FK_STakeProduct">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUser" Association="Self.FK_STUser">
+            <End Role="User" EntitySet="User" />
             <End Role="Stock_Take" EntitySet="Stock_Take" />
           </AssociationSet>
           <AssociationSet Name="FK_UserType" Association="Self.FK_UserType">
@@ -1370,8 +1495,7 @@
             <End Role="User_Shift" EntitySet="User_Shift" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OrdraDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1418,6 +1542,9 @@
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RPContainer" FromRole="Container" ToRole="Return_Product" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_SContainer" FromRole="Container" ToRole="Sale" />
           <NavigationProperty Name="Managers" Relationship="Self.Manager_Container" FromRole="Container" ToRole="Manager" />
+          <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOContainer" FromRole="Container" ToRole="Marked_Off" />
+          <NavigationProperty Name="Product_Backlog" Relationship="OrdraDBModel.FK_PBContainer" FromRole="Container" ToRole="Product_Backlog" />
+          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STakeContainer" FromRole="Container" ToRole="Stock_Take" />
         </EntityType>
         <EntityType Name="Container_Product">
           <Key>
@@ -1554,7 +1681,6 @@
           <NavigationProperty Name="EmployeeCVs" Relationship="Self.FK_EmployeeCV" FromRole="Employee" ToRole="EmployeeCV" />
           <NavigationProperty Name="EmployeePictures" Relationship="Self.FK_EmployeeImage" FromRole="Employee" ToRole="EmployeePicture" />
           <NavigationProperty Name="User" Relationship="Self.FK_EmployeeUser" FromRole="Employee" ToRole="User" />
-          <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STakeEmployee" FromRole="Employee" ToRole="Stock_Take" />
         </EntityType>
         <EntityType Name="EmployeeCV">
           <Key>
@@ -1642,6 +1768,12 @@
           <Property Name="MoDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Product" Relationship="Self.FK_MOProduct" FromRole="Marked_Off" ToRole="Product" />
           <NavigationProperty Name="Marked_Off_Reason" Relationship="Self.FK_MOReason" FromRole="Marked_Off" ToRole="Marked_Off_Reason" />
+          <Property Name="ContainerID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="StockTakeID" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_MOContainer" FromRole="Marked_Off" ToRole="Container" />
+          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_MOSTake" FromRole="Marked_Off" ToRole="Stock_Take" />
+          <NavigationProperty Name="User" Relationship="OrdraDBModel.FK_MOUser" FromRole="Marked_Off" ToRole="User" />
         </EntityType>
         <EntityType Name="Marked_Off_Reason">
           <Key>
@@ -1718,6 +1850,7 @@
           <NavigationProperty Name="Supplier" Relationship="Self.FK_ProdSup" FromRole="Product" ToRole="Supplier" />
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RetProdProduct" FromRole="Product" ToRole="Return_Product" />
           <NavigationProperty Name="Supplier_Order_Product" Relationship="Self.FK_SOPProduct" FromRole="Product" ToRole="Supplier_Order_Product" />
+          <NavigationProperty Name="Stock_Take_Product" Relationship="OrdraDBModel.FK_STakeProduct" FromRole="Product" ToRole="Stock_Take_Product" />
         </EntityType>
         <EntityType Name="Product_Backlog">
           <Key>
@@ -1728,6 +1861,8 @@
           <Property Name="QuantityToOrder" Type="Int32" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Product" Relationship="Self.FK_PBLogProduct" FromRole="Product_Backlog" ToRole="Product" />
+          <Property Name="ContainerID" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_PBContainer" FromRole="Product_Backlog" ToRole="Container" />
         </EntityType>
         <EntityType Name="Product_Category">
           <Key>
@@ -1802,18 +1937,6 @@
           <Property Name="ShiEnd" Type="Time" Precision="7" />
           <NavigationProperty Name="Users" Relationship="Self.User_Shift" FromRole="Shift" ToRole="User" />
         </EntityType>
-        <EntityType Name="Stock_Take">
-          <Key>
-            <PropertyRef Name="StockTakeID" />
-          </Key>
-          <Property Name="StockTakeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="STakeDate" Type="DateTime" Precision="0" />
-          <Property Name="STakeQuantity" Type="Int32" />
-          <Property Name="ProdCategory" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ProdName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_STakeEmployee" FromRole="Stock_Take" ToRole="Employee" />
-        </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="SupplierID" />
@@ -1884,6 +2007,8 @@
           <NavigationProperty Name="Sales" Relationship="Self.FK_SaleUser" FromRole="User" ToRole="Sale" />
           <NavigationProperty Name="User_Type" Relationship="Self.FK_UserType" FromRole="User" ToRole="User_Type" />
           <NavigationProperty Name="Shifts" Relationship="Self.User_Shift" FromRole="User" ToRole="Shift" />
+          <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOUser" FromRole="User" ToRole="Marked_Off" />
+          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STUser" FromRole="User" ToRole="Stock_Take" />
         </EntityType>
         <EntityType Name="User_Type">
           <Key>
@@ -2211,18 +2336,6 @@
             </Principal>
             <Dependent Role="Employee">
               <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_STakeEmployee">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
-          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
-            </Principal>
-            <Dependent Role="Stock_Take">
-              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2560,7 +2673,6 @@
           <EntitySet Name="Return_Product" EntityType="Self.Return_Product" />
           <EntitySet Name="Sales" EntityType="Self.Sale" />
           <EntitySet Name="Shifts" EntityType="Self.Shift" />
-          <EntitySet Name="Stock_Take" EntityType="Self.Stock_Take" />
           <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
           <EntitySet Name="Supplier_Order" EntityType="Self.Supplier_Order" />
           <EntitySet Name="Supplier_Order_Product" EntityType="Self.Supplier_Order_Product" />
@@ -2669,10 +2781,6 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
-          <AssociationSet Name="FK_STakeEmployee" Association="Self.FK_STakeEmployee">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Stock_Take" EntitySet="Stock_Take" />
-          </AssociationSet>
           <AssociationSet Name="FK_LLocationStatus" Association="Self.FK_LLocationStatus">
             <End Role="Location_Status" EntitySet="Location_Status" />
             <End Role="Location" EntitySet="Locations" />
@@ -2777,7 +2885,162 @@
             <End Role="Shift" EntitySet="Shifts" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="Stock_Take" EntityType="OrdraDBModel.Stock_Take" />
+          <EntitySet Name="Stock_Take_Product" EntityType="OrdraDBModel.Stock_Take_Product" />
+          <AssociationSet Name="FK_MOContainer" Association="OrdraDBModel.FK_MOContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PBContainer" Association="OrdraDBModel.FK_PBContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Product_Backlog" EntitySet="Product_Backlog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STakeContainer" Association="OrdraDBModel.FK_STakeContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MOSTake" Association="OrdraDBModel.FK_MOSTake">
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MOUser" Association="OrdraDBModel.FK_MOUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STakeProduct" Association="OrdraDBModel.FK_STakeProduct">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STake" Association="OrdraDBModel.FK_STake">
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUser" Association="OrdraDBModel.FK_STUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Stock_Take">
+          <Key>
+            <PropertyRef Name="StockTakeID" />
+          </Key>
+          <Property Name="StockTakeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="ContainerID" Type="Int32" />
+          <Property Name="STakeDate" Type="DateTime" Precision="0" />
+          <Property Name="isCompleted" Type="Boolean" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_STakeContainer" FromRole="Stock_Take" ToRole="Container" />
+          <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOSTake" FromRole="Stock_Take" ToRole="Marked_Off" />
+          <NavigationProperty Name="Stock_Take_Product" Relationship="OrdraDBModel.FK_STake" FromRole="Stock_Take" ToRole="Stock_Take_Product" />
+          <NavigationProperty Name="User" Relationship="OrdraDBModel.FK_STUser" FromRole="Stock_Take" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Stock_Take_Product">
+          <Key>
+            <PropertyRef Name="StockTakeProductID" />
+          </Key>
+          <Property Name="StockTakeProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StockTakeID" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
+          <Property Name="STProductCount" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="OrdraDBModel.FK_STakeProduct" FromRole="Stock_Take_Product" ToRole="Product" />
+          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STake" FromRole="Stock_Take_Product" ToRole="Stock_Take" />
+        </EntityType>
+        <Association Name="FK_MOContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Marked_Off" Role="Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PBContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Product_Backlog" Role="Product_Backlog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Product_Backlog">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STakeContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Stock_Take">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MOSTake">
+          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Marked_Off" Role="Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock_Take">
+              <PropertyRef Name="StockTakeID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="StockTakeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MOUser">
+          <End Type="OrdraDBModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Marked_Off" Role="Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STakeProduct">
+          <End Type="OrdraDBModel.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Stock_Take_Product" Role="Stock_Take_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Stock_Take_Product">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STake">
+          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Stock_Take_Product" Role="Stock_Take_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock_Take">
+              <PropertyRef Name="StockTakeID" />
+            </Principal>
+            <Dependent Role="Stock_Take_Product">
+              <PropertyRef Name="StockTakeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUser">
+          <End Type="OrdraDBModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Stock_Take">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3017,6 +3280,9 @@
           <EntitySetMapping Name="Marked_Off">
             <EntityTypeMapping TypeName="OrdraDBModel.Marked_Off">
               <MappingFragment StoreEntitySet="Marked_Off">
+                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="MarkedOffID" ColumnName="MarkedOffID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
@@ -3092,6 +3358,7 @@
           <EntitySetMapping Name="Product_Backlog">
             <EntityTypeMapping TypeName="OrdraDBModel.Product_Backlog">
               <MappingFragment StoreEntitySet="Product_Backlog">
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductBackLogID" ColumnName="ProductBackLogID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="QuantityToOrder" ColumnName="QuantityToOrder" />
@@ -3161,18 +3428,6 @@
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="ShiBegin" ColumnName="ShiBegin" />
                 <ScalarProperty Name="ShiEnd" ColumnName="ShiEnd" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Stock_Take">
-            <EntityTypeMapping TypeName="OrdraDBModel.Stock_Take">
-              <MappingFragment StoreEntitySet="Stock_Take">
-                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="STakeDate" ColumnName="STakeDate" />
-                <ScalarProperty Name="STakeQuantity" ColumnName="STakeQuantity" />
-                <ScalarProperty Name="ProdCategory" ColumnName="ProdCategory" />
-                <ScalarProperty Name="ProdName" ColumnName="ProdName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3276,6 +3531,27 @@
               <ScalarProperty Name="UserID" ColumnName="UserID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Stock_Take">
+            <EntityTypeMapping TypeName="OrdraDBModel.Stock_Take">
+              <MappingFragment StoreEntitySet="Stock_Take">
+                <ScalarProperty Name="isCompleted" ColumnName="isCompleted" />
+                <ScalarProperty Name="STakeDate" ColumnName="STakeDate" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock_Take_Product">
+            <EntityTypeMapping TypeName="OrdraDBModel.Stock_Take_Product">
+              <MappingFragment StoreEntitySet="Stock_Take_Product">
+                <ScalarProperty Name="STProductCount" ColumnName="STProductCount" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
+                <ScalarProperty Name="StockTakeProductID" ColumnName="StockTakeProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

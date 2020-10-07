@@ -115,18 +115,7 @@ CREATE TABLE User_Shift
 )
 GO
 
-CREATE TABLE Stock_Take
-(
-	StockTakeID int Primary Key identity(1,1) Not Null,
-	EmployeeID int,
-	STakeDate date,
-	STakeQuantity int,
-	ProdCategory varchar(25),
-	ProdName varchar(50),
-	CONSTRAINT FK_STakeEmployee FOREIGN KEY (EmployeeID)
-    REFERENCES Employee(EmployeeID)
-)
-GO
+
 
 CREATE TABLE Manager
 (
@@ -500,17 +489,32 @@ CREATE TABLE Marked_Off_Reason
 )
 GO
 
-CREATE TABLE Marked_Off
+
+CREATE TABLE Stock_Take
 (
-	MarkedOffID int Primary Key identity(1,1) Not Null,
+	StockTakeID int Primary Key identity(1,1) Not Null,
+	UserID int,
+	ContainerID int,
+	STakeDate date,
+	isCompleted BIT,
+	CONSTRAINT FK_STUser FOREIGN KEY (UserID)
+    REFERENCES [User](UserID),
+	CONSTRAINT FK_STakeContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID)
+)
+GO
+
+Create Table Stock_Take_Product
+(
+	StockTakeProductID int Primary Key identity(1,1) Not Null,
+	StockTakeID int,
 	ProductID int,
-	ReasonID int,
-	MoQuantity int,
-	MoDate date,
-	CONSTRAINT FK_MOProduct FOREIGN KEY (ProductID)
+	STProductCount int,
+	CONSTRAINT FK_STakeProduct FOREIGN KEY (ProductID)
     REFERENCES Product(ProductID),
-	CONSTRAINT FK_MOReason FOREIGN KEY (ReasonID)
-    REFERENCES Marked_Off_Reason(ReasonID)
+	CONSTRAINT FK_STake FOREIGN KEY (StockTakeID)
+    REFERENCES Stock_Take(StockTakeID)
+
 
 )
 GO
@@ -528,14 +532,42 @@ CREATE TABLE Return_Product
 )
 GO
 
+
+CREATE TABLE Marked_Off
+(
+	MarkedOffID int Primary Key identity(1,1) Not Null,
+	ProductID int,
+	ReasonID int,
+	ContainerID int,
+	UserID int,
+	StockTakeID int,
+	MoQuantity int,
+	MoDate date,
+	CONSTRAINT FK_MOProduct FOREIGN KEY (ProductID)
+    REFERENCES Product(ProductID),
+	CONSTRAINT FK_MOReason FOREIGN KEY (ReasonID)
+    REFERENCES Marked_Off_Reason(ReasonID),
+	CONSTRAINT FK_MOUser FOREIGN KEY (UserID)
+    REFERENCES [User](UserID),
+	CONSTRAINT FK_MOContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID),
+	CONSTRAINT FK_MOSTake FOREIGN KEY (StockTakeID)
+    REFERENCES Stock_Take(StockTakeID)
+
+)
+GO
+
 CREATE TABLE Product_Backlog
 (
 	ProductBackLogID int Primary Key identity(1,1) Not Null,
+	ContainerID int,
 	ProductID int, 
 	QuantityToOrder int,
 	DateModified dateTime,
 	CONSTRAINT FK_PBLogProduct FOREIGN KEY (ProductID)
     REFERENCES Product(ProductID),
+	CONSTRAINT FK_PBContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID)
 )
 GO
 
@@ -684,10 +716,7 @@ VALUES ('1', '3'),
 	   ('2', '1'),
 	   ('3', '2');
 
-INSERT INTO Stock_Take (EmployeeID, STakeDate, STakeQuantity, ProdCategory, ProdName)
-VALUES ('1', '2020-03-01', '12', 'Stationery', 'Bic Orange Fine Ballpoint Pen blue'),
-	   ('1', '2020-03-01', '23', 'Stationery', 'Bic Crystal Medium Xtra Life Ballpoint Pens Blue'),
-	   ('1', '2020-03-01', '12', 'Stationery', 'Pritt Stick 43g Glue Stick');
+
 
 INSERT INTO Manager (UserID, ManQualification, ManNationality, ManIDNumber, ManNextOfKeenFName, ManNextOfKeenCell)
 VALUES ('2', 'Bcom General degree', 'South African', '6704290231532', 'Joe', '0835522268'),
@@ -713,6 +742,11 @@ INSERT INTO Sale (UserID, ContainerID, SaleDate)
 VALUES ('2', '1','2020-07-23'),
 	   ('3', '1', '2020-01-16'),
 	   ('1', '3', '2020-05-12');
+
+INSERT INTO Supplier (SupName, SupCell, SupEmail,SupStreetNr, SupStreet, SupSuburb, SupCode)
+VALUES ('Mash Wholesale distributors' , '0123252134', 'mashwholesale@gmail.com', '23', 'Francis Baard street', 'Hatfield' ,'0018'),
+	   ('PWA Stationery', '0127521345', 'PWAStationery@yahoo.com', '54', 'Tony Avenue', 'Arcadia', '0018'),
+	   ('Makro Mamelodi', '0123471092', 'Makro@gmail.com', '12', 'Tshukulu Road', 'Mamelodi', '0122');
 
 INSERT INTO Product_Category (PCatName, PCatDescription)
 VALUES ('Stationery', 'writing and other office materials'),
@@ -813,10 +847,7 @@ VALUES ('1', '10.00', '2020-01-20','2020-12-12' ,'5.50'),
 	   ('6', '18.00', '2020-01-12', '2020-12-12' ,'14.00'),
 	   ('7', '15.50', '2020-01-12', '2020-12-12' ,'10.00');
 
-INSERT INTO Supplier (SupName, SupCell, SupEmail,SupStreetNr, SupStreet, SupSuburb, SupCode)
-VALUES ('Mash Wholesale distributors' , '0123252134', 'mashwholesale@gmail.com', '23', 'Francis Baard street', 'Hatfield' ,'0018'),
-	   ('PWA Stationery', '0127521345', 'PWAStationery@yahoo.com', '54', 'Tony Avenue', 'Arcadia', '0018'),
-	   ('Makro Mamelodi', '0123471092', 'Makro@gmail.com', '12', 'Tshukulu Road', 'Mamelodi', '0122');
+
 
 INSERT INTO Creditor (SupplierID, CredAccountBalance, CredBank, CredBranch, CredAccount, CredType)
 VALUES ('1', '20120.00', 'ABSA', 'Hatfield','1339543203', 'Check'),
@@ -867,22 +898,33 @@ VALUES ('Donated'),
 	   ('Expired'),
 	   ('Stolen');
 
-INSERT INTO Marked_Off (ProductID, ReasonID, MoQuantity, MoDate)
-VALUES ('2', '1', '50', '2020-04-10'),
-	   ('1', '4', '3', ' 2020-01-15'),
-	   ('3', '2', '4', '2020-06-23');
-
 INSERT INTO Return_Product (ProductID, ContainerID, Quantity)
 VALUES ('1', '2', '10'),
 	   ('3', '1', '15'),
 	   ('2', '2', '20');
 
-INSERT INTO Product_Backlog (ProductID, QuantityToOrder, DateModified)
-VALUES ('2', '30', '2020-04-10'),
-	   ('1', '25', '2020-04-14'),
-	   ('3', '15', '2020-02-27');
+INSERT INTO [dbo].[Stock_Take] ([UserID],[ContainerID],[STakeDate],[isCompleted])
+VALUES ('1','2','2020-05-01','1'),
+		('2','3','2020-06-01','1'),
+		('3','1','2020-07-01','0');
 
+INSERT INTO [dbo].[Stock_Take_Product] ([StockTakeID],[ProductID],[STProductCount])
+VALUES ('1','4','12'),
+		('2','5','20'),
+		('3','3','20');
 
+INSERT INTO [dbo].[Marked_Off] ([ProductID],[ReasonID],[ContainerID],[UserID],[StockTakeID],[MoQuantity],[MoDate])
+Values ('1','2','3','2','1','5','2020-01-01'),
+		('2','4','2','1','2','3','2020-03-01'),
+		('3','2','1','3','3','4','2020-02-01');
+
+INSERT INTO [dbo].[Product_Backlog] ([ContainerID],[ProductID],[QuantityToOrder],[DateModified])
+VALUES('1','4','20','2020-06-10'),
+	   ('2','5','30','2020-06-09'),
+	   ('3','6','25','2020-06-10'),
+	   ('1','5','20','2020-06-09'),
+	   ('2','6','35','2020-06-08'),
+	   ('3','4','20','2020-06-09');
 
 
 

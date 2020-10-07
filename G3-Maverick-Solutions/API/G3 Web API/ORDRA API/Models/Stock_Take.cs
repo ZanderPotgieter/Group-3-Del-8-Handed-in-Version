@@ -14,13 +14,24 @@ namespace ORDRA_API.Models
     
     public partial class Stock_Take
     {
-        public int StockTakeID { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
-        public Nullable<System.DateTime> STakeDate { get; set; }
-        public Nullable<int> STakeQuantity { get; set; }
-        public string ProdCategory { get; set; }
-        public string ProdName { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Stock_Take()
+        {
+            this.Marked_Off = new HashSet<Marked_Off>();
+            this.Stock_Take_Product = new HashSet<Stock_Take_Product>();
+        }
     
-        public virtual Employee Employee { get; set; }
+        public int StockTakeID { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public Nullable<int> ContainerID { get; set; }
+        public Nullable<System.DateTime> STakeDate { get; set; }
+        public Nullable<bool> isCompleted { get; set; }
+    
+        public virtual Container Container { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Marked_Off> Marked_Off { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Stock_Take_Product> Stock_Take_Product { get; set; }
+        public virtual User User { get; set; }
     }
 }

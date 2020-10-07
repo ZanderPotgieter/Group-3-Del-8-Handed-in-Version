@@ -4,6 +4,8 @@ import { Supplier} from '../supplier-management/supplier';
 import { NgModule } from '@angular/core';
 import {SupplierService} from '../supplier-management/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {ProductService} from 'src/app/product-management/product.service';
+import {Product} from 'src/app/product-management/product';
 
 
 @Component({
@@ -13,10 +15,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AddSupplierComponent implements OnInit {
 
-  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
   supForm: FormGroup;
   supplier : Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
+  products: Product[] = [];
 
   ngOnInit(): void {
 
@@ -29,6 +32,16 @@ export class AddSupplierComponent implements OnInit {
       SupCode: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]], 
       SupSuburb: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],       
     }); 
+
+    this.productService.getAllProducts()
+    .subscribe((value:any)=> {
+      console.log(value);
+      if (value != null) {
+        this.products = value.Products;
+      }
+    });
+
+
   }
 
   addSupplier(){
@@ -41,6 +54,9 @@ export class AddSupplierComponent implements OnInit {
       this.router.navigate(["supplier-management"])
     })
 
+  }
+
+  setProduct(val: Product){
   }
 
   gotoSupplierManagement(){

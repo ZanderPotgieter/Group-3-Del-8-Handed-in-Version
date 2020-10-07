@@ -320,13 +320,19 @@ namespace ORDRA_API.Controllers
                     Sale sale1= db.Sales.Where(x => x.SaleID == sale.SaleID).FirstOrDefault();
                     ///User user = sale1.User;
                     DateTime date = Convert.ToDateTime(sale1.SaleDate);
-                    if (sale1 != null )
+                    if (sale1 != null)
                     {
-                        dynamic searchedSale = new ExpandoObject();
-                        searchedSale.SaleID = sale.SaleID;
-                       // searchedSale.UserName = user.UserName;
-                        searchedSale.SaleDate = date.ToString("yyyy-MM-dd");
-                        Sales.Add(searchedSale);
+                        
+                        List<Product_Sale> product_Sale = db.Product_Sale.Where(x => x.SaleID == sale1.SaleID).ToList();
+
+                        if (product_Sale != null)
+                        {
+                            dynamic searchedSale = new ExpandoObject();
+                            searchedSale.SaleID = sale.SaleID;
+                            // searchedSale.UserName = user.UserName;
+                            searchedSale.SaleDate = date.ToString("yyyy-MM-dd");
+                            Sales.Add(searchedSale);
+                        }
                     }
                 }
 

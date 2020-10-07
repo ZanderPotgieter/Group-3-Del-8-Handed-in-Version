@@ -1,119 +1,12 @@
 <body>
     <form>
-        <h1>Stock Take</h1>
+        <h1>Stock Management</h1>
         <div class="card">
-            <button type="submit" (click)="StockTake()" >Stock Take</button>
-            <button type="submit" (click)="MarkedOff()" > Makred-Off Products</button>
-        
-        </div>
-
-    <br>
-        <div class="card" *ngIf="showStockTake">
-            <div class="divleft">
-                <label class="subheadinglabel">Enter Stock Take Details:</label>
-                <br>
-                <label>Employee Name:</label><input class="searchinput" type="text" required><label>Date:</label><input class="searchinput" type="text" value="06/25/2020" required  >
-                <br>
-                <label>Product Name:</label><input class="searchinput" type="text" value="Staedtler Pen" required ><label>Quantity:</label><input class="searchinput" type="text" required>
-                <br>
-                <label for="ProductCategoryID">Product Category:</label><select  required>
-                    <option value="0">--Select--</option>  
-                    <option [value]="type" *ngFor="let category of categories">{{category.PCatName}}</option>
-                  </select>
-                  <button type="submit" (click)="Add()" >Add</button>
-                <br>
-                <table>
-                    <label class="subheadinglabel">List of Stock:</label>
-                    <tr>
-                        <th>Employee Name</th>
-                        <th>Date</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Product Category</th>
-                        <th>Action</th>
-                    </tr>
-
-
-                    <tr>
-                        <td>Jason</td>
-                        <td>07/01/2020</td>
-                        <td>Bic Pen</td>
-                        <td>9</td>
-                        <td>Stationery</td>
-                        <td><button type="submit" (click)="Remove()">X</button></td>
-                    </tr>
-                    <tr>
-                        <td>Jason</td>
-                        <td>07/01/2020</td>
-                        <td>Pritt Glue Stick</td>
-                        <td>12</td>
-                        <td>Stationery</td>
-                        <td><button type="submit" (click)="Remove()">X</button></td>
-                    </tr>
-                    <tr>
-                        <td>Jason</td>
-                        <td>07/01/2020</td>
-                        <td>Staedtler Pen</td>
-                        <td>10</td>
-                        <td>Stationery</td>
-                        <td><button type="submit" (click)="Remove()">X</button></td>
-                    </tr>
-                </table>  
-                <button type="submit" (click)="Save()" >Save</button>
-                <button type="submit" (click)="Cancel()" >Cancel</button>
-            </div>
-        
-           
-        </div>
-
-     <br>
-        <div class="card" *ngIf="showMarkedOff">
-            <div class="divleft">
-                <label class="subheadinglabel">Enter Marked-Off Products Details:</label>
-                <br>
-                <label>Product Name:</label><input  type="text" value="Staedtler Pen" required >
-                <br>
-                <label for="ReasonID">Reason:</label><select  required>
-                    <option value="0">--Select--</option>  
-                    <option [value]="type" *ngFor="let reason of reasons">{{reason.MODescription}}</option>
-                  </select>
-                <br>
-                <label>Quantity:</label><input class="searchinput" type="text" required>
-                <br>
-                <label>Date:</label><input class="searchinput" type="text" value="06/25/2020" required  >
-                <button type="submit" (click)="AddMO()" >Add</button>
-                <br>
-                <table>
-                    <label class="subheadinglabel">List of Marked-Off Products:</label>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Reason</th>
-                        <th>Quantity</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
-
-
-                    <tr>
-                        <td>Bic Pen</td>
-                        <td>Product damaged</td>
-                        <td>2</td>
-                        <td>07/01/2020</td>
-                        <td><button type="submit" (click)="RemoveMO()">X</button></td>
-                    </tr>
-                    <tr>
-                        <td>Staedtler Pen</td>
-                        <td>Product damaged</td>
-                        <td>1</td>
-                        <td>07/01/2020</td>
-                        <td><button type="submit" (click)="RemoveMO()">X</button></td>
-                    </tr>
-                </table>  
-                <button type="submit" (click)="SaveMO()" >Save</button>
-                <button type="submit" (click)="CancelMO()" >Cancel</button>
-            </div>
-        
-           
+            <button type="submit" (click)="StockTake()" >Complete Stock Take</button><br>
+            <button type="submit" (click)="SearchStockTake()" >Search Stock Take</button><br>
+            <button type="submit" (click)="lowStock()">View Low Stock</button><br>
+            <button type="submit" (click)="MarkedOff()" > Makred-Off Products</button><br>
+            <button type="submit" (click)="stockTakeForm()">Generate Stock Take Form</button><br>
         </div>
     </form>
 </body>

@@ -42,7 +42,6 @@
         <EntityTypeShape EntityType="OrdraDBModel.Return_Product" Width="1.5" PointX="11.25" PointY="18" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Sale" Width="1.5" PointX="9" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Shift" Width="1.5" PointX="4.5" PointY="28.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Stock_Take" Width="1.5" PointX="11.25" PointY="45.125" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Supplier" Width="1.5" PointX="0.75" PointY="18.5" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Supplier_Order" Width="1.5" PointX="6" PointY="21.875" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Supplier_Order_Product" Width="1.5" PointX="11.25" PointY="21" IsExpanded="true" />
@@ -76,7 +75,6 @@
         <AssociationConnector Association="OrdraDBModel.FK_EmployeeCV" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeeImage" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_EmployeeUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_STakeEmployee" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_LLocationStatus" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_LoginUser" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_LogoutUser" ManuallyRouted="false" />
@@ -103,6 +101,16 @@
         <AssociationConnector Association="OrdraDBModel.FK_UserTypeAccess" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.Manager_Container" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.User_Shift" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="OrdraDBModel.Stock_Take" Width="1.5" PointX="14" PointY="13.75" />
+        <EntityTypeShape EntityType="OrdraDBModel.Stock_Take_Product" Width="1.5" PointX="16.25" PointY="15" />
+        <AssociationConnector Association="OrdraDBModel.FK_MOContainer" />
+        <AssociationConnector Association="OrdraDBModel.FK_PBContainer" />
+        <AssociationConnector Association="OrdraDBModel.FK_STakeContainer" />
+        <AssociationConnector Association="OrdraDBModel.FK_MOSTake" />
+        <AssociationConnector Association="OrdraDBModel.FK_MOUser" />
+        <AssociationConnector Association="OrdraDBModel.FK_STakeProduct" />
+        <AssociationConnector Association="OrdraDBModel.FK_STake" />
+        <AssociationConnector Association="OrdraDBModel.FK_STUser" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

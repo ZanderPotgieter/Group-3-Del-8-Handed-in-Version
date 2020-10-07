@@ -62,7 +62,8 @@ import { Component, NgModule } from '@angular/core';
     //---Manager Subsystem Imports---//
     import {CreateManagerComponent} from './create-manager/create-manager.component';
     import { UpdateManagerComponent} from './update-manager/update-manager.component';
-    import {SearchManagerComponent} from './search-manager/search-manager.component';
+    //import {SearchManagerComponent} from './search-manager/search-manager.component';
+    import {SearchManagerComponent} from './view-manager/view-manager.component'
 
     
     //---Customer Order Subsystem Imports---//
@@ -91,6 +92,9 @@ import { Component, NgModule } from '@angular/core';
     import { AddVatComponent } from './product-management/vat/add-vat/add-vat.component';
     import { UpdateVatComponent } from './product-management/vat/update-vat/update-vat.component';
     import {LowstockComponent} from './product-management/lowstock/lowstock.component';
+    import {StockTakeFormComponent} from './product-management/stock-take-form/stock-take-form.component';
+    import {CompleteStockTakeComponent} from './product-management/complete-stock-take/complete-stock-take.component';
+    import {SearchStockTakeComponent} from './product-management/search-stock-take/search-stock-take.component';
 
     //---Reporting Order Subsystem Imports---//
     import { CreditorsReportComponent } from './reporting-management/creditors-report/creditors-report.component';
@@ -414,6 +418,18 @@ import { Component, NgModule } from '@angular/core';
         {
             path: 'lowstock',
             component: LowstockComponent,
+        },
+        {
+            path: 'stock-take-form',
+            component: StockTakeFormComponent,
+        },
+        {
+            path: 'complete-stock-take',
+            component: CompleteStockTakeComponent,
+        },
+        {
+            path: 'search-stock-take',
+            component: SearchStockTakeComponent,
         }
 
     ];

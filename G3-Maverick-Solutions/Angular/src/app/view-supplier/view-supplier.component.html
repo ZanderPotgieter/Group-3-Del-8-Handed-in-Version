@@ -3,6 +3,7 @@
     <form [formGroup]="supForm">
         <div class="card" *ngIf = "showSearch">
             <br>
+            
         <div class="divleft"  >
             <label class="subheadinglabel" >Enter Supplier Name: </label>
         <br>
@@ -19,29 +20,25 @@
 
         <div class="divleft">
             <button type="submit"(click)="searchSupplier()">Search</button>
-            <button type="submit" (click)="gotoSupplierManagment()">Cancel</button>
+            <button type="submit" (click)="gotoSupplierManagement()">Cancel</button>
         </div>
-
-        <table class="table table-striped">  
-            <thead class="thead-dark">  
+        <div *ngIf="showTable">
+        <table >    
               <tr>  
                 <th>Name</th>
                 <th>Cell No</th>  
-                <th>Email</th>  
-                <th>Suburb</th>
-                <th>Postal Code</th>  
+                <th>Email</th>   
+                <th  style="width: 20%;"></th>
               </tr>  
-            </thead>  
-            <tbody>  
-              <tr *ngFor="let sup of allSup | async">  
-                <td>{{sup.SupName}}</td>  
-                <td>{{sup.SupCell}}</td>  
-                <td>{{sup.SupEmail}}</td>  
-                <td>{{sup.SupSuburb}}</td> 
-                <td>{{sup.SupCode}}</td>  
-              </tr>  
-            </tbody>  
-          </table>  
+              <tr *ngFor="let sup of suppliers; index as ndx">  
+                <td style="padding: 0px;">{{sup.SupName}}</td>  
+                <td style="padding: 0px;">{{sup.SupCell}}</td>  
+                <td style="padding: 0px;">{{sup.SupEmail}}</td> 
+                <td style="padding: 0px;"><button  style="border-radius: 10px; width: 100%;" (click)="view(ndx)">View</button></td> 
+
+              </tr>   
+          </table> 
+        </div> 
 
     </div>
     <br>
@@ -114,7 +111,7 @@
         <br>
         <div class="divleft" >
             <label for="SupCode">Postal Code:</label>
-                <input type="text" formControlName="SupCode" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" pattern="[0-9 ]*" required placeholder="0000" required [readonly] = "this.inputEnabled">
+                <input type="text" formControlName="SupCode" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" pattern="[0-9 ]*" required placeholder="0000" minlength="4" maxlength="4" required [readonly] = "this.inputEnabled">
                 <br>
                 <span style="color:red" *ngIf="supForm.get('SupCode').errors && (supForm.get('SupCode').touched || supForm.get('SupCode').dirty)">
                     <span *ngIf="supForm.get('SupCode').errors.required">Postal Code is required.<br></span>
@@ -134,16 +131,29 @@
                     <span *ngIf="supForm.get('SupSuburb').errors.pattern">Only text characters.<br></span>
                 </span> 
         </div>
-        <br><br>
+        <br>
+        <div>
+            <table>
+                    <th>Products Supplied</th>
+    
+                <tr *ngFor="let item of products; index as ndx;">
+                    <td>{{item.ProdName}}</td>
+
+                 </tr>
+            </table>
+        </div>
+        
+        <br>
 
         <div class="divleft" *ngIf="showButtons">
             <button type="submit" (click)="enableInputs()">Update</button>
             <button type="submit" (click)="deleteSupplier()">Delete</button>
+         <button type="submit"  (click)="gotoSupplierManagement()">Cancel</button>
          </div>
 
          <div class="divleft" *ngIf="showSave" >
          <button type="submit" (click)="updateSupplier()">Save</button>
-         <button type="submit"  (click)="gotoSupplierManagment()">Cancel</button>
+         <button type="submit"  (click)="gotoSupplierManagement()">Cancel</button>
         </div>
         
     </div>

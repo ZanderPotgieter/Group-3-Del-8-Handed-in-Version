@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {Supplier} from '../supplier-management/supplier';
 import { NgModule } from '@angular/core';
+import {Product} from 'src/app/product-management/product';
 import {SupplierService} from '../supplier-management/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -14,13 +15,7 @@ var inputEnabled = false;
   styleUrls: ['./view-supplier.component.scss']
 })
 export class ViewSupplierComponent implements OnInit {
-  private _allSup: Observable<Supplier[]>;  
-  public get allSup(): Observable<Supplier[]> {  
-    return this._allSup;  
-  }  
-  public set allSup(value: Observable<Supplier[]>) {  
-    this._allSup = value;  
-  }  
+ 
 
   constructor(private api: SupplierService, private router: Router, private fb: FormBuilder) { }
   supForm: FormGroup;
@@ -32,13 +27,12 @@ export class ViewSupplierComponent implements OnInit {
   inputEnabled:boolean = true;
   showSearch: boolean = true;
   showResults: boolean = false;
+  showTable: boolean = true;
   name : string;
+  suppliers: Supplier[] = [];
+  products: Product[] = [];
 
-  loadDisplay(){  
-    debugger;  
-    this.allSup= this.api.getAllSuppliers();  
   
-  } 
 
   ngOnInit(): void {
     this.supForm= this.fb.group({  
@@ -51,10 +45,41 @@ export class ViewSupplierComponent implements OnInit {
       SupCode: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]], 
       SupSuburb: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],       
     }); 
+
+    this.api.getAllSuppliers().subscribe((res: any) =>{
+      console.log(res);
+      if(res.Message != null){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)}
+        else{
+      this.suppliers = res;
+      
+    }
+    })
   }
 
   gotoSupplierManagement(){
     this.router.navigate(['supplier-management']);
+  }
+
+  view(ndx: number){
+    this.api.searchSupplier(this.suppliers[ndx].SupName).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      alert(this.responseMessage)}
+      else{
+          this.supplier = res.supplier;
+          this.products = res.products;
+
+      this.showSearch = false;
+      this.showResults = true;
+      this.showTable = false;
+      }
+      
+      
+    })
+
   }
 
   searchSupplier(){
@@ -72,10 +97,15 @@ export class ViewSupplierComponent implements OnInit {
           this.supplier.SupStreet = res.SupStreet;
           this.supplier.SupCode = res.SupCode;
           this.supplier.SupSuburb = res.SupSuburb;
-      }
-      
+
+          this.products = res.products;
+
+          
       this.showSearch = false;
       this.showResults = true;
+      this.showTable = false;
+      }
+      
       
     })
 

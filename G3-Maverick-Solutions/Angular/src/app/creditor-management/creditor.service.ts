@@ -28,11 +28,15 @@ export class CreditorService {
     return this.http.get<Creditor>(this.url + '/searchCreditor?name=' +name);
   }
 
-  addCreditor(creditor: Creditor): Observable<Creditor>
-  {
-    const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
-    return this.http.post<Creditor>(this.url + '/addCreditor/', creditor, httpOptions);
+  getAllSuppliers(): Observable<Supplier[]> {  
+    return this.http.get<Supplier[]>('https://localhost:44399/Api/Supplier' + '/getAllSuppliers');  
   }
+
+  addCreditor(creditor: Creditor): Observable<Creditor>  {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.post<Creditor>(this.url + '/AddCreditor',  
+    creditor, httpOptions);  
+  }  
 
   updateCreditor(creditor: Creditor): Observable<Creditor>
   {

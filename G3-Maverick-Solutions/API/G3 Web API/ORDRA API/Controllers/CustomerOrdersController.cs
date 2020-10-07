@@ -339,7 +339,7 @@ namespace ORDRA_API.Controllers
                 {
                     Customer customer = db.Customers.Where(x => x.CustomerID == order.CustomerID).FirstOrDefault();
                     User user = db.Users.Where(x => x.UserID == order.UserID).FirstOrDefault();
-                    Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "placed").FirstOrDefault();
+                    Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Placed").FirstOrDefault();
 
                     //save customer order details
                     Customer_Order customerOrder = new Customer_Order();
@@ -418,7 +418,7 @@ namespace ORDRA_API.Controllers
                 Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == CustomerOrderID).FirstOrDefault();
 
                 //get the collected customer order status
-                Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "collected").FirstOrDefault();
+                Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Fulfilled").FirstOrDefault();
 
                 //set order status to collected
                 cus_order.Customer_Order_Status = order_Status;
@@ -430,6 +430,44 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = error.Message;
             }
+
+            return toReturn;
+        }
+
+        //Update Customer
+        [HttpPut]
+        [Route("collectCustomerOrder")]
+        public object collectCustomerOrder(Customer_Order orderUpdate)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            Customer_Order objectCustomer_Order = new Customer_Order();
+            dynamic toReturn = new ExpandoObject();
+            var id = orderUpdate.CustomerOrderID;
+
+            try
+            {
+                objectCustomer_Order = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
+                if (objectCustomer_Order != null)
+                {
+                    objectCustomer_Order.CustomerOrderStatusID = 1;
+
+                    db.SaveChanges();
+
+                    toReturn.Message =  " has successfully been updated.";
+                }
+                else
+                {
+                    toReturn.Message = "Customer Not Found";
+                }
+            }
+
+            catch (Exception)
+            {
+                toReturn.Message = "Oops! The customer has not been updated.";
+
+            }
+
 
             return toReturn;
         }
@@ -456,7 +494,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     //get the cancelled customer order status
-                    Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "cancelled").FirstOrDefault();
+                    Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Retrieved").FirstOrDefault();
 
 
                     //set order status to cancelled

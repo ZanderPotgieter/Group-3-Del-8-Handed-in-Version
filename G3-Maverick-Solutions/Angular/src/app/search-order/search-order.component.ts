@@ -12,6 +12,7 @@ import {Customer} from '../customer-management/customer';
 import{SearchedOrder} from '../customer-order-management/searched-order';
 import {ProductOrderLine} from '../customer-order-management/product-order-line';
 import{map} from 'rxjs/operators';
+import { DialogService } from '../shared/dialog.service';
 
 @Component({
   selector: 'app-search-order',
@@ -20,7 +21,7 @@ import{map} from 'rxjs/operators';
 })
 export class SearchOrderComponent implements OnInit {
 
-  constructor(private api: CustomerOrderService,private router: Router, private fb: FormBuilder) { }
+  constructor(private api: CustomerOrderService, private dialogService: DialogService,private router: Router, private fb: FormBuilder) { }
 
   orderForm: FormGroup;
   
@@ -43,6 +44,7 @@ export class SearchOrderComponent implements OnInit {
   showCell: boolean = false;
   showOrdNo: boolean = false;
   showOptions: boolean = false;
+  customerorder : CustomerOrder = new CustomerOrder();
 
   selectedOrder: SearchedOrder = new SearchedOrder();
   searchedOrders: SearchedOrder[] = [];
@@ -153,15 +155,19 @@ export class SearchOrderComponent implements OnInit {
       })
     }
 
-    collectOrder(){
-
-      this.api.collectOrder(this.selectedOrder.CustomerOrderID).subscribe( (res:any)=> {
+    collectCustomerOrder(){
+      this.dialogService.openConfirmDialog('Confirm collect?')
+      .afterClosed().subscribe(res => {
+        if(res){
+      this.api.collectCustomerOrder(this.customerorder).subscribe( (res:any)=> {
         console.log(res);
-        if(res.Message != null){
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)}
-    })
-  }
+        if(res.Message){
+          this.dialogService.openAlertDialog(res.Message);}
+        //this.router.navigate(["customer-management"])
+      })
+    }
+    });
+    }
     
   gotoCustomerOrderManagement()
   {

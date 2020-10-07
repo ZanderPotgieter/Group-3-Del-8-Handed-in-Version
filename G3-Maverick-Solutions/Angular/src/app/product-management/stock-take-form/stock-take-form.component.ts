@@ -64,6 +64,12 @@ export class StockTakeFormComponent implements OnInit {
   }
 
   generateForm(){
+    if(!localStorage.getItem("accessToken")){
+      this.router.navigate([""]);
+    }
+    else {
+      this.session = {"token" : localStorage.getItem("accessToken")}
+
     this.productService.initateStockTake(this.session).subscribe((res: any)=>{
       console.log(res);
           if(res.Error != null){ 
@@ -78,6 +84,7 @@ export class StockTakeFormComponent implements OnInit {
           }
     })
   }
+}
 
     
   save(ndx: number){
@@ -93,7 +100,10 @@ export class StockTakeFormComponent implements OnInit {
       }
 
       Complete(){
-
+        alert("Stock Take Form Saved");
+        this.router.navigate(['stock-take']);
       }
+
+      
 
 }

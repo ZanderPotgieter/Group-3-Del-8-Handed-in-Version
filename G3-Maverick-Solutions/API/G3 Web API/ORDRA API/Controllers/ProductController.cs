@@ -1487,7 +1487,7 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             toReturn.container = new ExpandoObject();
-            toReturn.stock_Take = new ExpandoObject();
+            toReturn.stock_Take = new Stock_Take();
 
             try
             {
@@ -1519,16 +1519,14 @@ namespace ORDRA_API.Controllers
                 db.Stock_Take.Add(stock_Take);
                 db.SaveChanges();
 
-                Stock_Take newStock_Take = db.Stock_Take.ToList().LastOrDefault();
-
-                toReturn.stock_Take = newStock_Take;
+                toReturn.stock_Take = db.Stock_Take.Where(x => x.isCompleted == false).ToList().LastOrDefault();
                 toReturn.container = con;
 
 
             }
             catch
             {
-                toReturn.Message = "Form Generation Unssuccessful. Retry";
+                toReturn.Message = "Form Generation Unsuccessful. Retry";
             }
 
             return toReturn;

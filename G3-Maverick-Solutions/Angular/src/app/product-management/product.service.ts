@@ -147,7 +147,7 @@ export class ProductService {
     return this.http.get(this.url + '/getAllStockTakes',  httpOptions);
   }
 
-  getTodaysStockTake(date: Date, containerID: number){
+  getTodaysStockTake(date: string, containerID: number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
     return this.http.get(this.url + '/getTodaysStockTake?date='+ date + "&containerID=" + containerID,  httpOptions);
   }

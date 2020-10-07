@@ -8,6 +8,7 @@ import {SalesService} from '../../sales-management/sales.service';
 import {StockTakeProduct} from '../../product-management/stock-take-product';
 import {StockTake} from '../stock-take';
 import {MarkedOff} from '../marked-off';
+import {formatDate} from '@angular/common';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class CompleteStockTakeComponent implements OnInit {
   stocktake: StockTake = new StockTake();
   stocktakes: StockTake[] =[];
   index: number;
+  date = this.Todaysdate.toDateString();
 
   showMarkOff: boolean = false;
   NoForm: boolean = false;
@@ -54,7 +56,7 @@ export class CompleteStockTakeComponent implements OnInit {
         console.log(res);
         this.user = res;
 
-        this.productService.getTodaysStockTake(this.Todaysdate, res.user.ContainerID).subscribe( (res:any) =>{
+        this.productService.getTodaysStockTake(this.date, res.ContainerID).subscribe( (res:any) =>{
           console.log(res);
           if(res.Error){
             this.response = res.Error

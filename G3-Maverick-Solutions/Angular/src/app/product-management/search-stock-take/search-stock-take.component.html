@@ -11,7 +11,7 @@
                 </mat-radio-group>
             </div>
             <div *ngIf = "showContainer">
-            <label>Select Container</label><select  required formControlName="SelectContainer" name="SelectContainer" (ngModelChange)="selectConTAINER($event)">
+            <label>Select Container</label><select  required name="SelectContainer" (ngModelChange)="selectConTAINER($event)">
                 <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
                </select>
                <br>
@@ -31,7 +31,7 @@
 
                     <tr *ngFor="let item of stocktakes, index as ndx">
                         <th>{{ndx+1}}</th>
-                        <td>{{item.Date | date: 'yyyy-MM-dd' }}</td>
+                        <td>{{item.STakeDate | date: 'yyyy-MM-dd' }}</td>
                         <td>{{item.isCompleted}}</td>
                         <td><button style="border-radius: 10px; width: 95%;" (click)="Start(ndx)">View</button></td>
 
@@ -39,6 +39,36 @@
                 </table>
             </div>
 
-            <button type="submit" (click)="Save()">Cancel</button>
+            <div clss="divleft" *ngIf="showTable" >
+
+                <div class="divleft">
+                <label style="width: 100%">Done By: {{employee}} </label>
+                </div>
+                <div class = "divleft">
+                    <label>In Container: {{container.ConName}} </label>
+                </div>
+
+            <div class = "divleft" >
+                <label>On Date: {{stocktake.STakeDate | date: 'yyyy-MM-dd'}}</label>
+            </div>
+
+                
+            <table style="width: 100%; padding: 0px">
+                    <th style="width: 30%;padding: 0px">Product Name</th>
+                    <th style="width: 20%;padding: 0px">Quantity</th>
+                    <th style="width: 20%; padding: 0px">Stock Count</th>
+                    <th style="width: 20%; padding: 0px">Marked Off</th>
+    
+                <tr *ngFor="let item of list; index as ndx">
+                    <td>{{item.Prodname}}</td>
+                    <td>{{item.CPQuantity}}</td>
+                    <td>{{item.STCount}}</td>
+                    <td>{{item.MOQuantity}}</td> 
+    
+                </tr>
+    
+            </table>
+
+            <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
 

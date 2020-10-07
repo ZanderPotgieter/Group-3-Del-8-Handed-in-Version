@@ -125,7 +125,7 @@ import { MatAlertDialogComponent } from './mat-alert-dialog/mat-alert-dialog.com
 import { StockTakeFormComponent } from './product-management/stock-take-form/stock-take-form.component';
 import { CompleteStockTakeComponent } from './product-management/complete-stock-take/complete-stock-take.component';
 import { SearchStockTakeComponent } from './product-management/search-stock-take/search-stock-take.component';
-
+import { DatePipe, formatDate } from '@angular/common';
 
 
 @NgModule({
@@ -246,7 +246,7 @@ import { SearchStockTakeComponent } from './product-management/search-stock-take
     ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
   ],
   exports:[MakeSaleComponent],
-  providers: [HttpClientModule, ProductCategoryService],
+  providers: [HttpClientModule, ProductCategoryService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

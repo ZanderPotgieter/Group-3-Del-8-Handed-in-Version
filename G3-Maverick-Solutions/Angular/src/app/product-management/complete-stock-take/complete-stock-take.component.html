@@ -1,9 +1,6 @@
 <body>
     <form>
         <h1>Complete Stock Take</h1>
-        <div class="divleft">
-
-
             <div class = "card" >
                 <div *ngIf="NoForm">
                     <span>{{response}}</span>
@@ -18,7 +15,7 @@
 
                         <tr *ngFor="let item of stocktakes, index as ndx">
                             <th>{{ndx+1}}</th>
-                            <td>{{item.Date | date: 'yyyy-MM-dd' }}</td>
+                            <td>{{item.STakeDate | date: 'yyyy-MM-dd' }}</td>
                             <td>{{item.isCompleted}}</td>
                             <td><button style="border-radius: 10px; width: 95%;" (click)="Start(ndx)">View</button></td>
 
@@ -79,7 +76,5 @@
                 </div>
            
         
-
-        </div>
 
     

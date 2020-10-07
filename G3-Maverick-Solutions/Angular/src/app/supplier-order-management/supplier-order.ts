@@ -1,6 +1,6 @@
 export class SupplierOrder {
     SupplierOrderID: number;
-    SupplierOrderStatus: number;
+    SupplierOrderStatusID: number;
     SupplierID: number;
     SODate: Date;
 }

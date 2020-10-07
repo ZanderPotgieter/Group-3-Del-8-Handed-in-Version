@@ -93,7 +93,17 @@ namespace ORDRA_API.Controllers
                 creditor = db.Creditors.Include(s => s.Supplier).Where(s => s.SupplierID == id).FirstOrDefault();
 
 
-                toReturn = creditor;
+                if (creditor != null)
+                {
+
+                    toReturn = creditor;
+                }
+                else
+                {
+
+                    toReturn.Message = "The creditor was not found. Please check the search criteria.";
+
+                }
 
 
             }
@@ -116,38 +126,39 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
 
 
-            try
-            {
+            //try
+            //{
                 //get supplier
-                Supplier sup = db.Suppliers.Where(x => x.SupplierID == creditor.Supplier.SupplierID).FirstOrDefault();
-                if (sup != null)
-                {
+              //Supplier sup = db.Suppliers.Where(x => x.SupplierID == creditor.Supplier.SupplierID).FirstOrDefault();
+                //if (sup != null)
+                //{
 
 
                     //save new creditor
                     Creditor addCred = new Creditor();
-                    addCred.Supplier.SupplierID = creditor.Supplier.SupplierID;
                     addCred.CredBank = creditor.CredBank;
                     addCred.CredAccount = creditor.CredAccount;
                     addCred.CredType = creditor.CredType;
                     addCred.CredBranch = creditor.CredBranch;
                     addCred.CredAccountBalance = creditor.CredAccountBalance;
+                    addCred.SupplierID = creditor.SupplierID;
+                    //addCred.Supplier = sup;
                     db.Creditors.Add(addCred);
                     db.SaveChanges();
 
-                    toReturn.Message = "Add Creditor Succsessful";
-                }
-                else
-                {
-                    toReturn.Message = "Add Creditor Unsuccsessful: Supplier already a creditor.";
-                }
+                    toReturn.Message = "The creditor has been added successfully.";
+               // }
+                //else
+                //{
+                   // toReturn.Message = "Add Creditor Unsuccsessful: Supplier already a creditor.";
+                //}
 
-            }
-            catch (Exception)
-            {
-                toReturn.Message = "Add Creditor unsuccessful";
+            //}
+            //catch (Exception)
+            //{
+                //toReturn.Message = "Add Creditor unsuccessful";
 
-            }
+            //}
             return toReturn;
         }
 
@@ -170,8 +181,12 @@ namespace ORDRA_API.Controllers
                 if (objectCreditor != null)
                 {
                     objectCreditor.CredAccountBalance = creditorUpdate.CredAccountBalance;
+                    objectCreditor.CredBank = creditorUpdate.CredBank;
+                    objectCreditor.CredBranch = creditorUpdate.CredBranch;
+                    objectCreditor.CredAccount = creditorUpdate.CredAccount;
+                    objectCreditor.CredType = creditorUpdate.CredType;
                     db.SaveChanges();
-                    toReturn.Message = "Update Successful";
+                    toReturn.Message =  "Creditor has successfully been updated.";
                 }
                 else
                 {
@@ -181,7 +196,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception)
             {
-                toReturn.Message = "Update Unsuccessful";
+                toReturn.Message = "Please check input fields. Update failed.";
 
             }
 
@@ -212,7 +227,7 @@ namespace ORDRA_API.Controllers
                 {
                     db.Creditors.Remove(objectCreditor);
                     db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    toReturn.Message =  "Creditor has successfully been removed.";
                 }
 
             }
@@ -252,7 +267,7 @@ namespace ORDRA_API.Controllers
             catch (Exception)
             {
                 toReturn.Message = "Record Not Found";
-                //toReturn = "Something Went Wrong " + error.Message;
+                toReturn = "Creditor not Found. Please check the search criteria.";
             }
 
             return toReturn;

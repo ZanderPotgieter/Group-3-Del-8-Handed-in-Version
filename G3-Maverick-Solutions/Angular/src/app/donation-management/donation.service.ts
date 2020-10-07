@@ -85,6 +85,11 @@ export class DonationService {
     return this.http.get<Donation[]>(this.Donurl + '/searchDonationsByName?name=' +name+'&surname='+surname);
   }
 
+  searchDonationByID(id: number): Observable<Donation>
+  {
+    return this.http.get<Donation>(this.Donurl + '/searchDonationByID?ID=' +id);
+  }
+
   //add donation
   addDonation(donation: Donation): Observable<Donation>
   {

@@ -20,6 +20,7 @@ export class CreateDonationComponent implements OnInit {
 
   constructor(private donationService: DonationService, private router: Router, private fb: FormBuilder) { }
 
+  angForm: FormGroup;
   donation: Donation = new Donation();
   donationRecipient: DonationRecipient = new DonationRecipient();
   donatedProduct: DonatedProduct = new DonatedProduct();
@@ -55,13 +56,22 @@ export class CreateDonationComponent implements OnInit {
         }
       });
 
-      /* this.donForm= this.fb.group({  
+      this.angForm= this.fb.group({  
+        cell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9 ]*')]],  
         name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
-        surname: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
-        cell: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
-        
+        surname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+        DrName: [''],
+        DrSurname: [''],
+        DrEmail: [''],
+        DrCell: [''],
+        DonDescription: [''],
+        DonStatus: [''],
+        DonAmount: [''],
+        DonDate: [''],
+        DSDescription: [''],
+        DonationStatusID: [''],
          
-      }); */ 
+      }); 
 
 
   }
@@ -82,7 +92,8 @@ export class CreateDonationComponent implements OnInit {
   showSearchByName()
   {
     this.showName = true;
-    this.showCell = false;this.showSave = false;
+    this.showCell = false;
+    this.showSave = false;
     this.inputEnabled = false;
     this.showButtons = true;
     

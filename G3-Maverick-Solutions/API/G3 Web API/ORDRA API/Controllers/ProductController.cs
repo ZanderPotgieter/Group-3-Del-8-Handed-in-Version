@@ -1598,8 +1598,8 @@ namespace ORDRA_API.Controllers
             toReturn.products = new ExpandoObject();
             toReturn.employee = new ExpandoObject();
 
-            try
-            {
+            //try
+            //{
                 Stock_Take stock_Take = db.Stock_Take.Where(x => x.StockTakeID == id).FirstOrDefault();
                 if (stock_Take != null)
                 {
@@ -1660,11 +1660,11 @@ namespace ORDRA_API.Controllers
                     toReturn.Error = "Stock Take Record Not Found";
                 }
 
-            }
-            catch
-            {
-                toReturn.Error = "Search Interrupted. Retry";
-            }
+            //}
+            //catch
+            //{
+            //    toReturn.Error = "Search Interrupted. Retry";
+            //}
 
             return toReturn;
 

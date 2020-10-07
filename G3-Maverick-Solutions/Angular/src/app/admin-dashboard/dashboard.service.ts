@@ -16,4 +16,9 @@ export class DashboardService {
   {
     return this.http.get(this.url + "getSaleReportData").pipe(map(result => result))
   }
+
+  getSalePieChartData()
+  {
+    return this.http.get(this.url + "getSaleYearlyPieData").pipe(map(result => result))
+  }
 }

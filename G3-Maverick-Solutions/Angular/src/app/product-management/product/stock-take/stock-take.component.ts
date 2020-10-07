@@ -34,33 +34,27 @@ export class StockTakeComponent implements OnInit {
         }
       });
   }
+lowStock(){
+  this.router.navigate(['lowstock'])
+}
 
-  //Stock Take
+stockTakeForm(){
+  this.router.navigate(['stock-take-form'])
+}
+
+MarkedOff(){
+
+}
+
   StockTake(){
-    this.showStockTake=true;
-    this.showMarkedOff=false;
+    this.router.navigate(['complete-stock-take'])
+    
   }
 
-  Add(){}
-
-  Remove(){}
-
-  Save(){}
-
-  Cancel(){}
-
-  //Marked-Off
-  MarkedOff(){
-    this.showMarkedOff=true;
-    this.showStockTake=false;
+ 
+  SearchStockTake(){
+    this.router.navigate(['search-stock-take'])
+    
   }
-  
-  AddMO(){}
-
-  RemoveMO(){}
-
-  SaveMO(){}
-
-  CancelMO(){}
 
 }

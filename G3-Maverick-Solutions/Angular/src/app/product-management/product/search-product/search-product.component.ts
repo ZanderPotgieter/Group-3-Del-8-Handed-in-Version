@@ -73,7 +73,7 @@ export class SearchProductComponent implements OnInit {
 
   moveToContainer: boolean = false;
   selectedContainerID: number;
-  supplier: Supplier = new Supplier();
+  supplier: string;
   
 
   ngOnInit() {
@@ -280,6 +280,7 @@ export class SearchProductComponent implements OnInit {
 
           this.pricelist = res.PriceList;
           this.product_conlist = res.ProductContainers;
+          this.supplier = res.supplier;
 
 
       }

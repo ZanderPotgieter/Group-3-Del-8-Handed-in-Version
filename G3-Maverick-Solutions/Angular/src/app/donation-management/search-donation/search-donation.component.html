@@ -1,30 +1,69 @@
 
 <body>
     <h1>Search Donation</h1>
-<form  #form='ngForm' class="mb-4" autocomplete="off">
+<form [formGroup]="angForm" >
+    
     
     <div class="card" *ngIf = "showSearch">
-
-            
-        <div class="divleft">
-            <label class="subheadinglabel">Enter donation recipient cell number to search:</label>
-            <br><br>
-            <label for="Name">Name</label>
-            <input type = "text" id="cell"  class="searchInput" class="form-control" [(ngModel)]="cell" name="cell" required>     
-            <br><br>
-        </div> 
-
-        <div class="divleft">
-            <button type="submit" (click)= "searchDonations()">Search</button>
-            <button type="button" (click)= "gotoDonationManagement()">Cancel</button>
+            <label class="subheadinglabel">Search for donation recipient:</label>
+            <br>
+            <button type="button" (click)= "showSearchByCell()">Search By Cell</button>
+            <button type="button" (click)= "showSearchByName()">Search By Name</button>
             <button type="button" (click)= "gotoAddDonationRecipient()">Add Recipient</button>
-            
+            <!-- <button type="button" (click)= "gotoDonationManagement()">View all Recipients</button> -->
+            <button type="button" (click)= "gotoDonationManagement()">Cancel</button>
         </div>
-    </div>
+
+        <div class="card" *ngIf = "showCell">    
+            <div class="divleft">
+                <label class="subheadinglabel">Enter donation recipient cell number to search:</label>
+                <br>
+                <label for="cell">Cell:</label>
+                <input type = "text" formControlName="cell"  id="cell"  class="cell" class="form-control" [(ngModel)]="cell" name="cell" pattern="[0-9 ]*" required>    
+                <br>
+                <span style="color:red" *ngIf="angForm.get('cell').errors && (angForm.get('cell').touched || angForm.get('cell').dirty)">
+                    <span *ngIf="angForm.get('cell').errors.required">Cell number is required.</span>
+                    <span *ngIf="angForm.get('cell').errors.minlength || angForm.get('cell').errors.maxlength">Cell number must be 10 number</span>
+                    <span *ngIf="angForm.get('cell').errors.pattern">Only numebers.</span>
+                </span>
+            </div> 
+
+            <div class="divleft">
+                <button type="submit" (click)= "searchDonationsByCell()" >Search</button>
+            </div>
+        </div>
+
+        <div class="card" *ngIf = "showName">    
+            <div class="divleft">
+                <label class="subheadinglabel">Enter donation recipient details to search:</label>
+                <br>
+                <label for="name">Name</label>
+                <input type = "text" formControlName="name" id="name"  class="name" class="form-control" [(ngModel)]="name" name="name"  pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('name').errors && (angForm.get('name').touched || angForm.get('name').dirty)">
+                    <span *ngIf="angForm.get('name').errors.required">Name is required.</span>
+                    <span *ngIf="angForm.get('name').errors.minlength || angForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('name').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
+                <label for="surname">Surname</label>
+                <input type = "text" formControlName="surname"  id="surname"  class="surname" class="form-control" [(ngModel)]="surname" name="surname" pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('surname').errors && (angForm.get('surname').touched || angForm.get('surname').dirty)">
+                    <span *ngIf="angForm.get('surname').errors.required">Surname is required.</span>
+                    <span *ngIf="angForm.get('surname').errors.minlength || angForm.get('surname').errors.maxlength">Surname must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('surname').errors.pattern">Only text characters.</span>
+                </span>
+            </div> 
+
+            <div class="divleft">
+                <button type="submit" (click)= "searchDonationsByName()">Search</button>
+            </div>
+        </div>
 
 
     <div  *ngIf = "showResults" >
-        <div *ngFor= "let don of donations">
+        
             <div class="card"  >
             <label> <span style="white-space: nowrap;">Donation Recipient Details </span></label>
             <br>
@@ -32,49 +71,55 @@
                 <br>
 
                 <label for="Name">Name:</label>
-            <!-- <input type = "text" class="form-control"  [(ngModel)]="donationRecipient.DrName"  name="DrName" id="DrName"  required [readonly] = "this.inputEnabled">      -->
-            <label for="NameInput">{{don.Donation_Recipient.DrName}} </label>
+             <input type = "text" formControlName="DrName" class="form-control"  [(ngModel)]="donationRecipient.DrName"  name="DrName" id="DrName"  required [readonly] = "this.inputEnabled">     
+            <!-- <label for="NameInput">{{don.Donation_Recipient.DrName}} </label> -->
             <br>
             </div>
 
             <div class="divleft">
                 <label for="Name">Surname</label>
-                <!-- <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrSurname" name="DrSurname" id="DrSurname"  required [readonly] = "this.inputEnabled"> -->        
-                <label for="NameInput">{{don.Donation_Recipient.DrSurname}} </label>
+                <input type = "text" formControlName="DrSurname" class="form-control" [(ngModel)]="donationRecipient.DrSurname" name="DrSurname" id="DrSurname"  required [readonly] = "this.inputEnabled">       
+                <!-- <label for="NameInput">{{don.Donation_Recipient.DrSurname}} </label> -->
             </div>
 
             <div class="divleft">
                 <label for="Name">Cell Number</label>
-                <!-- <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrCell" name="DrCell" id="DrCell"  required [readonly] = "this.inputEnabled">  --> 
-                <label for="NameInput">{{don.Donation_Recipient.DrCell}} </label>
+                <input type = "text" formControlName="DrCell" class="form-control" [(ngModel)]="donationRecipient.DrCell" name="DrCell" id="DrCell"  required [readonly] = "this.inputEnabled">  
+                <!-- <label for="NameInput">{{don.Donation_Recipient.DrCell}} </label> -->
                 <br>
             </div>
 
             <div class="divleft">
                 <label for="Name">Email</label>
-                <!-- <input type = "text" class="form-control" [(ngModel)]="donationRecipient.DrEmail" name="DrEmail" id="DrEmial"  required [readonly] = "this.inputEnabled">            -->
-                <label for="NameInput">{{don.Donation_Recipient.DrEmail}} </label>
+                <input type = "text" formControlName="DrEmail" class="form-control" [(ngModel)]="donationRecipient.DrEmail" name="DrEmail" id="DrEmial"  required [readonly] = "this.inputEnabled">            
+                <!-- <label for="NameInput">{{don.Donation_Recipient.DrEmail}} </label> -->
                 <br>
             </div> 
         </div>
+    </div>
 
-        
+
+    <div  *ngIf = "showAllDons" >       
         <br><br>
-
+    
         <div class="card" id="donation">
             <label > <span style="white-space: nowrap;">Donation Details</span></label>
             <br>
             <table>
-                <!-- <th>Status</th> -->
-                <th>Date</th>
-                <th>Description</th>
-                <th>Action</th>
+                <tr>
+                    <!-- <th>Status</th> -->
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
 
-                <tr >
+                <tr *ngFor= "let don of donations, index as ndx" >
                     <!-- <td>{{don.DonationStatus.DSDescription}}</td> -->
-                    <td>{{don.DonDate}}</td>
-                    <td>{{don.DonDescription}}</td>
-                    <td><button type="submit" (click)="viewDonation()">View</button></td>
+                    <td>{{don.DonationID}}</td>
+                    <td>{{don.DonDate}}</td> 
+                    <td>{{don.DonDescription}}</td> 
+                    <td><button type="submit" (click)="view(don.DonationID)">View</button></td>
                 </tr>
             
             </table>
@@ -84,9 +129,66 @@
             
             <button type="submit" (click)="cancel()">Cancel</button>
         </div>
-          
+</div>
+
+<div class="card">
+<div  *ngIf = "showDonation">
+    <div  id="donation">
+        <label > <span style="white-space: nowrap;">Donation Details</span></label>
+        <br>
+        <div class="divleft">
+            <br>
+
+            <div *ngIf = "showText" class="divleft">
+                <label>Status</label>
+                <input type="text" formControlName="DSDescription" class="form-control" [(ngModel)]="donationStatus.DSDescription" id="DSDescription" name="DSDescription" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <!-- <select required name="selection" [(ngModel)]="selection">
+                    <option value="0">--select--</option>
+                    <option *ngFor="let status of statuses " [ngValue]="donationStatus">{{donationStatus.DSDescription}}</option>
+                </select>
+                <br> -->
+
+                <label for="date">Donation Date </label>
+                <input type="text" formControlName="DonDate" class="form-control" [(ngModel)]="donation.DonDate" id="DonDate" name="DonDate" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+            </div>
+
+            <div *ngIf = "showInput" class="divleft">
+                <label>Status</label>
+            <select required class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
+                <option value="0">--Select--</option>
+                <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
+              </select>
+
+                <label for="date">Donation Date </label>
+                <input type="date" formControlName="DonDate" class="form-control" [(ngModel)]="donation.DonDate" id="DonDate" name="DonDate" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+            </div>
+
+
+            <label for="Name">Donated Amount in R</label>
+            <input type="number" formControlName="DonAmount" class="form-control" [(ngModel)]="donation.DonAmount" id="DonAmount" name="DonAmount" pattern="[0-9]*" required [readonly] = "this.inputEnabled"> 
+            <br>
+            <label for="Name">Description</label>
+            <input type="text" formControlName="DonDescription" class="form-control" [(ngModel)]="donation.DonDescription" id="DonDescription" name="DonDescription" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled"> 
+            <br><br>
+        </div>
     </div>
 </div>
+
+<br>
+        <div class="divleft" *ngIf="showButtons">
+        <button type="submit" (click)="update()">Update</button>
+        <!-- <button type="submit" >Edit donated products</button> -->
+        </div>
+
+        <div class="divleft" *ngIf="showSave" >
+            <button type="submit" (click)="Save()">Save</button>
+            <button type="submit" (click)="cancel()">Cancel</button>
+        </div>
+</div>
+
 
 
 </form>

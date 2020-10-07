@@ -92,6 +92,9 @@ import { Component, NgModule } from '@angular/core';
     import { AddVatComponent } from './product-management/vat/add-vat/add-vat.component';
     import { UpdateVatComponent } from './product-management/vat/update-vat/update-vat.component';
     import {LowstockComponent} from './product-management/lowstock/lowstock.component';
+    import {StockTakeFormComponent} from './product-management/stock-take-form/stock-take-form.component';
+    import {CompleteStockTakeComponent} from './product-management/complete-stock-take/complete-stock-take.component';
+    import {SearchStockTakeComponent} from './product-management/search-stock-take/search-stock-take.component';
 
     //---Reporting Order Subsystem Imports---//
     import { CreditorsReportComponent } from './reporting-management/creditors-report/creditors-report.component';
@@ -415,6 +418,18 @@ import { Component, NgModule } from '@angular/core';
         {
             path: 'lowstock',
             component: LowstockComponent,
+        },
+        {
+            path: 'stock-take-form',
+            component: StockTakeFormComponent,
+        },
+        {
+            path: 'complete-stock-take',
+            component: CompleteStockTakeComponent,
+        },
+        {
+            path: 'search-stock-take',
+            component: SearchStockTakeComponent,
         }
 
     ];

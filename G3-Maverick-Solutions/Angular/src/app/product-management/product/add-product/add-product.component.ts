@@ -21,6 +21,7 @@ export class AddProductComponent implements OnInit {
   pdForm: FormGroup;
   categories: ProductCategory[];
   selectedCategory: ProductCategory;
+  selectedSupplier: Supplier;
   selectedProductID : number;
   newProduct : Product = new Product();
   price : Price = new Price();
@@ -115,7 +116,7 @@ export class AddProductComponent implements OnInit {
   }
 
   addSupplier(val : Supplier){
-    this.newProduct.SupplierID;
+    this.selectedSupplier = val;
   }
 
   setProducts(val : Product){
@@ -135,6 +136,7 @@ export class AddProductComponent implements OnInit {
   }
 
   Save(){
+    this.newProduct.SupplierID = this.selectedSupplier.SupplierID;
     this.newProduct.ProductCategoryID = this.selectedCategory.ProductCategoryID;
     this.price.Product = this.newProduct;
     this.productService.addProduct(this.price).subscribe( (res: any)=> {

@@ -53,6 +53,7 @@ export class ViewSupplierComponent implements OnInit {
         alert(this.responseMessage)}
         else{
       this.suppliers = res;
+      
     }
     })
   }
@@ -69,6 +70,7 @@ export class ViewSupplierComponent implements OnInit {
       alert(this.responseMessage)}
       else{
           this.supplier = res.supplier;
+          this.products = res.products;
 
       this.showSearch = false;
       this.showResults = true;
@@ -95,6 +97,8 @@ export class ViewSupplierComponent implements OnInit {
           this.supplier.SupStreet = res.SupStreet;
           this.supplier.SupCode = res.SupCode;
           this.supplier.SupSuburb = res.SupSuburb;
+
+          this.products = res.products;
 
           
       this.showSearch = false;

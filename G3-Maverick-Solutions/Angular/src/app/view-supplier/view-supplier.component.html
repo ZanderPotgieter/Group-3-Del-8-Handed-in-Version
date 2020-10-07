@@ -28,13 +28,13 @@
                 <th>Name</th>
                 <th>Cell No</th>  
                 <th>Email</th>   
-                <th  style="width: 10%;"></th>
+                <th  style="width: 20%;"></th>
               </tr>  
               <tr *ngFor="let sup of suppliers; index as ndx">  
-                <td>{{sup.SupName}}</td>  
-                <td>{{sup.SupCell}}</td>  
-                <td>{{sup.SupEmail}}</td> 
-                <td><button  style="border-radius: 10px; width: 60%;" (click)="view(ndx)">View</button></td> 
+                <td style="padding: 0px;">{{sup.SupName}}</td>  
+                <td style="padding: 0px;">{{sup.SupCell}}</td>  
+                <td style="padding: 0px;">{{sup.SupEmail}}</td> 
+                <td style="padding: 0px;"><button  style="border-radius: 10px; width: 100%;" (click)="view(ndx)">View</button></td> 
 
               </tr>   
           </table> 
@@ -111,7 +111,7 @@
         <br>
         <div class="divleft" >
             <label for="SupCode">Postal Code:</label>
-                <input type="text" formControlName="SupCode" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" pattern="[0-9 ]*" required placeholder="0000" required [readonly] = "this.inputEnabled">
+                <input type="text" formControlName="SupCode" [(ngModel)]="supplier.SupCode" id="SupCode" name="SupCode" pattern="[0-9 ]*" required placeholder="0000" minlength="4" maxlength="4" required [readonly] = "this.inputEnabled">
                 <br>
                 <span style="color:red" *ngIf="supForm.get('SupCode').errors && (supForm.get('SupCode').touched || supForm.get('SupCode').dirty)">
                     <span *ngIf="supForm.get('SupCode').errors.required">Postal Code is required.<br></span>
@@ -133,18 +133,13 @@
         </div>
         <br>
         <div>
-            <table  class="table" id="Table">
-    
-            
-                <tr>
+            <table>
                     <th>Products Supplied</th>
     
-                </tr>
-    
-                <tr *ngFor="let item of  products; index as ndx;">
+                <tr *ngFor="let item of products; index as ndx;">
                     <td>{{item.ProdName}}</td>
 
-                    </tr>
+                 </tr>
             </table>
         </div>
         

@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.Web.Http.Cors;
 using ORDRA_API.Models;
 using System.Security.Cryptography.X509Certificates;
+using System.Runtime.InteropServices;
 
 namespace ORDRA_API.Controllers
 {
@@ -34,7 +35,7 @@ namespace ORDRA_API.Controllers
 
                 List<Product> products = db.Products.Include(x => x.Prices).ToList();
                 List<Product> productsList = new List<Product>();
-                foreach(var item in products)
+                foreach (var item in products)
                 {
                     Product product = new Product();
                     product.ProductID = item.ProductID;
@@ -44,7 +45,7 @@ namespace ORDRA_API.Controllers
                     product.ProdReLevel = item.ProdReLevel;
                     product.ProductCategoryID = item.ProductCategoryID;
                     productsList.Add(product);
-                   
+
                 }
 
                 toReturn.Products = productsList;
@@ -136,7 +137,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
-                    if(product == null)
+                    if (product == null)
                     {
                         toReturn.Error = "Product Not Found";
                         return toReturn;
@@ -150,14 +151,14 @@ namespace ORDRA_API.Controllers
                             return toReturn;
                         }
                     }
-                    if(quantity< 1)
+                    if (quantity < 1)
                     {
                         toReturn.Error = "Cannot Move product with No quantity";
                         return toReturn;
                     }
                     else
                     {
-                        
+
                         Container_Product conProdFrom = db.Container_Product.Where(x => x.ContainerID == fromContainer.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
                         if (conProdFrom == null)
                         {
@@ -166,7 +167,7 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            if(conProdFrom.CPQuantity < quantity)
+                            if (conProdFrom.CPQuantity < quantity)
                             {
                                 toReturn.Error = "Not Enough Quantity to Move";
                                 return toReturn;
@@ -184,14 +185,14 @@ namespace ORDRA_API.Controllers
 
                                 Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == toConID && x.ProductID == productID).FirstOrDefault();
                                 Container containerTo = db.Containers.Where(x => x.ContainerID == toConID).FirstOrDefault();
-                                if( container_Product == null)
+                                if (container_Product == null)
                                 {
                                     Container_Product toProdCon = new Container_Product();
                                     // toProdCon.ContainerID = toConID;
                                     // toProdCon.ProductID = productID;
                                     toProdCon.CPQuantity = quantity;
                                     toProdCon.Product = product;
-                                    toProdCon.Container =  containerTo;
+                                    toProdCon.Container = containerTo;
                                     db.SaveChanges();
 
                                     toReturn.CoantainerTo = db.Container_Product.Where(x => x.ContainerID == toProdCon.ContainerID && x.ProductID == toProdCon.ProductID).FirstOrDefault(); ;
@@ -203,16 +204,16 @@ namespace ORDRA_API.Controllers
 
                                     toReturn.CoantainerTo = db.Container_Product.Where(x => x.ContainerID == container_Product.ContainerID && x.ProductID == container_Product.ProductID).FirstOrDefault();
                                 }
-                                
 
-                               
+
+
                             }
                         }
                         toReturn.Message = "Product " + product.ProdName + " moved to " + fromContainer.ConName;
                     }
                 }
 
-                
+
 
             }
             catch
@@ -243,7 +244,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                objectProduct = db.Products.Include(x => x.Product_Category).Include(x=> x.Container_Product).Where(x => x.ProductID == id).FirstOrDefault();
+                objectProduct = db.Products.Include(x => x.Product_Category).Include(x => x.Container_Product).Where(x => x.ProductID == id).FirstOrDefault();
 
 
 
@@ -350,7 +351,7 @@ namespace ORDRA_API.Controllers
                             {
 
                                 dynamic ProdCon = new ExpandoObject();
-                                ProdCon.Container = conProd.Container.ConName; 
+                                ProdCon.Container = conProd.Container.ConName;
                                 ProdCon.ContainerID = conProd.ContainerID;
                                 ProdCon.ProductID = conProd.ProductID;
                                 ProdCon.CPQuantity = conProd.CPQuantity;
@@ -359,6 +360,12 @@ namespace ORDRA_API.Controllers
                         }
 
                         toReturn.ProductContainers = ProductCons;
+                        if (objectProduct.SupplierID != null)
+                        {
+                            Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                            toReturn.supplier = supplier.SupName;
+                        }
+
 
                     }
 
@@ -516,6 +523,12 @@ namespace ORDRA_API.Controllers
 
                         toReturn.ProductContainers = ProductCons;
 
+                        if (objectProduct.SupplierID != null)
+                        {
+                            Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                            toReturn.supplier = supplier.SupName;
+                        }
+
                     }
                 }
                 else
@@ -560,7 +573,7 @@ namespace ORDRA_API.Controllers
                     Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
 
-                    if (cat != null) 
+                    if (cat != null)
                     {
                         //Set Product Category Details
                         Product_Category category = new Product_Category();
@@ -577,7 +590,7 @@ namespace ORDRA_API.Controllers
 
                     if (price != null)
                     {
-                       
+
                         //Set Product Details
                         dynamic Product = new ExpandoObject();
                         Product.ProductID = objectProduct.ProductID;
@@ -586,7 +599,7 @@ namespace ORDRA_API.Controllers
                         Product.ProdName = objectProduct.ProdName;
                         Product.ProdDesciption = objectProduct.ProdDesciption;
                         Product.ProdReLevel = objectProduct.ProdReLevel;
-                        
+
 
 
                         DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
@@ -600,9 +613,9 @@ namespace ORDRA_API.Controllers
                         Price.PriceStartDate = startdate.ToString("yyyy-MM-dd");
                         Price.PriceEndDate = enddate.ToString("yyyy-MM-dd");
 
-                
-                        
-          
+
+
+
                         toReturn.CurrentPrice = Price;
                         toReturn.Product = Product;
 
@@ -618,8 +631,8 @@ namespace ORDRA_API.Controllers
                         Product.ProdReLevel = objectProduct.ProdReLevel;
 
 
-                        toReturn.Product = Product; 
-                       
+                        toReturn.Product = Product;
+
                         toReturn.Message = "No current Price For Product";
                     }
 
@@ -651,7 +664,7 @@ namespace ORDRA_API.Controllers
 
                     List<Container_Product> container_Product = db.Container_Product.Where(x => x.ProductID == objectProduct.ProductID).ToList();
                     List<dynamic> ProductCons = new List<dynamic>();
-                    if ( container_Product != null)
+                    if (container_Product != null)
                     {
                         foreach (Container_Product conProd in container_Product)
                         {
@@ -672,8 +685,11 @@ namespace ORDRA_API.Controllers
 
                     }
 
-                    Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
-                    toReturn.supplier = supplier;
+                    if (objectProduct.SupplierID != null)
+                    {
+                        Supplier supplier = db.Suppliers.Where(x => x.SupplierID == objectProduct.SupplierID).FirstOrDefault();
+                        toReturn.supplier = supplier.SupName;
+                    }
                 }
                 else
                 {
@@ -681,7 +697,7 @@ namespace ORDRA_API.Controllers
                     toReturn.Message = "Prodcut Not Found";
                 }
 
-        }
+            }
             catch
             {
                 toReturn.Message = "Search interrupted. Retry";
@@ -708,15 +724,16 @@ namespace ORDRA_API.Controllers
             {
                 List<Product> objectProducts = db.Products.Where(x => x.ProductCategoryID == categoryID).ToList();
 
-             
 
-                
+
+
                 if (objectProducts != null)
                 {
-                   
+
                     List<dynamic> productsList = new List<dynamic>();
                     foreach (var item in objectProducts)
-                    {   dynamic product = new ExpandoObject();
+                    {
+                        dynamic product = new ExpandoObject();
                         product.ProductID = item.ProductID;
                         product.ProdName = item.ProdName;
                         product.CPQuantity = 0;
@@ -732,7 +749,7 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Message = "No Products Found In Category";
                 }
-                
+
 
             }
             catch
@@ -777,7 +794,8 @@ namespace ORDRA_API.Controllers
             {
                 //get category for product
                 Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == newProduct.Product.ProductCategoryID).FirstOrDefault();
-                if (cat != null)
+                Supplier sup = db.Suppliers.Where(x => x.SupplierID == newProduct.Product.SupplierID).FirstOrDefault();
+                if (cat != null & sup != null)
                 {
 
 
@@ -785,9 +803,10 @@ namespace ORDRA_API.Controllers
                     Product addProd = new Product();
                     addProd.ProdName = newProduct.Product.ProdName;
                     addProd.ProdBarcode = newProduct.Product.ProdBarcode;
-
+                    addProd.SupplierID = sup.SupplierID;
                     addProd.ProdDesciption = newProduct.Product.ProdDesciption;
                     addProd.ProdReLevel = newProduct.Product.ProdReLevel;
+                    addProd.Supplier = sup;
                     addProd.Product_Category = cat;
                     db.Products.Add(addProd);
                     db.SaveChanges();
@@ -812,9 +831,9 @@ namespace ORDRA_API.Controllers
                 {
                     toReturn.Message = "Add Product UnSuccsessful: Select A Category";
                 }
-           
+
             }
-            catch(Exception)
+            catch (Exception)
             {
                 toReturn.Message = "Add Product UnSuccsessful";
 
@@ -831,55 +850,56 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
 
 
-           try
+            try
             {
 
                 Product prod = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
                 Container con = db.Containers.Where(x => x.ContainerID == containerID).FirstOrDefault();
 
-            if ( con == null){
-                return toReturn.Message = "Container Not Found";
-
-            }
-            if (prod == null)
-            {
-                return toReturn.Message = "Product Not Found";
-
-            }
-            else
-            {
-                Container_Product conProd = new Container_Product();
-                conProd.ContainerID = con.ContainerID;
-                conProd.ProductID = prod.ProductID;
-                conProd.CPQuantity = quantity;
-                conProd.Product = prod;
-                conProd.Container = con;
-
-                Container_Product found = db.Container_Product.Where(x => x.ContainerID == conProd.ContainerID && x.ProductID == conProd.ProductID).FirstOrDefault();
-
-                if (found == null)
+                if (con == null)
                 {
-                    db.Container_Product.Add(conProd);
-                    db.SaveChanges();
+                    return toReturn.Message = "Container Not Found";
 
-                    toReturn.Message = "Product Added To Container";
+                }
+                if (prod == null)
+                {
+                    return toReturn.Message = "Product Not Found";
+
                 }
                 else
                 {
-                    toReturn.Message= " Product Already Linked To Container";
-                    
+                    Container_Product conProd = new Container_Product();
+                    conProd.ContainerID = con.ContainerID;
+                    conProd.ProductID = prod.ProductID;
+                    conProd.CPQuantity = quantity;
+                    conProd.Product = prod;
+                    conProd.Container = con;
+
+                    Container_Product found = db.Container_Product.Where(x => x.ContainerID == conProd.ContainerID && x.ProductID == conProd.ProductID).FirstOrDefault();
+
+                    if (found == null)
+                    {
+                        db.Container_Product.Add(conProd);
+                        db.SaveChanges();
+
+                        toReturn.Message = "Product Added To Container";
+                    }
+                    else
+                    {
+                        toReturn.Message = " Product Already Linked To Container";
+
+                    }
+
                 }
 
+
             }
-
-
-           }
             catch (Exception)
             {
                 toReturn.Message = "Adding Product To Container UnSuccsessful";
 
             }
-           return toReturn;
+            return toReturn;
         }
 
         //ADD PRICE
@@ -909,7 +929,7 @@ namespace ORDRA_API.Controllers
 
                     toReturn.Message = "Price Added To Product Successfuly";
                 }
-              
+
             }
             catch
             {
@@ -925,12 +945,12 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            
-            
+
+
             try
             {
                 Price price = db.Prices.Where(x => x.PriceID == id).FirstOrDefault();
-                if(price == null)
+                if (price == null)
                 {
                     toReturn.Message = "Price Not Found";
                     return toReturn;
@@ -941,20 +961,20 @@ namespace ORDRA_API.Controllers
                     Product product = db.Products.Where(x => x.ProductID == price.ProductID).FirstOrDefault();
                     if (product == null)
                     {
-                         toReturn.Message = "Prices's Product Not Found";
+                        toReturn.Message = "Prices's Product Not Found";
                         return toReturn;
                     }
                     else
                     {
-                       List<Customer_Order> orders = db.Customer_Order.Where(x => x.CusOrdDate > price.PriceStartDate && x.CusOrdDate < DateTime.Now).ToList();
-                        if(orders != null)
+                        List<Customer_Order> orders = db.Customer_Order.Where(x => x.CusOrdDate > price.PriceStartDate && x.CusOrdDate < DateTime.Now).ToList();
+                        if (orders != null)
                         {
-                            foreach (Customer_Order order in orders) 
+                            foreach (Customer_Order order in orders)
                             {
                                 Product_Order_Line product_Order_Line = db.Product_Order_Line.Where(x => x.CustomerOrderID == order.CustomerOrderID).FirstOrDefault();
-                                if(product_Order_Line != null)
+                                if (product_Order_Line != null)
                                 {
-                                    if(product.ProductID == product_Order_Line.ProductID)
+                                    if (product.ProductID == product_Order_Line.ProductID)
                                     {
                                         toReturn.Message = "Price Update Restricted";
                                         return toReturn;
@@ -966,24 +986,24 @@ namespace ORDRA_API.Controllers
 
 
                         List<Sale> sales = db.Sales.Where(x => x.SaleDate > price.PriceStartDate && x.SaleDate < DateTime.Now).ToList();
-                        if(sales != null)
+                        if (sales != null)
                         {
-                            foreach( Sale sale in sales)
+                            foreach (Sale sale in sales)
                             {
                                 Product_Sale product_Sale = db.Product_Sale.Where(x => x.SaleID == sale.SaleID).FirstOrDefault();
-                                if( product_Sale != null)
+                                if (product_Sale != null)
                                 {
-                                    if(product.ProductID == product_Sale.ProductID)
+                                    if (product.ProductID == product_Sale.ProductID)
                                     {
                                         toReturn.Message = "Price Update Restricted";
                                         return toReturn;
                                     }
-                                    
+
                                 }
                             }
 
                         }
-                        
+
 
                     }
                 }
@@ -999,8 +1019,8 @@ namespace ORDRA_API.Controllers
         }
 
 
-          //UPDATE product
-         [HttpPost]
+        //UPDATE product
+        [HttpPost]
         [Route("updateProduct")]
         public object updateProduct(Product updateProduct)
         {
@@ -1055,7 +1075,7 @@ namespace ORDRA_API.Controllers
                 if (conProd != null)
                 {
                     found = true;
-                     return found;
+                    return found;
                 }
                 else
                 {
@@ -1085,7 +1105,7 @@ namespace ORDRA_API.Controllers
                             {
                                 return found;
                             }
-                            
+
 
 
                         }
@@ -1200,7 +1220,7 @@ namespace ORDRA_API.Controllers
                     toReturn.Message = "Product Not Found In Container";
                 }
 
-               
+
 
 
 
@@ -1212,52 +1232,6 @@ namespace ORDRA_API.Controllers
             }
             return toReturn;
         }
-        //stock take
-        //get all stock take details
-        [HttpGet]
-        [Route("GetAllStockTake")]
-        public object GetAllStockTake()
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-                toReturn = db.Stock_Take.ToList();
-            }
-            catch
-            {
-                toReturn.Message = "Search interrupted. Retry";
-            }
-
-            return toReturn;
-
-        }
-
-        //add stock take
-        [HttpPost]
-        [Route("AddStockTake")]
-        public object AddStockTake(Stock_Take newStockTake)
-        {
-
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-                db.Stock_Take.Add(newStockTake);
-                db.SaveChanges();
-                toReturn.Message = "Add Succsessful";
-            }
-            catch (Exception)
-            {
-                toReturn.Message = "Add UnSuccsessful";
-
-
-            }
-
-            return toReturn;
-        }
 
         //get marked-off reasons
         [HttpGet]
@@ -1266,12 +1240,15 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
+            toReturn.Reasons = new ExpandoObject();
 
             try
             {
-                toReturn = db.Marked_Off_Reason.ToList();
+                List<Marked_Off_Reason> reasons = db.Marked_Off_Reason.ToList();
+                toReturn.Reasons = reasons;
+
             }
-            catch 
+            catch
             {
                 toReturn.Message = "Search interrupted. Retry";
             }
@@ -1291,13 +1268,14 @@ namespace ORDRA_API.Controllers
 
             try
             {
+
                 db.Marked_Off.Add(newMarkedOff);
                 db.SaveChanges();
-                toReturn.Message = "Add Succsessful";
+                toReturn.Message = "Product Mark Off Succsessful";
             }
-            catch (Exception)
+            catch
             {
-                toReturn.Message = "Add UnSuccsessful";
+                toReturn.Message = "Product Mark Off UnSuccsessful";
 
 
             }
@@ -1318,7 +1296,7 @@ namespace ORDRA_API.Controllers
 
 
             List<dynamic> listOfDetails = new List<dynamic>();
-            foreach(var conP in containerProd)
+            foreach (var conP in containerProd)
             {
                 //get the container product and product details
                 Container_Product containerProduct = db.Container_Product.Include(x => x.Product).ToList().FirstOrDefault();
@@ -1353,7 +1331,7 @@ namespace ORDRA_API.Controllers
             {
                 List<VAT> vats = db.VATs.ToList();
                 List<dynamic> vatList = new List<dynamic>();
-                foreach(var item in vats)
+                foreach (var item in vats)
                 {
                     dynamic vat = new ExpandoObject();
                     DateTime startdate = Convert.ToDateTime(item.VATStartDate);
@@ -1388,7 +1366,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-               DateTime date = DateTime.Now.AddYears(1);
+                DateTime date = DateTime.Now.AddYears(1);
                 newVat.VATEndDate = date;
                 db.VATs.Add(newVat);
                 db.SaveChanges();
@@ -1414,7 +1392,7 @@ namespace ORDRA_API.Controllers
 
             VAT objectVat = new VAT();
             dynamic toReturn = new ExpandoObject();
-      
+
 
             try
             {
@@ -1447,7 +1425,7 @@ namespace ORDRA_API.Controllers
 
         [HttpGet]
         [Route("getLowStock")]
-        public object getLowStock( int containerID)
+        public object getLowStock(int containerID)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -1455,7 +1433,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x=> x.ContainerID == containerID).ToList();
+                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x => x.ContainerID == containerID).ToList();
                 if (conProd != null)
                 {
                     //Get List Of products with current price
@@ -1501,5 +1479,433 @@ namespace ORDRA_API.Controllers
 
             return toReturn;
         }
+
+        [HttpPost]
+        [Route("initateStockTake")]
+        public object initateStockTake(dynamic session)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.container = new ExpandoObject();
+            toReturn.stock_Take = new Stock_Take();
+
+            try
+            {
+
+
+                Container con = new Container();
+                //get container of current user
+                string sessionID = session.token;
+                var user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
+
+                if (user.ContainerID == null)
+                {
+                    return toReturn.Error = ("Curent Container Not Found");
+
+                }
+                con = db.Containers.Where(x => x.ContainerID == user.ContainerID).FirstOrDefault();
+                if (con == null)
+                {
+                    return toReturn.Error = ("Curent Container Not Found");
+                }
+
+                Stock_Take stock_Take = new Stock_Take();
+                stock_Take.UserID = user.UserID;
+                stock_Take.User = user;
+                stock_Take.STakeDate = DateTime.Now;
+                stock_Take.ContainerID = con.ContainerID;
+                stock_Take.Container = con;
+                stock_Take.isCompleted = false;
+                db.Stock_Take.Add(stock_Take);
+                db.SaveChanges();
+
+                toReturn.stock_Take = db.Stock_Take.Where(x => x.isCompleted == false).ToList().LastOrDefault();
+                toReturn.container = con;
+
+
+            }
+            catch
+            {
+                toReturn.Message = "Form Generation Unsuccessful. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("addStockTakeProduct")]
+        public object addStockTakeProduct(int stockTakeID, int productID, int STcount)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.container = new ExpandoObject();
+            toReturn.stock_Take_Product = new ExpandoObject();
+
+            try
+            {
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+                Stock_Take stock_Take = db.Stock_Take.Where(x => x.StockTakeID == stockTakeID).FirstOrDefault();
+
+                if (stock_Take != null && product != null)
+                {
+
+                    Stock_Take_Product found = db.Stock_Take_Product.Where(x => x.StockTakeID == stockTakeID && x.ProductID == productID).FirstOrDefault();
+                    if (found == null)
+                    {
+                        Stock_Take_Product stock_Take_Product = new Stock_Take_Product();
+                        stock_Take_Product.ProductID = product.ProductID;
+                        stock_Take_Product.Product = product;
+                        stock_Take_Product.StockTakeID = stock_Take.StockTakeID;
+                        stock_Take_Product.Stock_Take = stock_Take;
+                        stock_Take_Product.STProductCount = STcount;
+                        db.Stock_Take_Product.Add(stock_Take_Product);
+                        db.SaveChanges();
+
+                        toReturn.stock_Take_Product = db.Stock_Take_Product.ToList().LastOrDefault();
+                    }
+                    else
+                    {
+                        found.STProductCount = STcount;
+                        db.SaveChanges();
+                        toReturn.stock_Take_Product = found;
+                    }
+
+                    toReturn.Message = "Product Count Saved";
+                }
+                else
+                {
+                    toReturn.Error = "Save Unsuccesful, Stock Take initiated Not Found";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Form Generation Unsuccessful. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getStockTake")]
+        public object getStockTake(int id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.container = new ExpandoObject();
+            toReturn.stock_Take = new ExpandoObject();
+            toReturn.products = new ExpandoObject();
+            toReturn.employee = new ExpandoObject();
+
+            try
+            {
+                Stock_Take stock_Take = db.Stock_Take.Where(x => x.StockTakeID == id).FirstOrDefault();
+                if (stock_Take != null)
+                {
+                    Container con = db.Containers.Where(x => x.ContainerID == stock_Take.ContainerID).FirstOrDefault();
+                    List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
+                    List<Product> products = new List<Product>();
+                    if (stock_Take_Product != null)
+                    {
+
+                        foreach (Stock_Take_Product take_Product in stock_Take_Product)
+                        {
+                            Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == stock_Take.ContainerID && x.ProductID == take_Product.ProductID).FirstOrDefault();
+                            Marked_Off marked_Off = db.Marked_Off.Where(x => x.ProductID == take_Product.ProductID && x.MoDate == stock_Take.STakeDate && x.ContainerID == stock_Take.ContainerID).FirstOrDefault();
+
+                            Product prod = db.Products.Where(x => x.ProductID == take_Product.ProductID).FirstOrDefault();
+                            if (prod != null)
+                            {
+                                dynamic product = new ExpandoObject();
+                                product.ProductID = prod.ProductID;
+                                product.ProdName = prod.ProdName;
+                                product.ProdDescription = prod.ProdDesciption;
+                                product.STCount = take_Product.STProductCount;
+
+                                if (container_Product != null)
+                                {
+                                    product.CPQuantity = container_Product.CPQuantity;
+                                }
+                                else
+                                {
+                                    product.CPQuantity = 0;
+                                }
+
+                                if (marked_Off != null)
+                                {
+                                    product.MoQuantity = marked_Off.MoQuantity;
+                                }
+                                else
+                                {
+                                    product.MoQuantity = 0;
+                                }
+
+                                products.Add(product);
+                            }
+                        }
+                    }
+                    User employee = db.Users.Where(x => x.UserID == stock_Take.UserID).FirstOrDefault();
+                    if (employee != null)
+                    {
+                        toReturn.employee = employee.UserName + " " + employee.UserSurname;
+                    }
+
+                    toReturn.products = products;
+                    toReturn.stock_Take = stock_Take;
+                    toReturn.container = con;
+                }
+                else
+                {
+                    toReturn.Error = "Stock Take Record Not Found";
+                }
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getAllStockTakes")]
+        public object getAllStockTakes()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.stock_Takes = new ExpandoObject();
+
+            try
+            {
+                List<Stock_Take> stock_Takes = db.Stock_Take.ToList();
+                if (stock_Takes != null)
+                {
+                    List<Stock_Take> stock_Takes1 = new List<Stock_Take>();
+                    foreach (Stock_Take stock_Take in stock_Takes)
+                    {
+                        List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
+                        if (stock_Take_Product != null)
+                        {
+                            stock_Takes1.Add(stock_Take);
+
+                        }
+                    }
+
+                    toReturn.stock_Takes = stock_Takes1;
+                }
+                else
+                {
+                    toReturn.Error = "No Stock Takes Found";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getTodaysStockTake")]
+        public object getTodaysStockTake(DateTime date, int containerID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.stock_Takes = new ExpandoObject();
+
+            try
+            {
+                List<Stock_Take> stock_Takes = db.Stock_Take.Where(x => x.STakeDate == date && x.ContainerID == containerID && x.isCompleted == false).ToList();
+                if (stock_Takes != null)
+                {
+                    List<Stock_Take> stock_Takes1 = new List<Stock_Take>();
+                    foreach (Stock_Take stock_Take in stock_Takes)
+                    {
+                        List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
+                        if (stock_Take_Product != null)
+                        {
+                            stock_Takes1.Add(stock_Take);
+
+                        }
+                    }
+
+                    toReturn.stock_Takes = stock_Takes1;
+                }
+                else
+                {
+                    toReturn.Error = "No Incomplete Stock Take In Current Container On Date: " + DateTime.Now.ToShortDateString();
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getCompletedStockTakes")]
+        public object getCompletedStockTakes()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.stock_Takes = new ExpandoObject();
+
+            try
+            {
+                List<Stock_Take> stock_Takes = db.Stock_Take.Where(x => x.isCompleted == true).ToList();
+                List<Stock_Take> stock_Takes1 = new List<Stock_Take>();
+                if (stock_Takes != null)
+                {
+                    foreach (Stock_Take stock_Take in stock_Takes)
+                    {
+                        List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
+                        if (stock_Take_Product != null)
+                        {
+                            stock_Takes1.Add(stock_Take);
+
+                        }
+                    }
+
+                    toReturn.stock_Takes = stock_Takes1;
+                }
+                else
+                {
+                    toReturn.Error = "No Stock Takes Found";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getIncompleteStockTakes")]
+        public object getIncompleteStockTakes()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.stock_Takes = new ExpandoObject();
+
+            try
+            {
+                List<Stock_Take> stock_Takes = db.Stock_Take.Where(x => x.isCompleted == false).ToList();
+
+                if (stock_Takes != null)
+                {
+                    List<Stock_Take> stock_Takes1 = new List<Stock_Take>();
+                    foreach (Stock_Take stock_Take in stock_Takes)
+                    {
+                        List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
+                        if (stock_Take_Product != null)
+                        {
+                            stock_Takes1.Add(stock_Take);
+
+                        }
+                    }
+
+                    toReturn.stock_Takes = stock_Takes1;
+                }
+                else
+                {
+                    toReturn.Error = "No Stock Takes Found";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getContainerStockTakes")]
+        public object getContainerStockTakes(int containerID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.stock_Takes = new ExpandoObject();
+
+            try
+            {
+                List<Stock_Take> stock_Takes = db.Stock_Take.Where(x => x.ContainerID == containerID).ToList();
+                if (stock_Takes != null)
+                {
+                    List<Stock_Take> stock_Takes1 = new List<Stock_Take>();
+                    foreach (Stock_Take stock_Take in stock_Takes)
+                    {
+                        List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
+                        if (stock_Take_Product != null)
+                        {
+                            stock_Takes1.Add(stock_Take);
+
+                        }
+
+
+                        toReturn.stock_Takes = stock_Takes1;
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "No Stock Takes Found";
+                }
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+
+        [HttpGet]
+        [Route("completeStockTake")]
+        public object completeStockTake(int id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.stock_Takes = new ExpandoObject();
+
+            try
+            {
+                Stock_Take stock_Take = db.Stock_Take.Where(x => x.StockTakeID == id).FirstOrDefault();
+                if(stock_Take != null)
+                {
+                    stock_Take.isCompleted = true;
+                    db.SaveChanges();
+                    toReturn.Message = "Stock Take Completed Successfuly";
+                }
+                else
+                {
+                    toReturn.Error = "Stock Take Completed Unsuccessfuly: Invalid Stock Take ID";
+                }
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
     }
-}
+  }

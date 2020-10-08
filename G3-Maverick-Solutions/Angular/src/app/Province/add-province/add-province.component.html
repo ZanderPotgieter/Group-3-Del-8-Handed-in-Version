@@ -1,16 +1,21 @@
 <body>
     <h1>Add Province</h1>
     <br>
-    <form >
+    <form [formGroup]="angForm">
         
         <div class="card" >
             <label class="subheadinglabel">Enter the new province details:</label> 
             <div class="divleft">
                 <br><br>
                 <label for="Name">Name</label>    
-                <input type="text" class="form-control" [(ngModel)]="province.ProvName" id="ProvName" name="ProvName" required>
-      
-                <br><br>
+                <input type="text" formControlName="ProvName" class="form-control" [(ngModel)]="province.ProvName" id="ProvName" name="ProvName"  pattern="[a-zA-Z ]*" required>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('ProvName').errors && (angForm.get('ProvName').touched || angForm.get('ProvName').dirty)">
+                    <span *ngIf="angForm.get('ProvName').errors.required">Name is required.</span>
+                    <span *ngIf="angForm.get('ProvName').errors.minlength || angForm.get('ProvName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('ProvName').errors.pattern">Only text characters.</span>
+                </span>
+                <br>
 
             </div>
 

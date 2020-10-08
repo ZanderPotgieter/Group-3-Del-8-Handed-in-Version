@@ -80,7 +80,7 @@ export class SearchDonationComponent implements OnInit {
     this.showCell = true;
     this.showName = false;
     this.showSave = false;
-    this.inputEnabled = false;
+    this.inputEnabled = true;
     this.showButtons = false;
     
     this.showSearch = true;
@@ -96,7 +96,7 @@ export class SearchDonationComponent implements OnInit {
     this.showName = true;
     this.showCell = false;
     this.showSave = false;
-    this.inputEnabled = false;
+    this.inputEnabled = true;
     this.showButtons = false;
     this.showDonation = false;
     
@@ -232,7 +232,7 @@ export class SearchDonationComponent implements OnInit {
         this.showName = false;
         this.showCell = false;
         this.showSave = false;
-        this.inputEnabled = false;
+        this.inputEnabled = true;
         this.showButtons = true;
         this.showAllDons = false;
         this.showDonation = true;

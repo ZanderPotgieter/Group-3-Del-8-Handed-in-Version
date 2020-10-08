@@ -108,24 +108,41 @@
                 <option value="0">--Select--</option>
                 <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
               </select>
+              <br>
+              <span style="color:red" *ngIf="angForm.get('DonationStatusID').errors && (angForm.get('DonationStatusID').touched || angForm.get('DonationStatusID').dirty)">
+                <span *ngIf="angForm.get('DonationStatusID').errors.required">Status is required.</span>
+            </span>
               
               <br>
 
             <label for="Name">Donation Date </label>
             <input type = "date" formControlName="DonDate" class="form-control" [(ngModel)]="donation.DonDate" name="DonDate" id="DonDate" required > 
-           
+            <br>
+            <span style="color:red" *ngIf="angForm.get('DonDate').errors && (angForm.get('DonDate').touched || angForm.get('DonDate').dirty)">
+                <span *ngIf="angForm.get('DonDate').errors.required">Date is required.</span>
+             </span>
 
             <br>
 
             <label for="Name">Donated Amount in R</label>
             <input type = "number" formControlName="DonAmount" class="form-control" [(ngModel)]="donation.DonAmount" name="DonAmount" id="DonAmount" required > 
-           
+            <br>
+            <span style="color:red" *ngIf="angForm.get('DonAmount').errors && (angForm.get('DonAmount').touched || angForm.get('DonAmount').dirty)">
+                <span *ngIf="angForm.get('DonAmount').errors.required">Description is required.</span>
+                <span *ngIf="angForm.get('DonAmount').errors.pattern">Only numbers</span>
+            </span>
+
 
             <br>
 
             <label for="Name">Description</label>
-            <input type = "text" formControlName="DonDescription" class="form-control" [(ngModel)]="donation.DonDescription" name="DonDescription" id="DonDescription" required > 
-            
+            <input type = "text" formControlName="DonDescription" class="form-control" [(ngModel)]="donation.DonDescription" name="DonDescription" id="DonDescription"  pattern="[a-zA-Z ]*" required > 
+            <br>
+            <span style="color:red" *ngIf="angForm.get('DonDescription').errors && (angForm.get('DonDescription').touched || angForm.get('DonDescription').dirty)">
+                <span *ngIf="angForm.get('DonDescription').errors.required">Description is required.</span>
+                <span *ngIf="angForm.get('DonDescription').errors.minlength">Description must be greater than 2 characters</span>
+                <span *ngIf="angForm.get('DonDescription').errors.pattern">Only text characters.</span>
+            </span>
 
             <br>
 

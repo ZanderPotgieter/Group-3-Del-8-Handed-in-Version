@@ -322,6 +322,9 @@
     <Compile Include="Models\Stock_Take.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Stock_Take_Product.cs">
+      <DependentUpon>ORDRA.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Supplier.cs">
       <DependentUpon>ORDRA.tt</DependentUpon>
     </Compile>

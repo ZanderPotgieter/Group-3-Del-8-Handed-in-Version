@@ -1,0 +1,37 @@
+<body>
+    <form>
+        <h1>Stock Take Form</h1>
+        <div class = "card">
+            <div *ngIf="showButton">
+                <button style="width: 50%" type="submit" (click)="generateForm()">Generate Stock Take Form</button>
+            </div>
+        <div clss="divleft" *ngIf="showForm">
+            <div class="divleft">
+            <label style="width: 100%">Employee: {{user.UserName}} {{user.UserSurname}} </label>
+            </div>
+        <div class = "divleft">
+            <label>Date: {{Todaysdate | date: 'yyyy-MM-dd'}}</label>
+        </div>
+            
+        <table style="width: 100%; padding: 0px">
+                <th style="width: 30%;padding: 0px">Product Name</th>
+                <th style="padding: 0px">Description</th>
+                <th style="width: 20%; padding: 0px">Stock Count</th>
+                <th style="width: 10%; padding: 0px"></th>
+
+            <tr *ngFor="let item of list; index as ndx">
+                <td>{{item.Prodname}}</td>
+                <td>{{item.ProdDescription}}</td>
+                <td><input style="width: 100%" type = "number"  name="a{{ndx}}" [(ngModel)] ="list[ndx].Subtotal" min="0"></td>
+                <td><button style="border-radius: 10px; width: 95%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
+
+            </tr>
+
+        </table>
+        <div class="divleft">
+            <button type="submit" (click)="Complete()">Save</button>
+            <button type="submit" (click)="Cancel()">Cancel</button>
+        </div>
+        </div>
+        </div>
+   

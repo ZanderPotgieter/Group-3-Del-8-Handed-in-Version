@@ -1,5 +1,6 @@
 export class Product {
-    ProductID : number;
+	ProductID : number;
+	SupplierID: number;
 	ProductCategoryID : number;
 	ProdBarcode: string;
 	ProdName : string;

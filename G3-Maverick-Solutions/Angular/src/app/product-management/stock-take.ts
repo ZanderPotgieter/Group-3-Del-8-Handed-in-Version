@@ -1,8 +1,7 @@
 export class StockTake {
     StockTakeID : number;
-	EmployeeID : number;
+	UserID : number;
 	STakeDate : Date;
-	STakeQuantity : number;
-	ProdCategory : string;
-	ProdName : string;
+	ContainerID: number;
+	isCompleted: boolean;
 }

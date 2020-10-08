@@ -7,7 +7,7 @@ import {Container} from './container-management/container';
 import {FormBuilder, Validators} from '@angular/forms';
 import { FormGroup, FormControl} from '@angular/forms';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
-
+import { DialogService } from './shared/dialog.service';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class AppComponent  implements OnInit {
   title = 'ORDRA';
   dateVal = new Date();
 
-  constructor(private api : LoginService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api : LoginService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
 regForm: FormGroup;
 showLogin: boolean = true;
 showNav: boolean = false;
@@ -187,13 +187,15 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
     this.errorMessage = res.Error;
-    alert(this.errorMessage);
+    this.dialogService.openAlertDialog(this.errorMessage);
+    //alert(this.errorMessage);
     this.showError = true;
     setTimeout(() => {
       this.showError = false;
     }, 5000);
   }else{
-    alert(res.Message);
+    this.dialogService.openAlertDialog(res.Message);
+   // alert(res.Message);
   //this.UserPassword = "";
 
   this.showLogin= true;
@@ -264,11 +266,13 @@ sendEmail(){
     if(res.Error)
     {
       this.errorMessage = res.Error;
-      alert(this.errorMessage);
+      this.dialogService.openAlertDialog(this.errorMessage);
+     // alert(this.errorMessage);
      
     }
     else{
-      alert(res.Message);
+      this.dialogService.openAlertDialog(res.Message);
+      //alert(res.Message);
         
     this.showLogin= false;
     this.showNav = false;
@@ -287,11 +291,13 @@ sendEmail(){
       if(res.Error)
       {
         this.errorMessage = res.Error;
-        alert(this.errorMessage);
+        this.dialogService.openAlertDialog(this.errorMessage);
+        //alert(this.errorMessage);
        
       }
       else{
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
+        //alert(res.Message);
           
       this.showLogin= false;
       this.showNav = false;
@@ -319,11 +325,13 @@ sendEmail(){
       if(res.Error)
       {
         this.errorMessage = res.Error;
-        alert(this.errorMessage);
+        this.dialogService.openAlertDialog(this.errorMessage);
+       // alert(this.errorMessage);
         
       }
       else{
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
+       // alert(res.Message);
           
       this.showLogin= true;
       this.showNav = false;

@@ -44,7 +44,7 @@
                 <span style="color:red" *ngIf="conForm.get('name').errors && (conForm.get('name').touched || conForm.get('name').dirty)">
                     <span *ngIf="conForm.get('name').errors.required">Name is required.</span>
                     <span *ngIf="conForm.get('name').errors.minlength || conForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
-                    <span *ngIf="conForm.get('name').errors.pattern">Only text characters.</span>
+                   
                 </span>
                 <br>
             </div>
@@ -76,7 +76,7 @@
                 <span style="color:red" *ngIf="conForm.get('ConName').errors && (conForm.get('ConName').touched || conForm.get('ConName').dirty)">
                     <span *ngIf="conForm.get('ConName').errors.required">Name is required.</span>
                     <span *ngIf="conForm.get('ConName').errors.minlength || conForm.get('ConName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
-                    <span *ngIf="conForm.get('ConName').errors.pattern">Only text characters.</span>
+                    
                 </span>
             </div>    
             
@@ -87,7 +87,7 @@
                 <span style="color:red" *ngIf="conForm.get('ConDescription').errors && (conForm.get('ConDescription').touched || conForm.get('ConDescription').dirty)">
                     <span *ngIf="conForm.get('ConDescription').errors.required">Description is required.</span>
                     <span *ngIf="conForm.get('ConDescription').errors.minlength">Description must be greater than 2 characters</span>
-                    <span *ngIf="conForm.get('ConDescription').errors.pattern">Only text characters.</span>
+                    
                 </span> 
            </div>
         

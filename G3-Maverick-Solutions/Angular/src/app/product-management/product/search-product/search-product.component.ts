@@ -9,6 +9,8 @@ import {LoginService} from 'src/app/login.service';
 import {Container} from 'src/app/container-management/container';
 import {ProductDetails} from 'src/app/customer-order-management/product-details';
 import {ContainerProduct} from '../../container-product';
+import {Supplier} from 'src/app/supplier-management/supplier';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-search-product',
@@ -17,7 +19,7 @@ import {ContainerProduct} from '../../container-product';
 })
 export class SearchProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private api: LoginService) { }
+  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private api: LoginService, private dialogService: DialogService) { }
   searchForm: FormGroup;
   pdForm: FormGroup;
   categories: ProductCategory[];
@@ -72,6 +74,7 @@ export class SearchProductComponent implements OnInit {
 
   moveToContainer: boolean = false;
   selectedContainerID: number;
+  supplier: string;
   
 
   ngOnInit() {
@@ -237,10 +240,13 @@ export class SearchProductComponent implements OnInit {
           this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
           this.Price.ProductID = res.Product.ProductID;
 
+          
+
           this.pricelist = res.PriceList;
           this.category = res.ProductCategory;
           
           this.product_conlist = res.ProductContainers;
+          this.supplier = res.supplier;
 
       }
       this.showBarcodeInput = false;
@@ -275,6 +281,7 @@ export class SearchProductComponent implements OnInit {
 
           this.pricelist = res.PriceList;
           this.product_conlist = res.ProductContainers;
+          this.supplier = res.supplier;
 
 
       }
@@ -388,14 +395,18 @@ export class SearchProductComponent implements OnInit {
   }
 
   Update(){
-    
+    this.dialogService.openConfirmDialog('Are you sure you want to update this product?')
+    .afterClosed().subscribe(res => {
+      if(res){
     return this.productService.updateProduct(this.Product).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(res.Message);}
       this.router.navigate(["product-management"])
       })
+    }
+  })
 
   }
 

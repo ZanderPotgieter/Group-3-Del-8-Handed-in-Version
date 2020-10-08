@@ -20,12 +20,32 @@ export class PlaceSupplierOrderComponent implements OnInit {
   public set allProducts(value: Observable<Product[]>) {  
     this._allProducts = value;  
   }  
+
+  showBacklog = true;
+  showOrders = false;
+  showSupOrder = false;
   constructor(public product:SupplierOrderService,private router: Router) { }
 
   loadDisplay(){  
     debugger;  
     this.allProducts= this.product.getProducts();    
   }  
+
+  addProduct(){
+  
+  }
+
+  viewOrders(){
+    this.showBacklog = false;
+    this.showOrders = true;
+    this.showSupOrder = false;
+  }
+
+  selectOrder(){
+    this.showBacklog = false;
+    this.showOrders = false;
+    this.showSupOrder = true;
+  }
 
   ngOnInit() {  
     this.loadDisplay();  

@@ -7,6 +7,10 @@ import {User} from '../employee-management/model/user.model';
 import {Container} from '../container-management/container';
 import {ManagerService} from '../manager-management/manager.service';
 
+import { FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { Validators } from '@angular/forms';
+import { DialogService } from '../shared/dialog.service';
 @Component({
   selector: 'app-view-manager',
   templateUrl: './view-manager.component.html',
@@ -14,11 +18,12 @@ import {ManagerService} from '../manager-management/manager.service';
 })
 export class SearchManagerComponent implements OnInit {
 
-  constructor(private api:ManagerService,private router: Router, private fb: FormBuilder) { }
+  constructor(private api:ManagerService,private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   allowEdit:boolean = false;
   manager: Manager = new Manager();
   user: User = new User();
   employee: Employee = new Employee();
+  managers: User[] = [];
 
   empForm: FormGroup;
 
@@ -37,9 +42,11 @@ export class SearchManagerComponent implements OnInit {
  showTable: boolean = true;
  showButtons: boolean = true;
  inputEnabled:boolean = true;
- showSearch: boolean = true;
  showResults: boolean = false;
  showConatinerSelect: boolean = false;
+
+ showViewAll: boolean = false;
+ showSearch: boolean = false;
 
 
  name : string;
@@ -59,14 +66,75 @@ export class SearchManagerComponent implements OnInit {
       empShiftsCompleted: [''],
       empStartDate: [''],
 
-      ManNationality: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')]],
-      ManQualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('[a-zA-Z]*')]],
+      ManNationality: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      ManQualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('[a-zA-Z ]*')]],
       ManIDNumber: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), Validators.pattern('[0-9]*')]],
       ManNextOfKeenCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('0-9]*')]],
-      ManNextOfKeenFName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')]],
-      container: ['', [Validators.required)]],
+      ManNextOfKeenFName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      container: ['', [Validators.required]]
     }); 
 
+  }
+
+  search(){
+    this.showSearch = true;
+    this.showViewAll = false;
+   
+  }
+
+  viewAll(){
+    this.showSearch = false;
+    this.showViewAll = true;
+    this.api.getAllManagers().subscribe((res:any)=>{
+      console.log(res);
+      this.managers = res.managers;
+    })
+  }
+
+  view(ndx: number){
+    this.name = this.managers[ndx].UserName;
+    this.surname = this.managers[ndx].UserSurname;
+    this.api.searchManager(this.managers[ndx].UserName,this.managers[ndx].UserSurname).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)}
+        else{
+        //Get Manager Details
+        this.manager.ManagerID = res.manager.ManagerID;
+        this.manager.ManQualification = res.manager.ManQualification;
+        this.manager.ManNationality = res.manager.ManNationality;
+        this.manager.ManIDNumber = res.manager.ManIDNumber;
+        this.manager.ManNextOfKeenFName = res.manager.ManNextOfKeenFName;
+        this.manager.ManNextOfKeenCell = res.manager.ManNextOfKeenCell;
+        this.manager.Containers =  res.Containers;
+
+          this.selectedContainers = res.containersManaged;
+        
+
+        //Get User Details
+        this.user.UserID = res.user.UserID;
+        this.user.UserName = res.user.UserName;
+        this.user.UserSurname = res.user.UserSurname;
+        this.user.UserCell = res.user.UserCell;
+        this.user.UserEmail = res.user.UserEmail;
+
+        //Get Employee Details
+        this.employee.EmployeeID = res.employee.EmployeeID;
+        this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
+        this.employee.EmpStartDate = res.employee.EmpStartDate;
+
+        //Get list Of Containers
+        this.containers = res.containers;
+        
+      this.showSearch = false;
+      this.showResults = true;
+      
+      }
+
+      
+    })
+    
   }
 
   searchManager(){
@@ -74,7 +142,9 @@ export class SearchManagerComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(this.responseMessage);
+       // alert(this.responseMessage)
+      }
         else{
         //Get Manager Details
         this.manager.ManagerID = res.manager.ManagerID;
@@ -104,11 +174,12 @@ export class SearchManagerComponent implements OnInit {
 
         //Get list Of Containers
         this.containers = res.containers;
-      }
-
-      
+        
       this.showSearch = false;
       this.showResults = true;
+      
+      }
+
       
     })
 
@@ -120,20 +191,33 @@ export class SearchManagerComponent implements OnInit {
        console.log(res);
        if(res.Message){
        this.responseMessage = res.Message;}
-       alert(this.responseMessage)
+       this.dialogService.openAlertDialog(this.responseMessage)
+       //alert(this.responseMessage)
        this.router.navigate(["manager-management"])
      })
  
    }
 
-   addContainer(val: any){
+   addContainer(val: Container){
     this.showlist(val);
   }
 
-  showlist(val: any){
+
+  showlist(val: Container){
     this.selectedContainers.push(val);
     this.manager.Containers.push(val);
     
+  }
+
+  remove(ndx: number){
+   this.containerSelected = this.containers[ndx];
+   
+   this.spliceContainer(ndx);
+  }
+
+  spliceContainer(ndx: number){
+    this.containers.splice(ndx,1);
+
   }
 
   gotoManagerManagement(){
@@ -147,7 +231,8 @@ export class SearchManagerComponent implements OnInit {
       console.log(res);
       if(res.Message){
       this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+      this.dialogService.openAlertDialog(this.responseMessage)
+      //alert(this.responseMessage)
       this.router.navigate(["manager-management"])
     })
 

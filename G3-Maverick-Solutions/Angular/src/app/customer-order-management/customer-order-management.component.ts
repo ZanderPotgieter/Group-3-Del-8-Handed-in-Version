@@ -17,6 +17,7 @@ export class CustomerOrderManagementComponent implements OnInit {
     this.router.navigate(['place-order']);
   }
 
+
   gotoSearchOrder(){
     this.router.navigate(['search-order']);
   }

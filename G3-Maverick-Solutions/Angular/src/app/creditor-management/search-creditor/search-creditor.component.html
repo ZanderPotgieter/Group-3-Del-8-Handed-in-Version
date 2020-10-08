@@ -1,6 +1,3 @@
-
-
-
 <body>
 
     <h1>Search Creditor</h1>
@@ -8,11 +5,12 @@
     <div class="card" *ngIf = "showSearch">
             
         <div class="divleft">
+            <label class="subheadinglabel">Enter Creditor/Supplier name to search:</label>
+            <br><br>
             <label for="name">Name:     </label>
-                  <input class="searchinput" type="text" formControlName="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" id="name" name="name" pattern="[a-zA-Z ]*" required><br>
+                  <input class="searchinput" type="text" formControlName="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" id="name" name="name" pattern="[a-zA-Z ]*" required>
                   <span style="color:red" *ngIf="credForm.get('name').errors && (credForm.get('name').touched || credForm.get('name').dirty)">
-                      <span *ngIf="credForm.get('name').errors.required">Creditor Name is required<br></span>
-                      <span *ngIf="credForm.get('name').errors.pattern">Only text characters.<br></span>
+                     <br> <span *ngIf="credForm.get('name').errors.required">Creditor Name is required.<br></span>
                   </span>
         </div> 
 
@@ -26,19 +24,17 @@
             <thead class="thead-dark">  
               <tr>  
                 <th>Creditor Name</th>  
-                <th>Balance</th>  
-                <th>Bank</th>  
+                <th>Account Balance R</th>  
                 <th>Account Nr</th>  
-                <th>Branch</th>  
+                <th>Account Type</th>   
               </tr>  
             </thead>  
             <tbody>  
               <tr *ngFor="let cred of allCred | async">  
-                <td>{{cred.SupName}}</td>  
+                <td>{{cred.Supplier.SupName}}</td>  
                 <td>{{cred.CredAccountBalance}}</td>  
-                <td>{{cred.CredBank}}</td>  
                 <td>{{cred.CredAccount}}</td>  
-                <td>{{cred.CredBranch}}</td> 
+                <td>{{cred.CredType}}</td>  
               </tr>  
             </tbody>  
           </table> 
@@ -51,20 +47,20 @@
                     
                     <div class="divleft">
                         <br>
-                        <label for="Name">Name</label>
-                        <input type = "text" id="name" formControlName="SupName" class="form-control" [(ngModel)]="supplier.SupName" name="SupName"  required [readonly] = "this.inputEnabled" >  
+                        <label for="Name">Name:</label>
+                        <input type = "text" id="name" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="supplier.SupName" name="SupName"  required [readonly]  = "this.inputDisabled">  
                         <br>
                     </div> 
 
                     <div class="divleft">
-                        <label for="CellNumber">Cell Number</label>
-                        <input type = "text" id="cellNumber" formControlName="SupCell" class="form-control" [(ngModel)]="supplier.SupCell" name="SupCell"  required [readonly] = "this.inputEnabled">  
+                        <label for="CellNumber">Cell Number:</label>
+                        <input type = "text" id="cellNumber" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="supplier.SupCell" name="SupCell"  required [readonly] = "this.inputDisabled">  
                         <br>
                     </div>
 
                     <div class="divleft">
-                        <label for="Email">Email</label>
-                        <input type = "text" id="email" class="form-control" formControlName="SupEmail" [(ngModel)]="supplier.SupEmail" name="SupEmail"  required [readonly] = "this.inputEnabled" >  
+                        <label for="Email">Email:</label>
+                        <input type = "text" id="email" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="supplier.SupEmail" name="SupEmail"  required [readonly] = "this.inputDisabled" >  
                         <br>
                     </div>
                 </div>
@@ -72,46 +68,61 @@
         
             <div class="card">
                 <label > <span style="white-space: nowrap;">Creditor Account</span></label>
+                
+                <div class="divleft">
+                    
+                    <div class="divleft">
+                        <label for="Bank">Bank:</label>
+                        <input type = "text" id="bank" class="form-control" formControlName="CredBank" [(ngModel)]="creditor.CredBank" [ngModelOptions]="{standalone: true}" name="CredBank"  required [readonly] = "this.inputEnabled" >  
+                        <span style="color:red" *ngIf="credForm.get('CredBank').errors && (credForm.get('CredBank').touched || credForm.get('CredBank').dirty)">
+                            <br> <span *ngIf="credForm.get('CredBank').errors.required"><br>Bank is required.<br></span>
+                          </span>
+                        <br>
+                    </div>
+               
 
                 <div class="divleft">
-                    <label for="Bank">Bank:</label>
-                    <input type = "text" id="bank" class="form-control" formControlName="CredBank" [(ngModel)]="creditor.CredBank" name="CredBank"  required [readonly] = "this.inputEnabled" >  
+                    <label for="Branch">Branch:</label>
+                    <input type = "text" id="branch" class="form-control" formControlName="CredBranch" [(ngModel)]="creditor.CredBranch" [ngModelOptions]="{standalone: true}" name="CredBranch"  required [readonly] = "this.inputEnabled" >  
+                    <span style="color:red" *ngIf="credForm.get('CredBranch').errors && (credForm.get('CredBranch').touched || credForm.get('CredBranch').dirty)">
+                        <br> <span *ngIf="credForm.get('CredBranch').errors.required"><br>Branchis required.<br></span>
+                      </span>
                     <br>
                 </div>
             
 
             <div class="divleft">
-                <label for="Branch">Branch:</label>
-                <input type = "text" id="branch" class="form-control" formControlName="CredBranch" [(ngModel)]="creditor.CredBranch" name="CredBranch"  required [readonly] = "this.inputEnabled" >  
+                <label for="Account">Account Nr:</label>
+                <input type = "text" id="account" class="form-control" formControlName="CredAccount" [(ngModel)]="creditor.CredAccount" [ngModelOptions]="{standalone: true}" name="CredAccount"  required [readonly] = "this.inputEnabled" >  
                 <br>
+                <span style="color:red" *ngIf="credForm.get('CredAccount').errors && (credForm.get('CredAccount').touched || credForm.get('CredAccount').dirty)">
+                    <span *ngIf="credForm.get('CredAccount').errors.required">Account Number is required.<br></span>
+                    <span *ngIf="credForm.get('CredAccount').errors.minlength">Must be 10 numbers<br></span>
+                    <span *ngIf="credForm.get('CredAccount').errors.maxlength">Must be 10 numbers<br></span>
+                    <span *ngIf="credForm.get('CredAccount').errors.pattern">Only numbers allowed.<br></span>
+                </span>
             </div>
-    
+        
 
         <div class="divleft">
             <label for="Type">Account Type:</label>
-            <input type = "text" id="type" class="form-control" formControlName="CredType" [(ngModel)]="creditor.CredType" name="CredType"  required [readonly] = "this.inputEnabled" >  
+            <input type = "text" id="type" class="form-control" formControlName="CredType" [(ngModel)]="creditor.CredType" [ngModelOptions]="{standalone: true}" name="CredType"  required [readonly] = "this.inputEnabled" >  
+            <span style="color:red" *ngIf="credForm.get('CredType').errors && (credForm.get('CredType').touched || credForm.get('CredType').dirty)">
+                <br> <span *ngIf="credForm.get('CredType').errors.required"><br>Account Type is required.<br></span>
+              </span>
             <br>
         </div>
     
 
-    <div class="divleft">
-        <label for="Account">Account Nr:</label>
-        <input type = "text" id="account" class="form-control" formControlName="CredAccount" [(ngModel)]="creditor.CredAccount" name="CredAccount"  required [readonly] = "this.inputEnabled" >  
-        <br>
-    </div>
-
-                
                 <div class="divleft">
                     
-                    <label for="Name">Account Balance in R</label>
-                    <input type = "number"  min=0.00 class="form-control" formControlName="CredAccountBalance" [(ngModel)]="creditor.CredAccountBalance" name="CredAccountBalance" id="CredAccountBalance"  required [readonly] = "this.inputEnabled">  
-                    <br>
+                    <label for="Name">Still Due: R</label>
+                    <input type = "number"  min=0.00 class="form-control" [(ngModel)]="creditor.CredAccountBalance" [ngModelOptions]="{standalone: true}" name="CredAccountBalance" id="CredAccountBalance"  required [readonly] = "this.inputDisabled"> 
                 </div> 
                 
                 <div class="divleft" *ngIf="showButtons">
                     <button type="button" (click)="enableInputs()">Update</button>
                     <button type="submit" (click)="removeCreditor()">Delete</button>
-                    <button type="button" (click)="cancel()">Cancel</button>
                 </div>
 
                 <div class="divleft" *ngIf="showSave" >
@@ -121,8 +132,6 @@
             </div>   
      </div>
 
-</form>
+
 
     <router-outlet></router-outlet>
-</body>
-

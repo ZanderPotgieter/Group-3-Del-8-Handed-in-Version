@@ -59,7 +59,7 @@
                              <select required name="accessSelection" [(ngModel)]="accessSelection" (ngModelChange)="addAccess($event)">
                                  <option *ngFor="let access of allAccess" [ngValue]="access">{{access.description}}</option>
                              </select>
-                             <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);"(click)="listAccess()"><i class="tiny material-icons" style="color: black;">save</i></button>
+                             <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);"(click)="listAccess()">Add</button>
                          </div>
                          <div *ngIf="showError">
                              <span style="color:orangered">{{message}}</span>

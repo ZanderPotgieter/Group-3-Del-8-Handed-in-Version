@@ -2,7 +2,8 @@
     <h1>Place Supplier Order</h1>
     <br>
     <form>
-            <div class="subheadinglabel" id="creditor">Backlog Products:</div>
+      <div class="card" *ngIf="showBacklog">
+            <div class="subheadinglabel" id="backlogprods">Backlog Products:</div>
             <br>
 
 
@@ -11,23 +12,33 @@
                 <tr>  
                   <th>Product</th>  
                   <th>Quantity Needed</th> 
-                  <th>Action</th> 
+                  <th>Add to Order</th> 
                 </tr>  
               </thead>  
               <tbody>  
                 <tr *ngFor="let product of allProducts | async">  
                   <td>{{product.ProdName}}</td>
-                  <td>{{product.QauntityToOrder}}</td>
-                  <td><button routerLink="/supplier-detail" type="submit" >Order</button><br></td>
+                  <td>{{product.QuantityToOrder}}</td>
+                  <td><button type="submit" (click) = "addProduct()" >Add +</button><br></td>
                 </tr>  
               </tbody>
             </table>  
   
         
   <div class="divleft">
+    <button (click) = "viewOrders()" >View Supplier Orders</button>
     <button routerLink="/supplier-order-management" type="submit" >Cancel</button><br>
           </div>
+      </div>
         <br>
+
+        <div class="card" *ngIf="showOrders">
+
+        </div>
+
+        <div class="card" *ngIf="showSupOrder">
+
+        </div>
       
   
     

@@ -9,6 +9,7 @@ import { Price } from './price';
 import { StockTake } from './stock-take';
 import { MarkedOff } from './marked-off';
 import { MarkedOffReason } from './marked-off-reason';
+import {Supplier} from 'src/app/supplier-management/supplier';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,9 @@ export class ProductService {
   url = 'https://localhost:44399/API/Product'
   constructor(private http: HttpClient) { }
 
-  
+  getAllSuppliers(): Observable<Supplier[]> {  
+    return this.http.get<Supplier[]>('https://localhost:44399/Api/Supplier' + '/getAllSuppliers');  
+  }
   getAllProductCategory(): Observable<ProductCategory[]> {  
     return this.http.get<ProductCategory[]>(this.url + '/GetAllProductCategories');  
   } 
@@ -125,5 +128,57 @@ export class ProductService {
     , httpOptions); 
   }
 
+  initateStockTake(session: any){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.post(this.url + '/initateStockTake', session, httpOptions);
+  }
+
+  addStockTakeProduct(stockTakeID: number, productID: number, STcount: number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/addStockTakeProduct?stockTakeID='+ stockTakeID + '&productID=' +productID + '&STcount=' +STcount, httpOptions);
+  }
+
+  getStockTake(id: number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/getStockTake?id='+ id,  httpOptions);
+  }
+  getAllStockTakes(){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/getAllStockTakes',  httpOptions);
+  }
+
+  getTodaysStockTake(date: string, containerID: number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/getTodaysStockTake?date='+ date + "&containerID=" + containerID,  httpOptions);
+  }
+
+  getCompletedStockTakes(){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/getCompletedStockTakes',  httpOptions);
+  }
+
+  getIncompleteStockTakes(){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/getIncompleteStockTakes',  httpOptions);
+  }
+
+  getContainerStockTakes(containerID: number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/getContainerStockTakes?containerID='+ containerID,  httpOptions);
+  }
+
+  AddMarkedOff(markedOff: MarkedOff){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.post(this.url + '/AddMarkedOff', markedOff, httpOptions);
+  }
+
+  completeStockTake(id: number){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
+    return this.http.get(this.url + '/completeStockTake?id='+ id,  httpOptions);
+  }
+
+
+
+  
   
 }

@@ -25,6 +25,8 @@ namespace ORDRA_API.Models
             this.One_Time_Pin = new HashSet<One_Time_Pin>();
             this.Sales = new HashSet<Sale>();
             this.Shifts = new HashSet<Shift>();
+            this.Marked_Off = new HashSet<Marked_Off>();
+            this.Stock_Take = new HashSet<Stock_Take>();
         }
     
         public int UserID { get; set; }
@@ -55,5 +57,9 @@ namespace ORDRA_API.Models
         public virtual User_Type User_Type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Shift> Shifts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Marked_Off> Marked_Off { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Stock_Take> Stock_Take { get; set; }
     }
 }

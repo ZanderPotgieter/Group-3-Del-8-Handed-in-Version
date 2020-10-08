@@ -84,7 +84,7 @@ namespace ORDRA_API.Controllers
                         order.CusSurname = ord.Customer.CusSurname;
                         order.CusOrdNumber = ord.CusOrdNumber;
                         order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
-                        order.CusOrdStatus = ord.Customer_Order_Status.CODescription;
+                        order.CusOrdStatus = ord.CustomerOrderStatusID;
                         orders.Add(order);
                     }
                     toReturn = orders;
@@ -101,6 +101,45 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        //Retrieve all orders
+        [HttpGet]
+        [Route("searchAllFulfilled")]
+        public object searchAllFulfilled()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderStatusID == 1).ToList();
+                if (customerOrders != null)
+                {
+                    List<dynamic> orders = new List<dynamic>();
+                    foreach (var ord in customerOrders)
+                    {
+                        DateTime ordDate = Convert.ToDateTime(ord.CusOrdDate);
+                        dynamic order = new ExpandoObject();
+                        order.CustomerOrderID = ord.CustomerOrderID;
+                        order.CusName = ord.Customer.CusName;
+                        order.CusSurname = ord.Customer.CusSurname;
+                        order.CusOrdNumber = ord.CusOrdNumber;
+                        order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
+                        order.CusOrdStatus = ord.CustomerOrderStatusID;
+                        orders.Add(order);
+                    }
+                    toReturn = orders;
+                }
+                else
+                {
+                    toReturn.Message = "No orders have been placed";
+                }
+            }
+            catch (Exception error)
+            {
+                toReturn = "Something Went Wrong" + error.Message;
+            }
+            return toReturn;
+        }
 
         //Search Order By OrderNo
         [HttpGet]
@@ -229,9 +268,9 @@ namespace ORDRA_API.Controllers
 
 
         //Function called on load of place order screen
-        [HttpGet]
+        [HttpPost]
         [Route("initiatePlaceOrder/{customerID}")]
-        public object initiatePlaceOrder(int customerID)
+        public object initiatePlaceOrder(int customerID, dynamic session)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -243,6 +282,24 @@ namespace ORDRA_API.Controllers
 
             try
             {
+                Container con = new Container();
+                //get container of current user
+                string sessionID = session.token;
+                var user = db.Users.Where(x => x.SessionID == sessionID).FirstOrDefault();
+
+                if (user.ContainerID == null)
+                {
+                    return toReturn.Error = ("Curent Container Not Found");
+
+                }
+                con = db.Containers.Where(x => x.ContainerID == user.ContainerID).FirstOrDefault();
+                if (con == null)
+                {
+                    return toReturn.Error = ("Curent Container Not Found");
+                }
+                //get products in container 
+                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x => x.CPQuantity <1 && x.ContainerID == con.ContainerID).ToList();
+               
                 //get customer details
                 Customer customer = new Customer();
                 customer = db.Customers.Where(x => x.CustomerID == customerID).FirstOrDefault();
@@ -278,7 +335,7 @@ namespace ORDRA_API.Controllers
                     List<Container_Product> containerprods = db.Container_Product.Include(x => x.Product).Where(x => x.CPQuantity < 1).ToList();
                     List<Product> productsList = db.Products.ToList();
                     List<dynamic> products = new List<dynamic>();
-                    foreach (var prod in containerprods)
+                    foreach (var prod in conProd)
                     {
                         Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).FirstOrDefault();
                         if (price != null)
@@ -294,6 +351,26 @@ namespace ORDRA_API.Controllers
                             productDetails.Subtotal = 0.0;
 
                             products.Add(productDetails);
+
+                            toReturn.VAT = db.VATs.Where(x => x.VATStartDate <= DateTime.Now).ToList().LastOrDefault();
+                            Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Placed").FirstOrDefault();
+
+                            //set up sale
+                            Customer_Order customerOrder = new Customer_Order();
+                            customerOrder.Customer = customer;
+                            customerOrder.Customer_Order_Status = order_Status;
+                            customerOrder.UserID = user.UserID;
+                            customerOrder.User = user;
+                            customerOrder.Container = con;
+                            customerOrder.ContainerID = con.ContainerID;
+                            customerOrder.CusOrdNumber = Convert.ToString(OrderNo);
+                            customerOrder.CusOrdDate = DateTime.Now;
+                            db.Customer_Order.Add(customerOrder);
+                            db.SaveChanges();
+
+                            //getsale
+                            toReturn.CustomerOrder = db.Customer_Order.ToList().LastOrDefault();
+                            
                         }
                         else
                         {
@@ -319,6 +396,136 @@ namespace ORDRA_API.Controllers
 
         }
 
+        //send email
+        [Route("sendNotification")]
+        [HttpPost]
+        public object sendNotification(string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+
+
+                Customer customer = db.Customers.Where(z => z.CusEmail == email).FirstOrDefault();
+                if (customer != null)
+                {
+                    //sending an email
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress("ordrasa@gmail.com");
+                        mail.To.Add(email);
+                        mail.Subject = "Your ORDRA order has arrived.";
+                        mail.Body = "<h1>You can collect your order </h1>";
+                        mail.IsBodyHtml = true;
+
+                        using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            smtp.Credentials = new System.Net.NetworkCredential("ordrasa@gmail.com", "Ordra@444");
+                            smtp.EnableSsl = true;
+                            smtp.Send(mail);
+                            toReturn.Message = "Success! The customer has been notified.";
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "Email not found";
+                }
+
+                return toReturn;
+            }
+            catch
+            {
+                toReturn.Error = "Mail unsuccessfully sent";
+            }
+            return toReturn;
+        }
+
+        // Cancel Sale
+        [HttpGet]
+        [Route("cancelCustomerOrder")]
+        public object cancelCustomerOrder(int customerorderID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                //get sale
+                List<Customer_Order> newCustomerOrder = db.Customer_Order.Where(x => x.CustomerOrderStatusID == customerorderID).ToList();
+                if (newCustomerOrder != null)
+                {
+                    foreach (Customer_Order order in newCustomerOrder)
+                    {
+                        //get container
+                        Container container = db.Containers.Where(x => x.ContainerID == order.ContainerID).FirstOrDefault();
+
+                        //get list of products in Sale
+                        List<Product_Order_Line> product_Orders = order.Product_Order_Line.ToList();
+
+                        if (container != null)
+                        {
+                            if (product_Orders != null)
+                            {
+                                foreach (var prod in product_Orders)
+                                {
+                                    Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
+                                    if (product != null)
+                                    {
+
+                                        Product_Backlog backlog_Product = db.Product_Backlog.Where(x => x.ContainerID == order.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
+                                        if (backlog_Product != null)
+                                        {
+                                            // backlog_Product.QuantityToOrder = (backlog_Product.QuantityToOrder - prod.PLQuantity);
+                                            //db.SaveChanges();
+
+                                            Product_Order_Line product_Order = db.Product_Order_Line.Where(x => x.ProductID == product.ProductID && x.CustomerOrderID == order.CustomerOrderID).FirstOrDefault();
+                                            if (product_Order != null)
+                                            {
+
+                                                db.Product_Order_Line.Remove(product_Order);
+                                                db.SaveChanges();
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        toReturn.Error = "Product Not Found";
+                                    }
+
+
+                                }
+
+
+
+                                toReturn.Message = "Sale Cancelled";
+                            }
+
+                        }
+                        else
+                        {
+                            toReturn.Error = "Container Not Found";
+                        }
+                    }
+                }
+
+
+                else
+                {
+                    toReturn.Error = "Cancel Failed: Sale Not Found";
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Sale Cancellation Unsuccessfully Completed";
+            }
+
+            return toReturn;
+        }
+
 
         //Place Order Function
         [HttpPost]
@@ -332,6 +539,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
+                
                 //Get Product Order Line Details from order
                 List<Product_Order_Line> productList = order.Product_Order_Line.ToList();
 
@@ -339,6 +547,7 @@ namespace ORDRA_API.Controllers
                 {
                     Customer customer = db.Customers.Where(x => x.CustomerID == order.CustomerID).FirstOrDefault();
                     User user = db.Users.Where(x => x.UserID == order.UserID).FirstOrDefault();
+                    Container con = db.Containers.Where(x => x.ContainerID == order.ContainerID).FirstOrDefault();
                     Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Placed").FirstOrDefault();
 
                     //save customer order details
@@ -346,11 +555,10 @@ namespace ORDRA_API.Controllers
                     customerOrder.Customer = customer;
                     customerOrder.Customer_Order_Status = order_Status;
                     customerOrder.User = user;
+                    customerOrder.Container = con;
                     customerOrder.CusOrdNumber = order.CusOrdNumber;
                     customerOrder.CusOrdDate = DateTime.Now;
-                    //customerOrder.Product_Order_Line = 
-
-                    ;
+      
 
                     db.Customer_Order.Add(customerOrder);
                     db.SaveChanges();
@@ -371,9 +579,6 @@ namespace ORDRA_API.Controllers
 
                             db.Product_Order_Line.Add(orderProd);
                             db.SaveChanges();
-
-                   
-
                         }
 
                         //Get the placed Orders Order Number
@@ -404,6 +609,132 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
+        [HttpGet]
+        [Route("addCustomerOrderProduct")]
+        public object addCustomerOrderProduct(int productID, int customerorderID, int quantity)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+                if (product != null)
+                {
+                    Customer_Order customerorder = db.Customer_Order.Where(x => x.CustomerOrderID == customerorderID).FirstOrDefault();
+                    if (customerorder != null)
+                    {
+                        Product_Backlog backlog_Product = db.Product_Backlog.Where(x => x.ContainerID == customerorder.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
+                        if (backlog_Product != null)
+                        {
+                            backlog_Product.QuantityToOrder = (backlog_Product.QuantityToOrder + quantity);
+                            db.SaveChanges();
+
+                            Product_Order_Line product_Order = db.Product_Order_Line.Where(x => x.ProductID == product.ProductID && x.CustomerOrderID == customerorder.CustomerOrderID).FirstOrDefault();
+                            if (product_Order == null)
+                            {
+                                Product_Order_Line newProduct_Order = new Product_Order_Line();
+                                newProduct_Order.ProductID = product.ProductID;
+                                newProduct_Order.Product = product;
+                                newProduct_Order.CustomerOrderID = customerorder.CustomerOrderID;
+                                newProduct_Order.Customer_Order = customerorder;
+                                newProduct_Order.PLQuantity = quantity;
+                                db.Product_Order_Line.Add(newProduct_Order);
+                                db.SaveChanges();
+
+                                toReturn.Product_Order_Line = db.Product_Order_Line.ToList().LastOrDefault();
+
+                            }
+                            else
+                            {
+                                product_Order.PLQuantity = product_Order.PLQuantity + quantity;
+                                db.SaveChanges();
+
+                                toReturn.Product_Order_Line= product_Order;
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Error = "Container Not Found";
+                        }
+
+
+                    }
+                    else
+                    {
+                        toReturn.Error = "Order Not Found";
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "Product Not Found";
+                }
+
+            }
+            catch
+            {
+                toReturn.Error = "Product Add Unsuccessful";
+            }
+
+            return toReturn;
+        }
+
+        [HttpGet]
+        [Route("removeCustomerOrderProduct")]
+        public object removeCustomerOrderProduct(int productID, int customerorderID, int quantity)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+                if (product != null)
+                {
+                    Customer_Order customerorder = db.Customer_Order.Where(x => x.CustomerOrderID == customerorderID).FirstOrDefault();
+                    if (customerorder != null)
+                    {
+                        Product_Backlog backlog_Product = db.Product_Backlog.Where(x => x.ContainerID == customerorder.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
+                        if (backlog_Product != null)
+                        {
+                            backlog_Product.QuantityToOrder = (backlog_Product.QuantityToOrder - quantity);
+                            db.SaveChanges();
+
+                            Product_Order_Line product_Order = db.Product_Order_Line.Where(x => x.ProductID == product.ProductID && x.CustomerOrderID == customerorder.CustomerOrderID).FirstOrDefault();
+                            if (product_Order != null)
+                            {
+
+                                db.Product_Order_Line.Remove(product_Order);
+                                db.SaveChanges();
+
+                                toReturn.Product_Order_Line = product_Order;
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Error = "Container Not Found";
+                        }
+
+
+                    }
+                    else
+                    {
+                        toReturn.Error = "Order Not Found";
+                    }
+                }
+                else
+                {
+                    toReturn.Error = "Product Not Found";
+                }
+
+            }
+            catch
+            {
+                toReturn.Error = "Product Removal Unsuccessful";
+            }
+
+            return toReturn;
+        }
+
+
         //collect Order Function
         [HttpPost]
         [Route("collectOrder")]
@@ -418,7 +749,7 @@ namespace ORDRA_API.Controllers
                 Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == CustomerOrderID).FirstOrDefault();
 
                 //get the collected customer order status
-                Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Fulfilled").FirstOrDefault();
+                Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == 4).FirstOrDefault();
 
                 //set order status to collected
                 cus_order.Customer_Order_Status = order_Status;
@@ -434,41 +765,40 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
-        //Update Customer
-        [HttpPut]
+        //UPDATE product
+        [HttpPost]
         [Route("collectCustomerOrder")]
-        public object collectCustomerOrder(Customer_Order orderUpdate)
+        public object collectCustomerOrder(Customer_Order collectOrder)
         {
             db.Configuration.ProxyCreationEnabled = false;
-
-            Customer_Order objectCustomer_Order = new Customer_Order();
             dynamic toReturn = new ExpandoObject();
-            var id = orderUpdate.CustomerOrderID;
+
 
             try
             {
-                objectCustomer_Order = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
-                if (objectCustomer_Order != null)
-                {
-                    objectCustomer_Order.CustomerOrderStatusID = 1;
+                //get category for product
+                Customer_Order_Status stat = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == collectOrder.CustomerOrderStatusID).FirstOrDefault();
 
+                //save new product
+                Customer_Order collectOrd = db.Customer_Order.Where(x => x.CustomerOrderID == collectOrder.CustomerOrderID).FirstOrDefault();
+                if (collectOrd != null)
+                {
+                    collectOrd.CustomerOrderStatusID = 1;
                     db.SaveChanges();
 
-                    toReturn.Message =  " has successfully been updated.";
+                    toReturn.Message = "Order Collected";
                 }
                 else
                 {
-                    toReturn.Message = "Customer Not Found";
+                    toReturn.Message = "Nope";
                 }
-            }
 
+            }
             catch (Exception)
             {
-                toReturn.Message = "Oops! The customer has not been updated.";
+                toReturn.Message = "Nope";
 
             }
-
-
             return toReturn;
         }
 
@@ -545,30 +875,6 @@ namespace ORDRA_API.Controllers
                 else
                 {
                     toReturn.Message = "Order(s) Not Found";
-                }
-            }
-            catch (Exception error)
-            {
-                toReturn = error.Message;
-            }
-
-            return toReturn;
-
-        }
-
-        [HttpPost]
-        [Route("sendNotification")]
-        public dynamic SendNotification(List<Customer_Order> orders)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-            try
-            {
-                foreach (var order in orders)
-                {
-
-                    toReturn.Message = "Notification Sent Successfully";
-
                 }
             }
             catch (Exception error)

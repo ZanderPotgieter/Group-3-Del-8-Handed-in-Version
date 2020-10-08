@@ -136,7 +136,8 @@
                 <div *ngIf="quantyNull" class ="diveleft">
                     <label style="color: red; font-size: 13px; width :1000px">No quantity has been entered. Please enter a quantity for the product. </label>
                 </div>
-                <button style="height: 30px;" (click)="listProducts()">Add</button>
+                <button style="height: 30px;" (click)="getProduct()">Add</button>
+                <button type="submit" (click)="gotoCustomerOrderManagement()">Cancel</button>
          </div>
         </div>
         <br>
@@ -156,7 +157,7 @@
                          <td>{{item.Quantity}}</td>
                          <td>R{{item.Price}}</td>
                         <td>R{{item.Subtotal}}</td>
-                        <td><button class="btntable" style="height: 30px; width:50px"  (click) ="remove(ndx)">X</button></td>
+                        <td><button class="btntable" style="height: 30px; width:50px"  (click) ="remove(ndx)"><i class="tiny material-icons">delete</i></button></td>
                     </tr>
     
                     <tr>
@@ -177,7 +178,7 @@
 
               
             <div class="divleft">
-                <button type="submit" (click)="placeOrder()" (click)="sendOrderEmail()">Place Order</button>
+                <button type="submit" (click)="placeOrder()" >Place Order</button>
                 <button type="submit" (click)="gotoCustomerOrderManagement()">Cancel</button>
             </div>
         </div>

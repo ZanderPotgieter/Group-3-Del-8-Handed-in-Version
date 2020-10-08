@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AreaserviceService } from '../services/areaservice.service';
 import { Area } from '../model/area.model';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Province } from 'src/app/Province/province';
+import { AreaStatus } from '../areastatus';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 
 @Component({
@@ -11,46 +15,111 @@ import { Router } from '@angular/router';
 })
 export class SearchareaComponent implements OnInit {
 
-  constructor(public service: AreaserviceService,private router: Router) { }
+  private _allAr: Observable<Area[]>;  
+  public get allAr(): Observable<Area[]> {  
+    return this._allAr;  
+  }  
+  public set allAr(value: Observable<Area[]>) {  
+    this._allAr = value;  
+  }  
+  name : string;
+  area: Area = new Area();
+  province: Province = new Province();
+  status: AreaStatus = new AreaStatus();
+  inputEnabled:boolean = true;
+  inputDisabled:boolean = true;
+  showSearch: boolean = true;
+  showResults: boolean = false;
+  showSave: boolean = false;
+  showButtons: boolean = true;
 
-  ngOnInit(){
-    this.resetForm();
-    this.refreshList();
+  constructor(public api: AreaserviceService,private router: Router, private dialogService: DialogService) { }
+
+
+  ngOnInit(): void {
+  }
+    
+  searchArea()
+  {
+    this.api.searchArea(this.name).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if (res.Message != null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+
+      }
+      else 
+      {
+        this.area.ProvinceID = res.ProvinceID;
+        this.area.AreaStatusID = res.AreaStatusID;
+        this.area.ArName = res.ArName;
+        this.area.ArPostalCode = res.ArPostalCode;
+        this.province.ProvName = res.Province.ProvName;
+        this.status.ASDescription = res.Area_Status.ASDescription;
+        this.showSearch = false;
+        this.showResults = true;
+      }
+
+       
+    })
   }
 
-  refreshList() {
-    this.service.getAreas().then(res => this.service.areaList = res as Area[]);
+  updateArea(){
+    this.dialogService.openConfirmDialog('Are you sure you want to update this creditor?')
+    .afterClosed().subscribe(res => {
+      if(res){
+    this.api.updateArea(this.area).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if(res.Message)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+      }
+      this.router.navigate(["gps-management"])
+    })
   }
+});
+}
 
-  resetForm() {
-    this.service.areaData = {
-      AreaID: 0,
-      AreaStatusID: 0,
-      ProvinceID: 0,
-      ArName: '',
-      ArPostalCode: ''
-    };
-    this.service.areaList = [];
+removeArea(){
+  this.dialogService.openConfirmDialog('Are you sure you want to remove this supplier as creditor?')
+  .afterClosed().subscribe(res => {
+    if(res){
+  this.api.deleteArea(this.area.AreaID).subscribe( (res:any)=> {
+    console.log(res);
+    if(res.Message != null){
+      this.dialogService.openAlertDialog(res.Message);
+      this.router.navigate(["gps-management"])
   }
-
-  selectProvince(ctrl) {
-    if (ctrl.selectedIndex === 0) {
-      this.service.areaData.ProvinceID = 0;
-    } else {
-      this.service.areaData.ProvinceID = this.service.areaList[ctrl.selectedIndex - 1].ProvinceID;
-    }
+  else{
+    this.dialogService.openAlertDialog('Unable to delete supplier as creditor. Payments were made to this creditor.');
   }
+  })
+}
+});
 
-  selectAreaStatus(ctrl) {
-    if (ctrl.selectedIndex === 0) {
-      this.service.areaData.AreaStatusID = 0;
-    } else {
-      this.service.areaData.AreaStatusID = this.service.areaList[ctrl.selectedIndex - 1].AreaStatusID;
-    }
+}
+
+enableInputs()
+  {
+    this.showSave = true;
+    this.inputEnabled = false;
+    this.inputDisabled = true;
+    this.showButtons = false;
   }
+    
+  cancel()
+  {
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed().subscribe(res => {
+      if(res){
+        
+  }
+});
 
-  submitSearch( obj: Area) {
-    this.service.areaData = obj;
-    }
+}
+
+  
   
 }

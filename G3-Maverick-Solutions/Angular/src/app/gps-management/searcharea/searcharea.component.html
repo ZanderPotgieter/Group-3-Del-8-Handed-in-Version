@@ -1,39 +1,69 @@
-<h1>Search Area</h1>
-<br>
-<div class="card">
-    <!--<p style="text-align: left;color: orange;"><u>Enter Area Details for Search:</u></p>
-    <br>
-    <form class="col s12 white" style="align-content: left;">
-        <div class="row">
-          <div class="input-field col s6">
-            <label>Area Name:</label>
-            <input type="text" name="ArName" #ArName="ngModel" [(ngModel)]="service.areaData.ArName">
-          </div>
-          <div class="input-field col s6">
-            <label>Province:</label>
-            <select  class="form-control" style="background-color: rgba(0,0,0,0);" name="ProvinceID" #ProvinceID="ngModel" [(ngModel)]="service.areaData.ProvinceID"
-            (change)="selectProvince($event.target)">
-            <option value="0" >-- Select --</option>
-            <option *ngFor="let area of service.areaList" value="{{area.ProvinceID}}">{{area.ProvName}}"></option>
-          </select>
-          </div>
-          <div class="input-field col s6">
-            <label>Area Status:</label>
-            <select class="form-control"  style="background-color: rgba(0,0,0,0);" name="AreaStatusID" #AreaStatusID="ngModel" [(ngModel)]="service.areaData.AreaStatusID"
-            (change)="selectAreaStatus($event.target)">
-                <option value="0" >-- Select --</option>
-                <option *ngFor="let area of service.areaList" value="{{ area.AreaStatusID}}">{{area.AreaStautsID.ASDescription}}"> </option>
-              </select>
-          </div>
+<body>
+
+  <h1>Search Area</h1>
+  <form>
+  <div class="card" *ngIf = "showSearch">
+          
+      <div class="divleft">
+          <label class="subheadinglabel">Enter Area to search:</label>
+          <br><br>
+          <label for="name">Name:     </label>
+                <input class="searchinput" type="text" formControlName="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" id="name" name="name" pattern="[a-zA-Z ]*" required>
+      </div> 
+
+      <div class="divleft">
+          <button type="submit" (click)= "searchArea()">Search</button>
+          <button type="button" (click)= "gotoCreditorManagement()">Cancel</button>
+          
+      </div>
+
+      
+
+  </div>
+  
+  <div id ="area" *ngIf = "showResults">
+          <div class="card">
+                  <label> <span style="white-space: nowrap;">Area</span></label>
+                  
+                  <div class="divleft">
+                      <br>
+                      <label for="Name">Area Name:</label>
+                      <input type = "text" id="ArName" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="area.ArName" name="ArName"  required [readonly]  = "this.inputDisabled">  
+                      <br>
+                  </div> 
+
+                  <div class="divleft">
+                      <label for="ArPostalCode">Postal Code:</label>
+                      <input type = "text" id="ArPostalCode" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="area.ArPostalCode" name="ArPostalCode"  required [readonly] = "this.inputDisabled">  
+                      <br>
+                  </div>
+
+                  <div class="divleft">
+                      <label for="ProvName">Province:</label>
+                      <input type = "text" id="Provname" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="Province.ProvName" name="ProvName"  required [readonly] = "this.inputDisabled" >  
+                      <br>
+                  </div>
+              </div>
+
+              <div class="divleft">
+                <label for="ASDescription">Status:</label>
+                <input type = "text" id="ASDescription" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="Status.ASDescription" name="ASDescription"  required [readonly] = "this.inputDisabled" >  
+                <br>
+            </div>
         </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <button class="btn-large btn-submit" type="submit"  (click)="SearchArea()">Search Area</button>
-            <button class="btn-large btn-submit" type="submit"  routerLink="./">Cancel</button>
-          </div>
-        </div>
-    </form>-->
-    </div>
-    <br>
+          
+              
+              <div class="divleft" *ngIf="showButtons">
+                  <button type="button" (click)="enableInputs()">Update</button>
+                  <button type="submit" (click)="removeCreditor()">Delete</button>
+              </div>
+
+              <div class="divleft" *ngIf="showSave" >
+                  <button type="submit" (click)="updateCreditor()">Save</button>
+                  <button type="button" (click)="cancel()">Cancel</button>
+              </div>
+        
+  
+
 
 

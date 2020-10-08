@@ -42,7 +42,14 @@ export class AddCreditorComponent implements OnInit {
       CredBranch: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],
       CredAccount: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
       CredType: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],      
-    }); 
+    });
+    
+    this.creditorService.getAllSuppliers()
+    .subscribe(value => {
+      if (value != null) {
+        this.suppliers = value;
+      }
+    });
 }
 
 loadSupplier(val: Supplier){

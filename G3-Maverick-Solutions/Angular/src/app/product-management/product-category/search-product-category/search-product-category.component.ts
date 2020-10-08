@@ -19,6 +19,7 @@ export class SearchProductCategoryComponent implements OnInit {
   productCategory : ProductCategory = new ProductCategory();
   responseMessage: string = "Request Not Submitted";
 
+  showOptions: boolean = true;
   showAll: boolean = false;
   showSaves: boolean = false;
   showButtons: boolean = true;
@@ -40,11 +41,13 @@ export class SearchProductCategoryComponent implements OnInit {
     this.allCategories = this.productCategoryService.getAllProductCategory();
     this.showAll = true;
     this.showSearch = false;
+    this.showOptions = true;
   }
 
   Input(){
     this.showSearch = true;
     this.showAll = false;
+    this.showOptions = false;
   }
   Search(){
     if(this.name == null)

@@ -2,7 +2,7 @@
     <h1>Search Container</h1>
 
     <form>
-        <div class="card" > 
+        <div class="card" *ngIf= "showOptions"> 
             <p class="subheadinglabel">Search Container By:</p>
             <div class="divleft">
                 <button type="submit" (click)="All()">All Containers</button>

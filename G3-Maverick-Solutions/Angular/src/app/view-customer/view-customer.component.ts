@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { DialogService } from '../shared/dialog.service';
 
 
 
@@ -29,7 +30,7 @@ export class ViewCustomerComponent implements OnInit {
     this._allCus = value;  
   }  
 
-  constructor(private api: CustomerService, private interaction: CustomerOrderService, private router: Router, private bf: FormBuilder) { }
+  constructor(private api: CustomerService, private dialogService: DialogService, private interaction: CustomerOrderService, private router: Router, private bf: FormBuilder) { }
   cusForm: FormGroup;
   customer : Customer = new Customer();
   responseMessage: string = "Request Not Submitted";
@@ -74,8 +75,8 @@ export class ViewCustomerComponent implements OnInit {
     this.api.searchCustomer(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      }
       else{
           this.customer.CustomerID = res.CustomerID;
           this.customer.CusName = res.CusName;
@@ -86,38 +87,42 @@ export class ViewCustomerComponent implements OnInit {
           this.customer.CusStreet = res.CusStreet;
           this.customer.CusCode = res.CusCode;
           this.customer.CusSuburb = res.CusSuburb;
-      }
-      
-      this.showSearch = false;
+          this.showSearch = false;
       this.showResults = true;
-      
+      }
     })
 
   }
 
   updateCustomer(){
+    this.dialogService.openConfirmDialog('Are you sure you want to update this customer?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.updateCustomer(this.customer).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
       this.router.navigate(["customer-management"])
     })
-
+  }
+  });
   }
 
   deleteCustomer(){
+    this.dialogService.openConfirmDialog('Are you sure you want to delete this customer?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.deleteCustomer(this.customer.CustomerID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
+        this.dialogService.openAlertDialog(res.Message);
       this.responseMessage = res.Message;}
-      alert(this.responseMessage)
       this.router.navigate(["customer-management"])
     })
+  }
+});
 
   }
-
-
 
   enableInputs(){
     this.showSave = true;
@@ -127,6 +132,8 @@ export class ViewCustomerComponent implements OnInit {
   }
 
   cancel(){
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed();
     this.showSave = false;
     this.inputEnabled = false;
     this.showButtons = true;
@@ -137,10 +144,5 @@ export class ViewCustomerComponent implements OnInit {
   gotoCustomerManagment(){
     this.router.navigate(['customer-management']);
   }
-
-   //gotoPlaceOrder(){
-     //this.interaction.sendCustomerID(this.customer.CustomerID);
-    //this.router.navigate(['place-order']);
-  //}
 
 }

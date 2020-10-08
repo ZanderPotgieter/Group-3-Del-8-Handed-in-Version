@@ -5,6 +5,7 @@ import { ProductCategory } from '../../product-category';
 import { NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-search-product-category',
@@ -13,7 +14,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class SearchProductCategoryComponent implements OnInit {
 
-  constructor(private productCategoryService: ProductCategoryService, private router: Router, private fb: FormBuilder) { }
+  constructor(private productCategoryService: ProductCategoryService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   pcatForm: FormGroup;
   productCategory : ProductCategory = new ProductCategory();
   responseMessage: string = "Request Not Submitted";
@@ -57,8 +58,8 @@ export class SearchProductCategoryComponent implements OnInit {
     this.productCategoryService.searchProductCategory(this.name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      }
       else{
           this.productCategory.ProductCategoryID = res.ProductCategoryID;
           this.productCategory.PCatName = res.PCatName;
@@ -84,26 +85,37 @@ export class SearchProductCategoryComponent implements OnInit {
   }
   
   Delete(){
+    this.dialogService.openConfirmDialog('Are you sure you want to delete this product category?')
+    .afterClosed().subscribe( res => {
+      if(res){
     this.productCategoryService.deleteProductCategoryById(this.productCategory.ProductCategoryID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
+        this.responseMessage = res.Message;}
       this.router.navigate(["product-management"])
+    })
+    }
     })
   }
   
   Save(){
+    this.dialogService.openConfirmDialog('Are you sure you want to update this product category?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.productCategoryService.updateProductCategory(this.productCategory).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
       this.router.navigate(["product-management"])
+    })
+    }
     })
   }
 
   cancel(){
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed();
     this.showSaves = false;
     this.inputEnabled = false;
     this.showButtons = true;

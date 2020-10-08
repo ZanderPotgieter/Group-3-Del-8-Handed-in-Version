@@ -14,6 +14,8 @@ import  {Container} from  'src/app/container-management/container';
 import { from } from 'rxjs';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../../shared/dialog.service';
+
 @Component({
   selector: 'app-make-sale',
   templateUrl: './make-sale.component.html',
@@ -24,7 +26,7 @@ export class MakeSaleComponent implements OnInit {
   @Input() ConName: string;
   @Input() ContainerID: number;
 
-  constructor(private api: SalesService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
+  constructor(private api: SalesService, private router: Router, private fb: FormBuilder, private productService: ProductService, private dialogService: DialogService) { }
   searchForm: FormGroup;
 
  currentContainer: Container = new Container();
@@ -427,23 +429,24 @@ export class MakeSaleComponent implements OnInit {
               console.log(res);
               this.lowStock = res;
               if(res == true){
-
-                alert("Sale Completed Successfully");
-                alert("Some Products are now low in stock. Click OK to view");
+                this.dialogService.openAlertDialog("Sale Completed Successfully");
+                this.dialogService.openAlertDialog("Some Products are now low in stock. Click OK to view");
+                //alert("Sale Completed Successfully");
+                //alert("Some Products are now low in stock. Click OK to view");
                 this.router.navigate(['lowstock'])
               }
               if(res == false){
-                
-              alert("Sale Completed Successfully");
-              this.showSale = false;
-              this.showMenu = true;
+                this.dialogService.openAlertDialog("Sale Completed Successfully");
+              //alert("Sale Completed Successfully");
+              this.router.navigate(['sales-management']);
               }
 
             })
   
           }
           else{
-            alert("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
+            this.dialogService.openAlertDialog("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
+            //alert("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
           }
 
         }
@@ -462,9 +465,9 @@ export class MakeSaleComponent implements OnInit {
         this.api.cancelSale(this.sale.SaleID).subscribe((res: any)=> {
           console.log(res);
           if(res.Message){
-            alert(res.Message);
-            this.showSale = false;
-            this.showMenu = true;
+            this.dialogService.openAlertDialog(res.Message);
+            //alert(res.Message);
+            this.router.navigate(['sales-management']);
             
           }
         } )

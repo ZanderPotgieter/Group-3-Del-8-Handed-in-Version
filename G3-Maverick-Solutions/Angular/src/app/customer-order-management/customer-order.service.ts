@@ -90,6 +90,12 @@ export class CustomerOrderService {
     CustomerOrderID, httpOptions); 
   }
 
+  collectCustomerOrder(CustomerOrder: CustomerOrder): Observable<CustomerOrder> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.put<CustomerOrder>(this.url + '/collectCustomerOrder',  
+    CustomerOrder, httpOptions);  
+  }  
+
   sendNotification(selectedOrders: string[]){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
     return this.http.post<CustomerOrder[]>(this.url + '/sendNotification',  

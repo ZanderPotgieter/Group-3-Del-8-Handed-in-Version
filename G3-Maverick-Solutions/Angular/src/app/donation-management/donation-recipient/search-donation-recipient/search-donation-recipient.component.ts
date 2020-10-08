@@ -5,6 +5,8 @@ import { NgModule } from '@angular/core';
 import {DonationService} from '../../donation.service';
 import { Observable } from 'rxjs';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../../../shared/dialog.service';
+
 @Component({
   selector: 'app-search-donation-recipient',
   templateUrl: './search-donation-recipient.component.html',
@@ -12,7 +14,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class SearchDonationRecipientComponent implements OnInit {
 
-  constructor(private donationSerive: DonationService, private router: Router , private fb: FormBuilder) { }
+  constructor(private donationSerive: DonationService, private router: Router , private fb: FormBuilder, private dialogService: DialogService) { }
   donForm: FormGroup;
   donationRecipient : DonationRecipient = new DonationRecipient();
   responseMessage: string = "Request Not Submitted";
@@ -67,8 +69,8 @@ export class SearchDonationRecipientComponent implements OnInit {
     this.donationSerive.searchDonationRecipient(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      }
       else{
           this.donationRecipient.RecipientID = res.RecipientID;
           this.donationRecipient.DrName = res.DrName;
@@ -99,26 +101,37 @@ export class SearchDonationRecipientComponent implements OnInit {
   }
 
   Save(){
+    this.dialogService.openConfirmDialog('Are you sure you want to update this recipient?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.donationSerive.updateDonationRecipient(this.donationRecipient).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
       this.router.navigate(["donation-management"])
     })
+  }
+  })
   }
   
   Delete(){
+    this.dialogService.openConfirmDialog('Are you sure you want to delete this recipient?')
+    .afterClosed().subscribe( res => {
+      if(res){
     this.donationSerive.deleteDonationRecipient(this.donationRecipient.RecipientID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
+        this.dialogService.openAlertDialog(res.Message);
       this.responseMessage = res.Message;}
-      alert(this.responseMessage)
       this.router.navigate(["donation-management"])
     })
   }
+  })
+  }
 
   cancel(){
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed();
     this.showSave = false;
     this.inputEnabled = false;
     this.showButtons = true;

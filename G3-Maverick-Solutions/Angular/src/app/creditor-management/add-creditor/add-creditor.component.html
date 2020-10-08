@@ -1,20 +1,60 @@
 
 <body>
 
-    <h1>Search Creditor</h1>
-<form>
+    <h1>Add Creditor</h1>
+    <form [formGroup]="credForm">
     <div class="card" *ngIf = "showSearch">
             
         <div class="divleft">
-            <label class="subheadinglabel">Enter name of supplier you wish to add as a creditor</label>
-            <br><br>
-            <label for="Name">Name</label>
-            <input type = "text" id="name"  class="searchInput" class="form-control" [(ngModel)]="name" name="name">     
-            <br>
+            <label class="subheadinglabel">Enter new creditor details:</label>
+
+<br>
+<div class="divleft">
+                <label for="SupplierID">Supplier:</label>
+                <select  required formControlName="SupplierID" name="SupplierID" [(ngModel)]="creditor.SupplierID" [ngModelOptions]="{standalone: true}" (ngModelChange)="loadSupplier($event)">
+                     
+                    <option  *ngFor="let supplier of suppliers" [ngValue]="supplier">{{supplier.SupName}}</option>
+                  </select>
+                </div>
+                  
+                  <div class="divleft">
+                    <label for="Bank">Bank:</label>
+                    <input type = "text" id="bank" class="form-control" formControlName="CredBank" [(ngModel)]="creditor.CredBank" [ngModelOptions]="{standalone: true}" name="CredBank"  required  >  
+                    <span style="color:red" *ngIf="credForm.get('CredBank').errors && (credForm.get('CredBank').touched || credForm.get('CredBank').dirty)">
+                        <br> <span *ngIf="credForm.get('CredBank').errors.required"><br>Bank is required.<br></span>
+                      </span>
+                </div>
+                <div class="divleft">
+                    <label for="Branch">Branch:</label>
+                    <input type = "text" id="branch" class="form-control" formControlName="CredBranch" [(ngModel)]="creditor.CredBranch" [ngModelOptions]="{standalone: true}" name="CredBranch"  required  >  
+                    <span style="color:red" *ngIf="credForm.get('CredBranch').errors && (credForm.get('CredBranch').touched || credForm.get('CredBranch').dirty)">
+                        <br> <span *ngIf="credForm.get('CredBranch').errors.required"><br>Branchis required.<br></span>
+                      </span>
+                    <br>
+                </div>
+                <div class="divleft">
+                    <label for="Account">Account Nr:</label>
+                    <input type = "text" id="account" class="form-control" formControlName="CredAccount" [(ngModel)]="creditor.CredAccount" [ngModelOptions]="{standalone: true}" name="CredAccount"  required >  
+                    <br>
+                    <span style="color:red" *ngIf="credForm.get('CredAccount').errors && (credForm.get('CredAccount').touched || credForm.get('CredAccount').dirty)">
+                        <span *ngIf="credForm.get('CredAccount').errors.required">Account Number is required.<br></span>
+                        <span *ngIf="credForm.get('CredAccount').errors.minlength">Must be 10 numbers<br></span>
+                        <span *ngIf="credForm.get('CredAccount').errors.maxlength">Must be 10 numbers<br></span>
+                        <span *ngIf="credForm.get('CredAccount').errors.pattern">Only numbers allowed.<br></span>
+                    </span>
+                </div>
+                <div class="divleft">
+                    <label for="Type">Account Type:</label>
+                    <input type = "text" id="type" class="form-control" formControlName="CredType" [(ngModel)]="creditor.CredType" [ngModelOptions]="{standalone: true}" name="CredType"  required  >  
+                    <span style="color:red" *ngIf="credForm.get('CredType').errors && (credForm.get('CredType').touched || credForm.get('CredType').dirty)">
+                        <br> <span *ngIf="credForm.get('CredType').errors.required"><br>Account Type is required.<br></span>
+                      </span>
+                </div>
+                
         </div> 
 
         <div class="divleft">
-            <button type="submit" (click)= "searchSupplier()">Search</button>
+            <button type="submit" (click)= "Save()">Add</button>
             <button type="button" (click)= "gotoCreditorManagement()">Cancel</button>
             
         </div>

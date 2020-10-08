@@ -9,6 +9,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import {LoginService} from 'src/app/login.service';
 import {Supplier} from 'src/app/supplier-management/supplier';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-add-product',
@@ -17,7 +18,7 @@ import {Supplier} from 'src/app/supplier-management/supplier';
 })
 export class AddProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder,private api: LoginService) { }
+  constructor(private productService: ProductService, private router: Router, private fb: FormBuilder,private api: LoginService, private dialogService: DialogService) { }
   pdForm: FormGroup;
   categories: ProductCategory[];
   selectedCategory: ProductCategory;
@@ -136,19 +137,23 @@ export class AddProductComponent implements OnInit {
   }
 
   Save(){
+    this.dialogService.openConfirmDialog('Are you sure you want to add the product?')
+          .afterClosed().subscribe(res => {
+            if(res){
     this.newProduct.SupplierID = this.selectedSupplier.SupplierID;
     this.newProduct.ProductCategoryID = this.selectedCategory.ProductCategoryID;
     this.price.Product = this.newProduct;
     this.productService.addProduct(this.price).subscribe( (res: any)=> {
       console.log(res);
       if(res.Message){
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
         this.router.navigate(["product-management"]);}
         else if (res.Error){
           alert(res.Error);
         }
        
+    })
+    }
     })
     
   }

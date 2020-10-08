@@ -28,6 +28,7 @@ export class AdminDashboardComponent {
   chart: Chart;
   TableData: object;
   totalBalance: any;
+  pieChart: Chart; 
 
   /** Based on the screen size, switch from standard to one column per row */
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
@@ -54,6 +55,7 @@ export class AdminDashboardComponent {
 
   ngOnInit(): void {
     this.GenerateReport();
+    this.GeneratePieChart();
   }
 
 
@@ -83,14 +85,14 @@ export class AdminDashboardComponent {
         console.log(this.totalBalance);  
  
         var ctx = document.getElementById('canvas');
-        this.chart = new Chart(ctx,{
+        this.chart = new Chart('bar',{
         type: 'bar',
         data: {
           labels: keys,
           datasets: [
             {
-            label:'Revenue of sales per container ',
-            data: Vals,
+            label:'Sales Revenue per container for current year',
+            data: Vals, 
             fill: false,
             barPercentage: 0.70,
             backgroundColor: [
@@ -135,7 +137,6 @@ export class AdminDashboardComponent {
                 display: true,
                 ticks:{
                 beginAtZero: true,
-                  
                 }
               }],
             }
@@ -145,5 +146,89 @@ export class AdminDashboardComponent {
       })
     });
  }
+
+ GeneratePieChart()
+  {
+ 
+    if (this.pieChart)
+    {
+       this.pieChart.destroy();
+    }
+ 
+  
+      this.showErrorMessage =false;
+      
+      this.dashboardService.getSalePieChartData().subscribe((res) =>
+      {
+        console.log(res);
+        //this.TableData = res['TableData'];
+ 
+        let keys = res['ChartData'].map((z)=>z.Name);
+        let Vals = res['ChartData'].map((z)=>z.Sum);
+        
+ 
+         let totalTot = res['ChartData'].map((z) => z.Sum);
+        const sum = totalTot.reduce((a,b) => a+b, 0);
+        this.totalBalance = sum || 0;
+        console.log(this.totalBalance);  
+ 
+        var ctx = document.getElementById('canvas');
+        this.pieChart = new Chart('pie',{
+        type: 'pie',
+        data: {
+          labels: keys,
+          datasets: [
+            {
+            label:'Sales Revenue per container for current year',
+            data: Vals, 
+            fill: false,
+            backgroundColor: [
+              
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(190, 204, 102, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(102, 204, 194, 1)',
+              'rgba(180, 75, 75, 1)'
+                
+ 
+            ],
+            borderColor: [
+              
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(190, 204, 102, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(102, 204, 194, 1)',
+              'rgba(180, 75, 75, 1)'
+            ],
+            borderWidth: 1
+          }],
+          options:{
+            resposive: true,
+            legend:{
+              position: 'top',
+            },
+            title:{
+              text: "Current year Revenue By Container",
+              fontSize: 50,
+            },
+            animation: {
+              animateScale: true,
+              animateRotate: true,
+            },
+            
+        
+          }
+        }
+ 
+      })
+    });
+ }
+
  
 }

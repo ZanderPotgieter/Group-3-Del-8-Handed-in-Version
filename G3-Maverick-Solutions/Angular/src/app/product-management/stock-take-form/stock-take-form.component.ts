@@ -27,6 +27,7 @@ export class StockTakeFormComponent implements OnInit {
   SelectReason: number;
   container: Container;
   stocktake: StockTake = new StockTake();
+  stocktakeID: number;
 
   constructor(private productService: ProductService, private router: Router,private api: SalesService) { }
 
@@ -75,7 +76,7 @@ export class StockTakeFormComponent implements OnInit {
           if(res.Error != null){ 
           alert(res.Message)}
           else{
-            this.stocktake = res.stock_Take;
+            this.stocktakeID = res.stock_TakeID;
             this.container = res.container;
 
             this.showButton = false;
@@ -88,7 +89,7 @@ export class StockTakeFormComponent implements OnInit {
 
     
   save(ndx: number){
-    this.productService.addStockTakeProduct(this.stocktake.StockTakeID, this.list[ndx].ProductID, this.list[ndx].Subtotal)
+    this.productService.addStockTakeProduct(this.stocktakeID, this.list[ndx].ProductID, this.list[ndx].Subtotal)
     .subscribe((res: any)=>{
       console.log(res);
     })

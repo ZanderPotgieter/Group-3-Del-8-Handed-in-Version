@@ -82,6 +82,8 @@ reportingEnabled: boolean = false;
       UserSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
       UserCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
       UserEmail: ['', [Validators.required, Validators.email]],   
+      UserPassword: [''], 
+      ConfirmPassword: [''],
     }); 
   }
 
@@ -90,7 +92,7 @@ reportingEnabled: boolean = false;
 login(){
   if(this.containerSelected == true){
     this.user.UserName = this.UserName;
-    this.user.UserPassword = this.UserPassword;
+    this.user.UserPassword = this.password;
   this.api.loginUser(this.user).subscribe( (res:any)=> {
     console.log(res);
     if(res.Error){

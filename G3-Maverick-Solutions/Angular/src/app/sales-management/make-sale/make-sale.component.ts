@@ -88,41 +88,15 @@ export class MakeSaleComponent implements OnInit {
   barcodeFound: boolean = false;
   prodFound: boolean = false;
   lowStock: boolean = false;
+  showSale: boolean = false;
+  showMenu = true;
 
   productID = 0;
   removeQuantity = 0;
 
-  ngOnInit() {
+  ngOnInit(): void {
 
-
-    if(!localStorage.getItem("accessToken")){
-      this.router.navigate([""]);
-    }
-    else {
-      this.session = {"token" : localStorage.getItem("accessToken")}
-
-      this.api.getUserDetails(this.session).subscribe( (res:any) =>{
-        console.log(res);
-        this.user = res;
-
-        this.api.initiateSale(this.session)
-        .subscribe((value:any) =>{
-        console.log(value);
-      
-          this.productsWithPrice = value.products;
-          this.sale = value.Sale;
-          this.saleDate = value.Sale.SaleDate;
-          this.paymentTypes = value.paymentTypes;
-          this.vatPerc = value.VAT.VATPerc;
-        
-        
-      });
-        
-      })
-
-   
-  }
-
+    
   this.searchForm= this.fb.group({ 
     prodBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
   
@@ -133,7 +107,34 @@ export class MakeSaleComponent implements OnInit {
 
   }
   
-  
+  showMakeSale(){
+    
+    this.session = {"token" : localStorage.getItem("accessToken")}
+
+    this.api.getUserDetails(this.session).subscribe( (res:any) =>{
+      console.log(res);
+      this.user = res;
+
+      this.api.initiateSale(this.session)
+      .subscribe((value:any) =>{
+      console.log(value);
+    
+        this.productsWithPrice = value.products;
+        this.sale = value.Sale;
+        this.saleDate = value.Sale.SaleDate;
+        this.paymentTypes = value.paymentTypes;
+        this.vatPerc = value.VAT.VATPerc;
+      
+      
+    })
+      
+    })
+
+    this.showSale = true;
+    this.showMenu = false;
+
+
+  }
   
 
   useBardode(){
@@ -434,7 +435,8 @@ export class MakeSaleComponent implements OnInit {
               if(res == false){
                 
               alert("Sale Completed Successfully");
-              this.router.navigate(['sales-management']);
+              this.showSale = false;
+              this.showMenu = true;
               }
 
             })
@@ -461,7 +463,8 @@ export class MakeSaleComponent implements OnInit {
           console.log(res);
           if(res.Message){
             alert(res.Message);
-            this.router.navigate(['sales-management']);
+            this.showSale = false;
+            this.showMenu = true;
             
           }
         } )

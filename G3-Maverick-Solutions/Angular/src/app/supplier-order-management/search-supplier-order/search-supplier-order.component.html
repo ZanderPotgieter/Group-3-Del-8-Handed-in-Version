@@ -2,47 +2,121 @@
     <h1>Search Supplier Order</h1>
     <br>
     <form>
-        
-        <div class="card" id="creditor">
-  
-          <div class="subheadinglabel" id="creditor">Enter Product and Supplier Details or Status:</div>
-            <br>
-  <div class="divleft">
-            <label>Product:</label>
-            <input class="searchinput" type ="text" id="LocNameid" name="LocName" required style="width:580px"> <br>
-  
-            <label>Supplier:</label>
-            <input class="searchinput" type ="text" id="LocNameid" name="LocName" required style="width:580px"> <br/>
-  
-            <label for="credpayment">Status:</label>
-                <select class="smallselect" name="Creditor" required id="Creditor" required style="width:580px">
-                  <option>---</option>
-                    <option>Ordered</option>
-                    <option>Received</option>
-                </select> <br>
-  
-            
-            <button type="submit">Search</button>
-            <button routerLink="/supplier-order-management" type="submit" >Cancel</button><br>
+    <div class="card">
+        <div class="divleft">
+          <label class="subheadinglabel">Select Search Criteria</label>
+        </div>
+        <div >
+          <mat-radio-group  aria-label="Select Option To View">
+          <mat-radio-button  value = 1 (click)="getAll()" >All Supplier Orders</mat-radio-button>
+          <mat-radio-button value = 2 (click)="getContainers()" >By Container</mat-radio-button>
+          <mat-radio-button value = 3 (click)="getOrderStatuses()" >By Order Status</mat-radio-button>
+          <mat-radio-button value = 4 (click)="showDate()" >By Date</mat-radio-button>
+          </mat-radio-group>
+
+        </div>
+
+        <div *ngIf = "showContainer">
+          <label>Select Container</label><select [ngModelOptions]="{standalone: true}" required name="SelectContainer" [(ngModel)]="SelectContainer" (ngModelChange)="selectContainer($event)">
+          <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
+         </select>
+         <br>
+         <div *ngIf="showError">
+              <span style="color:orangered;">container selection required</span>
           </div>
+         
+         <div class= "divleft">
+          <button type="submit" (click)="searchByContainer()">Search</button>
+          <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
-        <div class="card" id="creditor">
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th>Product</th>
-      <th>Supplier</th>
-      <th>Quantity</th>
-      <th>Date</th>
-      <th>Status</th>
-    </tr>
-    </thead>
-  </table>
-            
+       
+       </div>
+
+       <div *ngIf = "showStatuses">
+        <label>Select Status:</label><select [ngModelOptions]="{standalone: true}" required name="SelectStatus" [(ngModel)]="SelectStatus" (ngModelChange)="selectStatus($event)">
+        <option  *ngFor="let status of statuses" [ngValue]="status" >{{status.SOSDescription}}</option>
+       </select>
+       <br>
+       <div *ngIf="showError">
+            <span style="color:orangered;">Status selection required</span>
         </div>
-        <br><br>
-  
-    
-    </form>
-  
-  </body>
+        <br>
+        <div class= "divleft">
+          <button type="submit" (click)="searchByStatus()">Search</button>
+          <button type="submit" (click)="Cancel()">Cancel</button>
+        </div>
+       
+     </div>
+
+     <div *ngIf = "showdate">
+      <label>Select Date:</label><input type="date" [ngModelOptions]="{standalone: true}" required name="date" [(ngModel)]="date" >
+     <br>
+     <div *ngIf="showError">
+          <span style="color:orangered;">Date selection required</span>
+      </div>
+     
+     <div class= "divleft">
+      <button type="submit" (click)="searchByDate()">Search</button>
+      <button type="submit" (click)="Cancel()">Cancel</button>
+    </div>
+   
+   </div>
+
+   <div *ngIf="showList">
+   <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
+    <th style="width: 20%;padding: 0px">Date</th>
+    <th style="width: 30%;padding: 0px">Supplier</th>
+    <th style="width: 20%; padding: 0px">Status</th>
+    <th style="width: 20%; padding: 0px"></th>
+
+<tr *ngFor="let item of supplierOrders; index as ndx">
+    <td>{{item.SODate}}</td>
+    <td>{{item.SupName}}</td>
+    <td>{{item.Status}}</td>
+    <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
+
+</tr>
+
+</table>
+</div>
+
+<div *ngIf="showOrder">
+  <label class="subheadinglabel">Supplier Order Details </label>
+  <div class="left">
+    <div style="float:left; width: 50%">
+      <label style="width: 100%">Date: {{selectedOrder.SODate | date:'yyyy-MM-dd'}}</label>
+    </div>
+    <div style="float:left; width: 50%">
+      <label style="width: 100%">Status {{selectedOrder.Status}}</label>
+    </div>
+  </div>
+ 
+
+  <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
+   <th style="width: 20%;padding: 0px">Product</th>
+   <th style="width: 30%;padding: 0px">Description</th>
+   <th style="width: 20%; padding: 0px">Ordered</th>
+   <th style="width: 20%; padding: 0px">Received</th>
+
+<tr *ngFor="let item of orderproducts; index as ndx">
+   <td>{{item.ProdName}}</td>
+   <td>{{item.ProdDescription}}</td>
+   <td>{{item.SOPQuantityOrdered}}</td>
+   <td>{{item.SOPQuantityRecieved}}</td>
+
+   <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
+
+</tr>
+
+</table>
+<br>
+<div class= "divleft">
+  <button type="submit" (click)="CancelOrder()">Cancel Order</button>
+  <button type="submit" (click)="Back()">Back To List</button>
+</div>
+
+</div>
+
+
+    </div>
+       

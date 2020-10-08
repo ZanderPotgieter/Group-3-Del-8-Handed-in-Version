@@ -99,11 +99,11 @@
       </div>
       <div class="form-group">
         <label >Password:</label>
-        <input  class="input"  type="password" formControlName="UserPassword"  [(ngModel)]="user.UserPassword" name="UserPassword" id="UserPassword" required>
+        <input  class="input"  type="password" formControlName="UserPassword"  [(ngModel)]="password" name="UserPassword" id="UserPassword" required>
       </div>
       <div class="form-group">
         <label >Confirm Password:</label>
-        <input  class="input"  type="password"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (ngModelchange)="Validate()" required>
+        <input  class="input"  type="password" formControlName="ConfirmPassword"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (ngModelchange)="Validate()" required>
       </div>
       <span style="color:red" *ngIf="showInvalidPassword">
         Passwords do not match
@@ -237,7 +237,7 @@
         <ul style="width: 200px; height: 600px; overflow-y: scroll;">
             
           <li><i class="tiny material-icons">menu</i><a *ngIf="adminEnabled" [routerLink]="'/admin'"> <i class="fas fa-home"></i>Administration </a></li>
-          <li><i class="tiny material-icons">shopping_basket</i><a *ngIf="salesEnabled" [routerLink]="'/sales-management'"><i class="fas fa-blog"></i>Sales </a></li>
+          <li><i class="tiny material-icons">shopping_basket</i><a *ngIf="salesEnabled" [routerLink]="'/make-sale'"><i class="fas fa-blog"></i>Sales </a></li>
           <li><i class="tiny material-icons">store</i><a *ngIf="containerEnabled" [routerLink]="'/container-management'"><i class="fas fa-user"></i>Container Management</a></li>
           <li><i class="tiny material-icons">attach_money</i><a *ngIf="creditorEnabled" [routerLink]="'/creditor-management'"><i class="fas fa-map-pin"></i>Creditor Management </a></li>
           <li><i class="tiny material-icons">contacts</i><a *ngIf="customerEnabled" [routerLink]="'/customer-management'"><i class="fas fa-address-book"></i>Customer Management </a></li>

@@ -130,7 +130,7 @@ export class ProductService {
 
   initateStockTake(session: any){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post(this.url + '/initateStockTake', session, httpOptions);
+    return this.http.put(this.url + '/initateStockTake', session, httpOptions);
   }
 
   addStockTakeProduct(stockTakeID: number, productID: number, STcount: number){
@@ -140,7 +140,7 @@ export class ProductService {
 
   getStockTake(id: number){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
-    return this.http.get(this.url + '/getStockTake?id='+ id,  httpOptions);
+    return this.http.get(this.url + '/getStockTake?id='+ id);
   }
   getAllStockTakes(){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) }; 
@@ -177,6 +177,13 @@ export class ProductService {
     return this.http.get(this.url + '/completeStockTake?id='+ id,  httpOptions);
   }
 
+  GetAllMarkedOffProducts(): Observable<MarkedOff[]> {  
+    return this.http.get<MarkedOff[]>(this.url + '/GetAllMarkedOffProducts');  
+  }
+
+  getAllMarkedOffProductsByReason(id: number): Observable<MarkedOff[]> {  
+    return this.http.get<MarkedOff[]>(this.url + '/getAllMarkedOffProductsByReason?id='+id);  
+  }
 
 
   

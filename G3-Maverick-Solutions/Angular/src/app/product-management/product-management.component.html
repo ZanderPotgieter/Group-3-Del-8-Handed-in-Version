@@ -6,6 +6,7 @@
             <div>
                 <button style="width: 30%;" type="submit" (click)="showProduct()">Product</button><br>
                 <button style="width: 30%;" type="submit" (click)="showProductCategory()">Product Category</button><br>
+                
                 <button style="width: 30%;" type="submit" (click)="showVat()">Vat</button><br>
             </div>
         </div>
@@ -14,7 +15,7 @@
            
             <div class="card" *ngIf="showProd">
                 <div> 
-                    <label>Product</label>
+                    <label style="width:100%; text-align: center;">Product</label>
                     <br>
                     <button style="width: 30%;" type="submit" (click)="gotoAddProduct()">Add Product</button>
                     <br>
@@ -24,14 +25,14 @@
                     <br>
                     <button style="width: 30%;" type="submit" (click)="gotoSearchProduct()">Remove Product</button>
                     <br>
-                    <button style="width: 30%;" type="submit" (click)="gotoStockTake()">Stock Management</button>
-                    <br>
+                    <button style="width: 30%;" type="submit" (click)="gotoStockTake()">Stock Management</button><br>
+                    
                 </div>
             </div>
             
             <div class="card"*ngIf="showProdCat" >
             <div> 
-                <label style="display: inline;">Product Category</label>
+                <label style="width:100%; text-align: center;">Product Category</label>
                 <br>
                 <button style="width: 30%;" type="submit" (click)="gotoAddProductCategory()">Add Product Category</button>
                 <br>
@@ -45,7 +46,7 @@
 
         <div class="card" *ngIf="showvat">
             <div> 
-                <label>VAT</label>
+                <label style="width:100%; text-align: center;">VAT</label>
                 <br>
                 <button style="width: 30%;" type="submit" (click)="gotoAddVAT()">Add VAT</button>
                 <br>

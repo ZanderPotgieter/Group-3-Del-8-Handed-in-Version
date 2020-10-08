@@ -325,7 +325,7 @@ namespace ORDRA_API.Controllers
                         
                         List<Product_Sale> product_Sale = db.Product_Sale.Where(x => x.SaleID == sale1.SaleID).ToList();
 
-                        if (product_Sale != null)
+                        if (product_Sale.Count != 0)
                         {
                             dynamic searchedSale = new ExpandoObject();
                             searchedSale.SaleID = sale.SaleID;
@@ -403,7 +403,7 @@ namespace ORDRA_API.Controllers
                             }
                             //get list of payment
                             List<Payment> payments = db.Payments.Where(x => x.SaleID == newSale.SaleID).ToList();
-                            if (payments != null)
+                            if (payments.Count != 0)
                             {
                                 foreach (Payment payment in payments)
                                 {

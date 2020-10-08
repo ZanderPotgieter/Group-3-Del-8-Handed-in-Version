@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <body>
+  <div *ngIf="showMenu">
+    <h1>Sale Management</h1>
+  <br>
+  <div class="card" id="salemanagement">
+    <br>        
+    <button click="showMakeSale()" type="submit">Make Sale</button>
+   
+    <button routerLink="/search-sale" type="submit">Search Sale</button>
+    
+    <button routerLink="/sale-management" type="submit">Card Machine Help</button>
+ 
+  </div>
+</div>
+<div *ngIf="showSale">
   <h1>Make Sale</h1>
   <form >
     <div *ngIf="showProd" class="card"> 
@@ -154,6 +168,6 @@
 
   
   </form>
-
+</div>
 </body>
 

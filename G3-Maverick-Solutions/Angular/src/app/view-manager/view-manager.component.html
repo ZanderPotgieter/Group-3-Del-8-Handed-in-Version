@@ -16,7 +16,7 @@
                     <th>Name</th>
                     <th>Surname</th>
                     <th>Email</th>
-                    <th style="width: 30%; padding:5px"></th>
+                    <th style="width: 30%; padding:0px"></th>
                 </tr>
     
                    
@@ -114,13 +114,13 @@
             
             <tr>
                 <th>Containers Managed</th>
-                <th style="width: 10%; padding:5px"></th>
+                <th style="width: 20%; padding: 2px"></th>
 
             </tr>
 
             <tr *ngFor="let item of  selectedContainers; index as ndx;">
                 <td>{{item.ConName}}</td>
-                <td><button  style="border-radius: 10px; width: 60%;" (click)="remove(ndx)">Remove</button></td>
+                <td><button  style="border-radius: 10px; width: 95%;" (click)="remove(ndx)">Remove</button></td>
             </tr>
         </table>
         </div>

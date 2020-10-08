@@ -2,16 +2,14 @@
     <form>
         <h1>Complete Stock Take</h1>
             <div class = "card" >
-                <div *ngIf="NoForm">
-                    <span>{{response}}</span>
-                </div>
+                
 
                 <div *ngIf="showList">
                     <table>
-                        <th></th>
+                        <th style="width: 10%; padding: 2px"></th>
                         <th>StockTake Date</th>
                         <th>Is Completed</th>
-                        <th></th>
+                        <th style="width: 25%; padding: 2px"></th>
 
                         <tr *ngFor="let item of stocktakes, index as ndx">
                             <th>{{ndx+1}}</th>
@@ -23,6 +21,11 @@
                     </table>
                 </div>
 
+                <div *ngIf="NoForm">
+                    <span>No Incomplete Stock Takes In This Container</span>
+                    <button type="submit" (click)="Cancel()">Cancel</button>
+                </div>
+
 
                 <div clss="divleft" *ngIf="showTable" >
 
@@ -30,28 +33,28 @@
                     <label style="width: 100%">Done By: {{employee}} </label>
                     </div>
                     <div class = "divleft">
-                        <label>In Container: {{container.ConName}} </label>
+                        <label style="width: 100%">In Container: {{container.ConName}} </label>
                     </div>
 
                 <div class = "divleft" >
-                    <label>On Date: {{Todaysdate | date: 'yyyy-MM-dd'}}</label>
+                    <label style="width: 100%">On Date: {{Todaysdate | date: 'yyyy-MM-dd'}}</label>
                 </div>
 
                 <div class= "divleft" *ngIf="showMarkOff"> 
                     <label class="subheadinglabel"> Mark Off {{selectedProduct.ProdName}}</label>
                     <Label>Quantity: {{MOQuantity}} </Label>
-                    <label>Mark Off Reason:</label><select  required formControlName="SelectReason" name="SelectReason" (ngModelChange)="setReason($event)">
+                    <label>Mark Off Reason:</label><select [ngModelOptions]="{standalone: true}" required formControlName="SelectReason" name="SelectReason" (ngModelChange)="setReason($event)">
                         <option  *ngFor="let reason of reasons" [ngValue]="reason" >{{reason.MODescription}}</option>
                        </select>
                        <br>
                        <div *ngIf="showSaveError">
-                        <span>{{response}}</span>
+                        <span [ngModelOptions]="{standalone: true}" >{{response}}</span>
                     </div>
                        <button type="submit" (click)="Save()">Save</button>
                      
                 </div>
                     
-                <table style="width: 100%; padding: 0px">
+                <table [ngModelOptions]="{standalone: true} " style="width: 100%; padding: 0px">
                         <th style="width: 30%;padding: 0px">Product Name</th>
                         <th style="width: 20%;padding: 0px">Quantity</th>
                         <th style="width: 20%; padding: 0px">Stock Count</th>
@@ -59,10 +62,10 @@
                         <th style="width: 10%; padding: 0px"></th>
         
                     <tr *ngFor="let item of list; index as ndx">
-                        <td>{{item.Prodname}}</td>
+                        <td>{{item.ProdName}}</td>
                         <td>{{item.CPQuantity}}</td>
                         <td>{{item.STCount}}</td>
-                        <td>{{item.MOQuantity}}</td>
+                        <td>{{item.MoQuantity}}</td>
                         <td><button style="border-radius: 10px; width: 95%;" (click)="markOff(ndx)">MarkOff</button></td>
         
                     </tr>

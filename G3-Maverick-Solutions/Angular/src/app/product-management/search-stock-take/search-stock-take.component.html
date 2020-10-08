@@ -2,6 +2,10 @@
     <form>
         <h1>Search Stock Take</h1>
         <div class = "card">
+            <div class="divleft">
+                <label class="subheadinglabel">Select Search Criteria</label>
+            </div>
+            
             <div >
                 <mat-radio-group  aria-label="Select Option To View">
                 <mat-radio-button  value = 1 (click)="getAll()" >All Stock Takes</mat-radio-button>
@@ -9,25 +13,27 @@
                 <mat-radio-button value = 3 (click)="getIncomplete()" >Incomplete</mat-radio-button>
                 <mat-radio-button value = 4 (click)="getByContainer()" >By Container</mat-radio-button>
                 </mat-radio-group>
+
+
             </div>
             <div *ngIf = "showContainer">
-            <label>Select Container</label><select  required name="SelectContainer" (ngModelChange)="selectConTAINER($event)">
+                <label>Select Container</label><select [ngModelOptions]="{standalone: true}" required name="SelectContainer" [(ngModel)]="SelectContainer" (ngModelChange)="selectContainer($event)">
                 <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
                </select>
                <br>
                <div *ngIf="showError">
-                <span>container selection required</span>
-            </div>
+                    <span>container selection required</span>
+                </div>
                <button type="submit" (click)="searchByContainer()">Search</button>
              
-        </div>
+             </div>
             
             <div *ngIf="showList">
-                <table>
-                    <th></th>
+                <table [ngModelOptions]="{standalone: true}">
+                    <th style="width: 10%; padding: 2px"></th>
                     <th>StockTake Date</th>
                     <th>Is Completed</th>
-                    <th></th>
+                    <th style="width: 20%"></th>
 
                     <tr *ngFor="let item of stocktakes, index as ndx">
                         <th>{{ndx+1}}</th>
@@ -45,30 +51,32 @@
                 <label style="width: 100%">Done By: {{employee}} </label>
                 </div>
                 <div class = "divleft">
-                    <label>In Container: {{container.ConName}} </label>
+                    <label style="width: 100%">In Container: {{container.ConName}} </label>
                 </div>
 
             <div class = "divleft" >
-                <label>On Date: {{stocktake.STakeDate | date: 'yyyy-MM-dd'}}</label>
+            <label style="width: 100%">On Date: {{selectedStockTake.STakeDate | date: 'yyyy-MM-dd'}}</label>
             </div>
 
                 
-            <table style="width: 100%; padding: 0px">
+            <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
                     <th style="width: 30%;padding: 0px">Product Name</th>
                     <th style="width: 20%;padding: 0px">Quantity</th>
                     <th style="width: 20%; padding: 0px">Stock Count</th>
                     <th style="width: 20%; padding: 0px">Marked Off</th>
     
                 <tr *ngFor="let item of list; index as ndx">
-                    <td>{{item.Prodname}}</td>
+                    <td>{{item.ProNname}}</td>
                     <td>{{item.CPQuantity}}</td>
                     <td>{{item.STCount}}</td>
-                    <td>{{item.MOQuantity}}</td> 
+                    <td>{{item.MoQuantity}}</td> 
     
                 </tr>
     
             </table>
 
+        </div>
+        <div>
             <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
 

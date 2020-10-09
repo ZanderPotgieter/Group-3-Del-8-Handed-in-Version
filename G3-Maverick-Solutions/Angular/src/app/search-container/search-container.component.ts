@@ -19,6 +19,7 @@ export class SearchContainerComponent implements OnInit {
   container : Container = new Container();
   responseMessage: string = "Request Not Submitted";
 
+  showOptions: boolean = true;
   showAll: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -42,11 +43,13 @@ containerNull : boolean = false;
     this.allContainers = this.api.getAllContainers();
     this.showAll = true;
     this.showSearch = false;
+    this.showOptions = true;
   }
 
   Input(){
     this.showSearch = true;
     this.showAll = false;
+    this.showOptions = false;
   }
   Search(){
     if(this.name == null)

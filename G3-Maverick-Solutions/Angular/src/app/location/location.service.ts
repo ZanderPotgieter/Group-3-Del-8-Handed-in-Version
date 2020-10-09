@@ -45,24 +45,22 @@ export class LocationService {
 
 
   //Get Area
-  getAreas()
+  getAreas(): Observable<AreaVM[]>
   {
-    return this.http.get('https://localhost:44399/Api/Areas').toPromise();
+    return this.http.get<AreaVM[]>(this.url + '/getLocationAreas');
   }
 
   //get status
-  getStatuses() 
+  getStatuses(): Observable<StatusVm[]>
   {
-    return this.http.get('https://localhost:44399/Api/Location_Status').toPromise();
-
+    return this.http.get<StatusVm[]>(this.url + '/getLocationStatuses');
   }
 
-    //get containers
-    getContainers() 
-    {
-      return this.http.get('https://localhost:44399/Api/Container/GetAllContainers').toPromise();
-  
-    }
+  //get containers
+  getContainers(): Observable<ContainerVm[]>
+  {
+    return this.http.get<ContainerVm[]>(this.url + '/getLocationContainers');
+  }
 
 
 }

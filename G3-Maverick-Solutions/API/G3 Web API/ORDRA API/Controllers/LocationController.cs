@@ -29,11 +29,31 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                toReturn = db.Locations.ToList();
+                List<Location> locList = db.Locations.ToList();
+                List<dynamic> locations = new List<dynamic>();
+                foreach (var loc in locList)
+                {
+                    dynamic location = new ExpandoObject();
+                    location.LocationName = loc.LocName;
+                    location.LocationID = loc.LocationID;
+                    Area area = db.Areas.Where(z => z.AreaID == loc.AreaID).FirstOrDefault();
+                    location.AreaName = area.ArName;
+                    location.AreaID = loc.AreaID;
+                    Container container = db.Containers.Where(z => z.ContainerID == loc.ContainerID).FirstOrDefault();
+                    location.ContainerName = container.ConName;
+                    location.ContainerID = loc.ContainerID;
+                    Location_Status status = db.Location_Status.Where(z => z.LocationStatusID == loc.LocationStatusID).FirstOrDefault();
+                    location.StatusName = status.LSDescription;
+                    location.StatusID = loc.LocationStatusID;
+                    locations.Add(loc);
+                }
+
+                toReturn.Locations = locations;
+                
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Error = "Something Went Wrong" + error;
             }
 
             return toReturn;
@@ -175,6 +195,65 @@ namespace ORDRA_API.Controllers
             }
 
 
+            return toReturn;
+        }
+
+        //Getting all  statuses
+        [HttpGet]
+        [Route("getLocationStatuses")]
+        public object getLocationStatuses()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                toReturn = db.Location_Status.ToList();
+            }
+            catch (Exception )
+            {
+                toReturn.Error = "Statuses not found";
+            }
+            return toReturn;
+        }
+
+
+        //Getting all areas
+        [HttpGet]
+        [Route("getLocationAreas")]
+        public object getLocationAreas()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                toReturn = db.Areas.ToList();
+            }
+            catch (Exception)
+            {
+                toReturn.Error = "Statuses not found";
+            }
+            return toReturn;
+        }
+
+
+        //Getting all  statuses
+        [HttpGet]
+        [Route("getLocationContainers")]
+        public object getLocationContainers()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                toReturn = db.Containers.ToList();
+            }
+            catch (Exception)
+            {
+                toReturn.Error = "Statuses not found";
+            }
             return toReturn;
         }
 

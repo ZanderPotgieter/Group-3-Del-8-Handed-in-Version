@@ -107,9 +107,9 @@
             <select required formControlName="DonationStatusID" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
                 <option value="0">--Select--</option>
                 <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
-              </select>
-              <br>
-              <span style="color:red" *ngIf="angForm.get('DonationStatusID').errors && (angForm.get('DonationStatusID').touched || angForm.get('DonationStatusID').dirty)">
+            </select>
+            <br>
+            <span style="color:red" *ngIf="angForm.get('DonationStatusID').errors && (angForm.get('DonationStatusID').touched || angForm.get('DonationStatusID').dirty)">
                 <span *ngIf="angForm.get('DonationStatusID').errors.required">Status is required.</span>
             </span>
               

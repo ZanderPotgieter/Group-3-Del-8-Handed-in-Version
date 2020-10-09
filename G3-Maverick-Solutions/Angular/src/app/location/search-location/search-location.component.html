@@ -1,19 +1,53 @@
 <body>
   <h1>Location Details</h1>
-  <form #form='ngForm' class="mb-4" autocomplete="off" >
+  <form [formGroup]="angForm">
+    <div class="card" *ngIf = "showOptions"> 
+        <button type="submit"   (click)="gotoSearch()" >Search By Name</button>
+        <button type="submit"   (click)="getAll()">View All Locations</button>
+    </div> 
+    
+    <div class="card" *ngIf = "showViewAll">
+        <p class="subheadinglabel">List of all locations:</p>
+
+        <table>
+            <tr>
+                <th>Location name</th>
+                <th>Area name</th>
+                <th>Container name</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+
+            <tr *ngFor="let location of locations">
+                <td>{{location.LocName}}</td>
+                <!-- <td>{{location.AreaName}}</td> -->
+                <th><button (click)="view(province.ProvName)">View</button></th>
+            
+            </tr>
+            
+        </table> 
+        <button type="submit" (click)="cancel()">Cancel</button> 
+    </div>
+    
   <div class="card" *ngIf = "showSearch">
           <br>
       <div class="divleft"  >
           <label class="subheadinglabel" >Enter Location Name to search </label>
       <br>
           <label for="name">Location Name:       </label>
-          <input class="searchinput" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" required>
-          <small style="color: coral;">required</small>
+          <input class="searchinput" formControlName="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name"  pattern="[a-zA-Z ]*" required>
+          <br>
+                <span style="color:red" *ngIf="angForm.get('name').errors && (angForm.get('name').touched || angForm.get('name').dirty)">
+                    <span *ngIf="angForm.get('name').errors.required">Name is required.</span>
+                    <span *ngIf="angForm.get('name').errors.minlength || angForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('name').errors.pattern">Only text characters.</span>
+                </span>
       </div>
       <br>
 
       <div class="divleft">
-          <button type="submit"   (click)="searchLocation()"  [disabled]="form.invalid">Search</button>
+          <button type="submit"   (click)="searchLocation()" >Search</button>
           <button type="submit"   (click)="gotoGPSManagement()">Cancel</button>
       </div>
 
@@ -27,31 +61,32 @@
   
       <div class="divleft" >
           <label for="LocName">Location Name:       </label>
-          <input type="text" class="form-control" [(ngModel)]="location.LocName" id="LocName" name="LocName" required [readonly] = "this.inputEnabled">
+          <input type="text" formControlName="LocName" class="form-control" [(ngModel)]="location.LocName" id="LocName" name="LocName" required [readonly] = "this.inputEnabled">
       </div>
 
 
       <br>
       <div class="divleft" >
           <label for="AreaID">Area:  </label>
-          <input type="text" class="form-control" [(ngModel)]="location.AreaID" id="AreaID" name="AreaID" required [readonly] = "this.inputEnabled">
+          <input type="text" formControlName="AreaName" class="form-control" [(ngModel)]="location.AreaID" id="AreaID" name="AreaID" required [readonly] = "this.inputEnabled">
       </div>
 
       <br>
       <div class="divleft"  >
           <label for="ContainerID">Container:     </label>
-          <input type="text" class="form-control" [(ngModel)]="location.ContainerID" id="ContainerID" name="ContainerID" required [readonly] = "this.inputEnabled">
+          <input type="text" formControlName="ContainerName" class="form-control" [(ngModel)]="location.ContainerID" id="ContainerID" name="ContainerID" required [readonly] = "this.inputEnabled">
       </div>
 
       <br>
       <div class="divleft" >
-          <label for="LocationStatusID">Status:: </label>
-          <input type="text" class="form-control" [(ngModel)]="location.LocationStatusID" id="LocationStatusID" name="LocationStatusID" required [readonly] = "this.inputEnabled"> 
+          <label for="LocationStatusID">Status: </label>
+          <input type="text" class="form-control" formControlName="StatusName" [(ngModel)]="location.LocationStatusID" id="LocationStatusID" name="LocationStatusID" required [readonly] = "this.inputEnabled"> 
       </div>
       <br><br>
 
       <div class="divleft" *ngIf="showButtons">
-          <button type="submit"  (click)="gotoGPSManagement()" >Return</button>
+        <button type="submit"  (click)="gotoUpdate()" >Update</button>
+          <button type="submit"  (click)="gotoGPSManagement()" >Cancel</button>
        </div>
 
        <div class="divleft" *ngIf="showSave" >
@@ -59,6 +94,64 @@
        <button type="submit"  (click)="gotoGPSManagement()">Cancel</button>
       </div>
       
+  </div>
+
+  <div  *ngIf = "showResultsEdit">
+    <br>       
+        <div class="card">
+          <div class="divleft">
+          <div class="subheadinglabel" id="location">Enter Location Details:</div>
+            <br>
+
+            <div class="divleft" >
+            <label for="LocName">Location Name:   </label>
+            <input type="text" formControlName="Locname" class="form-control" [(ngModel)]="location.LocName" id="LocName" name="LocName"  required> 
+            <br>
+                <span style="color:red" *ngIf="angForm.get('Locname').errors && (angForm.get('Locname').touched || angForm.get('Locname').dirty)">
+                    <span *ngIf="angForm.get('Locname').errors.required">Name is required.</span>
+                    <span *ngIf="angForm.get('Locname').errors.minlength || angForm.get('Locname').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                    <span *ngIf="angForm.get('Locname').errors.pattern">Only text characters.</span>
+                </span>
+        </div>
+
+            <div class="divleft" >
+            <label>Area</label>
+              <select required formControlName="AreaID"  class="form-control" [(ngModel)]="location.AreaID" name="AreaID" id="AreaID" required >
+                    <option  *ngFor="let area of areas" value="{{area.AreaID}}">{{area.ArName}}</option>
+              </select>
+              <br>
+                <span style="color:red" *ngIf="angForm.get('AreaID').errors && (angForm.get('AreaID').touched || angForm.get('AreaID').dirty)">
+                    <span *ngIf="angForm.get('AreaID').errors.required">Area is required.</span>
+                </span>
+            </div>
+             
+            <div class="divleft" >
+             <label>Container</label>
+              <select required formControlName="ContainerID" class="form-control" [(ngModel)]="location.ContainerID" name="ContainerID" id="ContainerID" required>
+                    <option  *ngFor="let container of containers" value="{{container.ContainerID}}">{{container.ConName}}</option>
+              </select>
+              <br>
+                <span style="color:red" *ngIf="angForm.get('ContainerID').errors && (angForm.get('ContainerID').touched || angForm.get('ContainerID').dirty)">
+                    <span *ngIf="angForm.get('ContainerID').errors.required">Container is required.</span>
+                </span>
+             </div>   
+
+             <div class="divleft" >
+                <label>Location Status</label>
+                <select required formControlName="StatusID" class="form-control" [(ngModel)]="location.LocationStatusID" name="LocationStatusID" id="LocationStatusID" required>
+                      <option  *ngFor="let status of statuses" value="{{status.LocationStatusID}}">{{status.LSDescription}}</option>
+                </select>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('StatusID').errors && (angForm.get('StatusID').touched || angForm.get('StatusID').dirty)">
+                    <span *ngIf="angForm.get('StatusID').errors.required">Location is required.</span>
+                </span>
+              </div>
+            
+            
+            <button type="button" (click)="updateLocation()">Update</button> 
+            <button type="button" (click)="gotoGPSManagement()" >Cancel</button>
+          </div>
+        </div>
   </div>
   <br>
   </form>

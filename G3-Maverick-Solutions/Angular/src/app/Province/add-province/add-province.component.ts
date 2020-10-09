@@ -36,7 +36,7 @@ export class AddProvinceComponent implements OnInit {
 
   ngOnInit(): void {
     this.angForm= this.fb.group({  
-      ProvName: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9 ]*')]],  
+      ProvName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
     });
     
   }

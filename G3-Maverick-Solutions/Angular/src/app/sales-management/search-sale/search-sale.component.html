@@ -12,7 +12,7 @@
               <mat-radio-button value = 2 (click)="selectedDate()" >By Date</mat-radio-button>
               </mat-radio-group>
               <br>
-              <button type="submit" (click)="Cancel()">Cancel</button>
+              <button type="submit" routerLink="/make-sale">Cancel</button>
             </div>
       </div> 
         <div *ngIf="showOptions" class="card">
@@ -48,7 +48,7 @@
               </span>
               <br>
                   <button type="submit" (click)="searchByDate()">Search</button>
-                  <button (click)=" gotoSalesManagement()">Cancel</button>
+                  <button routerLink="/make-sale">Cancel</button>
              </div>
   
             <div class="divleft" *ngIf="showBarcode" >

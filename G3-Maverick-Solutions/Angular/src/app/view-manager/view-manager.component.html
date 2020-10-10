@@ -155,7 +155,7 @@
 
     <div class="divleft">
         <label for="ManIDNumber">ID Number:       </label>
-        <input type="text" [(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "this.allowEdit">
+        <input type="text" [(ngModel)]="manager.ManIDNumber" formControlName="ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "this.allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManIDNumber').errors && (empForm.get('ManIDNumber').touched || empForm.get('ManIDNumber').dirty)">
             <span *ngIf="empForm.get('ManIDNumber').errors.required">cell number is required.</span>

@@ -844,7 +844,7 @@ namespace ORDRA_API.Controllers
         //add product to container
         [HttpPut]
         [Route("addProductToContainer")]
-        public object addProductToContainer(int containerID, int productID, int quantity)
+        public object addProductToContainer(int containerID, int productID)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -871,7 +871,7 @@ namespace ORDRA_API.Controllers
                     Container_Product conProd = new Container_Product();
                     conProd.ContainerID = con.ContainerID;
                     conProd.ProductID = prod.ProductID;
-                    conProd.CPQuantity = quantity;
+                    conProd.CPQuantity = 0;
                     conProd.Product = prod;
                     conProd.Container = con;
 

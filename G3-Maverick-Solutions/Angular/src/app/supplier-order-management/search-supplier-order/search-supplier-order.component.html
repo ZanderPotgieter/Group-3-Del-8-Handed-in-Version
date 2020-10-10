@@ -13,10 +13,13 @@
           <mat-radio-button value = 3 (click)="getOrderStatuses()" >By Order Status</mat-radio-button>
           <mat-radio-button value = 4 (click)="showDate()" >By Date</mat-radio-button>
           </mat-radio-group>
-
+          <br>
+          <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
 
+        
         <div *ngIf = "showContainer">
+          <div class= "divleft">
           <label>Select Container</label><select [ngModelOptions]="{standalone: true}" required name="SelectContainer" [(ngModel)]="SelectContainer" (ngModelChange)="selectContainer($event)">
           <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
          </select>
@@ -25,14 +28,15 @@
               <span style="color:orangered;">container selection required</span>
           </div>
          
-         <div class= "divleft">
+         
           <button type="submit" (click)="searchByContainer()">Search</button>
-          <button type="submit" (click)="Cancel()">Cancel</button>
+          
         </div>
        
        </div>
 
        <div *ngIf = "showStatuses">
+        <div class= "divleft">
         <label>Select Status:</label><select [ngModelOptions]="{standalone: true}" required name="SelectStatus" [(ngModel)]="SelectStatus" (ngModelChange)="selectStatus($event)">
         <option  *ngFor="let status of statuses" [ngValue]="status" >{{status.SOSDescription}}</option>
        </select>
@@ -41,23 +45,22 @@
             <span style="color:orangered;">Status selection required</span>
         </div>
         <br>
-        <div class= "divleft">
+        
           <button type="submit" (click)="searchByStatus()">Search</button>
-          <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
        
      </div>
 
      <div *ngIf = "showdate">
+      <div class= "divleft">
       <label>Select Date:</label><input type="date" [ngModelOptions]="{standalone: true}" required name="date" [(ngModel)]="date" >
      <br>
      <div *ngIf="showError">
           <span style="color:orangered;">Date selection required</span>
       </div>
      
-     <div class= "divleft">
+     
       <button type="submit" (click)="searchByDate()">Search</button>
-      <button type="submit" (click)="Cancel()">Cancel</button>
     </div>
    
    </div>
@@ -70,7 +73,7 @@
     <th style="width: 20%; padding: 0px"></th>
 
 <tr *ngFor="let item of supplierOrders; index as ndx">
-    <td>{{item.SODate}}</td>
+    <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
     <td>{{item.SupName}}</td>
     <td>{{item.Status}}</td>
     <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 

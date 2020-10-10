@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Items} from 'src/app/adminModels/items';
 import {UserTypeAccess} from '../../user-type-access';
 
+import { DialogService } from '../../shared/dialog.service';
 import { Router } from '@angular/router';
 import { NgModule } from '@angular/core';
 import {AdminService} from 'src/app/admin.service';
@@ -13,7 +14,7 @@ import {AdminService} from 'src/app/admin.service';
 })
 export class UsersComponent implements OnInit {
 
-  constructor(private api: AdminService, private router: Router) { }
+  constructor(private api: AdminService, private router: Router,private dialogService: DialogService) { }
 
   selection: number;
   list: Items[] = [];
@@ -76,7 +77,7 @@ export class UsersComponent implements OnInit {
     this.api.getAccessForUserType(id).subscribe((res: any)=>{
       console.log(res);
       if(res.Error){
-        alert(res.Error); 
+        this.dialogService.openAlertDialog(res.Error); 
       }
     else{
       this.allAccess = res.AllAccess;
@@ -92,10 +93,10 @@ export class UsersComponent implements OnInit {
     return this.api.addUserType(this.addDes).subscribe((res:any)=>{
       console.log(res)
       if(res.Message){
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
       }
       if(res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
     }})
   }
 
@@ -136,7 +137,7 @@ export class UsersComponent implements OnInit {
       this.api.addUserTypeAccess(this.selectedAccess.id, this.selectedtype.id).subscribe((res:any) =>{
         console.log(res);
         if(res.Error){
-          alert(res.Error)
+          this.dialogService.openAlertDialog(res.Error)
         }
         if(res.Message){
           this.message = res.Message;
@@ -162,7 +163,7 @@ export class UsersComponent implements OnInit {
     this.api.removeUserTypeAccess(this.selectedAccess.id, this.selectedtype.id).subscribe((res:any) =>{
       console.log(res);
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       if(res.Message){
         this.message = res.Message;
@@ -191,10 +192,10 @@ export class UsersComponent implements OnInit {
     this.api.setUserTypeAccess(this.userTA_list).subscribe((res: any)=>{
       console.log(res);
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       if(res.Message){
-        alert(res.Message)
+        this.dialogService.openAlertDialog(res.Message)
       }
     })
 

@@ -111,8 +111,8 @@
       
       <div class="form-row">
         <div class="form-group col-md-8 offset-md-2">
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (ngModelchange)="Validate()" (click)="saveUser()">Register</button>
-          <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
+          <button style="background-color:rgba(251,113,0,1);color:white;  width: 25%" type="submit" (ngModelchange)="Validate()" (click)="saveUser()">Register</button>
+          <button style="background-color:rgba(251,113,0,1);color:white;  width: 25%" type="submit" (click)="cancel()">Cancel</button>
         </div>
       </div>
     </form>
@@ -141,8 +141,8 @@
   
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="sendEmail()">Send One Time Pin</button>
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
+        <button style="background-color:rgba(251,113,0,1);color:white;  width: 25%" type="submit"   (click)="sendEmail()">Send One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white;  width: 25%" type="submit" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>
@@ -175,8 +175,8 @@
   
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="checkOTP()">Verify One Time Pin</button>
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
+        <button style="background-color:rgba(251,113,0,1);color:white;  width: 30%" type="submit"  (click)="checkOTP()">Verify One Time Pin</button>
+        <button style="background-color:rgba(251,113,0,1);color:white;  width: 30%" type="submit" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>
@@ -206,7 +206,7 @@
       </div>
       <div class="form-group">
         <label >Confirm Password:</label>
-        <input  class="input"  type="password"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (change)="Validate()" required>
+        <input  class="input"  type="password"  [(ngModel)]="ConfirmPassword"name="ConfirmPassword" id="txtConfirmPassword" (ngModelChange)="Validate()" required>
       </div>
       <span style="color:red" *ngIf="showInvalidPassword">
         Passwords do not match
@@ -215,8 +215,8 @@
   
     <div class="form-row">
       <div class="form-group col-md-8 offset-md-2">
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit"  (click)="resetPassword()">Reset Password</button>
-        <button style="background-color:rgba(251,113,0,1);color:white" type="submit" (click)="cancel()">Cancel</button>
+        <button style="background-color:rgba(251,113,0,1);color:white;  width: 25%" type="submit"  (click)="resetPassword()">Reset Password</button>
+        <button style="background-color:rgba(251,113,0,1);color:white;  width: 25%" type="submit" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>

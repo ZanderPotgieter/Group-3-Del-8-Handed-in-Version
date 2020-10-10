@@ -55,6 +55,44 @@ namespace ORDRA_API.Controllers
 
         }
 
+        //Get all products
+        [HttpGet]
+        [Route("getSupplierOrderStatuses")]
+        public object getSupplierOrderStatuses()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+
+            try
+            {
+
+                List<Supplier_Order_Status> statuses = db.Supplier_Order_Status.ToList();
+                if (statuses != null)
+                {
+                    toReturn.Statuses = statuses;
+                }
+                else
+                {
+                    toReturn.Message = "Supplier Order Stauses Not Found";
+                }
+
+            }
+
+            catch 
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+
+
+        }
+
+
+
+
         //Sreeen 1:
         //Get List of products with the backlog quantities in the container
         [HttpGet]
@@ -84,7 +122,7 @@ namespace ORDRA_API.Controllers
                             product.SupplierID = prod.SupplierID;
                             product.ProdName = prod.ProdName;
                             product.ProdDescription = prod.ProdDesciption;
-                            product.Quantity = product_Backlog.QuantityToOrder;
+                            product.QuantityToOrder = product_Backlog.QuantityToOrder;
 
                             products.Add(product);
 
@@ -104,7 +142,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -142,6 +180,7 @@ namespace ORDRA_API.Controllers
                         Supplier_Order newOrder = new Supplier_Order();
                         newOrder.SupplierID = supplierID;
                         newOrder.SODate = DateTime.Now;
+                        newOrder.ContainerID = containerID;
                         newOrder.SupplierOrderStatusID = status.SupplierOrderStatusID;
                         db.Supplier_Order.Add(newOrder);
 
@@ -183,7 +222,7 @@ namespace ORDRA_API.Controllers
                         toReturn.product = db.Supplier_Order_Product.Where(x => x.ProductID == productID && x.SupplierOrderID == supplier_Order.SupplierOrderID).FirstOrDefault();
                     }
 
-                    toReturn.Message = "Product Added To " +supplier.SupName+ " Order";
+                    toReturn.Message = "Product Added To  Order";
 
                    
                     
@@ -200,7 +239,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -229,16 +268,19 @@ namespace ORDRA_API.Controllers
                     {
                         //get supplier linked to 
                         Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
-                        
+                        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
+
 
                         //set dynamic object to display in list
                         dynamic Order = new ExpandoObject();
                         Order.SupplierOrderID = order.SupplierOrderID;
                         Order.SupplierID = order.SupplierID;
+                        Order.ContainerID = order.ContainerID;
                         Order.SupEmail = supplier.SupEmail;
                         Order.SupName = supplier.SupName;
+                        Order.Status = status.SOSDescription;
                         Order.SODate = order.SODate;
-                        orders.Add(order);
+                        orders.Add(Order);
 
                     }
 
@@ -250,7 +292,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -278,15 +320,19 @@ namespace ORDRA_API.Controllers
                     {
                         //get supplier linked to 
                         Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
+                        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
 
 
                         //set dynamic object to display in list
                         dynamic Order = new ExpandoObject();
                         Order.SupplierOrderID = order.SupplierOrderID;
                         Order.SupplierID = order.SupplierID;
+                        Order.ContainerID = order.ContainerID;
+                        Order.SupEmail = supplier.SupEmail;
+                        Order.Status = status.SOSDescription;
                         Order.SupName = supplier.SupName;
                         Order.SODate = order.SODate;
-                        orders.Add(order);
+                        orders.Add(Order);
 
                     }
 
@@ -298,7 +344,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -325,15 +371,19 @@ namespace ORDRA_API.Controllers
                     {
                         //get supplier linked to 
                         Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
+                        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
 
 
                         //set dynamic object to display in list
                         dynamic Order = new ExpandoObject();
                         Order.SupplierOrderID = order.SupplierOrderID;
                         Order.SupplierID = order.SupplierID;
+                        Order.ContainerID = order.ContainerID;
+                        Order.SupEmail = supplier.SupEmail;
                         Order.SupName = supplier.SupName;
+                        Order.Status = status.SOSDescription;
                         Order.SODate = order.SODate;
-                        orders.Add(order);
+                        orders.Add(Order);
 
                     }
 
@@ -345,7 +395,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -372,16 +422,19 @@ namespace ORDRA_API.Controllers
                     {
                         //get supplier linked to 
                         Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
+                        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
 
 
                         //set dynamic object to display in list
                         dynamic Order = new ExpandoObject();
                         Order.SupplierOrderID = order.SupplierOrderID;
                         Order.SupplierID = order.SupplierID;
+                        Order.ContainerID = order.ContainerID;
                         Order.SupEmail = supplier.SupEmail;
                         Order.SupName = supplier.SupName;
+                        Order.Status = status.SOSDescription;
                         Order.SODate = order.SODate;
-                        orders.Add(order);
+                        orders.Add(Order);
 
                     }
 
@@ -393,7 +446,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -420,16 +473,19 @@ namespace ORDRA_API.Controllers
                     {
                         //get supplier linked to 
                         Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
+                        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
 
 
                         //set dynamic object to display in list
                         dynamic Order = new ExpandoObject();
                         Order.SupplierOrderID = order.SupplierOrderID;
                         Order.SupplierID = order.SupplierID;
+                        Order.ContainerID = order.ContainerID;
                         Order.SupEmail = supplier.SupEmail;
                         Order.SupName = supplier.SupName;
+                        Order.Status = status.SOSDescription;
                         Order.SODate = order.SODate;
-                        orders.Add(order);
+                        orders.Add(Order);
 
                     }
 
@@ -441,7 +497,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -474,6 +530,7 @@ namespace ORDRA_API.Controllers
                         Order.SupplierOrderID = order.SupplierOrderID;
                         Order.SupplierID = order.SupplierID;
                         Order.SupName = supplier.SupName;
+                        Order.ContainerID = order.ContainerID;
                         Order.SupEmail = supplier.SupEmail;
                         Order.SODate = order.SODate;
                         Order.Status = status.SOSDescription;
@@ -516,7 +573,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Supplier Order Not Found";
+                    toReturn.Error= "Supplier Order Not Found";
                 }
 
 
@@ -586,7 +643,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;
@@ -660,7 +717,7 @@ namespace ORDRA_API.Controllers
 
             catch
             {
-                toReturn = "Search Interrupted. Retry";
+                toReturn.Error = "Search Interrupted. Retry";
             }
 
             return toReturn;

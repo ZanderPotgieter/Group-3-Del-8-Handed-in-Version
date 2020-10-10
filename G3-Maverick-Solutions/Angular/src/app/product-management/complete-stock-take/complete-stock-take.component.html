@@ -41,7 +41,7 @@
                 </div>
 
                 <div class= "divleft" *ngIf="showMarkOff"> 
-                    <label class="subheadinglabel"> Mark Off {{selectedProduct.ProdName}}</label>
+                    <label class="subheadinglabel"> Mark Off {{selectedProduct.ProdName}}</label><br>
                     <Label>Quantity: {{MOQuantity}} </Label>
                     <label>Mark Off Reason:</label><select [ngModelOptions]="{standalone: true}" required formControlName="SelectReason" name="SelectReason" (ngModelChange)="setReason($event)">
                         <option  *ngFor="let reason of reasons" [ngValue]="reason" >{{reason.MODescription}}</option>

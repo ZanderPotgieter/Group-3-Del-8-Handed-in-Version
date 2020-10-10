@@ -4,22 +4,27 @@
     <form>
         <div class="card">
             <div > 
-                <label style="display: inline;">Donation Recipient</label>
+                <label style="text-align: center;" style="display: inline;">Donation Recipient</label>
                 <br>
-                <button type="submit" (click)="gotoAddDonationRecipient()">Add Donation Recipient</button>
-                <button type="submit" (click)="gotoSearchDonationRecipient()">Update Donation Recipient</button>
-                <button type="submit" (click)="gotoSearchDonationRecipient()">Search Donation Recipient</button>
-                <button type="submit" (click)="gotoSearchDonationRecipient()">Delete Donation Recipient</button>
+                <button type="submit" style="width: 25%;" (click)="gotoAddDonationRecipient()">Add Donation Recipient</button>
+                <br>
+                <button style="width: 25%;" type="submit" (click)="gotoSearchDonationRecipient()">Update Donation Recipient</button>
+                <br>
+                <button type="submit" style="width: 25%;" (click)="gotoSearchDonationRecipient()">Search Donation Recipient</button>
+                <br>
+                <button type="submit" style="width: 25%;" (click)="gotoSearchDonationRecipient()">Delete Donation Recipient</button>
             </div>
         </div>
         <br><br>
         <div class="card">
             <div > 
-                <label>Donation</label>
+                <label style="text-align: center;">Donation</label>
                 <br>
-                <button routerLink="/create-donation" type="submit">Create Donation</button>         
-                <button routerLink="/search-donation" type="submit">Search Donation</button>       
-                <button routerLink="/search-donation" type="submit">Update Donation</button>  
+                <button  style="width: 25%;" routerLink="/create-donation" type="submit">Create Donation</button>         
+                <br>
+                <button style="width: 25%;" routerLink="/search-donation" type="submit">Search Donation</button>       
+                <br>
+                <button style="width: 25%;" routerLink="/search-donation" type="submit">Update Donation</button>  
             </div>
         </div>
     </form>

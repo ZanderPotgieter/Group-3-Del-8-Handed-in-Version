@@ -7,6 +7,7 @@ import {User} from '../../user';
 import {Container} from '../../container-management/container';
 import {StockTakeProduct} from '../../product-management/stock-take-product';
 import {StockTake} from '../stock-take';
+import { DialogService } from '../../shared/dialog.service';
 
 @Component({
   selector: 'app-stock-take-form',
@@ -29,7 +30,7 @@ export class StockTakeFormComponent implements OnInit {
   stocktake: StockTake = new StockTake();
   stocktakeID: number;
 
-  constructor(private productService: ProductService, private router: Router,private api: SalesService) { }
+  constructor(private productService: ProductService, private router: Router,private api: SalesService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
 
@@ -47,7 +48,7 @@ export class StockTakeFormComponent implements OnInit {
         this.productService.getContainerProducts(res.ContainerID).subscribe((res: any)=>{
           console.log(res);
           if(res.Message != null){ 
-          alert(res.Message)}
+            this.dialogService.openAlertDialog(res.Message)}
           else{
             this.list = res.products;
             
@@ -74,7 +75,7 @@ export class StockTakeFormComponent implements OnInit {
     this.productService.initateStockTake(this.session).subscribe((res: any)=>{
       console.log(res);
           if(res.Error != null){ 
-          alert(res.Message)}
+            this.dialogService.openAlertDialog(res.Message)}
           else{
             this.stocktakeID = res.stock_TakeID;
             this.container = res.container;
@@ -101,7 +102,7 @@ export class StockTakeFormComponent implements OnInit {
       }
 
       Complete(){
-        alert("Stock Take Form Saved");
+        this.dialogService.openAlertDialog("Stock Take Form Saved");
         this.router.navigate(['stock-take']);
       }
 

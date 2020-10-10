@@ -92,7 +92,7 @@ reportingEnabled: boolean = false;
 login(){
   if(this.containerSelected == true){
     this.user.UserName = this.UserName;
-    this.user.UserPassword = this.password;
+    this.user.UserPassword = this.UserPassword;
   this.api.loginUser(this.user).subscribe( (res:any)=> {
     console.log(res);
     if(res.Error){
@@ -184,21 +184,19 @@ showRP()
 
 
 saveUser(){
-  //this.user.UserPassword = this.password;
+  this.user.UserPassword = this.password;
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
     this.errorMessage = res.Error;
     this.dialogService.openAlertDialog(this.errorMessage);
-    //alert(this.errorMessage);
     this.showError = true;
     setTimeout(() => {
       this.showError = false;
     }, 5000);
   }else{
     this.dialogService.openAlertDialog(res.Message);
-   // alert(res.Message);
-  //this.UserPassword = "";
+  
 
   this.showLogin= true;
   this.showNav = false;
@@ -206,7 +204,8 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
   this.showContainerNotSelected = false;
   this.showResetPassword = false;
   this.showEnterOTP = false;
-  this.showGenerateOTP = false;}
+  this.showGenerateOTP = false;
+  this.showInvalidPassword = false;}
 })
 
 }
@@ -269,12 +268,12 @@ sendEmail(){
     {
       this.errorMessage = res.Error;
       this.dialogService.openAlertDialog(this.errorMessage);
-     // alert(this.errorMessage);
+  
      
     }
     else{
       this.dialogService.openAlertDialog(res.Message);
-      //alert(res.Message);
+      
         
     this.showLogin= false;
     this.showNav = false;
@@ -282,7 +281,7 @@ sendEmail(){
     this.showContainerNotSelected = false;
     this.showResetPassword = false;
     this.showEnterOTP = true;
-    this.showGenerateOTP = true;}
+    this.showGenerateOTP = false;}
   })
   }
 

@@ -10,6 +10,8 @@ import {StockTake} from '../stock-take';
 import {MarkedOff} from '../marked-off';
 import {formatDate} from '@angular/common';
 
+import { DialogService } from '../../shared/dialog.service';
+
 
 @Component({
   selector: 'app-complete-stock-take',
@@ -42,7 +44,7 @@ export class CompleteStockTakeComponent implements OnInit {
   MarkedOffProduct: MarkedOff = new MarkedOff();
   
 
-  constructor(private productService: ProductService, private router: Router,private api: SalesService) { }
+  constructor(private productService: ProductService, private router: Router,private api: SalesService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
     if(!localStorage.getItem("accessToken")){
@@ -58,6 +60,7 @@ export class CompleteStockTakeComponent implements OnInit {
 
         this.productService.getTodaysStockTake(this.date, res.ContainerID).subscribe( (res:any) =>{
           console.log(res);
+          
          
             this.stocktakes = res.stock_Takes
             this.showList = true;
@@ -76,7 +79,7 @@ export class CompleteStockTakeComponent implements OnInit {
     this.productService.getStockTake(this.stocktakes[ndx].StockTakeID).subscribe( (res:any) =>{
       console.log(res);
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.employee = res.employee;
@@ -97,10 +100,10 @@ export class CompleteStockTakeComponent implements OnInit {
   Complete(){
     this.productService.completeStockTake(this.stocktakes[this.index].StockTakeID).subscribe((res:any)=>{
       if(res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
       }
       else{
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
         this.router.navigate(['stock-take']);
       }
     })

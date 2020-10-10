@@ -98,7 +98,7 @@ export class SearchManagerComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(this.responseMessage)}
         else{
         //Get Manager Details
         this.manager.ManagerID = res.manager.ManagerID;
@@ -109,7 +109,10 @@ export class SearchManagerComponent implements OnInit {
         this.manager.ManNextOfKeenCell = res.manager.ManNextOfKeenCell;
         this.manager.Containers =  res.Containers;
 
+        if(res.containersManaged != null)
+        {
           this.selectedContainers = res.containersManaged;
+        }
         
 
         //Get User Details

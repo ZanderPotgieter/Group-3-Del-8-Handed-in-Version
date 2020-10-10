@@ -7,6 +7,7 @@ import {StockTakeProduct} from '../../product-management/stock-take-product';
 import {StockTake} from '../stock-take';
 
 import {LoginService} from 'src/app/login.service';
+import { DialogService } from '../../shared/dialog.service';
 
 @Component({
   selector: 'app-search-stock-take',
@@ -33,7 +34,7 @@ export class SearchStockTakeComponent implements OnInit {
   SelectContainer = 0;
   stockdate: Date;
 
-  constructor(private productService: ProductService, private router: Router, private api: LoginService) { }
+  constructor(private productService: ProductService, private router: Router, private api: LoginService, private dialogService: DialogService) { }
 
 
   ngOnInit(): void {
@@ -44,7 +45,7 @@ export class SearchStockTakeComponent implements OnInit {
     this.productService.getAllStockTakes().subscribe((res: any) =>
     { console.log(res)
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.stocktakes = res.stock_Takes;
@@ -60,7 +61,7 @@ export class SearchStockTakeComponent implements OnInit {
     this.productService.getCompletedStockTakes().subscribe((res: any) =>
     { console.log(res)
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.stocktakes = res.stock_Takes;
@@ -76,7 +77,7 @@ export class SearchStockTakeComponent implements OnInit {
     this.productService.getIncompleteStockTakes().subscribe((res: any) =>
     { console.log(res)
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.stocktakes = res.stock_Takes;
@@ -92,7 +93,7 @@ export class SearchStockTakeComponent implements OnInit {
       console.log(res);
       this.containers = res; 
       if (res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
       }
       
     });
@@ -120,7 +121,7 @@ export class SearchStockTakeComponent implements OnInit {
     this.productService.getContainerStockTakes(this.selectedcontainerID).subscribe((res: any) =>
     { console.log(res)
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.stocktakes = res.stock_Takes;
@@ -138,7 +139,7 @@ export class SearchStockTakeComponent implements OnInit {
     this.productService.getStockTake(this.stocktakes[ndx].StockTakeID).subscribe( (res:any) =>{
       console.log(res);
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.employee = res.employee;

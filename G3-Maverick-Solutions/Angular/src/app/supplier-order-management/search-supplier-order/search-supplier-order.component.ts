@@ -6,6 +6,7 @@ import {SupplierOrderService} from '../supplier-order.service';
 import {SupplierOrderStatus} from '../supplier-order-status';
 import {Container} from '../../container-management/container';
 import { DialogService } from '../../shared/dialog.service';
+import {formatDate} from '@angular/common';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class SearchSupplierOrderComponent implements OnInit {
 
   showdate = false;
   date: Date = new Date();
-  selecteddate: string;
+  selecteddate = this.date.toDateString();
 
   showList = false;
   selectedOrderID: number;
@@ -73,7 +74,7 @@ export class SearchSupplierOrderComponent implements OnInit {
         this.dialogService.openAlertDialog(res.Message)
       }
       else{
-        this.supplierOrders = res.supplierOrders;
+        this.containers = res;
 
         this.showContainer = true;
         this.showStatuses = false;
@@ -93,7 +94,7 @@ export class SearchSupplierOrderComponent implements OnInit {
         this.dialogService.openAlertDialog(res.Error)
       }
       else{
-        this.supplierOrders = res.supplierOrders;
+        this.statuses = res.Statuses
 
         this.showContainer = false;
         this.showStatuses = true;
@@ -191,7 +192,6 @@ export class SearchSupplierOrderComponent implements OnInit {
       this.showError = true;
     }
     else{
-      this.selecteddate = this.date.toDateString();
     this.api.getSupplierOrdersByDate(this.selecteddate).subscribe((res:any) =>{
       console.log(res)
       if(res.Error){

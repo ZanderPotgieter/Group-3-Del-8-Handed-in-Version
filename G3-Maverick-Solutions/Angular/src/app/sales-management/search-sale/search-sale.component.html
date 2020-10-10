@@ -5,12 +5,14 @@
   
             <div class="divleft">
                 <label class="subheadinglabel">Select Search Criteria</label><br>
-            </div>
-            <div class="divleft">
-                <button style="height: 30px;" (click)="selectedDate()">Date</button>
-                <button style="height: 30px;" (click)="productSelected()" hidden>Product</button>
-                <button style="height: 30px;" (click)="productBarcode()" hidden>Product Barcode</button>
-                <button style="height: 30px;" (click)="searchAllSales()">All Sales</button>
+            
+
+              <mat-radio-group  aria-label="Select Option To View">
+              <mat-radio-button  value = 1 (click)="searchAllSales()" >All Sales</mat-radio-button>
+              <mat-radio-button value = 2 (click)="selectedDate()" >By Date</mat-radio-button>
+              </mat-radio-group>
+              <br>
+              <button type="submit" (click)="Cancel()">Cancel</button>
             </div>
       </div> 
         <div *ngIf="showOptions" class="card">

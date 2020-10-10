@@ -57,6 +57,7 @@ export class SearchProductComponent implements OnInit {
   products: Product[] = [];
   newPrice: Price = new Price();
   found = false;
+  suppliers: Supplier[] = [];
 
   showadd: boolean=false;
   containerID: number;
@@ -64,6 +65,10 @@ export class SearchProductComponent implements OnInit {
   productID: number;
   CategoryName: string;
   categoryID: number;
+  inputEnabled = true;
+    allButton = true;
+    saveOption = false;
+    selectedSupplier: Supplier = new Supplier()
 
   quantity: number;
   mydate: Date =new Date();
@@ -75,6 +80,7 @@ export class SearchProductComponent implements OnInit {
   moveToContainer: boolean = false;
   selectedContainerID: number;
   supplier: string;
+  SelectSup = 0;
   
 
   ngOnInit() {
@@ -93,6 +99,7 @@ export class SearchProductComponent implements OnInit {
       PriceStartDate: ['', [Validators.required]],
       PriceEndDate: [''],
       ProductCategoryID: [''],
+      SelectSup: ['', [Validators.required]],
     });
     
     this.pdForm= this.fb.group({
@@ -120,10 +127,23 @@ export class SearchProductComponent implements OnInit {
       console.log(res);
       this.containers = res; 
       if (res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
       }
       
     });
+
+    this.productService.getAllSuppliers() .subscribe((value:any)=> {
+      console.log(value);
+      if (value != null) {
+        this.suppliers = value;
+      }
+    });
+  }
+
+  enableInputs(){
+    this.inputEnabled = false;
+    this.allButton = false;
+    this.saveOption = true;
   }
 
   showPrice(){
@@ -219,13 +239,23 @@ export class SearchProductComponent implements OnInit {
     this.prodName = val.ProdName;
   }
 
+  loadSupplier(val: Supplier){
+   
+    this.addSupplier(val);
+  }
+
+  addSupplier(val : Supplier){
+    this.selectedSupplier = val;
+    this.Product.SupplierID = val.SupplierID;
+  }
+
   SearchBarcode(){
 
    return  this.productService.getProductByBarcode(this.prodBarcode).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
           this.Product.ProdName = res.Product.ProdName;
           this.Product.ProdDesciption = res.Product.ProdDesciption;
@@ -264,7 +294,7 @@ export class SearchProductComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
           this.Product.ProdName = res.Product.ProdName;
           this.Product.ProdDesciption = res.Product.ProdDesciption;
@@ -297,7 +327,7 @@ export class SearchProductComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
         this.productList = res.Products;
 
@@ -334,7 +364,7 @@ export class SearchProductComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
         this.productList = res.Products;
 
@@ -376,12 +406,12 @@ export class SearchProductComponent implements OnInit {
         console.log(res);
         if(res.Message)
         {
-        alert(res.Message)
+          this.dialogService.openAlertDialog(res.Message)
       }
       });
     }
     if(this.found == true){
-      alert("Duplicate Price Start Date Found")
+      this.dialogService.openAlertDialog("Duplicate Price Start Date Found")
     }
 
 
@@ -415,7 +445,7 @@ export class SearchProductComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       this.router.navigate(["product-management"])
       })
   }
@@ -434,11 +464,11 @@ export class SearchProductComponent implements OnInit {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(this.responseMessage)
         this.showProductResult = true;
         this.moveToContainer = false;}
         else if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
        
     })

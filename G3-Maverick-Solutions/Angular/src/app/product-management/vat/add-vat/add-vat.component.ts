@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'; 
 import { ProductService } from '../../product.service';
 import { Vat } from '../../vat';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-add-vat',
@@ -10,7 +11,7 @@ import { Vat } from '../../vat';
 })
 export class AddVatComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router) { }
+  constructor(private productService: ProductService, private router: Router, private dialogService: DialogService) { }
 
   vat : Vat = new Vat();
   list: Vat[] = [];
@@ -37,16 +38,16 @@ export class AddVatComponent implements OnInit {
         console.log(res);
         if(res.Message){
           this.responseMessage = res.Message;
-          alert(this.responseMessage)
+          this.dialogService.openAlertDialog(this.responseMessage)
           this.router.navigate(["product-management"])}
           if(res.Error){
             this.responseMessage = res.Message;
-          alert(this.responseMessage)
+            this.dialogService.openAlertDialog(this.responseMessage)
           }
       })
     }
     if(this.found = true){
-      alert("Duplicate Vat Start Date Found")
+      this.dialogService.openAlertDialog("Duplicate Vat Start Date Found")
     }
 
 

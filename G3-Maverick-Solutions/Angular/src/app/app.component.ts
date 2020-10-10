@@ -82,6 +82,8 @@ reportingEnabled: boolean = false;
       UserSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
       UserCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
       UserEmail: ['', [Validators.required, Validators.email]],   
+      UserPassword: [''], 
+      ConfirmPassword: [''],
     }); 
   }
 
@@ -182,21 +184,19 @@ showRP()
 
 
 saveUser(){
-  //this.user.UserPassword = this.password;
+  this.user.UserPassword = this.password;
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
     this.errorMessage = res.Error;
     this.dialogService.openAlertDialog(this.errorMessage);
-    //alert(this.errorMessage);
     this.showError = true;
     setTimeout(() => {
       this.showError = false;
     }, 5000);
   }else{
     this.dialogService.openAlertDialog(res.Message);
-   // alert(res.Message);
-  //this.UserPassword = "";
+  
 
   this.showLogin= true;
   this.showNav = false;
@@ -204,7 +204,8 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
   this.showContainerNotSelected = false;
   this.showResetPassword = false;
   this.showEnterOTP = false;
-  this.showGenerateOTP = false;}
+  this.showGenerateOTP = false;
+  this.showInvalidPassword = false;}
 })
 
 }
@@ -267,12 +268,12 @@ sendEmail(){
     {
       this.errorMessage = res.Error;
       this.dialogService.openAlertDialog(this.errorMessage);
-     // alert(this.errorMessage);
+  
      
     }
     else{
       this.dialogService.openAlertDialog(res.Message);
-      //alert(res.Message);
+      
         
     this.showLogin= false;
     this.showNav = false;
@@ -280,7 +281,7 @@ sendEmail(){
     this.showContainerNotSelected = false;
     this.showResetPassword = false;
     this.showEnterOTP = true;
-    this.showGenerateOTP = true;}
+    this.showGenerateOTP = false;}
   })
   }
 

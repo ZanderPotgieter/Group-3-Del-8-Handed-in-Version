@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { Vat } from '../../vat';
 import { NgModule } from '@angular/core';
+import { DialogService } from '../../../shared/dialog.service';
 
 @Component({
   selector: 'app-update-vat',
@@ -11,7 +12,7 @@ import { NgModule } from '@angular/core';
 })
 export class UpdateVatComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router) { }
+  constructor(private productService: ProductService, private router: Router, private dialogService: DialogService) { }
 
   vat : Vat = new Vat();
   date = new Date();
@@ -54,11 +55,11 @@ export class UpdateVatComponent implements OnInit {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(this.responseMessage)
         this.router.navigate(["product-management"])}
         if(res.Error){
           this.responseMessage = res.Message;
-        alert(this.responseMessage)
+          this.dialogService.openAlertDialog(this.responseMessage)
         }
 
   })

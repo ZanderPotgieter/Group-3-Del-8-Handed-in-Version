@@ -844,7 +844,7 @@ namespace ORDRA_API.Controllers
         //add product to container
         [HttpPut]
         [Route("addProductToContainer")]
-        public object addProductToContainer(int containerID, int productID, int quantity)
+        public object addProductToContainer(int containerID, int productID)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
@@ -871,7 +871,7 @@ namespace ORDRA_API.Controllers
                     Container_Product conProd = new Container_Product();
                     conProd.ContainerID = con.ContainerID;
                     conProd.ProductID = prod.ProductID;
-                    conProd.CPQuantity = quantity;
+                    conProd.CPQuantity = 0;
                     conProd.Product = prod;
                     conProd.Container = con;
 
@@ -1257,6 +1257,54 @@ namespace ORDRA_API.Controllers
 
         }
 
+        //get marked-off reasons
+        [HttpGet]
+        [Route("GetAllMarkedOffProducts")]
+        public object GetAllMarkedOffProducts()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.MarkedOff = new ExpandoObject();
+
+            try
+            {
+                List<Marked_Off> markedoff = db.Marked_Off.Include(x => x.Product).ToList();
+                toReturn.MarkedOff = markedoff;
+
+            }
+            catch
+            {
+                toReturn.Message = "Search interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
+        //get marked-off reasons
+        [HttpGet]
+        [Route("getAllMarkedOffProductsByReason")]
+        public object GetAllMarkedOffProductsByReason(int id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.MarkedOff = new ExpandoObject();
+
+            try
+            {
+                List<Marked_Off> markedoff = db.Marked_Off.Include(x => x.Product).Where(x => x.ReasonID ==id).ToList();
+                toReturn.MarkedOff = markedoff;
+
+            }
+            catch
+            {
+                toReturn.Message = "Search interrupted. Retry";
+            }
+
+            return toReturn;
+
+        }
+
         //add marked-off product
         [HttpPost]
         [Route("AddMarkedOff")]
@@ -1282,6 +1330,8 @@ namespace ORDRA_API.Controllers
 
             return toReturn;
         }
+
+
 
         //generate low stock
         [HttpGet]
@@ -1480,14 +1530,56 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("addProductToBacklog")]
+        public object addProductToBacklog(int productID, int containerID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //get product details
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+
+                //get the backlog details of the product so we can add back the quantity
+                Product_Backlog backlog = db.Product_Backlog.Where(x => x.ProductID == product.ProductID && x.ContainerID == containerID).FirstOrDefault();
+                if (backlog != null)
+                {
+                    //add back the quantity
+                    backlog.QuantityToOrder = (product.ProdReLevel * 3);
+                    backlog.DateModified = DateTime.Now;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //if no backlog record exits, create a new 
+                    Product_Backlog backlog1 = new Product_Backlog();
+                    backlog1.ProductID = product.ProductID;
+                    backlog1.QuantityToOrder = (product.ProdReLevel * 3);
+                    backlog.DateModified = DateTime.Now;
+                    backlog.ContainerID = containerID;
+                    db.Product_Backlog.Add(backlog1);
+                    db.SaveChanges();
+                }
+
+            }
+            catch
+            {
+                toReturn.Message = "Search interrupted. Retry";
+            }
+
+            return toReturn;
+        }
+
+
+        [HttpPut]
         [Route("initateStockTake")]
         public object initateStockTake(dynamic session)
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             toReturn.container = new ExpandoObject();
-            toReturn.stock_Take = new Stock_Take();
+            toReturn.stock_Take = new ExpandoObject();
 
             try
             {
@@ -1519,7 +1611,8 @@ namespace ORDRA_API.Controllers
                 db.Stock_Take.Add(stock_Take);
                 db.SaveChanges();
 
-                toReturn.stock_Take = db.Stock_Take.Where(x => x.isCompleted == false).ToList().LastOrDefault();
+                Stock_Take newStock_Take =   db.Stock_Take.Include(x => x.Stock_Take_Product).Where(x => x.isCompleted == false).ToList().LastOrDefault();
+                toReturn.stock_TakeID = newStock_Take.StockTakeID;
                 toReturn.container = con;
 
 
@@ -1605,7 +1698,7 @@ namespace ORDRA_API.Controllers
                 {
                     Container con = db.Containers.Where(x => x.ContainerID == stock_Take.ContainerID).FirstOrDefault();
                     List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
-                    List<Product> products = new List<Product>();
+                    List<dynamic> products = new List<dynamic>();
                     if (stock_Take_Product != null)
                     {
 
@@ -1652,7 +1745,7 @@ namespace ORDRA_API.Controllers
                     }
 
                     toReturn.products = products;
-                    toReturn.stock_Take = stock_Take;
+                    toReturn.stock_TakeID = stock_Take.StockTakeID;
                     toReturn.container = con;
                 }
                 else
@@ -1660,7 +1753,7 @@ namespace ORDRA_API.Controllers
                     toReturn.Error = "Stock Take Record Not Found";
                 }
 
-            }
+        }
             catch
             {
                 toReturn.Error = "Search Interrupted. Retry";
@@ -1727,7 +1820,7 @@ namespace ORDRA_API.Controllers
                     foreach (Stock_Take stock_Take in stock_Takes)
                     {
                         List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
-                        if (stock_Take_Product != null)
+                        if (stock_Take_Product.Count != 0)
                         {
                             stock_Takes1.Add(stock_Take);
 
@@ -1767,7 +1860,7 @@ namespace ORDRA_API.Controllers
                     foreach (Stock_Take stock_Take in stock_Takes)
                     {
                         List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
-                        if (stock_Take_Product != null)
+                        if (stock_Take_Product.Count != 0)
                         {
                             stock_Takes1.Add(stock_Take);
 
@@ -1808,7 +1901,7 @@ namespace ORDRA_API.Controllers
                     foreach (Stock_Take stock_Take in stock_Takes)
                     {
                         List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
-                        if (stock_Take_Product != null)
+                        if (stock_Take_Product.Count != 0)
                         {
                             stock_Takes1.Add(stock_Take);
 
@@ -1848,7 +1941,7 @@ namespace ORDRA_API.Controllers
                     foreach (Stock_Take stock_Take in stock_Takes)
                     {
                         List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
-                        if (stock_Take_Product != null)
+                        if (stock_Take_Product.Count != 0)
                         {
                             stock_Takes1.Add(stock_Take);
 

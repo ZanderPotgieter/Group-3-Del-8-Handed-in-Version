@@ -2,6 +2,7 @@
     <h1>Place Supplier Order</h1>
     <br>
     <form>
+      <div class="card" *ngIf="showButton"> <button style="width: 50%" (click)="searchBacklog()">Search Container Backlog Products</button></div>
       <div class="card" *ngIf="showBacklog">
             <div class="subheadinglabel" id="backlogprods">Backlog Products:</div>
             <br>

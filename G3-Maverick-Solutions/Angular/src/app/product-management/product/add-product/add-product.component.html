@@ -1,13 +1,13 @@
 <body>
   <h1>Add Product</h1>
   <form>
-    <!--<div class="card" > 
+    <div class="card" *ngIf="showmain" > 
       <p class="subheadinglabel">Select An Add Option:</p>
       <div class="divleft">
-          <button type="submit" (click)="AddToSystem()">Add Product to System</button>
-          <button type="submit" (click)="LinkToContainer()">Link Product to Container</button>
+          <button type="submit" style="width: 30%;" (click)="AddToSystem()">Add Product to System</button>
+          <button type="submit" style="width: 30%;" (click)="LinkToContainer()">Link Existing Product to Container</button>
       </div>
-  </div>-->
+  </div>
   </form >
 
     <form [formGroup]="pdForm">
@@ -96,6 +96,8 @@
         </div>
     </form>
 
+
+
     <form [formGroup]="pdForm"> 
       <div class="card" *ngIf= "linkToContainer"> 
         <p class="subheadinglabel">Move Product</p>
@@ -117,8 +119,15 @@
                 </span>
               <br>
             
-
-              
+              <label style="width: 300px" for="ProductCategoryID">Container:</label><select  required formControlName="SelectCon" name="SelectCon" (ngModelChange)="setContainer($event)">
+                         
+                <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
+               </select>
+               <br>
+               <span style="color:red" *ngIf="pdForm.get('SelectCon').errors && (pdForm.get('SelectCon').touched || pdForm.get('SelectCon').dirty)">
+                <span *ngIf="pdForm.get('SelectCon').errors.required">Container required.</span>
+            </span>
+        
             
             <button type="submit" (click)="Link()">Link</button>
             <button type="submit" (click)="RemoveLink()">Remove Link</button>

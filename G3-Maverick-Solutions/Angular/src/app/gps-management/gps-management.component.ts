@@ -7,9 +7,34 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GPSManagementComponent implements OnInit {
 
+  showlocation = false;
+  showarea = false;
+  showprovince=false;
+
   constructor() { }
 
   ngOnInit(): void {
+
+  }
+
+  location(){
+    this.showlocation = true;
+    this.showarea = false;
+    this.showprovince=false;
+  }
+
+  area(){
+    this.showlocation = false;
+    this.showarea = true;
+    this.showprovince=false;
+
+  }
+
+  province(){
+
+    this.showlocation = false;
+    this.showarea = false;
+    this.showprovince=true;
   }
 
 }

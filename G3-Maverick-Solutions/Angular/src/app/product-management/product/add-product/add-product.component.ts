@@ -34,8 +34,10 @@ export class AddProductComponent implements OnInit {
   suppliers: Supplier[] = [];
   selectedCatID: number;
 
-  addToSystem: boolean = true;
+  addToSystem: boolean = false;
   linkToContainer: boolean = false;
+  
+  showmain= true;
   selectedContainerID: number;
  
   containers: Container[] = [];
@@ -68,7 +70,7 @@ export class AddProductComponent implements OnInit {
       console.log(res);
       this.containers = res; 
       if (res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
       }
       
     });
@@ -95,11 +97,13 @@ export class AddProductComponent implements OnInit {
   AddToSystem(){
     this.addToSystem = true;
     this.linkToContainer = false;
+    this.showmain= false;
   }
 
   LinkToContainer(){
     this.linkToContainer = true;
     this.addToSystem = false;
+    this.showmain= false;
   }
 
   loadProducts(val: ProductCategory){
@@ -149,7 +153,7 @@ export class AddProductComponent implements OnInit {
         this.dialogService.openAlertDialog(res.Message);
         this.router.navigate(["product-management"]);}
         else if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
        
     })
@@ -164,10 +168,10 @@ export class AddProductComponent implements OnInit {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(this.responseMessage)
         this.router.navigate(["product-management"]);}
         else if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
        
     })
@@ -180,10 +184,10 @@ export class AddProductComponent implements OnInit {
       console.log(res);
       if(res.Message){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(this.responseMessage)
         this.router.navigate(["product-management"]);}
         else if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
        
     })

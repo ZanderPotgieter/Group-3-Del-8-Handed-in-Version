@@ -409,12 +409,15 @@ CREATE TABLE Supplier_Order
 (
 	SupplierOrderID int Primary Key identity(1,1) Not Null,
 	SupplierID int,
+	ContainerID int,
 	SupplierOrderStatusID int,
 	SODate date,
 	CONSTRAINT FK_SOSupplier FOREIGN KEY (SupplierID)
     REFERENCES Supplier(SupplierID),
 	CONSTRAINT FK_SOStatus FOREIGN KEY (SupplierOrderStatusID)
-    REFERENCES Supplier_Order_Status(SupplierOrderStatusID)
+    REFERENCES Supplier_Order_Status(SupplierOrderStatusID),
+	CONSTRAINT FK_SOContainer FOREIGN KEY (ContainerID)
+	REFERENCES Container(ContainerID)
 
 )
 GO
@@ -423,7 +426,8 @@ CREATE TABLE Supplier_Order_Product
 (
 	ProductID int,
 	SupplierOrderID int, 
-	SOPQuantity int,
+	SOPQuantityOrdered int,
+	SOPQuantityRecieved int,
 	Primary Key (ProductID, SupplierOrderID),
 	CONSTRAINT FK_SOPProduct FOREIGN KEY (ProductID)
     REFERENCES Product(ProductID),
@@ -719,8 +723,7 @@ VALUES ('1', '3'),
 
 
 INSERT INTO Manager (UserID, ManQualification, ManNationality, ManIDNumber, ManNextOfKeenFName, ManNextOfKeenCell)
-VALUES ('2', 'Bcom General degree', 'South African', '6704290231532', 'Joe', '0835522268'),
-	   ('1', 'BcomHons Business management', 'South African' , '780129502452', 'Mary' ,'0923513859');
+VALUES ('3', 'Bcom General degree', 'South African', '6704290231532', 'Joe', '0835522268');
 
 INSERT INTO Container (ConName, ConDescription)
 VALUES ('Betha Mamelodi', 'Situated in Mamelodi east'),
@@ -728,15 +731,15 @@ VALUES ('Betha Mamelodi', 'Situated in Mamelodi east'),
 	   ('Legora Mamelodi', 'Situated in Mamelodi by Legora primary school');
 
 INSERT INTO Manager_Container (ManagerID, ContainerID)
-VALUES ('1', '2'),
-	   ('2', '1'),
-	   ('2', '3');
+VALUES ('1', '2');
+
+	   
 
 INSERT INTO Customer_Order_Status (CODescription)
-VALUES ('Fulfilled'),
-	   ('Awaiting supplier delivery'),
-	   ('Placed'),
-	   ('Retrieved');
+VALUES ('Placed'),
+	   ('Fulfilled'),
+	   ('Collected'),
+	   ('Cancelled');
 
 INSERT INTO Sale (UserID, ContainerID, SaleDate)
 VALUES ('2', '1','2020-07-23'),
@@ -815,18 +818,19 @@ VALUES ('1', '1', '3', 'Mamelodi Ext 4'),
 INSERT INTO Container_Product (ContainerID, ProductID, CPQuantity)
 VALUES ('1', '3', '34'),
 	   ('1', '1', '25'),
-	   ('1', '2', '12'),
-	   ('2', '3', '13'),
+	   ('1', '5', '15'),
+	   ('2', '6', '13'),
 	   ('2', '1', '16'),
 	   ('2', '2', '19'),
 	   ('3', '3', '24'),
-	   ('3', '1', '32'),
+	   ('3', '5', '32'),
 	   ('3', '2', '21'),
+	   ('3', '7', '20'),
 	   ('1','4','0'),
 	   ('2','5','0'),
 	   ('3','6','0'),
-	   ('1','5','0'),
-	   ('2','6','0'),
+	   ('1','2','0'),
+	   ('2','4','0'),
 	   ('3','4','0');
 
 INSERT INTO VAT (VATPerc, VATStartDate, VATEndDate)
@@ -861,17 +865,18 @@ VALUES ('2' , '2020-03-21', '6050.00'),
 INSERT INTO Supplier_Order_Status (SOSDescription)
 VALUES ('Placed'),
 	   ('Cancelled'),
-	   ('Delivered');
+	   ('Delivered'),
+	   ('BackOrderd');
 
-INSERT INTO Supplier_Order (SupplierID, SupplierOrderStatusID, SODate)
-VALUES ('1', '3', '2020-04-10'),
-	   ('3', '2', '2020-02-28'),
-	   ('2', '1', '2020-07-12');
+INSERT INTO Supplier_Order (SupplierID, [ContainerID], SupplierOrderStatusID, SODate)
+VALUES ('1', '3', '1', '2020-04-10'),
+	   ('3', '2', '2', '2020-02-28'),
+	   ('2', '1', '3', '2020-07-12');
 
-INSERT INTO Supplier_Order_Product (ProductID, SupplierOrderID, SOPQuantity)
-VALUES ('2', '1', '100'),
-	   ('1', '2', '50'),
-	   ('3', '3', '90');
+INSERT INTO Supplier_Order_Product (ProductID, SupplierOrderID, SOPQuantityOrdered, SOPQuantityRecieved)
+VALUES ('2', '1', '100', '100'),
+	   ('1', '2', '50', '45'),
+	   ('3', '3', '90','90');
 
 INSERT INTO Donation_Recipient (DrName, DrSurname, DrCell, DrEmail, DrStreetNr, DrStreet, DrArea, DrCode)
 VALUES ('Julie' , 'Richards', '0128972817', 'julierichards@gmail.com', '34', 'Walter Sisulu Street' , 'Pretoria CBD', '0020'),
@@ -893,8 +898,7 @@ VALUES ('1', '1', '20'),
 	   ('3', '2', '15');
 
 INSERT INTO Marked_Off_Reason (MODescription)
-VALUES ('Donated'),
-	   ('Damaged'),
+VALUES ('Damaged'),
 	   ('Expired'),
 	   ('Stolen');
 
@@ -914,9 +918,9 @@ VALUES ('1','4','12'),
 		('3','3','20');
 
 INSERT INTO [dbo].[Marked_Off] ([ProductID],[ReasonID],[ContainerID],[UserID],[StockTakeID],[MoQuantity],[MoDate])
-Values ('1','2','3','2','1','5','2020-01-01'),
-		('2','4','2','1','2','3','2020-03-01'),
-		('3','2','1','3','3','4','2020-02-01');
+Values ('1','1','3','2','1','5','2020-01-01'),
+		('2','1','2','1','2','3','2020-03-01'),
+		('3','3','1','3','3','4','2020-02-01');
 
 INSERT INTO [dbo].[Product_Backlog] ([ContainerID],[ProductID],[QuantityToOrder],[DateModified])
 VALUES('1','4','20','2020-06-10'),

@@ -1,6 +1,8 @@
 export class Product {
     ProductID: number;
+    SupplierID: number;
     ProdName: string;
-    QuantityToOrder: number;
+    ProdDescription: string;
+    QauntityToOrder: number;
 
 }

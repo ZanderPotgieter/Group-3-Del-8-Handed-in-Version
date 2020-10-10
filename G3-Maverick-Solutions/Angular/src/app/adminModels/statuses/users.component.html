@@ -10,7 +10,7 @@
             <div style="width: 100;" >
                 <ul class = "list">
                     <li class = "list">
-                         <button (click)="search()" style="border-radius: 20px; width: 10%; height:30px; background-color: rgb(255, 251, 230);" ><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>Usertypes<button style="border-radius: 10px; width: 30%; height:30px;" (click)="add()">new</button>
+                         <button (click)="search()" style="border-radius: 20px; width: 10%; height:30px; background-color: rgb(255, 251, 230);" ><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>Usertypes<button hidden="true" style="border-radius: 10px; width: 30%; height:30px;" (click)="add()">new</button>
                     </li>
  
                 <mat-list class = "list">
@@ -21,14 +21,14 @@
                         </div>
                         </mat-list-item>
                     </div>
-                     <div style="width: 80%; text-align:left;" *ngFor="let item of list; index as ndx;">
-                         <mat-list-item class = "list"><label>     </label><button  style="border-radius: 10px; width: 30px; height:30px; background-color: rgb(255, 251, 230); "(click)="update(ndx)"><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>{{item.description}}</mat-list-item>
+                     <div style="width: 100%; text-align:left;" *ngFor="let item of list; index as ndx;">
+                         <mat-list-item class = "list"><label>   </label><button  style="border-radius: 10px; width: 30px; height:30px; background-color: rgb(255, 251, 230); "(click)="update(ndx)"><i class="tiny material-icons" style="color: black;" >keyboard_arrow_right</i></button>{{item.description}}</mat-list-item>
                          <div *ngIf="ndx == id">
                             <mat-list>
                                 <div class="divleft" >
                             <div style="width: 100%; text-align:left;"  *ngFor="let thing of userAccess; index as ndx;">
                                 <mat-list-item style="width: 100%;" class = "list">
-                                    <label>     </label>
+                                    <label>       </label>
                                     <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);" (click)="delete(ndx)"><i class="tiny material-icons" style="color: black;">delete</i></button>
                                     {{thing.description}}
                                     
@@ -59,7 +59,7 @@
                              <select required name="accessSelection" [(ngModel)]="accessSelection" (ngModelChange)="addAccess($event)">
                                  <option *ngFor="let access of allAccess" [ngValue]="access">{{access.description}}</option>
                              </select>
-                             <button style="border-radius: 10px; width: 30px; background-color: rgb(255, 251, 230);"(click)="listAccess()">Add</button>
+                             
                          </div>
                          <div *ngIf="showError">
                              <span style="color:orangered">{{message}}</span>
@@ -71,8 +71,12 @@
                 
             </div>-->
             <div >
+                <button (click)="listAccess()">Add</button>
                 <button type ="submit" (click)="Cancel()">Cancel</button>
-                <button type ="submit" (click)="Done()">Done</button>
+                
+            </div>
+            <div>
+                <button style="width: 25%" (click)="Done()">Save All Changes</button>
             </div>
         </div>
 

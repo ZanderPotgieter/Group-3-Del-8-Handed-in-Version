@@ -19,7 +19,7 @@
         </div>
 
         <div class="divleft" >
-          <label>Area</label>
+          <label>Area:</label>
             <select required formControlName="AreaID" class="form-control" [(ngModel)]="location.AreaID" name="AreaID" id="AreaID" required>
                   
                   <option  *ngFor="let area of areas" value="{{area.AreaID}}">{{area.ArName}}</option>
@@ -31,7 +31,7 @@
           </div>
 
       <div class="divleft" >
-        <label>Container</label>
+        <label>Container:</label>
          <select required formControlName="ContainerID" class="form-control" [(ngModel)]="location.ContainerID" name="ContainerID" id="ContainerID" required>
                <option  *ngFor="let container of containers" value="{{container.ContainerID}}">{{container.ConName}}</option>
          </select>
@@ -42,7 +42,7 @@
         </div> 
        
       <div class="divleft" >
-        <label>Location Status</label>
+        <label>Location Status:</label>
         <select required formControlName="StatusID" class="form-control" [(ngModel)]="location.LocationStatusID" name="LocationStatusID" id="LocationStatusID" required >
               <option  *ngFor="let status of statuses" value="{{status.LocationStatusID}}">{{status.LSDescription}}</option>
         </select>

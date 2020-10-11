@@ -8,13 +8,13 @@
             <br>
             <div class="divleft">
               <div class="divleft" >
-                <label for="CreditorID">Creditor:  </label>
-                <input type="number" class="form-control" [(ngModel)]="creditorpayment.CreditorID" id="CreditorID" name="CreditorID" required>
-                <select required>
-                  <option value="0">--Select--</option>
-                  <option [value]="type" *ngFor= "let supplier of suppliers">{{supplier.SupName}}</option>
-                </select>
-            </div> 
+                <label>Creditor:</label>
+                  <select required formControlName="SupplierID" class="form-control" [(ngModel)]="creditorpayment.SupplierID" name="SupplierID" id="SupplierID" required>
+                        
+                        <option  *ngFor="let supplier of suppliers" value="{{supplier.SupplierID}">{{supplier.SupName}}</option>
+                  </select>
+                  <br>
+                </div>
             <br/>
             <div class="divleft" >
               <label for="CredPaymentDate">Date of Payment:  </label>

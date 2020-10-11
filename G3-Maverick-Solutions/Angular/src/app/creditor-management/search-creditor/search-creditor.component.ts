@@ -34,7 +34,7 @@ export class SearchCreditorComponent implements OnInit {
   creditor: Creditor = new Creditor();
   supplier: Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
-
+  creditorNull: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
@@ -94,6 +94,12 @@ export class SearchCreditorComponent implements OnInit {
   }
 
   updateCreditor(){
+    if (this.creditor.SupplierID == null || this.creditor.CredAccountBalance ==null || this.creditor.CredBank == null || this.creditor.CredBranch==null)
+    {
+      this.creditorNull = true;
+    }
+    else
+    {
     this.dialogService.openConfirmDialog('Are you sure you want to update this creditor?')
     .afterClosed().subscribe(res => {
       if(res){
@@ -108,7 +114,7 @@ export class SearchCreditorComponent implements OnInit {
     })
   }
 });
-}
+}}
 
 
 removeCreditor(){

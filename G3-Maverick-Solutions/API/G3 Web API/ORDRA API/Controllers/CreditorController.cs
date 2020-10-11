@@ -118,48 +118,31 @@ namespace ORDRA_API.Controllers
 
         }
 
+        //add creditor
         [HttpPost]
-        [Route("AddCreditor")]
-        public object AddCreditor(Creditor creditor)
+        [Route("addCreditor")]
+        public object addCreditor(Creditor newCreditor)
         {
+
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
+            try
+            {
+                db.Creditors.Add(newCreditor);
+                db.SaveChanges();
+                toReturn.Message = "Creditor added successfully.";
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Failed to add creditor";
 
-            //try
-            //{
-                //get supplier
-              //Supplier sup = db.Suppliers.Where(x => x.SupplierID == creditor.Supplier.SupplierID).FirstOrDefault();
-                //if (sup != null)
-                //{
 
+            }
 
-                    //save new creditor
-                    Creditor addCred = new Creditor();
-                    addCred.CredBank = creditor.CredBank;
-                    addCred.CredAccount = creditor.CredAccount;
-                    addCred.CredType = creditor.CredType;
-                    addCred.CredBranch = creditor.CredBranch;
-                    addCred.CredAccountBalance = creditor.CredAccountBalance;
-                    addCred.SupplierID = creditor.SupplierID;
-                    //addCred.Supplier = sup;
-                    db.Creditors.Add(addCred);
-                    db.SaveChanges();
-
-                    toReturn.Message = "The creditor has been added successfully.";
-               // }
-                //else
-                //{
-                   // toReturn.Message = "Add Creditor Unsuccsessful: Supplier already a creditor.";
-                //}
-
-            //}
-            //catch (Exception)
-            //{
-                //toReturn.Message = "Add Creditor unsuccessful";
-
-            //}
             return toReturn;
+
+
         }
 
 

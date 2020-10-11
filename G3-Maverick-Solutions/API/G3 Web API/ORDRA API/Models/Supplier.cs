@@ -20,6 +20,7 @@ namespace ORDRA_API.Models
             this.Creditors = new HashSet<Creditor>();
             this.Products = new HashSet<Product>();
             this.Supplier_Order = new HashSet<Supplier_Order>();
+            this.Creditor_Payment = new HashSet<Creditor_Payment>();
         }
     
         public int SupplierID { get; set; }
@@ -37,5 +38,7 @@ namespace ORDRA_API.Models
         public virtual ICollection<Product> Products { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Supplier_Order> Supplier_Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Creditor_Payment> Creditor_Payment { get; set; }
     }
 }

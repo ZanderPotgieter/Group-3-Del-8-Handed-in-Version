@@ -111,7 +111,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderStatusID == 1).ToList();
+                List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderStatusID == 2).ToList();
                 if (customerOrders != null)
                 {
                     List<dynamic> orders = new List<dynamic>();

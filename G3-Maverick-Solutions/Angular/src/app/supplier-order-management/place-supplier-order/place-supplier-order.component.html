@@ -6,7 +6,8 @@
       <div class="card" *ngIf="showBacklog">
             <div class="subheadinglabel" id="backlogprods">Backlog Products:</div>
             <br>
-
+            <span style="color:red" *ngIf="showError">
+              {{errorMessage}}</span>
 
             <table class="table table-striped">  
               <thead class="thead-dark">  
@@ -17,27 +18,74 @@
                 </tr>  
               </thead>  
               <tbody>  
-                <tr *ngFor="let product of allProducts | async">  
+                <tr *ngFor="let product of products; index as ndx">  
                   <td>{{product.ProdName}}</td>
                   <td>{{product.QuantityToOrder}}</td>
-                  <td><button type="submit" (click) = "addProduct()" >Add +</button><br></td>
+                  <td><button type="submit" (click) = "addProduct(ndx)">Add</button><br></td>
                 </tr>  
               </tbody>
             </table>  
   
         
-  <div class="divleft">
-    <button (click) = "viewOrders()" >View Supplier Orders</button>
-    <button routerLink="/supplier-order-management" type="submit" >Cancel</button><br>
+          <div class="divleft">
+            <button (click) = "viewOrders()" >View Supplier Orders</button>
+            <button routerLink="/supplier-order-management" type="submit" >Cancel</button><br>
           </div>
+
       </div>
         <br>
 
         <div class="card" *ngIf="showOrders">
-
+          <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
+            <th style="padding: 0px">Date</th>
+            <th style="width: 35%;padding: 0px">Supplier</th>
+            <th style=" padding: 0px">Status</th>
+            <th style="padding: 0px"></th>
+        
+        <tr *ngFor="let item of supplierOrders; index as ndx">
+            <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
+            <td>{{item.SupName}}</td>
+            <td>{{item.SupEmail}}</td>
+            <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
+        
+        </tr>
+        
+        </table>
         </div>
 
         <div class="card" *ngIf="showSupOrder">
+          <label class="subheadinglabel">Supplier Order Details </label>
+  <div class="left">
+    <div style="float:left; width: 50%">
+      <label style="width: 100%">Date: {{selectedOrder.SODate | date:'yyyy-MM-dd'}}</label>
+    </div>
+    <div style="float:left; width: 50%">
+      <label style="width: 100%">Status {{selectedOrder.Status}}</label>
+    </div>
+  </div>
+ 
+
+  <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
+   <th style="padding: 0px">Product</th>
+   <th style="width: 35%; padding: 0px">Description</th>
+   <th style="padding: 0px">Ordered</th>
+   <th style="padding: 0px">Received</th>
+
+<tr *ngFor="let item of orderproducts; index as ndx">
+   <td>{{item.ProdName}}</td>
+   <td>{{item.ProdDescription}}</td>
+   <td>{{item.SOPQuantityOrdered}}</td>
+   <td>{{item.SOPQuantityRecieved}}</td>
+
+</tr>
+
+</table>
+<br>
+<div class= "divleft">
+  <button type="submit" (click)="PlaceOrder()">Place Order</button>
+  <button type="submit" (click)="CancelOrder()">Cancel Order</button>
+  <button type="submit" (click)="Back()">Back To List</button>
+</div>
 
         </div>
       

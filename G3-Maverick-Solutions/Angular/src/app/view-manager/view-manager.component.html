@@ -131,7 +131,7 @@
     <label class="subheadinglabel" >Enter Manager Profile Details</label>
 <br>
         <label for="ManQualification">Qualification:       </label>
-        <input type="text" formControlName="ManQualification" [(ngModel)]="manager.ManQualification" id="ManQualification" name="ManQualification" pattern="[a-zA-Z ]*" required [readonly] = "this.allowEdit">
+        <input type="text" formControlName="ManQualification" [(ngModel)]="manager.ManQualification" id="ManQualification" name="ManQualification" pattern="[a-zA-Z ]*" required [readonly] = "allowEdit">
        <br>
         <span style="color:red" *ngIf="empForm.get('ManQualification').errors && (empForm.get('ManQualification').touched || empForm.get('ManQualification').dirty)">
             <span *ngIf="empForm.get('ManQualification').errors.required">Qualification is required.</span>
@@ -143,7 +143,7 @@
 
     <div class="divleft">
         <label for="ManNationality">Nationality:       </label>
-        <input type="text" formControlName="ManNationality" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" pattern="[a-zA-Z ]*" required  [readonly] = "this.allowEdit">
+        <input type="text" formControlName="ManNationality" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" pattern="[a-zA-Z ]*" required  [readonly] = "allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManNationality').errors && (empForm.get('ManNationality').touched || empForm.get('ManNationality').dirty)">
             <span *ngIf="empForm.get('ManNationality').errors.required">Nationality is required.</span>
@@ -155,7 +155,7 @@
 
     <div class="divleft">
         <label for="ManIDNumber">ID Number:       </label>
-        <input type="text" [(ngModel)]="manager.ManIDNumber" formControlName="ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "this.allowEdit">
+        <input type="text" [(ngModel)]="manager.ManIDNumber" formControlName="ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManIDNumber').errors && (empForm.get('ManIDNumber').touched || empForm.get('ManIDNumber').dirty)">
             <span *ngIf="empForm.get('ManIDNumber').errors.required">cell number is required.</span>
@@ -171,7 +171,7 @@
         <label class="subheadinglabel">Enter Next Of Keen Details:</label>
         <br>
         <label for="ManNextOfKeenFName">Full Name:       </label>
-        <input type="text" formControlName="ManNextOfKeenFName" [(ngModel)]="manager.ManNextOfKeenFName" id="ManNextOfKeenFName" name="ManNextOfKeenFName" pattern="[a-zA-Z ]*" required  [readonly] = "this.allowEdit">
+        <input type="text" formControlName="ManNextOfKeenFName" [(ngModel)]="manager.ManNextOfKeenFName" id="ManNextOfKeenFName" name="ManNextOfKeenFName" pattern="[a-zA-Z ]*" required  [readonly] = "allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManNextOfKeenFName').errors && (empForm.get('ManNextOfKeenFName').touched || empForm.get('ManNextOfKeenFName').dirty)">
             <span *ngIf="empForm.get('ManNextOfKeenFName').errors.required">Name is required.</span>
@@ -183,7 +183,7 @@
 
     <div class="divleft">
         <label for="ManNextOfKeenCell">Cell Number:       </label>
-        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" pattern="[0-9 ]*" required  [readonly] = "this.allowEdit">
+        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" pattern="[0-9 ]*" required  [readonly] = "allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManNextOfKeenCell').errors && (empForm.get('ManNextOfKeenCell').touched || empForm.get('ManNextOfKeenCell').dirty)">
             <span *ngIf="empForm.get('ManNextOfKeenCell').errors.required">cell number is required.</span>
@@ -196,8 +196,9 @@
   
     <br><br>
     <div class="divleft" *ngIf="showButtons">
-       <button type="submit" (click)="updateManager()">Update</button>
+       <button type="submit" (click)="enableInputs()">Update</button>
        <button type="submit" (click)="deleteManager()">Delete</button>
+       <button type="submit" (click)="cancel()">Cancel</button>
     </div>
 
     <div class="divleft" *ngIf="showSave" >

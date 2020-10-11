@@ -127,6 +127,7 @@ import { CompleteStockTakeComponent } from './product-management/complete-stock-
 import { SearchStockTakeComponent } from './product-management/search-stock-take/search-stock-take.component';
 import { DatePipe, formatDate } from '@angular/common';
 import { MarkedOffComponent } from './product-management/marked-off/marked-off.component';
+import { ReceiveStockComponent } from './supplier-order-management/receive-stock/receive-stock.component';
 
 
 @NgModule({
@@ -232,6 +233,7 @@ import { MarkedOffComponent } from './product-management/marked-off/marked-off.c
     CompleteStockTakeComponent,
     SearchStockTakeComponent,
     MarkedOffComponent,
+    ReceiveStockComponent,
   ],
   imports: [
     BrowserModule,

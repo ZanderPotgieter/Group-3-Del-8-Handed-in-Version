@@ -19,7 +19,7 @@ import { DialogService } from '../shared/dialog.service';
 export class SearchManagerComponent implements OnInit {
 
   constructor(private api:ManagerService,private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
-  allowEdit:boolean = false;
+  allowEdit:boolean = true;
   manager: Manager = new Manager();
   user: User = new User();
   employee: Employee = new Employee();
@@ -188,6 +188,14 @@ export class SearchManagerComponent implements OnInit {
 
   }
 
+  enableInputs(){
+    this.showSave = true;
+    this.showButtons = false;
+    this.allowEdit = false;
+
+  }
+
+
   updateManager(){
     this.manager.UserID = this.user.UserID;
      this.api.updateManager(this.manager).subscribe( (res:any)=> {
@@ -230,6 +238,9 @@ export class SearchManagerComponent implements OnInit {
 
   
   deleteManager(){
+    this.dialogService.openConfirmDialog('Delete Manager Profile')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.deleteManager(this.manager.ManagerID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
@@ -238,6 +249,8 @@ export class SearchManagerComponent implements OnInit {
       //alert(this.responseMessage)
       this.router.navigate(["manager-management"])
     })
+  }})
+
 
   }
 

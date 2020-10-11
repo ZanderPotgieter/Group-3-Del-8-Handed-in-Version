@@ -725,11 +725,71 @@ namespace ORDRA_API.Controllers
         }
 
 
+        //Screen 1
+        //Add a product to the suppliers order
+        [HttpGet]
+        [Route("receiveProductStock")]
+        public object receiveProductStock(int containerID, int supplierID, int productID, int quantity)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            toReturn.product = new ExpandoObject();
 
 
+            try
+            {
+                //search for the supplier and product in the database
+                Supplier supplier = db.Suppliers.Where(X => X.SupplierID == supplierID).FirstOrDefault();
+                Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+
+                if (supplier != null && product != null)
+                {
+
+                    //check to see if the supplier order was already created today in the current container
+                    Supplier_Order supplier_Order = db.Supplier_Order.Where(x => x.SupplierID == supplierID && x.SODate == DateTime.Now && x.SupplierOrderStatusID == 1 && x.ContainerID == containerID).FirstOrDefault();
+                    if (supplier_Order == null)
+                    {
+                        //get the "Placed" order status
+                        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SOSDescription == "Delivered").FirstOrDefault();
 
 
+                        //add product to existing Order
+                        Supplier_Order_Product addProd = new Supplier_Order_Product();
+                        addProd.ProductID = productID;
+                        addProd.SupplierOrderID = supplier_Order.SupplierOrderID;
+                        addProd.SOPQuantityRecieved = quantity;
+                        db.Supplier_Order_Product.Add(addProd);
+                        db.SaveChanges();
 
+                        //returning the product so you can see it in the console if you want
+                        toReturn.product = db.Supplier_Order_Product.Where(x => x.ProductID == productID && x.SupplierOrderID == supplier_Order.SupplierOrderID).FirstOrDefault();
+
+                        toReturn.Message = "Product Quantity Saved";
+                        //adjust quantity on hand in container
+                        Container con = db.Containers.Where(x => x.ContainerID == containerID).FirstOrDefault();
+                        if(con != null)
+                        {
+                            Container_Product conProd = db.Container_Product.Where(x => x.ContainerID == con.ContainerID && x.ProductID == productID).FirstOrDefault();
+                            if(conProd != null)
+                            {
+                                conProd.CPQuantity = conProd.CPQuantity + quantity;
+                                toReturn.Message = "Container's Product Quantity Updated";
+                            }
+                        }
+
+                    }
+
+
+                }
+            }
+            catch
+            {
+                toReturn.Error = "Receiving Stock Failed";
+            }
+
+            return toReturn;
+
+        }
 
 
 

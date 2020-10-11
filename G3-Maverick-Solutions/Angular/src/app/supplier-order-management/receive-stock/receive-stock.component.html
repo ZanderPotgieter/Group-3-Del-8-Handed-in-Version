@@ -1,0 +1,63 @@
+<body>
+    <h1>Receive Stock</h1>
+    <br>
+    <form>
+    <div class="card">
+        <div class="divleft">
+          <label class="subheadinglabel" style="width: 50%">List Of Placed Orders In Container</label>
+        </div>
+        <div *ngIf="showList">
+            <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
+             <th style="padding: 0px">Date</th>
+             <th style="width: 35%;padding: 0px">Supplier</th>
+             <th style="padding: 0px">Status</th>
+             <th style="padding: 0px"></th>
+         
+         <tr *ngFor="let item of supplierOrders; index as ndx">
+             <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
+             <td>{{item.SupName}}</td>
+             <td>{{item.Status}}</td>
+             <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
+         
+         </tr>
+         
+         </table>
+         </div>
+         
+         <div *ngIf="showOrder">
+           <label class="subheadinglabel">Supplier Order Details </label>
+           <div class="left">
+             <div style="float:left; width: 50%">
+               <label style="width: 100%">Date: {{selectedOrder.SODate | date:'yyyy-MM-dd'}}</label>
+             </div>
+             <div style="float:left; width: 50%">
+               <label style="width: 100%">Status {{selectedOrder.Status}}</label>
+             </div>
+           </div>
+          
+         
+           <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
+            <th style="width: 35%;padding: 1px">Product</th>
+            <th style="padding: 1px">Ordered</th>
+            <th style="padding: 1px">Received</th>
+            <th  style= "width: 20%; padding: 1px"></th>
+         
+         <tr *ngFor="let item of orderproducts; index as ndx; trackBy:trackByndx;">
+            <td>{{item.ProdName}}</td>
+            <td>{{item.SOPQuantityOrdered}}</td>
+            <td><input style="width: 70%" type = "text"  name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].SOPQuantityRecieved"></td>
+            <td><button style="border-radius: 10px; width: 95%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
+            
+         
+         </tr>
+         
+         </table>
+         <br>
+         <div class= "divleft">
+           <button type="submit" style="width:30%" (click)="Done()">Save All Changes</button>
+           <button type="submit" (click)="Back()">Back To List</button>
+         </div>
+         
+         </div>
+         
+  

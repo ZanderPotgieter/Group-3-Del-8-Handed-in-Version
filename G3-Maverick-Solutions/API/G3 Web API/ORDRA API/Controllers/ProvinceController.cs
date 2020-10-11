@@ -98,7 +98,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Province Record Not Found";
 
                 }
             }
@@ -252,9 +252,18 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Provinces.Remove(objectProvince);
-                    db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    List<Area> areas = db.Areas.Where(x => x.ProvinceID == id).ToList();
+                    if( areas.Count == 0)
+                    {
+                        db.Provinces.Remove(objectProvince);
+                        db.SaveChanges();
+                        toReturn.Message = "Delete Successful";
+                    }
+                    else
+                    {
+                        toReturn.Message = "Province Delete Restricted";
+                    }
+                    
                 }
 
             }

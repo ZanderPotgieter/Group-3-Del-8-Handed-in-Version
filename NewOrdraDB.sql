@@ -17,6 +17,7 @@ GO
 CREATE TABLE Container
 (
 	ContainerID int Primary Key identity(1,1) Not Null,
+	InActive BIT,
 	ConName varchar(25),
 	ConDescription varchar(255)
 )
@@ -725,10 +726,10 @@ VALUES ('1', '3'),
 INSERT INTO Manager (UserID, ManQualification, ManNationality, ManIDNumber, ManNextOfKeenFName, ManNextOfKeenCell)
 VALUES ('3', 'Bcom General degree', 'South African', '6704290231532', 'Joe', '0835522268');
 
-INSERT INTO Container (ConName, ConDescription)
-VALUES ('Betha Mamelodi', 'Situated in Mamelodi east'),
-	   ('Crispy pools Mamelodi', 'Situated in Mamelodi by crispy pools'),
-	   ('Legora Mamelodi', 'Situated in Mamelodi by Legora primary school');
+INSERT INTO Container (InActive, ConName, ConDescription)
+VALUES ('0','Betha Mamelodi', 'Situated in Mamelodi east'),
+	   ('0','Crispy pools Mamelodi', 'Situated in Mamelodi by crispy pools'),
+	   ('0','Legora Mamelodi', 'Situated in Mamelodi by Legora primary school');
 
 INSERT INTO Manager_Container (ManagerID, ContainerID)
 VALUES ('1', '2');

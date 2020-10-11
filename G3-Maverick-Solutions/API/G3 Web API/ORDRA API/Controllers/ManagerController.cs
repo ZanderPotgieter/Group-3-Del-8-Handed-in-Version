@@ -80,7 +80,7 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Message = "Employee Record Not Found";
+                        toReturn.Message = "Employee Record Not Found. Create Employee Profile";
                     }
 
                     Manager manager = db.Managers.Include(x => x.Containers).Where(x => x.UserID == user.UserID).FirstOrDefault();
@@ -183,7 +183,7 @@ namespace ORDRA_API.Controllers
             }
             catch 
             {
-                toReturn = "Search Interrupted.Retry";
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -244,7 +244,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn = "Search Interrupted.Retry";
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -282,16 +282,16 @@ namespace ORDRA_API.Controllers
                     managerDetails.Containers = managedContainers;
 
                     db.SaveChanges();
-                    toReturn.Message = "Update Successful";
+                    toReturn.Message = "Manager Profile Update Successful";
                 }
                 else
                 {
                     toReturn.Message = "Manager Profile Not Found";
                 }
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Manager Profile Update Unsuccesful";
             }
 
             return toReturn;
@@ -313,7 +313,7 @@ namespace ORDRA_API.Controllers
 
                 if (manager == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Manager ProfileNot Found";
                     
                 }
                 else
@@ -346,9 +346,9 @@ namespace ORDRA_API.Controllers
 
                 }
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Delete Resticted";
             }
 
             return toReturn;

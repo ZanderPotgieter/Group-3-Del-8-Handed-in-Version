@@ -33,6 +33,7 @@ namespace ORDRA_API.Models
         public int ContainerID { get; set; }
         public string ConName { get; set; }
         public string ConDescription { get; set; }
+        public Nullable<bool> InActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer_Order> Customer_Order { get; set; }

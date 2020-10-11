@@ -190,7 +190,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Creditor Not Found";
                 }
             }
 
@@ -221,19 +221,30 @@ namespace ORDRA_API.Controllers
 
                 if (objectCreditor == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Creditor Not Found";
                 }
                 else
                 {
-                    db.Creditors.Remove(objectCreditor);
-                    db.SaveChanges();
-                    toReturn.Message =  "Creditor has successfully been removed.";
+                    List<Creditor_Payment> payments = db.Creditor_Payment.Where(x => x.CreditorID == id).ToList();
+                    if(payments.Count == 0)
+                    {
+                        db.Creditors.Remove(objectCreditor);
+                        db.SaveChanges();
+                        toReturn.Message = "Creditor has successfully been removed.";
+
+                    }
+                    else
+                    {
+                        toReturn.Message = "Removing Creditor Restricted";
+                    }
+                     
+                    
                 }
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Something Went Wrong " + error.InnerException.ToString();
+                toReturn.Message = "Removing Creditor Unssucessful";
 
 
             }

@@ -1103,7 +1103,17 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                return found;
+                                Product_Backlog product = db.Product_Backlog.Where(x => x.ProductID == id).FirstOrDefault();
+                                if(product != null)
+                                {
+                                    found = true;
+                                    return found;
+                                }
+                                else
+                                {
+                                    return found;
+                                }
+                                
                             }
 
 

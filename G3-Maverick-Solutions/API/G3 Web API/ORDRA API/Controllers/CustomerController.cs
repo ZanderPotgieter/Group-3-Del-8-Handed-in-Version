@@ -215,9 +215,20 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Customers.Remove(objectCustomer);
-                    db.SaveChanges();
-                    toReturn.Message = "The customer has successfully been Deleted.";
+                    List<Customer_Order> orders = db.Customer_Order.Where(x => x.CustomerID == id).ToList();
+                    if( orders.Count == 0)
+                    {
+                        db.Customers.Remove(objectCustomer);
+                        db.SaveChanges();
+                        toReturn.Message = "The customer has successfully been Deleted.";
+                    }
+                    else
+                    {
+
+                        toReturn.Message = " Customer Delete Restricted";
+                    }
+
+                   
                 }
 
             }

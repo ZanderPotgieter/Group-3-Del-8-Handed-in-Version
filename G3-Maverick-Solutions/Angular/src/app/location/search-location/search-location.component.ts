@@ -69,7 +69,7 @@ export class SearchLocationComponent implements OnInit {
       AreaID: ['', [Validators.required]],
       ContainerID: [''],
       StatusID: [''],
-      Locname: ['', [Validators.required]],
+      Locname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
     });
   }
 

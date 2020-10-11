@@ -6,6 +6,8 @@ import {LocationService} from '../location.service';
 import { AreaVM } from './../area-vm'; 
 import { StatusVm} from './../status-vm'; 
 import { ContainerVm} from './../container-vm'; 
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-update-location',
@@ -14,10 +16,10 @@ import { ContainerVm} from './../container-vm';
 })
 export class UpdateLocationComponent implements OnInit {
 
-  constructor(private api: LocationService, private router: Router) { }
+  constructor(private api: LocationService, private fb: FormBuilder, private router: Router, private dialogService: DialogService ) { }
   location : Location= new Location();
   responseMessage: string = "Request Not Submitted";
-
+  locationNull : boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
@@ -27,6 +29,7 @@ export class UpdateLocationComponent implements OnInit {
   statuses: StatusVm[];
   areas: AreaVM[];
   containers: ContainerVm[];
+  angForm: FormGroup;
 
   ngOnInit(): void {
     /* this.resetForm();
@@ -48,19 +51,31 @@ export class UpdateLocationComponent implements OnInit {
         this.containers = value;
       }
     });
+
+    this.angForm= this.fb.group({  
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+      LocName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
+      AreaName: [''],
+      ContainerName: [''],
+      StatusName: [''],
+      AreaID: ['', [Validators.required]],
+      ContainerID: [''],
+      StatusID: [''],
+      Locname: ['', [Validators.required]],
+    });
   }
 
 
   searchLocationEdit(){
     this.api.searchLocation(this.name).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message == "Record Not Found"){
-      this.responseMessage = res.Message;
-      alert(res.Message);
-      this.showSearchEdit = true;
-      this.showResultsEdit = false;
+      if(res.Message != null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+        this.showSearchEdit = true;
+        this.showResultsEdit = false;
     
-    }
+      }
       else{
         console.log(res);
           this.location.LocationID = res.LocationID;
@@ -76,12 +91,18 @@ export class UpdateLocationComponent implements OnInit {
   }
 
   updateLocation(){
-    this.api.updateLocation(this.location).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
-      this.router.navigate(["gps-management"])
+    this.dialogService.openConfirmDialog('Are you sure you want to update this location?')
+    .afterClosed().subscribe(res=> {
+      if (res){
+        this.api.updateLocation(this.location).subscribe( (res:any)=> {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message);
+          }
+          this.router.navigate(["gps-management"])
+        })
+      }
     })
 
   }

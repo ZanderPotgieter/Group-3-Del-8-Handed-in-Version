@@ -130,9 +130,9 @@
         <input type="text"  formControlName="ManIDNumber"[(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" required minlength="13" maxlength="13" pattern="[0-9 ]*">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManIDNumber').errors && (empForm.get('ManIDNumber').touched || empForm.get('ManIDNumber').dirty)">
-            <span *ngIf="empForm.get('ManIDNumber').errors.required">cell number is required.</span>
-            <span *ngIf="empForm.get('ManIDNumber').errors.minlength || empForm.get('ManIDNumber').errors.maxlength">Surname must be 13 digits</span>
-            <span *ngIf="empForm.get('ManIDNumber').errors.pattern">Only text characters.</span>
+            <span *ngIf="empForm.get('ManIDNumber').errors.required">ID number is required.</span>
+            <span *ngIf="empForm.get('ManIDNumber').errors.minlength || empForm.get('ManIDNumber').errors.maxlength">ID number must be 13 digits</span>
+            <span *ngIf="empForm.get('ManIDNumber').errors.pattern">Only numbers.</span>
           </span>
           <br>
     </div>

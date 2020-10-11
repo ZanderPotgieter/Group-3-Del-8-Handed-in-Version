@@ -9,9 +9,9 @@
             <div class="divleft">
               <div class="divleft" >
                 <label>Creditor:</label>
-                  <select required formControlName="CreditorID" class="form-control" [(ngModel)]="creditorpayment.CreditorID" name="CreditorID" id="CreditorID" required>
+                  <select required formControlName="SupplierID" class="form-control" [(ngModel)]="creditorpayment.SupplierID" name="SupplierID" id="SupplierID" required>
                         
-                        <option  *ngFor="let supplier of suppliers" value="{{supplier.creditor.CreditorID}">{{supplier.SupName}}</option>
+                        <option  *ngFor="let supplier of suppliers" value="{{supplier.SupplierID}">{{supplier.SupName}}</option>
                   </select>
                   <br>
                 </div>

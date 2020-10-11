@@ -34,12 +34,12 @@
                 </div>
                 <div class="divleft">
                     <label for="Account">Account Nr:</label>
-                    <input type = "text" id="account" class="form-control" formControlName="CredAccount" [(ngModel)]="creditor.CredAccount" [ngModelOptions]="{standalone: true}" name="CredAccount"  required >  
+                    <input type = "number" id="account" class="form-control" formControlName="CredAccount" [(ngModel)]="creditor.CredAccount" [ngModelOptions]="{standalone: true}" name="CredAccount"  required >  
                     <br>
                     <span style="color:red" *ngIf="credForm.get('CredAccount').errors && (credForm.get('CredAccount').touched || credForm.get('CredAccount').dirty)">
                         <span *ngIf="credForm.get('CredAccount').errors.required">Account Number is required.<br></span>
-                        <span *ngIf="credForm.get('CredAccount').errors.minlength">Must be 10 numbers<br></span>
-                        <span *ngIf="credForm.get('CredAccount').errors.maxlength">Must be 10 numbers<br></span>
+                        <span *ngIf="credForm.get('CredAccount').errors.minlength">Must be between 10 and 12 digits.<br></span>
+                        <span *ngIf="credForm.get('CredAccount').errors.maxlength">Must be between 10 and 12 digits.<br></span>
                         <span *ngIf="credForm.get('CredAccount').errors.pattern">Only numbers allowed.<br></span>
                     </span>
                 </div>

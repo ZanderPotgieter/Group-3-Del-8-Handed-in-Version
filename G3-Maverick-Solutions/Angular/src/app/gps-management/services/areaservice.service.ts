@@ -11,8 +11,6 @@ import { map } from 'rxjs/internal/operators/map';
   providedIn: 'root'
 })
 export class AreaserviceService {
-  areaData: Area;
-  areaList: Area[];
   url = 'https://localhost:44399/API/Area'
   constructor(private http: HttpClient) { }
 
@@ -31,11 +29,11 @@ export class AreaserviceService {
     return this.http.get(this.url + '/getAreaByID/' + id);  
   } 
 
-  addArea(newArea: Area): Observable<Area>   {  
+  addArea(Area: Area): Observable<Area> {  
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.put<Area>(this.url + '/addArea',  
-    newArea, httpOptions);  
-  }  
+    return this.http.post<Area>(this.url + '/addArea',  
+    Area, httpOptions);  
+  }   
 
   updateArea(newArea: Area): Observable<Area>   {  
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  

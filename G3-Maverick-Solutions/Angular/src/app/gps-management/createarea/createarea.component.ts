@@ -4,6 +4,10 @@ import { Province } from 'src/app/Province/province';
 import { AreaStatus } from '../areastatus';
 import { Area } from '../model/area.model';
 import { AreaserviceService } from '../services/areaservice.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-createarea',
@@ -12,67 +16,49 @@ import { AreaserviceService } from '../services/areaservice.service';
 })
 export class CreateareaComponent implements OnInit {
 
-  constructor(private areaService: AreaserviceService,  private router: Router) { }
-  newArea : Area = new Area();
-  selectedProvince: Province;
-  selectedStatus: AreaStatus;
+  constructor(private api: AreaserviceService,  private router: Router) { }
   area : Area = new Area();
   responseMessage: string = "Request Not Submitted";
-  statusses: AreaStatus[];
+  statuses: AreaStatus[];
   provinces: Province[];
-  Select: number;
 
   ngOnInit(): void {
 
-    this.areaService.getAllAreaStatus()
-    .subscribe(value => {
-      if (value != null) {
-        this.statusses = value;
+    this.api.getAllAreaStatus().subscribe(value => {
+      if (value!=null){
+        this.statuses = value;
       }
     });
 
-    this.areaService.getAllProvinces()
-    .subscribe(value => {
-      if (value != null) {
+    this.api.getAllProvinces().subscribe(value => {
+      if (value!=null){
         this.provinces = value;
       }
     });
 
   }
 
-  loadStatus(val: AreaStatus){
-   
-    this.addStatus(val);
-  }
-
-  addStatus(val : AreaStatus){
-    this.selectedStatus = val;
-  }
-
-  loadProvinces(val: Province){
-   
-    this.addProvince(val);
-  }
-
-  addProvince(val : Province){
-    this.selectedProvince = val;
-  }
-
-  Save(){
-    this.newArea.ProvinceID = this.selectedProvince.ProvinceID;
-    this.newArea.AreaStatusID = this.selectedStatus.AreaStatusID;
-    this.areaService.addArea(this.area).subscribe( (res: any)=> {
+  addArea(){
+    this.api.addArea(this.area).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
-        this.router.navigate(["product-management"]);}
-        else if (res.Error){
-          alert(res.Error);
-        }
-       
+      this.responseMessage = res.Message;}
+      alert(this.responseMessage)
+      this.router.navigate(["gps-management"])
     })
-    
+
   }
+
+  gotoGPSManagement(){
+    this.router.navigate(['gps-management']);
+  }
+
+  
+
+  
+
+  
+
+  
 
 }

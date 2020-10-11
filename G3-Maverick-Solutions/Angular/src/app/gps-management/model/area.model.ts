@@ -1,7 +1,7 @@
 export class Area {
-    AreaID: number;
-    AreaStatusID:number;
-    ProvinceID:number;
-    ArName: string;
-    ArPostalCode:string;
+    public AreaID:number;
+    public AreaStatusID:number;
+    public ProvinceID:number;
+    public ArName:string;
+    public ArPostalCode:string;
 }

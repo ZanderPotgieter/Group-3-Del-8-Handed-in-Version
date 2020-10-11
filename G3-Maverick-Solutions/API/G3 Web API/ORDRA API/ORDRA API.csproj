@@ -169,10 +169,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\ContainerController.cs" />
     <Compile Include="Controllers\CreditorController.cs" />
     <Compile Include="Controllers\CreditorPaymentController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\CustomerOrderController.cs" />
     <Compile Include="Controllers\CustomerOrdersController.cs" />
     <Compile Include="Controllers\DonationController.cs" />
     <Compile Include="Controllers\DonationRecipientController.cs" />

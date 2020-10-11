@@ -12,6 +12,7 @@ import {CustomerService} from '../customer-management/customer.service';
 import{map} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { User } from '../user';
 
 
 
@@ -41,19 +42,23 @@ export class PlaceOrderComponent implements OnInit {
   
   } 
 
-  customerID:number = 2;
-  userID: number = 1; //Should be changed;
+  //customerID:number = 2;
+  //userID: number = 1; //Should be changed;
   subtotal:number = 0;
+  productID = 0;
+  prodFound: boolean = false;
   total: number = 0;
   quantity: number = 0;
   vatPerc: number = 0;
+  prodcuctorders: ProductOrderLine[] = [];
   responseMessage: string = "Request Not Submitted";
   showButton = false;
   showProd = false;
   showDetails = false;
+  removeQuantity = 0;
   showCus = true;
   showInitiate = true;
-
+  showQuantity:boolean = false;
   showTable: boolean = false;
   name : string;
   surname : string;
@@ -88,18 +93,38 @@ export class PlaceOrderComponent implements OnInit {
   productsWithPrice: ProductDetails[] = [];
   prodsForCategory: ProductDetails[] = [];
   orderProducts: ProductDetails[] = [];
- 
+  user : User = new User();
+  selectedProduct: ProductDetails = new ProductDetails();
+
+
+  session : any;
   
 
 CustomerID: number;
 
 ngOnInit(): void {
+
+  if(!localStorage.getItem("accessToken")){
+    this.router.navigate([""]);
+  }
+  else {
+    this.session = {"token" : localStorage.getItem("accessToken")}
+
+    this.api.getUserDetails(this.session).subscribe( (res:any) =>{
+      console.log(res);
+      this.user = res;
+     
+    });
+      
+    }
+
+
   this.loadDisplay();   
   this.cusorderForm= this.bf.group({  
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]], 
     surname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],     
   });    
-  
+
 }
 
   searchCustomer(){
@@ -162,13 +187,13 @@ ngOnInit(): void {
           this.customer.CusSurname = res.CusSurname;
           this.customer.CusCell = res.CusCell;
           this.customer.CusEmail = res.CusEmail;
-          this.customerID = res.CustomerID;
+          
 
           this.CustomerID = res.CustomerID;
           this.showDetails = true;
           this.showInitiate = false;
           this.customerNull = false;
-          this.initiatePlaceOrder(res.CustomerID)
+         this.initiatePlaceOrder(res.CustomerID)
       }
           
 
@@ -182,7 +207,7 @@ ngOnInit(): void {
   initiatePlaceOrder(ID: any){
    // this.CustomerID = parseInt(this.api.currentCustomerID.toString());
 
-     this.api.initiatePlaceOrder(ID).subscribe( (res:any)=> {
+     this.api.initiatePlaceOrder(ID, this.session).subscribe( (res:any)=> {
               console.log(res);
               if(res.Message != null){
                 this.responseMessage = res.Message;
@@ -192,8 +217,10 @@ ngOnInit(): void {
                 this.customer = res.customer;
 
                 //set customer order details
+                this.customerOrder.CustomerOrderID = res.orderInfo.CustomerOrderID;
                 this.customerOrder.CustomerID = res.customer.CustomerID;
-                this.customerOrder.UserID = this.userID;
+                this.customerOrder.UserID = this.user.UserID;
+                this.customerOrder.ContainerID = this.user.ContainerID;
                 this.customerOrder.CusOrdDate = res.orderInfo.OrderDate;
                 this.customerOrder.CusOrdNumber = res.orderInfo.OrderNo;
 
@@ -224,69 +251,187 @@ ngOnInit(): void {
     this.prodPush(val);
   }
 
-  prodPush(val: ProductDetails){
-    this.productDetails = val;
+  getProduct(){
+
+    for(let prod of this.productsWithPrice ){
+        this.selectedProduct = prod;
+        this.quantity = this.selectedProduct.Quantity + 1;
+        this.updateList();
+      
+      
+    }
     }
 
-listProducts(){
-  if(this.prodSelection == 0){
-    this.prodNotSelected= true
-   }
-  else if(this.quantity == 0){
-  
-    this.quantyNull = true;
+    updateList(){
+      for(let prod of this.orderProducts){
+        
+
+          this.total = this.total-prod.Subtotal;
+          
+          prod.Quantity = this.quantity;
+          prod.Subtotal = (this.quantity * prod.Price);
+          
+          this.total = this.total + prod.Subtotal;
+        
+          this.TotalIncVat = this.total;
+          this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
+          this.TotalExcVat = this.total - this.Vat;
+         
+        
+          this.orderDetails.TotalIncVat = this.TotalIncVat;
+          this.orderDetails.Vat  = this.Vat;
+          this.orderDetails.TotalExcVat = this.TotalExcVat;
+        
+         this.displayTotal = this.TotalIncVat.toFixed(2);
+         this.displayVat = this.Vat.toFixed(2);
+         this.displaySubtotal = this.TotalExcVat.toFixed(2);
+
+        this.api.addCustomerOrderProduct(this.selectedProduct.ProductID, this.customerOrder.CustomerOrderID, 1).subscribe((res: any) =>{
+          console.log(res);
+          if (res.Error){
+            alert(res.Error);
+          }
+          
+        })
+       
+         
+        
+        this.showTable = true;
+        this.showQuantity = false;
+        this.prodFound = true;
+    }
+
+    if(this.prodFound == false){
+      this.listProducts();
+    }
+
+    this.prodFound = false
   }
-  else{
-    this.quantyNull = false;
 
-  this.productDetails.Quantity = this.quantity;
-  this.productDetails.Subtotal = (this.quantity * this.productDetails.Price)
-  this.orderProducts.push(this.productDetails);
+  prodPush(val: ProductDetails){
+    this.selectedProduct = val;
+    }
 
-  this.prodOrder.PLQuantity = this.quantity;
-  this.prodOrder.ProductID = this.productDetails.ProductID;
+    listProducts(){
+      if(this.quantity == 0 || this.prodSelection == null){
+       this.prodNotSelected = true;
+         this.quantyNull = true;
+       }
+       else{
+         this.prodNotSelected = false;
+         this.quantyNull = false;
+         if(this.quantity <= this.selectedProduct.CPQuantity)
+         {
+          
+       this.selectedProduct.Quantity = this.quantity;
+       this.selectedProduct.Subtotal = (this.quantity * this.selectedProduct.Price)
+       this.orderProducts.push(this.selectedProduct);
+     
+     
+       this.total = this.total + this.selectedProduct.Subtotal;
+     
+       this.TotalIncVat = this.total;
+       this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
+       this.TotalExcVat = this.total - this.Vat;
+      
+     
+       this.orderDetails.TotalIncVat = this.TotalIncVat;
+       this.orderDetails.Vat  = this.Vat;
+       this.orderDetails.TotalExcVat = this.TotalExcVat;
+     
+      this.displayTotal = this.TotalIncVat.toFixed(2);
+      this.displayVat = this.Vat.toFixed(2);
+      this.displaySubtotal = this.TotalExcVat.toFixed(2);
+    
+     
+     this.showTable = true;
+     this.showQuantity = false;
 
-  this.customerOrder.Product_OrderLine.push(this.prodOrder);
+     this.api.addCustomerOrderProduct(this.selectedProduct.ProductID, this.customerOrder.CustomerOrderID, this.quantity).subscribe((res: any) =>{
+       console.log(res);
+       if (res.Error){
+         alert(res.Error);
+       }
+       
+     })
+     
+         }
+     }
+     
+     }
 
-  this.total = this.total + this.productDetails.Subtotal;
+     remove(index: any){
+        
+      this.productID = this.orderProducts[index].ProductID;
+      this.removeQuantity = this.orderProducts[index].Quantity;
 
-  this.TotalIncVat = this.total;
-  this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
-  this.TotalExcVat = this.total - this.Vat;
- 
 
-  this.orderDetails.TotalIncVat = this.TotalIncVat;
-  this.orderDetails.Vat  = this.Vat;
-  this.orderDetails.TotalExcVat = this.TotalExcVat;
+      if(this.orderProducts.length != 1){
+      this.total = this.total - this.orderProducts[index].Subtotal;
+      this.TotalIncVat = this.total;
+      this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
+      this.TotalExcVat = this.total - this.Vat;
 
- this.displayTotal = this.TotalIncVat.toFixed(2);
- this.displayVat = this.Vat.toFixed(2);
- this.displaySubtotal = this.TotalExcVat.toFixed(2);
+      this.orderDetails.TotalIncVat = this.TotalIncVat;
+      this.orderDetails.Vat  = this.Vat;
+      this.orderDetails.TotalExcVat = this.TotalExcVat;
+    
+      this.orderProducts.splice(index,1);
+      
+    
+      this.displayTotal = this.TotalIncVat.toFixed(2);
+     this.displayVat = this.Vat.toFixed(2);
+     this.displaySubtotal = this.TotalExcVat.toFixed(2);
 
+     this.prodcuctorders.splice(index,1);
+
+     this.api.removeCustomerOrderProduct(this.productID, this.customerOrder.CustomerOrderID, this.removeQuantity).subscribe((res: any) =>{
+      console.log(res);
+      if (res.Error){
+        alert(res.Error);
+      }
+      
+    })
+    }
+else{
+      this.total = 0;
+      this.TotalExcVat = 0;
+      this.TotalIncVat = 0;
+      this.Vat = 0;
+
+
+      this.orderProducts.splice(index,1);
+      
+    
+      this.displayTotal = this.TotalIncVat.toFixed(2);
+     this.displayVat = this.Vat.toFixed(2);
+     this.displaySubtotal = this.TotalExcVat.toFixed(2);
+
+     
+     this.api.removeCustomerOrderProduct(this.productID, this.customerOrder.CustomerOrderID, this.removeQuantity).subscribe((res: any) =>{
+      console.log(res);
+      if (res.Error){
+        alert(res.Error);
+      }
+      
+    })
+
+     this.prodcuctorders.splice(index,1);
+     this.prodcuctorders = [];
+     this.orderProducts = [];
+     this.selectedProduct = new ProductDetails();
+     this.showTable = false;
+
+
+     for(let item of this.productsWithPrice){
+      item.Quantity = 0;
+   }
 
   
 
-this.showTable = true;}
+    }
 
-}
-
-remove(index: any){
-  this.total = this.total - this.productDetails.Subtotal;
-  this.TotalIncVat = this.total;
-  this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
-  this.TotalExcVat = this.total - this.Vat;
- 
-  this.orderDetails.TotalIncVat = this.TotalIncVat;
-  this.orderDetails.Vat  = this.Vat;
-  this.orderDetails.TotalExcVat = this.TotalExcVat;
-
-  this.orderProducts.splice(index,1);
-  this.customerOrder.Product_OrderLine.splice(index,1);
-
-  this.displayTotal = this.TotalIncVat.toFixed(2);
- this.displayVat = this.Vat.toFixed(2);
- this.displaySubtotal = this.TotalExcVat.toFixed(2);
-}
+    }
 
 
   placeOrder()
@@ -305,8 +450,15 @@ remove(index: any){
 
   gotoCustomerOrderManagement()
   {
+    this.api.cancelCustomerOrder(this.customerOrder.CustomerOrderID).subscribe((res: any)=> {
+      console.log(res);
+      if(res.Message){
+        alert(res.Message);
     this.router.navigate(["customer-order-management"])
   }
+} )
+}
+
 
   onLogout() {
     localStorage.removeItem('token');

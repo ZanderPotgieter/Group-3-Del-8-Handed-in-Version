@@ -18,6 +18,7 @@ export class ViewOrderComponent implements OnInit {
   }
   CustomerOrder : CustomerOrder = new CustomerOrder();
 CustomerOrderID: number;
+
   collectOrder(){
     this.dialogService.openConfirmDialog('Confirm the Customer has Collected the order?')
     .afterClosed().subscribe(res => {

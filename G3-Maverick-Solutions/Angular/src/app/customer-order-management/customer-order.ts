@@ -4,6 +4,7 @@ export class CustomerOrder {
     CustomerID : number;
     UserID: number;
     CustomerOrderStatusID : number;
+    ContainerID : number;
     CusOrdNumber: string;
     CusOrdDate: Date;
     PaymentID : number;

@@ -11,6 +11,7 @@
             <button style="height: 30px;" (click)="selectedOrderNo()">Order No.</button>
             <button style="height: 30px;" (click)="selectedCell()">Cell No.</button>
             <button style="height: 30px;" (click)="searchAll()">View all</button>
+            <button style="height: 30px;" (click)="searchAllFulfilled()">Show Fulfilled Orders</button>
         </div>
     </div> 
 
@@ -96,6 +97,11 @@
                <label class="displaylabel" for="OrdDate">Date:      </label>
                  <label  id="OrdDate" name="OrdDate">{{orderDetails.CusOrdDate}}</label>
                </div>
+
+               <div class="divleft" >
+                <label class="displaylabel" for="cusOrdNo">Status:      </label>
+               <label id="cusOrdNo" name="cusOrdNo">{{orderDetails.CusOrdStatus}}</label>
+               </div>
                
             
             <div class="divleft" >
@@ -170,10 +176,13 @@
             </table>
 
         <div class="divleft">
-        <button  type="submit" (click)="collectCustomerOrder()" >Collect Order</button>
-        <button type="submit" (click)="collectCustomerOrder()">Cancel Order</button>
+        <button  type="submit" (click)="Collect()" >Collect Order</button>
+        <button type="submit" (click)="cancelOrder()">Cancel Order</button>
+        <button  type="submit"  (click)="sendNotification()" >Send Notification</button>
         <button  type="submit" (click)="gotoCustomerOrderManagement()">Back</button>
         </div>
     </div>
+
+    
        
 

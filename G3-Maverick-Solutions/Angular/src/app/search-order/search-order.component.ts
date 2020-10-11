@@ -28,7 +28,7 @@ export class SearchOrderComponent implements OnInit {
 
   cell:string;
   orderNo: string;
-
+  errorMessage: string;
   customer: Customer = new Customer();
   orderDetails: CustomerOrder = new CustomerOrder();
   calculatedValues: OrderDetails = new OrderDetails();
@@ -40,11 +40,13 @@ export class SearchOrderComponent implements OnInit {
   selectOrderNo: boolean = false;
   selectCell: boolean = false;
   showOrder: boolean =false;
+  showFulfilled: boolean =false;
   showcriteria:boolean = true;
   showCell: boolean = false;
   showOrdNo: boolean = false;
   showOptions: boolean = false;
   customerorder : CustomerOrder = new CustomerOrder();
+  hidebutton = "disabled";
 
   selectedOrder: SearchedOrder = new SearchedOrder();
   searchedOrders: SearchedOrder[] = [];
@@ -102,6 +104,7 @@ export class SearchOrderComponent implements OnInit {
         this.customer = res.customerDetails;
         this.calculatedValues = res.calculatedValues;
         this.orderProducts = res.orderProducts;
+        this.orderDetails.CustomerOrderStatusID = res.orderDetails.CustomerOrderID;
         this.orderDetails.CusOrdDate = res.orderDetails.OrderDate;
         this.orderDetails.CusOrdNumber =res.orderDetails.OrderNo;
         this.orderDetails.CustomerOrderID = res.CustomerOrderID;
@@ -110,6 +113,7 @@ export class SearchOrderComponent implements OnInit {
 
       
       this.showOrder = true;
+      this.showList = false;
     }
 
     searchByCell(){
@@ -140,6 +144,21 @@ export class SearchOrderComponent implements OnInit {
         this.showList = true;
     }  
 
+    searchAllFulfilled(){
+      this.api.searchAllFulfilled().subscribe( (res:any)=> {
+        console.log(res);
+        if(res.Message != null){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)}
+        else
+        {
+          this.searchedOrders = res;
+        }
+        })
+        this.showList = true;
+    }  
+
+
     selectOrder(val : SearchedOrder){
         this.selectedOrder = val;
         this.orderNo = this.selectedOrder.CusOrdNumber;
@@ -155,11 +174,12 @@ export class SearchOrderComponent implements OnInit {
       })
     }
 
-    collectCustomerOrder(){
+    collectOrder(){
       this.dialogService.openConfirmDialog('Confirm collect?')
       .afterClosed().subscribe(res => {
         if(res){
-      this.api.collectCustomerOrder(this.customerorder).subscribe( (res:any)=> {
+      this.api.collectCustomerOrder(this.orderDetails).subscribe( (res:any)=> {
+        this.orderDetails.CustomerOrderID = res.CustomerOrderID = 4;
         console.log(res);
         if(res.Message){
           this.dialogService.openAlertDialog(res.Message);}
@@ -168,6 +188,37 @@ export class SearchOrderComponent implements OnInit {
     }
     });
     }
+
+    Collect(){
+    
+      return this.api.collectCustomerOrder(this.orderDetails).subscribe( (res:any)=> {
+        console.log(res);
+        if(res.Message != null){
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)}
+        //this.router.navigate(["product-management"])
+        })
+  
+    }
+
+    sendNotification(){
+      this.dialogService.openConfirmDialog('Confirm that this order is fulfilled and ready to be collected?')
+    .afterClosed().subscribe(res => {
+      if(res){
+      this.api.sendNotification(this.customer.CusEmail).subscribe((res : any)=>{
+        console.log(res);
+        if(res.Error)
+        {
+          this.errorMessage = res.Error;
+          this.dialogService.openAlertDialog(this.errorMessage);
+        }
+        else{
+          this.dialogService.openAlertDialog(res.Message);
+         }
+      })
+      }
+    });
+  }
     
   gotoCustomerOrderManagement()
   {

@@ -243,9 +243,18 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Areas.Remove(objectArea);
-                    db.SaveChanges();
-                    toReturn.Message = "The area has successfully been Deleted.";
+                    List<Location> locations = db.Locations.Where(x => x.AreaID == id).ToList();
+                    if (locations.Count == 0)
+                    {
+                        db.Areas.Remove(objectArea);
+                        db.SaveChanges();
+                        toReturn.Message = "The area has successfully been Deleted.";
+
+                    }
+                    else
+                    {
+                        toReturn.Message = "Removing Area Restricted";
+                    }
                 }
 
             }

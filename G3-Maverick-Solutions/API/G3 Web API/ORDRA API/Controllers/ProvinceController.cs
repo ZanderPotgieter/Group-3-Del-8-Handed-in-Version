@@ -31,9 +31,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Provinces.ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get all provinces" ;
             }
 
             return toReturn;
@@ -66,9 +66,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch (Exception )
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Failed to get province " ;
             }
 
             return toReturn;
@@ -103,9 +103,9 @@ namespace ORDRA_API.Controllers
                 }
             }
 
-            catch (Exception error)
+            catch (Exception )
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Message = "Failed to get province ";
             }
 
             return toReturn;
@@ -258,9 +258,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn = "Failed to delete province";
             }
 
             return toReturn;

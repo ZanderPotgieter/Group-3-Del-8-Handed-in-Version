@@ -30,30 +30,31 @@ namespace ORDRA_API.Controllers
             try
             {
                 List<Location> locList = db.Locations.ToList();
-                List<dynamic> locations = new List<dynamic>();
-                foreach (var loc in locList)
-                {
-                    dynamic location = new ExpandoObject();
-                    location.LocationName = loc.LocName;
-                    location.LocationID = loc.LocationID;
-                    Area area = db.Areas.Where(z => z.AreaID == loc.AreaID).FirstOrDefault();
-                    location.AreaName = area.ArName;
-                    location.AreaID = loc.AreaID;
-                    Container container = db.Containers.Where(z => z.ContainerID == loc.ContainerID).FirstOrDefault();
-                    location.ContainerName = container.ConName;
-                    location.ContainerID = loc.ContainerID;
-                    Location_Status status = db.Location_Status.Where(z => z.LocationStatusID == loc.LocationStatusID).FirstOrDefault();
-                    location.StatusName = status.LSDescription;
-                    location.StatusID = loc.LocationStatusID;
-                    locations.Add(loc);
-                }
+                /* List<dynamic> locations = new List<dynamic>();
+                 foreach (var loc in locList)
+                 {
+                     dynamic location = new ExpandoObject();
+                     location.LocationName = loc.LocName;
+                     location.LocationID = loc.LocationID;
+                     Area area = db.Areas.Where(z => z.AreaID == loc.AreaID).FirstOrDefault();
+                     location.AreaName = area.ArName;
+                     location.AreaID = loc.AreaID;
+                     Container container = db.Containers.Where(z => z.ContainerID == loc.ContainerID).FirstOrDefault();
+                     location.ContainerName = container.ConName;
+                     location.ContainerID = loc.ContainerID;
+                     Location_Status status = db.Location_Status.Where(z => z.LocationStatusID == loc.LocationStatusID).FirstOrDefault();
+                     location.StatusName = status.LSDescription;
+                     location.StatusID = loc.LocationStatusID;
+                     locations.Add(loc);
+                 }
 
-                toReturn.Locations = locations;
+                 toReturn.Locations = locations;*/
+                toReturn.Locations = locList;
                 
             }
             catch (Exception error)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Something Went Wrong" + error;
             }
 
             return toReturn;
@@ -88,7 +89,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Something Went Wrong: " + error.Message;
             }
 
             return toReturn;
@@ -123,7 +124,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception error)
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Message = "Something Went Wrong " + error.Message;
             }
 
             return toReturn;
@@ -147,7 +148,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Message = "Oops!";
+                toReturn.Message = "Failed to add location";
 
 
             }
@@ -180,7 +181,7 @@ namespace ORDRA_API.Controllers
 
                     db.SaveChanges();
 
-                    toReturn.Message = "Update Done.";
+                    toReturn.Message = "Location Update Successful";
                 }
                 else
                 {
@@ -212,7 +213,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception )
             {
-                toReturn.Error = "Statuses not found";
+                toReturn.Message = "Statuses not found";
             }
             return toReturn;
         }
@@ -232,7 +233,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Statuses not found";
+                toReturn.Message = "Statuses not found";
             }
             return toReturn;
         }
@@ -252,7 +253,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Statuses not found";
+                toReturn.Message = "Statuses not found";
             }
             return toReturn;
         }

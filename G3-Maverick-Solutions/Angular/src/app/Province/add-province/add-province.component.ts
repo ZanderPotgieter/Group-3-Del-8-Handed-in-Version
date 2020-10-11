@@ -4,7 +4,7 @@ import { Province } from '../province';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
-
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-add-province',
@@ -22,10 +22,11 @@ export class AddProvinceComponent implements OnInit {
 
   
 
-  constructor(private provinceService: ProvinceService, private formBuilder: FormBuilder, private router: Router, private fb: FormBuilder ) { };
+  constructor(private provinceService: ProvinceService, private formBuilder: FormBuilder, private router: Router, private fb: FormBuilder, private dialogService: DialogService ) { };
 
   province : Province = new Province();
   responseMessage: string = "Request Not Submitted";
+  provinceNull: boolean = false;
 
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -45,17 +46,28 @@ export class AddProvinceComponent implements OnInit {
 
 addProvince()
 {
-   this.provinceService.addProvince(this.province).subscribe( (res:any)=> 
+  if (this.province.ProvName == null)
   {
-    console.log(res);
-    if(res.Message)
-    {
-      this.responseMessage = res.Message;
-    }
-    alert(this.responseMessage)
-    this.router.navigate(["gps-management"])
-  }) 
-
+    this.provinceNull = true;
+  }
+  else
+  {
+    this.dialogService.openConfirmDialog('Are you sure you want to add the province?')
+    .afterClosed().subscribe(res=> {
+      if(res)
+      {
+        this.provinceService.addProvince(this.province).subscribe( (res:any)=> 
+        {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message)
+          }
+          this.router.navigate(["gps-management"])
+        }) 
+      }
+    })
+  }
 }
 
   getAllProvinces(){

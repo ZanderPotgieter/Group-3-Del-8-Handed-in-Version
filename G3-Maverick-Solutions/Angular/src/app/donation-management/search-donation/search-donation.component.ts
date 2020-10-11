@@ -64,7 +64,7 @@ export class SearchDonationComponent implements OnInit {
       DonAmount: [''],
       DonDate: [''],
       DSDescription: [''],
-       
+      DonationStatusID: [''],
     }); 
     
     this.donationService.getDonationStatuses()

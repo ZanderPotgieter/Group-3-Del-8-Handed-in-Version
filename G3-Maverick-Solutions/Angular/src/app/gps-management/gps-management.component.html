@@ -8,7 +8,7 @@
                 <br>
                 <button style="width: 25%;" (click)="province()">Province</button>
         </div>
-        <br>
+
         <div class="card" *ngIf="showlocation">
             <label style="text-align: center;">Location</label>
             <br>
@@ -18,7 +18,7 @@
             <br>
             <button style="width: 25%;" routerLink="/update-location" type="submit">Update Location</button>                
         </div>
-        <br><br>
+
         <div class="card" *ngIf="showarea">
             <label style="text-align: center;">Area</label>
             <br>
@@ -32,7 +32,7 @@
             
             
         </div>
-        <br><br>
+
         <div class="card" *ngIf="showprovince">
             <label style="text-align: center;">Province </label>
             <br>
@@ -40,7 +40,7 @@
             <br>
             <button style="width: 25%;" routerLink="/search-province" type="submit">Search Province</button>
             <br>
-            <button style="width: 25%;" routerLink="/seatch-province" type="submit">Update Province </button>
+            <button style="width: 25%;" routerLink="/search-province" type="submit">Update Province </button>
             <br>
             <button style="width: 25%;" routerLink="/search-province" type="submit">Remove Province </button>
             

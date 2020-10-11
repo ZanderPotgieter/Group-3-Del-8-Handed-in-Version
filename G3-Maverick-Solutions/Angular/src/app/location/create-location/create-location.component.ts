@@ -9,6 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-create-location',
@@ -18,13 +19,14 @@ import { FormGroup } from '@angular/forms';
 export class CreateLocationComponent implements OnInit {
   http: any;
 
-  constructor(public api: LocationService, private router: Router, private fb: FormBuilder) { }
+  constructor(public api: LocationService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   location : Location = new Location();
   responseMessage: string = "Request Not Submitted";
   angForm: FormGroup;
   statuses: StatusVm[];
   areas: AreaVM[];
   containers: ContainerVm[];
+  locationNull: boolean = false;
 
   ngOnInit(): void {
     /* //this.resetForm();
@@ -65,14 +67,27 @@ export class CreateLocationComponent implements OnInit {
   }
 
   addLocation(){
-    this.api.addLocation(this.location).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
-      this.router.navigate(["gps-management"])
-    })
-
+    if (this.location.AreaID == null || this.location.ContainerID ==null || this.location.LocName == null || this.location.LocationStatusID==null)
+    {
+      this.locationNull = true;
+    }
+    else
+    {
+      this.dialogService.openConfirmDialog("Are you sure you want to add the location? ")
+      .afterClosed().subscribe(res => {
+        if (res)
+        {
+          this.api.addLocation(this.location).subscribe( (res:any)=> {
+            console.log(res);
+            if(res.Message)
+            {
+              this.dialogService.openAlertDialog(res.Message);
+            }
+            this.router.navigate(["gps-management"])
+          })
+        }
+      })
+    }
   }
 
   gotoGPSManagement(){

@@ -7,6 +7,7 @@ import { AreaVM } from './../area-vm';
 import { StatusVm} from './../status-vm'; 
 import { ContainerVm} from './../container-vm'; 
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 
 var inputEnabled = false;
@@ -18,11 +19,12 @@ var inputEnabled = false;
 })
 export class SearchLocationComponent implements OnInit {
 
-  constructor(private api: LocationService, private router: Router, private fb: FormBuilder ) { }
+  constructor(private api: LocationService, private router: Router, private fb: FormBuilder, private dialogService: DialogService ) { }
   location : Location= new Location();
   locations: Location[];
   responseMessage: string = "Request Not Submitted";
   angForm: FormGroup;
+  locationNull : boolean = false;
 
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -84,17 +86,23 @@ export class SearchLocationComponent implements OnInit {
  this.router.navigate(['gps-management']);
   }
 
+  view(location: any)
+  {
+    this.name = location;
+    this.searchLocation();
+  }
+
   gotoUpdate() {
     this.api.searchLocation(this.name).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message == "Record Not Found"){
-      this.responseMessage = res.Message;
-      alert(res.Message);
-      this.showSearch = true;
-      this.showResults = false;
-      this.showResultsEdit = false;
+      if(res.Message != null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+        this.showSearch = true;
+        this.showResults = false;
+        this.showResultsEdit = false;
     
-    }
+      }
       else{
         console.log(res);
           this.location.LocationID = res.LocationID;
@@ -105,6 +113,7 @@ export class SearchLocationComponent implements OnInit {
           this.showSearch = false;
           this.showResults = false;
           this.showResultsEdit = true;
+          this.showViewAll = false;
       }     
     })
   }
@@ -112,14 +121,14 @@ export class SearchLocationComponent implements OnInit {
   searchLocation(){
     this.api.searchLocation(this.name).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Message == "Record Not Found"){
-      this.responseMessage = res.Message;
-      alert(res.Message);
-      this.showSearch = true;
-      this.showResults = false;
-      this.showResultsEdit = false;
+      if(res.Message !=null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+        this.showSearch = true;
+        this.showResults = false;
+        this.showResultsEdit = false;
     
-    }
+      }
       else{
           this.location.LocationID = res.LocationID;
           this.location.LocName = res.LocName;
@@ -129,6 +138,7 @@ export class SearchLocationComponent implements OnInit {
           this.showSearch = false;
           this.showResults = true;
           this.showResultsEdit = false;
+          this.showViewAll = false;
       }     
     })
 
@@ -137,14 +147,14 @@ export class SearchLocationComponent implements OnInit {
   getAll(){
     this.api.getAllLocations().subscribe( (res:any)=> {
       console.log(res);
-      if(res.Error !=null){
-      this.responseMessage = res.Message;
-      alert(res.Message);
-      this.showSearch = true;
-      this.showResults = false;
-      this.showResultsEdit = false;
+      if(res.Message !=null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+        this.showSearch = true;
+        this.showResults = false;
+        this.showResultsEdit = false;
     
-    }
+      }
       else{
         
           /* this.location.LocationID = res.locations.LocationID;
@@ -152,7 +162,7 @@ export class SearchLocationComponent implements OnInit {
           this.location.LocationStatusID = res.Location_Status.LSDescription;
           this.location.AreaID = res.Area.ArName;
           this.location.ContainerID = res.Container.ConName; */
-          this.locations = res;
+          this.locations = res.Locations;
           this.showSearch = false;
           this.showResults = false;
           this.showResultsEdit = false;
@@ -164,12 +174,18 @@ export class SearchLocationComponent implements OnInit {
   }
 
   updateLocation(){
-    this.api.updateLocation(this.location).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
-      this.router.navigate(["gps-management"])
+    this.dialogService.openConfirmDialog('Are you sure you want to update this location?')
+    .afterClosed().subscribe(res => {
+      if(res){
+        this.api.updateLocation(this.location).subscribe( (res:any)=> {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message);
+          }
+          this.router.navigate(["gps-management"])
+        })
+      }
     })
 
   }
@@ -180,6 +196,7 @@ export class SearchLocationComponent implements OnInit {
     this.showButtons = false;
     this.showResults = false;
     this.showResultsEdit = true;
+    this.showViewAll = false;
   
   }
 
@@ -191,6 +208,7 @@ export class SearchLocationComponent implements OnInit {
     this.showSearch = true;
     this.showResults = false;
     this.showResultsEdit = false;
+    this.showViewAll = false;
   }
 
   }

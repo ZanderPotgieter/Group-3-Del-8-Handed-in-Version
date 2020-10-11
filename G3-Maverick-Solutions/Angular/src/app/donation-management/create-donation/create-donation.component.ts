@@ -10,6 +10,7 @@ import { Container } from '../container'
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
+import { DialogService } from '../../shared/dialog.service';
 
 @Component({
   selector: 'app-create-donation',
@@ -17,8 +18,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./create-donation.component.scss']
 })
 export class CreateDonationComponent implements OnInit {
-
-  constructor(private donationService: DonationService, private router: Router, private fb: FormBuilder) { }
+  constructor(private donationService: DonationService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
 
   angForm: FormGroup;
   donation: Donation = new Donation();
@@ -45,9 +45,22 @@ export class CreateDonationComponent implements OnInit {
   name: string;
   surname: string;
 
+  showAddProduct: boolean = false;
+  showSearchSelection: boolean = false;
+  showNameSearch: boolean = false;
+
+
   //donForm: FormGroup;
 
-  
+  useBarcode()
+  {
+
+  }
+
+  useName()
+  {
+
+  }
 
   ngOnInit(): void {
     this.donationService.getDonationStatuses().subscribe(value => {
@@ -64,12 +77,12 @@ export class CreateDonationComponent implements OnInit {
         DrSurname: [''],
         DrEmail: [''],
         DrCell: [''],
-        DonDescription: [''],
-        DonStatus: [''],
-        DonAmount: [''],
-        DonDate: [''],
-        DSDescription: [''],
-        DonationStatusID: [''],
+        DonDescription:['', [Validators.required, Validators.minLength(2),  Validators.pattern('[a-zA-Z ]*')]], 
+        DonStatus: ['', [Validators.required ]],
+        DonAmount:['', [Validators.required, Validators.pattern('[0-9 ]*')]], 
+        DonDate: ['', [Validators.required ]],
+        //DSDescription: [''], 
+        DonationStatusID: ['', [Validators.required ]],
          
       }); 
 

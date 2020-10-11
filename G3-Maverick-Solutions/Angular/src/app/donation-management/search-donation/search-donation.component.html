@@ -156,7 +156,7 @@
 
             <div *ngIf = "showInput" class="divleft">
                 <label>Status</label>
-            <select required class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
+            <select required formControlName="DonationStatusID" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
                 <option value="0">--Select--</option>
                 <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
               </select>
@@ -173,7 +173,6 @@
             <br>
             <label for="Name">Description</label>
             <input type="text" formControlName="DonDescription" class="form-control" [(ngModel)]="donation.DonDescription" id="DonDescription" name="DonDescription" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled"> 
-            <br><br>
         </div>
     </div>
 </div>

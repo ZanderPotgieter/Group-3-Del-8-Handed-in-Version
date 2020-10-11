@@ -6,6 +6,7 @@ import { Province } from '../province';
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 
 @Component({
@@ -15,10 +16,11 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class SearchProvinceComponent implements OnInit {
 
-  constructor(private provinceService: ProvinceService, private router: Router, private fb: FormBuilder ) { }
+  constructor(private provinceService: ProvinceService, private router: Router, private fb: FormBuilder , private dialogService: DialogService) { }
   province : Province = new Province();
   provinces: Province [];
   responseMessage: string = "Request Not Submitted";
+  provinceNull: boolean = false;
 
   angForm: FormGroup;
   showSave: boolean = false;
@@ -60,8 +62,7 @@ export class SearchProvinceComponent implements OnInit {
       console.log(res);
       if(res.Message != null)
       {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -87,8 +88,7 @@ export class SearchProvinceComponent implements OnInit {
       console.log(res);
       if(res.Message != null)
       {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -107,31 +107,41 @@ export class SearchProvinceComponent implements OnInit {
   }
 
   updateProvince(){
-    this.provinceService.updateProvince(this.province).subscribe( (res:any)=> 
-    {
-      console.log(res);
-      if(res.Message)
-      {
-        this.responseMessage = res.Message;
+    this.dialogService.openConfirmDialog('Are you sure you want to update this province?')
+    .afterClosed().subscribe(res => {
+      if (res){
+        this.provinceService.updateProvince(this.province).subscribe( (res:any)=> 
+        {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message)
+          }
+          this.router.navigate(["gps-management"])
+        })
       }
-      alert(this.responseMessage)
-      this.router.navigate(["gps-management"])
     })
 
   }
 
   removeProvince()
   {
-    this.provinceService.removeProvince(this.province.ProvinceID).subscribe( (res:any)=> 
-    {
-      console.log(res);
-      if(res.Message)
+    this.dialogService.openConfirmDialog('Are you sure you want to delete this province?')
+    .afterClosed().subscribe(res => {
+      if (res)
       {
-        this.responseMessage = res.Message;
+        this.provinceService.removeProvince(this.province.ProvinceID).subscribe( (res:any)=> 
+        {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message)
+          }
+          this.router.navigate(["gps-management"])
+        })
       }
-      alert(this.responseMessage)
-      this.router.navigate(["gps-management"])
     })
+    
 
   }
 
@@ -150,7 +160,8 @@ export class SearchProvinceComponent implements OnInit {
     
     this.showSearch = true;
     this.showResults = false; */
-
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed();
     this.router.navigate(["gps-management"])
   }
 

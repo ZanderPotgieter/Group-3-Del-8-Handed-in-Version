@@ -238,7 +238,7 @@ namespace ORDRA_API.Controllers
             toReturn.donations = new ExpandoObject();
             try
             {
-                var donationRecipient = db.Donation_Recipient.Where(x => (x.DrName == name) && (x.DrSurname==surname)).FirstOrDefault();
+                var donationRecipient = db.Donation_Recipient.Where(x => (x.DrName == name) && (x.DrSurname == surname)).FirstOrDefault();
 
                 if (donationRecipient != null)
                 {
@@ -253,10 +253,10 @@ namespace ORDRA_API.Controllers
 
                     List<dynamic> donList = new List<dynamic>();
                     List<Donation> donations = db.Donations.Include(z => z.Donation_Recipient).Include(z => z.Donation_Status).Include(z => z.Donated_Product).Where(z => z.RecipientID == donationRecipient.RecipientID).ToList();
-                   // toReturn = donations
-                    if(donations!=null)
+                    // toReturn = donations
+                    if (donations != null)
                     {
-                      
+
                         foreach (var obj in donations)
                         {
                             dynamic don = new ExpandoObject();
@@ -314,7 +314,7 @@ namespace ORDRA_API.Controllers
             toReturn.donations = new ExpandoObject();
             try
             {
-                var donation = db.Donations.Include(z=>z.Donation_Status).Include(z=>z.Donation_Recipient).Include(z=>z.Donated_Product).Where(z => z.DonationID == ID).FirstOrDefault();
+                var donation = db.Donations.Include(z => z.Donation_Status).Include(z => z.Donation_Recipient).Include(z => z.Donated_Product).Where(z => z.DonationID == ID).FirstOrDefault();
                 var donationRecipient = db.Donation_Recipient.Where(x => x.RecipientID == donation.RecipientID).FirstOrDefault();
 
                 if (donationRecipient != null)
@@ -331,26 +331,26 @@ namespace ORDRA_API.Controllers
                     // toReturn = donations
                     if (donation != null)
                     {
-                            dynamic don = new ExpandoObject();
+                        dynamic don = new ExpandoObject();
                         don.DonationID = donation.DonationID;
-                            don.RecipientID = donation.RecipientID;
-                            don.DonAmount = donation.DonAmount;
-                            don.DonDate = donation.DonDate;
-                            don.DonDescription = donation.DonDescription;
-                            don.DonStatus = donation.Donation_Status.DSDescription;
-                            List<dynamic> prodList = new List<dynamic>();
+                        don.RecipientID = donation.RecipientID;
+                        don.DonAmount = donation.DonAmount;
+                        don.DonDate = donation.DonDate;
+                        don.DonDescription = donation.DonDescription;
+                        don.DonStatus = donation.Donation_Status.DSDescription;
+                        List<dynamic> prodList = new List<dynamic>();
 
-                            foreach (var prodObj in donation.Donated_Product)
-                            {
-                                dynamic prod = new ExpandoObject();
-                                prod.DPQuantity = prodObj.DPQuantity;
-                                prod.ProductID = prodObj.ProductID;
-                                prod.ProdName = prodObj.Product.ProdName;
-                                prodList.Add(prod);
-                            }
-                            //don.Products = prodList;
-                            
-                        
+                        foreach (var prodObj in donation.Donated_Product)
+                        {
+                            dynamic prod = new ExpandoObject();
+                            prod.DPQuantity = prodObj.DPQuantity;
+                            prod.ProductID = prodObj.ProductID;
+                            prod.ProdName = prodObj.Product.ProdName;
+                            prodList.Add(prod);
+                        }
+                        //don.Products = prodList;
+
+
                         toReturn.donation = don;
                         toReturn.products = prodList;
                     }
@@ -421,7 +421,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                var donationRecipient = db.Donation_Recipient.Where(x => (x.DrName == name) && (x.DrSurname == surname) ).FirstOrDefault();
+                var donationRecipient = db.Donation_Recipient.Where(x => (x.DrName == name) && (x.DrSurname == surname)).FirstOrDefault();
 
                 if (donationRecipient != null)
                 {
@@ -632,15 +632,52 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch 
+            catch (Exception )
             {
-                toReturn.Error = "Delete Unsuccesful";
+                toReturn.Message = "Failed to delete the donation" ;
             }
 
             return toReturn;
         }
 
 
-        
+        [HttpGet]
+        [Route("searchProduct")]
+        public object searchProduct(int productID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Failed to add the product";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("addProduct")]
+        public object addProduct(int productID )
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                
+            }
+            catch(Exception)
+            {
+                toReturn.Message = "Failed to add the product";
+            }
+
+            return toReturn;
+                 
+        }
+
     }
 }

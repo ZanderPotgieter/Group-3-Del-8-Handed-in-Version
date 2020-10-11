@@ -12,17 +12,13 @@
         <table>
             <tr>
                 <th>Location name</th>
-                <th>Area name</th>
-                <th>Container name</th>
-                <th>Status</th>
                 <th>Action</th>
             </tr>
 
 
             <tr *ngFor="let location of locations">
                 <td>{{location.LocName}}</td>
-                <!-- <td>{{location.AreaName}}</td> -->
-                <th><button (click)="view(province.ProvName)">View</button></th>
+                <th><button (click)="view(location.LocName)">View</button></th>
             
             </tr>
             

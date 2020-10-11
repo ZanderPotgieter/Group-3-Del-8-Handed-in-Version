@@ -95,7 +95,7 @@
         </div>
     
         <br><br>
-        <form #form1='ngForm' class="mb-4" autocomplete="off"  >
+        
         <div class="card" *ngIf = "showAddDon">
             <label > <span style="white-space: nowrap;">Donation Details</span></label>
             <br>
@@ -111,7 +111,7 @@
             <br>
             <span style="color:red" *ngIf="angForm.get('DonationStatusID').errors && (angForm.get('DonationStatusID').touched || angForm.get('DonationStatusID').dirty)">
                 <span *ngIf="angForm.get('DonationStatusID').errors.required">Status is required.</span>
-            </span>
+            </span> 
               
               <br>
 
@@ -120,22 +120,21 @@
             <br>
             <span style="color:red" *ngIf="angForm.get('DonDate').errors && (angForm.get('DonDate').touched || angForm.get('DonDate').dirty)">
                 <span *ngIf="angForm.get('DonDate').errors.required">Date is required.</span>
-             </span>
+             </span> 
 
             <br>
 
             <label for="Name">Donated Amount in R</label>
-            <input type = "number" formControlName="DonAmount" class="form-control" [(ngModel)]="donation.DonAmount" name="DonAmount" id="DonAmount" required > 
+            <input type = "number" formControlName="DonAmount" class="form-control" [(ngModel)]="donation.DonAmount" name="DonAmount" id="DonAmount" pattern="[0-9 ]*"  required > 
             <br>
             <span style="color:red" *ngIf="angForm.get('DonAmount').errors && (angForm.get('DonAmount').touched || angForm.get('DonAmount').dirty)">
-                <span *ngIf="angForm.get('DonAmount').errors.required">Description is required.</span>
+                <span *ngIf="angForm.get('DonAmount').errors.required">Amount is required.</span>
                 <span *ngIf="angForm.get('DonAmount').errors.pattern">Only numbers</span>
-            </span>
-
+            </span> 
 
             <br>
 
-            <label for="Name">Description</label>
+          <label for="Name">Description</label>
             <input type = "text" formControlName="DonDescription" class="form-control" [(ngModel)]="donation.DonDescription" name="DonDescription" id="DonDescription"  pattern="[a-zA-Z ]*" required > 
             <br>
             <span style="color:red" *ngIf="angForm.get('DonDescription').errors && (angForm.get('DonDescription').touched || angForm.get('DonDescription').dirty)">
@@ -143,7 +142,7 @@
                 <span *ngIf="angForm.get('DonDescription').errors.minlength">Description must be greater than 2 characters</span>
                 <span *ngIf="angForm.get('DonDescription').errors.pattern">Only text characters.</span>
             </span>
-
+ 
             <br>
 
             <br><br>
@@ -151,51 +150,42 @@
 
             <br>
             <div class="divleft" >
-                <button type="submit" (click)="addDonation()"  [disabled]="form1.invalid">Save</button>
+                <button type="submit" (click)="addDonation()" >Save</button>
                 <button type="button" (click)="cancel()">Cancel</button>
             </div>
-
-            <!--
-            <label><span style="white-space: nowrap;">Donated Products</span></label>
-            <div class="divleft">
-            <label class="subheadinglabel"> Please add the donated products (if any) </label>
-            <br>
-
-            <button type="submit"  routerLink="/search-donated-product" >Add donated Products</button>
-            <br>
-
-            <label class="subheadinglabel"> Please select the container that donated the product </label>
-            <label>Container</label>
-            <select required>
-                <option value="0">--Select--</option>
-                <option [value]="type" *ngFor="let con of container">{{con.ConName}}</option>
-              </select>
-              <br>
-            
-             <br>
-             <table>
-                <th>Product name</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Action</th>
-
-                <tr>
-                    <td>top white m/meal 50kg</td>
-                    <td>50kg mealie meal by top white </td>
-                    <td>40</td>
-                    <td><button type="submit" ><span style="font-size: 80%;"> Remove</span></button></td>
-                </tr>
-                
-            </table>
-            
-            
-           
-            </div>  -->
         </div>
-        </form>
-    </form>
+
+        <div class="card" *ngIf = "showAddProduct">
+            <div *ngIf="showSearchSelection" class="card"> 
+
+                <div class="divleft" style="padding: 2px 2px;">
+                  <label class="subheadinglabel" >Add Products:</label>
+                </div>
+                <div class="divleft" >
+                  <mat-radio-group  aria-label="Select Option">
+                    <mat-radio-button  value = 1 (click)="useBardode()" >Use Barcode</mat-radio-button>
+                    <mat-radio-button value = 2 (click)="useName()" >Use Product Name</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+            </div>
+
+
+            <div *ngIf="showNameSearch" class="card">
+                <div class="divleft"> 
+                    <label class="subheadinglabel" >Search Product:</label>
+                    <label>Product </label>
+                    <select required formControlName="Prod" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
+                        <option value="0">--Select--</option>
+                        <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
+                    </select>
+                </div>
+            </div> 
+
+
+        </div>
+     </form> 
 
     <router-outlet></router-outlet>
-</body>
+ </body>
 
 

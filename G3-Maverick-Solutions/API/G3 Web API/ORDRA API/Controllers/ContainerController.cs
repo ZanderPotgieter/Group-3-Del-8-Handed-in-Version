@@ -201,9 +201,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Message = "Delete Restricted";
             }
 
             return toReturn;

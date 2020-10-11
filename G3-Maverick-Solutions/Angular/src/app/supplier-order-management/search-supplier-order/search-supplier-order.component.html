@@ -14,7 +14,9 @@
           <mat-radio-button value = 4 (click)="showDate()" >By Date</mat-radio-button>
           </mat-radio-group>
           <br>
+          <div class="divleft">
           <button type="submit" (click)="Cancel()">Cancel</button>
+        </div>
         </div>
 
         
@@ -67,10 +69,10 @@
 
    <div *ngIf="showList">
    <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
-    <th style="width: 20%;padding: 0px">Date</th>
-    <th style="width: 30%;padding: 0px">Supplier</th>
-    <th style="width: 20%; padding: 0px">Status</th>
-    <th style="width: 20%; padding: 0px"></th>
+    <th style="padding: 1px">Date</th>
+    <th style="width: 35%;padding: 1px">Supplier</th>
+    <th style="padding: 1px">Status</th>
+    <th style="padding: 1px"></th>
 
 <tr *ngFor="let item of supplierOrders; index as ndx">
     <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
@@ -96,18 +98,16 @@
  
 
   <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
-   <th style="width: 20%;padding: 0px">Product</th>
-   <th style="width: 30%;padding: 0px">Description</th>
-   <th style="width: 20%; padding: 0px">Ordered</th>
-   <th style="width: 20%; padding: 0px">Received</th>
+   <th style="padding: 1px">Product</th>
+   <th style="width: 35%;padding: 1px">Description</th>
+   <th style="padding: 1px">Ordered</th>
+   <th style="padding: 1px">Received</th>
 
 <tr *ngFor="let item of orderproducts; index as ndx">
    <td>{{item.ProdName}}</td>
    <td>{{item.ProdDescription}}</td>
    <td>{{item.SOPQuantityOrdered}}</td>
    <td>{{item.SOPQuantityRecieved}}</td>
-
-   <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
 
 </tr>
 

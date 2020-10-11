@@ -168,7 +168,7 @@ export class SearchSupplierOrderComponent implements OnInit {
       this.showError = true;
     }
     else{
-    this.api.getSupplierOrdersByContainer(this.selectedStatusID).subscribe((res:any) =>{
+    this.api.getSupplierOrdersByStatus(this.selectedStatusID).subscribe((res:any) =>{
       console.log(res)
       if(res.Error){
         this.dialogService.openAlertDialog(res.Error)
@@ -176,12 +176,8 @@ export class SearchSupplierOrderComponent implements OnInit {
       else{
         this.supplierOrders = res.supplierOrders;
 
-        this.showContainer = false;
-        this.showStatuses = false;
         this.showList = true;
         this.showdate = false;
-        this.showOrder = false;
-        this.showError = false;
       }
 
     })}
@@ -229,7 +225,6 @@ export class SearchSupplierOrderComponent implements OnInit {
           this.showContainer = false;
           this.showStatuses = false;
           this.showList = false;
-          this.showdate = false;
           this.showOrder = true;
           this.showError = false;
         }
@@ -264,9 +259,26 @@ export class SearchSupplierOrderComponent implements OnInit {
           this.showError = false;
     
   }
+
+ 
+  
   Cancel(){
-    this.router.navigate(["search-supplier-order"])
-  }
+    this.dialogService.openConfirmDialog('Are You Sure You Want to Cancel This Order?')
+    .afterClosed().subscribe(res => {
+      if(res){
+    this.api.cancelSupplierOrder(this.selectedOrderID).subscribe((res:any) =>{
+      console.log(res);
+      if(res.Error){
+        this.dialogService.openAlertDialog(res.Error)
+      }
+      else{
+        this.dialogService.openAlertDialog(res.Message)
+        this.router.navigate(["search-supplier-order"])
+      }
+    })}
+      
+  })
+}
 
 
 }

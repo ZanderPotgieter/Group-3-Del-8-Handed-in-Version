@@ -32,9 +32,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Product_Category.ToList();
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -68,9 +68,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -127,9 +127,9 @@ namespace ORDRA_API.Controllers
                 }
             }
 
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -192,15 +192,24 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Product_Category.Remove(objectProductCategory);
-                    db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    List<Product> products = db.Products.Where(x => x.ProductCategoryID == id).ToList();
+                    if(products.Count == 0)
+                    {
+                        db.Product_Category.Remove(objectProductCategory);
+                        db.SaveChanges();
+                        toReturn.Message = "Delete Successful";
+                    }
+                    else
+                    {
+                        toReturn.Message = "Product Category Delete Restricted";
+                    }
+                    
                 }
 
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn.Message = "Delete Unsuccessful";
             }
 
             return toReturn;

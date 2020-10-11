@@ -51,8 +51,9 @@ namespace ORDRA_API.Controllers
                 toReturn = db.Suppliers.ToList();
             }
             catch (Exception)
+            catch
             {
-                toReturn = "Something went wrong";
+                toReturn.Message = "Search Interrupted.Retry";
             }
             return toReturn;
         }
@@ -74,7 +75,7 @@ namespace ORDRA_API.Controllers
                 
                 if (objectCreditorPayment == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Creditor Payment Not Found";
                 }
                 else
                 {
@@ -83,9 +84,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch
             {
-                toReturn = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Search Interrupted.Retry" ;
             }
 
             return toReturn;
@@ -103,9 +104,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Creditor_Payment.ToList();
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Something Went Wrong" + error;
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;

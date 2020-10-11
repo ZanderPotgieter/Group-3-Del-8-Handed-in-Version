@@ -196,15 +196,25 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Donation_Recipient.Remove(objectDonationRecipient);
-                    db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    List<Donation> donation = db.Donations.Where(x => x.Donation_Recipient.RecipientID == id).ToList();
+                    if (donation.Count == 0)
+                    {
+
+                        db.Donation_Recipient.Remove(objectDonationRecipient);
+                        db.SaveChanges();
+                        toReturn.Message = "Delete Successful";
+                    }
+                    else{
+
+                        toReturn.Message = "Donation Recepient Delete Restricted";
+                    }
+
                 }
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn = "Something Went Wrong " + error.Message;
+                toReturn = "Delete Unsuccesful";
             }
 
             return toReturn;

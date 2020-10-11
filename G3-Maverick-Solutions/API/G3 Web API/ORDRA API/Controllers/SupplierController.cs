@@ -251,19 +251,33 @@ namespace ORDRA_API.Controllers
 
                     if (objectSupplier == null)
                     {
-                        toReturn.Message = "Record Not Found";
+                        toReturn.Message = "Supplier Record Not Found";
                     }
                     else
                     {
+                    Supplier_Order order = db.Supplier_Order.Where(x => x.SupplierID == id).FirstOrDefault();
+                    Product product = db.Products.Where(x => x.SupplierID == id).FirstOrDefault();
+                    if(product == null || order == null)
+                    {
+
                         db.Suppliers.Remove(objectSupplier);
                         db.SaveChanges();
                         toReturn.Message = "Delete Successful";
+
+                    }
+                    else
+                    {
+                        toReturn.Message = "Delete Restricted";
                     }
 
+                  
+
                 }
-                catch (Exception error)
+
+                }
+                catch 
                 {
-                    toReturn = "Something Went Wrong " + error.Message;
+                    toReturn.Message = "Delete Resticted";
                 }
 
                 return toReturn;
@@ -305,7 +319,7 @@ namespace ORDRA_API.Controllers
 
 
             }
-            catch (Exception)
+            catch 
             {
                 toReturn.Message = "Linking Supplier to Product UnSuccsessful";
 

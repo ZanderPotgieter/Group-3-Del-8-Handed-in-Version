@@ -87,9 +87,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception error)
+            catch 
             {
-                toReturn.Message = "Something Went Wrong: " + error.Message;
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;
@@ -122,9 +122,9 @@ namespace ORDRA_API.Controllers
                 }
             }
 
-            catch (Exception error)
+            catch
             {
-                toReturn.Message = "Something Went Wrong " + error.Message;
+                toReturn.Message = "Search Interrupted.Retry";
             }
 
             return toReturn;

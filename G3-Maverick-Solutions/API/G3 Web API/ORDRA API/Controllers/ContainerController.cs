@@ -195,15 +195,52 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Containers.Remove(objectContainer);
-                    db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    User user = db.Users.Where(x => x.ContainerID == id).FirstOrDefault();
+                    Container_Product  con = db.Container_Product.Where(x => x.ContainerID == id).FirstOrDefault();
+                    Sale sale = db.Sales.Where(x => x.ContainerID == id).FirstOrDefault();
+                    Customer_Order order = db.Customer_Order.Where(x => x.ContainerID == id).FirstOrDefault();
+                    Supplier_Order suporder = db.Supplier_Order.Where(x => x.ContainerID == id).FirstOrDefault();
+                    Product_Backlog prod = db.Product_Backlog.Where(x => x.ContainerID == id).FirstOrDefault();
+                   if ( user == null && con == null && sale == null && order == null && suporder == null && prod == null)
+                    {
+                        List<Manager> managers = db.Managers.ToList();
+                        if (managers.Count != 0)
+                        {
+                            foreach(Manager man in managers)
+                            {
+                                List<Container> containers = man.Containers.ToList();
+                                foreach(Container container in containers)
+                                {
+                                    if (container.ContainerID == id)
+                                    {
+                                        objectContainer.InActive = true;
+                                        db.SaveChanges();
+                                        toReturn.Message = "Delete Restricted But Container Set to Inactive";
+                                        return toReturn;
+                                    }
+                                }
+                            }
+                        }
+                        db.Containers.Remove(objectContainer);
+                        db.SaveChanges();
+                        toReturn.Message = "Delete Successful";
+
+                    }
+                    else
+                    {
+                        objectContainer.InActive = true;
+                        db.SaveChanges();
+                        toReturn.Message = "Delete Restricted But Container Set to Inactive";
+                        return toReturn;
+                    }
+
+                   
                 }
 
             }
             catch
             {
-                toReturn.Message = "Delete Restricted";
+                toReturn.Message = "Delete Unsuccesful";
             }
 
             return toReturn;

@@ -251,7 +251,7 @@ namespace ORDRA_API.Controllers
 
                     if (objectSupplier == null)
                     {
-                        toReturn.Message = "Record Not Found";
+                        toReturn.Message = "Supplier Record Not Found";
                     }
                     else
                     {
@@ -267,10 +267,10 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-
+                        toReturn.Message = "Delete Restricted";
                     }
 
-                    toReturn.Message = "Delete Restricted";
+                  
 
                 }
 

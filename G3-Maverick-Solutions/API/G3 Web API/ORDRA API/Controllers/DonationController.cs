@@ -634,7 +634,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception )
             {
-                toReturn.Message = "Failed to delete the donation" ;
+                toReturn.Message = "Delete Unsuccessful";
             }
 
             return toReturn;

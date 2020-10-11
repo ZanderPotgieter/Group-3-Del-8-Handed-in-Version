@@ -21,7 +21,7 @@ namespace ORDRA_API.Controllers
         //database initializing
         OrdraDBEntities db = new OrdraDBEntities();
 
-        //Getting all Provinces
+        //Getting all Statusses
         [HttpGet]
         [Route("getAllAreaStatus")]
         public object getAllAreaStatus()
@@ -42,44 +42,47 @@ namespace ORDRA_API.Controllers
 
         }
 
-        //Getting all products
+        //Getting all Areas
         [HttpGet]
         [Route("getAllAreas")]
         public object getAllAreas()
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            toReturn.Areas = new List<Area>();
 
             try
             {
-
-                List<Area> areas = db.Areas.Include(x => x.Area_Status).Include(x => x.Province).ToList();
-                List<Area> areasList = new List<Area>();
-                foreach (var item in areas)
+                List<Area> AreaList = db.Areas.ToList();
+                List<dynamic> areas = new List<dynamic>();
+                foreach (var ar in AreaList)
                 {
-                    Area area = new Area();
-                    area.AreaID = item.AreaID;
-                    area.ArName = item.ArName;
-                    area.ArPostalCode = item.ArPostalCode;
-                    area.AreaStatusID = item.AreaStatusID;
-                    area.ProvinceID = item.ProvinceID;
-                    areasList.Add(area);
-
+                    dynamic area = new ExpandoObject();
+                    area.ArName = ar.ArName;
+                    area.ArPostalCode = ar.ArPostalCode;
+                    area.AreaID = ar.AreaID;
+                    Province province = db.Provinces.Where(z => z.ProvinceID == ar.ProvinceID).FirstOrDefault();
+                    area.ProvName = province.ProvName;
+                    area.ProvinceID = province.ProvinceID;
+                    Area_Status status = db.Area_Status.Where(z => z.AreaStatusID == ar.AreaStatusID).FirstOrDefault();
+                    area.Status = status.ASDescription;
+                    area.AreaStatusID = ar.AreaStatusID;
+                    areas.Add(ar);
                 }
 
-                toReturn.Products = areasList;
+                toReturn.Locations = areas;
+
             }
-            catch
+            catch (Exception error)
             {
-                toReturn.Message = "Search interrupted. Retry";
+                toReturn.Error = "Something Went Wrong" + error;
             }
 
             return toReturn;
 
         }
 
-        //Getting Creditor by id
+
+        //Getting Area by ID
         [HttpGet]
         [Route("getAreaByID/{id}")]
 
@@ -113,138 +116,107 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
-        //Search Employee Using Thier Name And Surname
+        //Search Area
         [HttpGet]
         [Route("searchArea")]
         public object searchArea(string name)
         {
+
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            toReturn.area = new ExpandoObject();
-
 
             try
             {
-                Area area = db.Areas.Where(x => x.ArName == name).FirstOrDefault();
-                Area_Status stat = db.Area_Status.Where(x => x.AreaStatusID == area.AreaStatusID).FirstOrDefault();
-                Province prov = db.Provinces.Where(x => x.ProvinceID == area.ProvinceID).FirstOrDefault();
+                //Search Location in database
+                var Area = db.Areas.Include(z => z.Area_Status).Include(z => z.Province).Where(x => x.ArName == name).FirstOrDefault();
 
-                if (area != null)
+                if (Area != null)
                 {
 
-                    //Set User Details To Return Object
-                    dynamic areaDetails = new ExpandoObject();
-                    areaDetails.AreaID = area.AreaID;
-                    areaDetails.ArName = area.ArName;
-                    areaDetails.ArPostalCode = area.ArPostalCode;
-                    areaDetails.ProvinceID = area.ProvinceID;
-                    areaDetails.AreaStatusID = area.AreaStatusID;
-                    areaDetails.Province = prov;
-                    areaDetails.Area_Status = stat;
-                    toReturn.area = areaDetails;
-
+                    toReturn = Area;
                 }
                 else
                 {
-                    toReturn.Error = "User Record Not Found";
+
+                    toReturn.Message = "Area not found. Please check input criteria.";
+
                 }
-
-
             }
-            catch (Exception)
+
+            catch (Exception error)
             {
-                toReturn.Error = "Not Found";
+                toReturn.Message = "Something Went Wrong " + error.Message;
             }
 
             return toReturn;
         }
 
-        //add product
-        [HttpPut]
-        [Route("AddArea")]
-        public object AddArea(Area newArea)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
 
-
-            try
-            {
-                //get category for product
-                Area_Status stat = db.Area_Status.Where(x => x.AreaStatusID == newArea.AreaStatusID).FirstOrDefault();
-                Province prov = db.Provinces.Where(x => x.ProvinceID == newArea.ProvinceID).FirstOrDefault();
-                if (prov != null & stat != null)
-                {
-
-
-                    //save new product
-                    Area addArea = new Area();
-                    addArea.ArName = newArea.ArName;
-                    addArea.ArPostalCode = newArea.ArPostalCode;
-                    addArea.AreaStatusID = stat.AreaStatusID;
-                    addArea.ProvinceID = prov.ProvinceID;
-                    addArea.Province = prov;
-                    addArea.Area_Status = stat;
-                    db.Areas.Add(addArea);
-                    db.SaveChanges();
-
-                
-                    toReturn.Message = "Add Area Succsessful";
-                }
-                else
-                {
-                    toReturn.Message = "Add Area UnSuccsessful: Select a Province and Status";
-                }
-
-            }
-            catch (Exception)
-            {
-                toReturn.Message = "Add Area UnSuccsessful";
-
-            }
-            return toReturn;
-        }
-
-        //UPDATE product
+        //Add Area
         [HttpPost]
-        [Route("updateArea")]
-        public object updateArea(Area updateArea)
+        [Route("addArea")]
+        public object addArea(Area newArea)
         {
+
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
 
-
             try
             {
-                //get category for product
-                Area_Status stat = db.Area_Status.Where(x => x.AreaStatusID == updateArea.AreaStatusID).FirstOrDefault();
-                Province prov = db.Provinces.Where(x => x.ProvinceID == updateArea.ProvinceID).FirstOrDefault();
-
-                //save new product
-                Area addArea = db.Areas.Where(x => x.AreaID == updateArea.AreaID).FirstOrDefault();
-                if (addArea != null)
-                {
-                    addArea.ArName = updateArea.ArName;
-                    addArea.ArPostalCode = updateArea.ArPostalCode;
-                    addArea.AreaStatusID = stat.AreaStatusID;
-                    addArea.ProvinceID = prov.ProvinceID;
-                    addArea.Area_Status = stat;
-                    addArea.Province = prov;
-                    db.SaveChanges();
-
-                    toReturn.Message = "Area Update Succsessful";
-                }
-                else
-                {
-                    toReturn.Message = "Area Not Found";
-                }
-
+                db.Areas.Add(newArea);
+                db.SaveChanges();
+                toReturn.Message = "The Area has been added successfully.";
             }
             catch (Exception)
             {
-                toReturn.Message = "Area Update UnSuccsessful";
+                toReturn.Message = "Failed to add the Area";
+
 
             }
+
+            return toReturn;
+
+
+        }
+
+        //Update Area
+        [HttpPut]
+        [Route("updateArea")]
+        public object updateArea(Area AreaUpdate)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            Area objectArea = new Area();
+            dynamic toReturn = new ExpandoObject();
+            var id = AreaUpdate.AreaID;
+
+            try
+            {
+                objectArea = db.Areas.Where(x => x.AreaID == id).FirstOrDefault();
+                if (objectArea != null)
+                {
+                    objectArea.ArName = AreaUpdate.ArName;
+                    objectArea.AreaStatusID = AreaUpdate.AreaStatusID;
+                    objectArea.ProvinceID = AreaUpdate.ProvinceID;
+                    objectArea.ArPostalCode = AreaUpdate.ArPostalCode;
+
+                    db.SaveChanges();
+
+                    toReturn.Message = AreaUpdate.ArName + " has been successfully updated.";
+                }
+                else
+                {
+                    toReturn.Message = "Record Not Found";
+                }
+            }
+
+            catch (Exception)
+            {
+                toReturn.Message = "Update not successful.";
+
+            }
+
+
             return toReturn;
         }
 

@@ -50,7 +50,7 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Suppliers.ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
                 toReturn = "Something went wrong";
             }

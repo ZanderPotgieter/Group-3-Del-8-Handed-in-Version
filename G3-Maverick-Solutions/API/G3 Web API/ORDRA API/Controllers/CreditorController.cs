@@ -140,7 +140,7 @@ namespace ORDRA_API.Controllers
                     addCred.CredAccount = creditor.CredAccount;
                     addCred.CredType = creditor.CredType;
                     addCred.CredBranch = creditor.CredBranch;
-                    addCred.CredAccountBalance = creditor.CredAccountBalance;
+                    addCred.CredAccountBalance = 0;
                     addCred.SupplierID = creditor.SupplierID;
                     //addCred.Supplier = sup;
                     db.Creditors.Add(addCred);

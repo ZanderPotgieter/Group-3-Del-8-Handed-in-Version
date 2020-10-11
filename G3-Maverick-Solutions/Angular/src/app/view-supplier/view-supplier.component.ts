@@ -6,6 +6,7 @@ import {Product} from 'src/app/product-management/product';
 import {SupplierService} from '../supplier-management/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { DialogService } from '../shared/dialog.service';
 
 var inputEnabled = false;
 
@@ -17,7 +18,7 @@ var inputEnabled = false;
 export class ViewSupplierComponent implements OnInit {
  
 
-  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   supForm: FormGroup;
   supplier : Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
@@ -50,7 +51,7 @@ export class ViewSupplierComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(this.responseMessage)}
         else{
       this.suppliers = res;
       
@@ -67,7 +68,7 @@ export class ViewSupplierComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
           this.supplier = res.supplier;
           this.products = res.products;
@@ -86,19 +87,12 @@ export class ViewSupplierComponent implements OnInit {
     this.api.searchSupplier(this.name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);;
+      //alert(this.responseMessage)
+    }
       else{
-          this.supplier.SupplierID = res.SupplierID;
-          this.supplier.SupName = res.SupName;
-          this.supplier.SupCell = res.SupCell;
-          this.supplier.SupEmail = res.SupEmail;
-          this.supplier.SupStreetNr = res.SupStreetNr;
-          this.supplier.SupStreet = res.SupStreet;
-          this.supplier.SupCode = res.SupCode;
-          this.supplier.SupSuburb = res.SupSuburb;
-
-          this.products = res.products;
+        this.supplier = res.supplier;
+        this.products = res.products;
 
           
       this.showSearch = false;
@@ -112,13 +106,18 @@ export class ViewSupplierComponent implements OnInit {
   }
 
   updateSupplier(){
+    this.dialogService.openConfirmDialog('Are you sure you want to update this supplier?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.updateSupplier(this.supplier).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);}
+      //alert(this.responseMessage)
       this.router.navigate(["supplier-management"])
     })
+  }
+})
 
   }
 
@@ -127,7 +126,7 @@ export class ViewSupplierComponent implements OnInit {
       console.log(res);
       if(res.Message){
       this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+      this.dialogService.openAlertDialog(this.responseMessage)
       this.router.navigate(["supplier-management"])
     })
 

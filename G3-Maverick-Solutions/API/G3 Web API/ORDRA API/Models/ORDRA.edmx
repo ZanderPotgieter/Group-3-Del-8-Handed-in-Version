@@ -402,6 +402,7 @@
           </Key>
           <Property Name="SupplierOrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SupplierID" Type="int" />
+          <Property Name="ContainerID" Type="int" />
           <Property Name="SupplierOrderStatusID" Type="int" />
           <Property Name="SODate" Type="date" />
         </EntityType>
@@ -412,7 +413,8 @@
           </Key>
           <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="SupplierOrderID" Type="int" Nullable="false" />
-          <Property Name="SOPQuantity" Type="int" />
+          <Property Name="SOPQuantityOrdered" Type="int" />
+          <Property Name="SOPQuantityRecieved" Type="int" />
         </EntityType>
         <EntityType Name="Supplier_Order_Status">
           <Key>
@@ -1056,6 +1058,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SOContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Supplier_Order" Type="Self.Supplier_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Supplier_Order">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SOPProduct">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Supplier_Order_Product" Type="Self.Supplier_Order_Product" Multiplicity="*" />
@@ -1446,6 +1460,10 @@
             <End Role="Container" EntitySet="Container" />
             <End Role="Sale" EntitySet="Sale" />
           </AssociationSet>
+          <AssociationSet Name="FK_SOContainer" Association="Self.FK_SOContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Supplier_Order" EntitySet="Supplier_Order" />
+          </AssociationSet>
           <AssociationSet Name="FK_SOPProduct" Association="Self.FK_SOPProduct">
             <End Role="Product" EntitySet="Product" />
             <End Role="Supplier_Order_Product" EntitySet="Supplier_Order_Product" />
@@ -1545,6 +1563,7 @@
           <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOContainer" FromRole="Container" ToRole="Marked_Off" />
           <NavigationProperty Name="Product_Backlog" Relationship="OrdraDBModel.FK_PBContainer" FromRole="Container" ToRole="Product_Backlog" />
           <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STakeContainer" FromRole="Container" ToRole="Stock_Take" />
+          <NavigationProperty Name="Supplier_Order" Relationship="OrdraDBModel.FK_SOContainer" FromRole="Container" ToRole="Supplier_Order" />
         </EntityType>
         <EntityType Name="Container_Product">
           <Key>
@@ -1964,6 +1983,8 @@
           <NavigationProperty Name="Supplier" Relationship="Self.FK_SOSupplier" FromRole="Supplier_Order" ToRole="Supplier" />
           <NavigationProperty Name="Supplier_Order_Product" Relationship="Self.FK_SOPSupplierOrder" FromRole="Supplier_Order" ToRole="Supplier_Order_Product" />
           <NavigationProperty Name="Supplier_Order_Status" Relationship="Self.FK_SOStatus" FromRole="Supplier_Order" ToRole="Supplier_Order_Status" />
+          <Property Name="ContainerID" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_SOContainer" FromRole="Supplier_Order" ToRole="Container" />
         </EntityType>
         <EntityType Name="Supplier_Order_Product">
           <Key>
@@ -1972,9 +1993,10 @@
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="SupplierOrderID" Type="Int32" Nullable="false" />
-          <Property Name="SOPQuantity" Type="Int32" />
           <NavigationProperty Name="Product" Relationship="Self.FK_SOPProduct" FromRole="Supplier_Order_Product" ToRole="Product" />
           <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOPSupplierOrder" FromRole="Supplier_Order_Product" ToRole="Supplier_Order" />
+          <Property Name="SOPQuantityOrdered" Type="Int32" />
+          <Property Name="SOPQuantityRecieved" Type="Int32" />
         </EntityType>
         <EntityType Name="Supplier_Order_Status">
           <Key>
@@ -2919,6 +2941,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Stock_Take" EntitySet="Stock_Take" />
           </AssociationSet>
+          <AssociationSet Name="FK_SOContainer" Association="OrdraDBModel.FK_SOContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Supplier_Order" EntitySet="Supplier_Order" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Stock_Take">
           <Key>
@@ -3038,6 +3064,18 @@
             </Principal>
             <Dependent Role="Stock_Take">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SOContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Supplier_Order" Role="Supplier_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Supplier_Order">
+              <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3448,6 +3486,7 @@
           <EntitySetMapping Name="Supplier_Order">
             <EntityTypeMapping TypeName="OrdraDBModel.Supplier_Order">
               <MappingFragment StoreEntitySet="Supplier_Order">
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="SupplierOrderID" ColumnName="SupplierOrderID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="SupplierOrderStatusID" ColumnName="SupplierOrderStatusID" />
@@ -3458,9 +3497,10 @@
           <EntitySetMapping Name="Supplier_Order_Product">
             <EntityTypeMapping TypeName="OrdraDBModel.Supplier_Order_Product">
               <MappingFragment StoreEntitySet="Supplier_Order_Product">
+                <ScalarProperty Name="SOPQuantityRecieved" ColumnName="SOPQuantityRecieved" />
+                <ScalarProperty Name="SOPQuantityOrdered" ColumnName="SOPQuantityOrdered" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="SupplierOrderID" ColumnName="SupplierOrderID" />
-                <ScalarProperty Name="SOPQuantity" ColumnName="SOPQuantity" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

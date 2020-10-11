@@ -160,6 +160,7 @@
                 <option value="0">--Select--</option>
                 <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
               </select>
+              <br>
 
                 <label for="date">Donation Date </label>
                 <input type="date" formControlName="DonDate" class="form-control" [(ngModel)]="donation.DonDate" id="DonDate" name="DonDate" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">

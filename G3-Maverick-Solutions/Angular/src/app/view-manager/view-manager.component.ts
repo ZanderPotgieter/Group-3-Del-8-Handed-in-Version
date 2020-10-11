@@ -10,7 +10,7 @@ import {ManagerService} from '../manager-management/manager.service';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
-
+import { DialogService } from '../shared/dialog.service';
 @Component({
   selector: 'app-view-manager',
   templateUrl: './view-manager.component.html',
@@ -18,7 +18,7 @@ import { Validators } from '@angular/forms';
 })
 export class SearchManagerComponent implements OnInit {
 
-  constructor(private api:ManagerService,private router: Router, private fb: FormBuilder) { }
+  constructor(private api:ManagerService,private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   allowEdit:boolean = false;
   manager: Manager = new Manager();
   user: User = new User();
@@ -98,7 +98,7 @@ export class SearchManagerComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(this.responseMessage)}
         else{
         //Get Manager Details
         this.manager.ManagerID = res.manager.ManagerID;
@@ -109,7 +109,10 @@ export class SearchManagerComponent implements OnInit {
         this.manager.ManNextOfKeenCell = res.manager.ManNextOfKeenCell;
         this.manager.Containers =  res.Containers;
 
+        if(res.containersManaged != null)
+        {
           this.selectedContainers = res.containersManaged;
+        }
         
 
         //Get User Details
@@ -142,7 +145,9 @@ export class SearchManagerComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(this.responseMessage);
+       // alert(this.responseMessage)
+      }
         else{
         //Get Manager Details
         this.manager.ManagerID = res.manager.ManagerID;
@@ -189,7 +194,8 @@ export class SearchManagerComponent implements OnInit {
        console.log(res);
        if(res.Message){
        this.responseMessage = res.Message;}
-       alert(this.responseMessage)
+       this.dialogService.openAlertDialog(this.responseMessage)
+       //alert(this.responseMessage)
        this.router.navigate(["manager-management"])
      })
  
@@ -228,7 +234,8 @@ export class SearchManagerComponent implements OnInit {
       console.log(res);
       if(res.Message){
       this.responseMessage = res.Message;}
-      alert(this.responseMessage)
+      this.dialogService.openAlertDialog(this.responseMessage)
+      //alert(this.responseMessage)
       this.router.navigate(["manager-management"])
     })
 

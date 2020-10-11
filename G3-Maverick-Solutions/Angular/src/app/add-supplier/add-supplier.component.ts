@@ -6,7 +6,7 @@ import {SupplierService} from '../supplier-management/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {ProductService} from 'src/app/product-management/product.service';
 import {Product} from 'src/app/product-management/product';
-
+import { DialogService } from '../shared/dialog.service';
 
 @Component({
   selector: 'app-add-supplier',
@@ -15,7 +15,7 @@ import {Product} from 'src/app/product-management/product';
 })
 export class AddSupplierComponent implements OnInit {
 
-  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
+  constructor(private api: SupplierService, private router: Router, private fb: FormBuilder, private productService: ProductService, private dialogService: DialogService) { }
   supForm: FormGroup;
   supplier : Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
@@ -45,14 +45,19 @@ export class AddSupplierComponent implements OnInit {
   }
 
   addSupplier(){
+    this.dialogService.openConfirmDialog('Are you sure you want to add the supplier?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.addSupplier(this.supplier).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
+        this.dialogService.openAlertDialog(res.Message);}
 
-      alert(this.responseMessage)
+      //alert(this.responseMessage)
       this.router.navigate(["supplier-management"])
     })
+    }
+  })
 
   }
 

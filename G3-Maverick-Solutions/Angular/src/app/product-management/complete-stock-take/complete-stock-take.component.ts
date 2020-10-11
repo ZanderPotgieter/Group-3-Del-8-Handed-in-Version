@@ -10,6 +10,8 @@ import {StockTake} from '../stock-take';
 import {MarkedOff} from '../marked-off';
 import {formatDate} from '@angular/common';
 
+import { DialogService } from '../../shared/dialog.service';
+
 
 @Component({
   selector: 'app-complete-stock-take',
@@ -29,7 +31,7 @@ export class CompleteStockTakeComponent implements OnInit {
   date = this.Todaysdate.toDateString();
 
   showMarkOff: boolean = false;
-  NoForm: boolean = false;
+  NoForm: boolean = true;
   response: string;
   showTable: boolean = false;
   showList: boolean = true;
@@ -42,7 +44,7 @@ export class CompleteStockTakeComponent implements OnInit {
   MarkedOffProduct: MarkedOff = new MarkedOff();
   
 
-  constructor(private productService: ProductService, private router: Router,private api: SalesService) { }
+  constructor(private productService: ProductService, private router: Router,private api: SalesService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
     if(!localStorage.getItem("accessToken")){
@@ -58,18 +60,12 @@ export class CompleteStockTakeComponent implements OnInit {
 
         this.productService.getTodaysStockTake(this.date, res.ContainerID).subscribe( (res:any) =>{
           console.log(res);
-          if(res.Error){
-            this.response = res.Error
-            this.NoForm = true;
-          }
-          else if(res.Message){
-            this.response = res.Message
-            this.NoForm = true;
-          }
-          else{
-          this.stocktakes = res.stock_Takes
-          this.showList = true;
-        }
+          
+         
+            this.stocktakes = res.stock_Takes
+            this.showList = true;
+            this.NoForm = false;
+          
         
         })
         
@@ -83,7 +79,7 @@ export class CompleteStockTakeComponent implements OnInit {
     this.productService.getStockTake(this.stocktakes[ndx].StockTakeID).subscribe( (res:any) =>{
       console.log(res);
       if(res.Error){
-        alert(res.Error)
+        this.dialogService.openAlertDialog(res.Error)
       }
       else{
         this.employee = res.employee;
@@ -91,21 +87,23 @@ export class CompleteStockTakeComponent implements OnInit {
         this.list = res.products;
         this.stocktake = res.stocktake;
 
-        this.showTable = true
+        this.showTable = true;
+        this.showList = false;
       }
       
       
       
     })
+    this.index = ndx;
   }
 
   Complete(){
-    this.productService.completeStockTake(this.stocktake.StockTakeID).subscribe((res:any)=>{
+    this.productService.completeStockTake(this.stocktakes[this.index].StockTakeID).subscribe((res:any)=>{
       if(res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
       }
       else{
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
         this.router.navigate(['stock-take']);
       }
     })
@@ -124,7 +122,7 @@ export class CompleteStockTakeComponent implements OnInit {
       this.showSaveError = false;
     }
     else{
-      alert("No Products To Mark Of. Stock Count Is Equal to Quantity")
+      alert("Mark Off Resticted. Stock Count Is Greater Or Equal To Quantity")
     }
 
     this.productService.getAllMarkedOffReasons().subscribe((res:any) =>
@@ -155,18 +153,20 @@ export class CompleteStockTakeComponent implements OnInit {
     this.MarkedOffProduct.ProductID = this.list[this.index].ProductID;
     this.MarkedOffProduct.StockTakeID = this.stocktake.StockTakeID;
     this.MarkedOffProduct.UserID = this.user.UserID;
+    this.list[this.index].MoQuantity = this.MOQuantity;
+    
+
 
   }
 
   Save(){
     this.productService.AddMarkedOff(this.MarkedOffProduct).subscribe((res:any)=>{
       console.log(res);
-      if(res.Message){
+      if(res.Error){
           this.response = res.Error
           this.showSaveError = true;
       }
       else{
-        this.reasons =res.Reasons;
         this.showMarkOff = false;
         this.list[this.index].MoQuantity = this.MOQuantity;
 

@@ -5,6 +5,8 @@ import { ProvinceService } from '../province.service';
 import { Province } from '../province';
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-search-province',
@@ -13,19 +15,65 @@ import { Router } from '@angular/router';
 })
 export class SearchProvinceComponent implements OnInit {
 
-  constructor(private provinceService: ProvinceService, private router: Router) { }
+  constructor(private provinceService: ProvinceService, private router: Router, private fb: FormBuilder ) { }
   province : Province = new Province();
+  provinces: Province [];
   responseMessage: string = "Request Not Submitted";
 
+  angForm: FormGroup;
   showSave: boolean = false;
-  showButtons: boolean = true;
+  showButtons: boolean = false;
   inputEnabled:boolean = true;
-  showSearch: boolean = true;
+  showSearch: boolean = false;
   showResults: boolean = false;
+  showOptions: boolean = true;
+  showViewAll: boolean = false;
   name : string;
+  ProvName: string;
 
   ngOnInit(): void {
+    this.angForm= this.fb.group({  
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]], 
+      ProvName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+    });
   }
+
+  showSearchDiv()
+  {
+    this.showOptions = false;
+    this.showSearch = true;
+    this.showViewAll  = false;
+    this.showResults = false;
+  }
+
+
+ view(val : any )
+ {
+    this.name = val;
+    this.searchProvince();   
+ }
+
+  getAllProvinces()
+  {
+    this.provinceService.getAllProvinces().subscribe( (res:any) =>
+    {
+      console.log(res);
+      if(res.Message != null)
+      {
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+      }
+      else
+      {
+       this.provinces = res;
+        this.showSearch = false;
+        this.showResults = false;
+        this.showOptions = false;
+        this.showViewAll = true;
+      }
+    });
+  }
+
 
   gotoGPSManagement()
   {
@@ -48,6 +96,9 @@ export class SearchProvinceComponent implements OnInit {
         this.province.ProvName = res.ProvName;
         this.showSearch = true;
         this.showResults = true;
+        this.showOptions = false;
+        this.showViewAll = false;
+        this.showButtons = true;
       }
 
       

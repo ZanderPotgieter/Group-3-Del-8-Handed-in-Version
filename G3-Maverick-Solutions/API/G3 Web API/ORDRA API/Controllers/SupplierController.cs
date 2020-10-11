@@ -269,7 +269,49 @@ namespace ORDRA_API.Controllers
                 return toReturn;
             }
 
+        //link supplier to product 
+        [HttpGet]
+        [Route("linkSupplierToProduct")]
+        public object linkSupplierToProduct(int supplierID, int productID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
 
-        
+
+            try
+            {
+
+                Product prod = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
+                Supplier sup = db.Suppliers.Where(x => x.SupplierID == supplierID).FirstOrDefault();
+
+                if (sup == null)
+                {
+                    return toReturn.Message = "Supplier Not Found";
+
+                }
+                if (prod == null)
+                {
+                    return toReturn.Message = "Product Not Found";
+
+                }
+                else
+                {
+                    prod.SupplierID = sup.SupplierID;
+                    db.SaveChanges();
+                    toReturn.Message = "Supplier Linked to Product";
+
+
+                }
+
+
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Linking Supplier to Product UnSuccsessful";
+
+            }
+            return toReturn;
+        }
+
     }
 }

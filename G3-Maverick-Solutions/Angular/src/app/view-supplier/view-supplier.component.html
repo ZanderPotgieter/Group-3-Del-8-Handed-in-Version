@@ -25,16 +25,16 @@
         <div *ngIf="showTable">
         <table >    
               <tr>  
-                <th>Name</th>
-                <th>Cell No</th>  
-                <th>Email</th>   
-                <th  style="width: 20%;"></th>
+                <th style="padding: 1px;">Name</th>
+                <th style="padding: 1px;">Cell No</th>  
+                <th style="padding: 1px;">Email</th>   
+                <th style="width: 25%;"></th>
               </tr>  
               <tr *ngFor="let sup of suppliers; index as ndx">  
-                <td style="padding: 0px;">{{sup.SupName}}</td>  
-                <td style="padding: 0px;">{{sup.SupCell}}</td>  
-                <td style="padding: 0px;">{{sup.SupEmail}}</td> 
-                <td style="padding: 0px;"><button  style="border-radius: 10px; width: 100%;" (click)="view(ndx)">View</button></td> 
+                <td >{{sup.SupName}}</td>  
+                <td >{{sup.SupCell}}</td>  
+                <td >{{sup.SupEmail}}</td> 
+                <td ><button  style="border-radius: 10px; width: 95%;" (click)="view(ndx)">View</button></td> 
 
               </tr>   
           </table> 
@@ -132,6 +132,7 @@
                 </span> 
         </div>
         <br>
+    
         <div>
             <table>
                     <th>Products Supplied</th>
@@ -156,7 +157,8 @@
          <button type="submit"  (click)="gotoSupplierManagement()">Cancel</button>
         </div>
         
-    </div>
     
-    </form>
+    
+    </div>
+</form>
 </body>

@@ -14,6 +14,8 @@ import  {Container} from  'src/app/container-management/container';
 import { from } from 'rxjs';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../../shared/dialog.service';
+
 @Component({
   selector: 'app-make-sale',
   templateUrl: './make-sale.component.html',
@@ -24,7 +26,7 @@ export class MakeSaleComponent implements OnInit {
   @Input() ConName: string;
   @Input() ContainerID: number;
 
-  constructor(private api: SalesService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
+  constructor(private api: SalesService, private router: Router, private fb: FormBuilder, private productService: ProductService, private dialogService: DialogService) { }
   searchForm: FormGroup;
 
  currentContainer: Container = new Container();
@@ -88,41 +90,15 @@ export class MakeSaleComponent implements OnInit {
   barcodeFound: boolean = false;
   prodFound: boolean = false;
   lowStock: boolean = false;
+  showSale: boolean = false;
+  showMenu = true;
 
   productID = 0;
   removeQuantity = 0;
 
-  ngOnInit() {
+  ngOnInit(): void {
 
-
-    if(!localStorage.getItem("accessToken")){
-      this.router.navigate([""]);
-    }
-    else {
-      this.session = {"token" : localStorage.getItem("accessToken")}
-
-      this.api.getUserDetails(this.session).subscribe( (res:any) =>{
-        console.log(res);
-        this.user = res;
-
-        this.api.initiateSale(this.session)
-        .subscribe((value:any) =>{
-        console.log(value);
-      
-          this.productsWithPrice = value.products;
-          this.sale = value.Sale;
-          this.saleDate = value.Sale.SaleDate;
-          this.paymentTypes = value.paymentTypes;
-          this.vatPerc = value.VAT.VATPerc;
-        
-        
-      });
-        
-      })
-
-   
-  }
-
+    
   this.searchForm= this.fb.group({ 
     prodBarcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern('[0-9 ]*')]], 
   
@@ -133,7 +109,38 @@ export class MakeSaleComponent implements OnInit {
 
   }
   
-  
+  showMakeSale(){
+    if(!localStorage.getItem("accessToken")){
+      this.router.navigate([""]);
+    }
+    else {
+    this.session = {"token" : localStorage.getItem("accessToken")}
+
+    this.api.getUserDetails(this.session).subscribe( (res:any) =>{
+      console.log(res);
+      this.user = res;
+
+      this.api.initiateSale(this.session)
+      .subscribe((value:any) =>{
+      console.log(value);
+    
+        this.productsWithPrice = value.products;
+        this.sale = value.Sale;
+        this.saleDate = value.Sale.SaleDate;
+        this.paymentTypes = value.paymentTypes;
+        this.vatPerc = value.VAT.VATPerc;
+      
+      
+    })
+      
+    })
+
+    this.showSale = true;
+    this.showMenu = false;
+  }
+
+
+  }
   
 
   useBardode(){
@@ -183,7 +190,7 @@ export class MakeSaleComponent implements OnInit {
             this.selectedProduct = prod;
             this.barcodeFound = true;
             if (this.selectedProduct.Quantity >= this.selectedProduct.CPQuantity){
-              alert("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock");
+              this.dialogService.openAlertDialog("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock");
             }
             else{
             this.quantity = this.selectedProduct.Quantity + 1;
@@ -208,7 +215,7 @@ export class MakeSaleComponent implements OnInit {
         this.showBarcode = false;
         this.showName = false;
         if( this.amountpaid >= this.TotalIncVat){
-          alert("Payment Resticted: R"+ this.amountpaid+ " already paid")
+          this.dialogService.openAlertDialog("Payment Resticted: R"+ this.amountpaid+ " already paid")
         }
         else{
         this.amountpaid = this.amountpaid + this.amount;
@@ -237,7 +244,7 @@ export class MakeSaleComponent implements OnInit {
         this.api.makeSalePayment(this.sale.SaleID, this.amount,this.selectedPayment.PaymentTypeID).subscribe((res:any) => {
           console.log(res);
           if(res.Error)(
-            alert(res.Error)
+            this.dialogService.openAlertDialog(res.Error)
           )
         })
       }
@@ -334,13 +341,13 @@ export class MakeSaleComponent implements OnInit {
       this.api.addSaleProduct(this.selectedProduct.ProductID, this.sale.SaleID, this.quantity).subscribe((res: any) =>{
         console.log(res);
         if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
         
       })
       
           }else{
-            alert("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock")
+            this.dialogService.openAlertDialog("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock")
           }
       }
       
@@ -374,7 +381,7 @@ export class MakeSaleComponent implements OnInit {
        this.api.removeSaleProduct(this.productID, this.sale.SaleID, this.removeQuantity).subscribe((res: any) =>{
         console.log(res);
         if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
         
       })
@@ -397,7 +404,7 @@ export class MakeSaleComponent implements OnInit {
        this.api.removeSaleProduct(this.productID, this.sale.SaleID, this.removeQuantity).subscribe((res: any) =>{
         console.log(res);
         if (res.Error){
-          alert(res.Error);
+          this.dialogService.openAlertDialog(res.Error);
         }
         
       })
@@ -426,14 +433,15 @@ export class MakeSaleComponent implements OnInit {
               console.log(res);
               this.lowStock = res;
               if(res == true){
-
-                alert("Sale Completed Successfully");
-                alert("Some Products are now low in stock. Click OK to view");
+                this.dialogService.openAlertDialog("Sale Completed Successfully");
+                this.dialogService.openAlertDialog("Some Products are now low in stock. Click OK to view");
+                //alert("Sale Completed Successfully");
+                //alert("Some Products are now low in stock. Click OK to view");
                 this.router.navigate(['lowstock'])
               }
               if(res == false){
-                
-              alert("Sale Completed Successfully");
+                this.dialogService.openAlertDialog("Sale Completed Successfully");
+              //alert("Sale Completed Successfully");
               this.router.navigate(['sales-management']);
               }
 
@@ -441,7 +449,8 @@ export class MakeSaleComponent implements OnInit {
   
           }
           else{
-            alert("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
+            this.dialogService.openAlertDialog("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
+            //alert("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
           }
 
         }
@@ -460,8 +469,9 @@ export class MakeSaleComponent implements OnInit {
         this.api.cancelSale(this.sale.SaleID).subscribe((res: any)=> {
           console.log(res);
           if(res.Message){
-            alert(res.Message);
-            this.router.navigate(['sales-management']);
+            this.dialogService.openAlertDialog(res.Message);
+            this.showSale = false;
+            this.showMenu = true;
             
           }
         } )

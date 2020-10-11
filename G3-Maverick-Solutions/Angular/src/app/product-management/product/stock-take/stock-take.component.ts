@@ -43,7 +43,7 @@ stockTakeForm(){
 }
 
 MarkedOff(){
-
+  this.router.navigate(['marked-off'])
 }
 
   StockTake(){

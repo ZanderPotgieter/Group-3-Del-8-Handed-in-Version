@@ -123,6 +123,7 @@ import { Component, NgModule } from '@angular/core';
     import {AdminComponent} from './admin/admin.component';
    import {ViewStatusesComponent} from './adminModels/view-statuses/view-statuses.component';
    import {UsersComponent} from './adminModels/statuses/users.component';
+   import {MarkedOffComponent} from './product-management/marked-off/marked-off.component';
 
     const routes: Routes = [
 
@@ -430,6 +431,10 @@ import { Component, NgModule } from '@angular/core';
         {
             path: 'search-stock-take',
             component: SearchStockTakeComponent,
+        },
+        {
+            path: 'marked-off',
+            component: MarkedOffComponent,
         }
 
     ];

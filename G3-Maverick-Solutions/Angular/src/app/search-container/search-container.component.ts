@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import {ContainerService} from '../container-management/container.service';
 import { Observable } from 'rxjs';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DialogService } from '../shared/dialog.service';
 
 @Component({
   selector: 'app-search-container',
@@ -13,11 +14,12 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 })
 export class SearchContainerComponent implements OnInit {
 
-  constructor(private api: ContainerService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: ContainerService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
   conForm: FormGroup;
   container : Container = new Container();
   responseMessage: string = "Request Not Submitted";
 
+  showOptions: boolean = true;
   showAll: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -41,11 +43,13 @@ containerNull : boolean = false;
     this.allContainers = this.api.getAllContainers();
     this.showAll = true;
     this.showSearch = false;
+    this.showOptions = true;
   }
 
   Input(){
     this.showSearch = true;
     this.showAll = false;
+    this.showOptions = false;
   }
   Search(){
     if(this.name == null)
@@ -58,8 +62,8 @@ containerNull : boolean = false;
     this.api.searchContainer(this.name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      }
       else{
           this.container.ContainerID = res.ContainerID;
           this.container.ConName = res.ConName;
@@ -86,26 +90,38 @@ containerNull : boolean = false;
   }
 
   Delete(){
+    this.dialogService.openConfirmDialog('Are you sure you want to delete this container?')
+    .afterClosed().subscribe( res => {
+      if(res){
     this.api.deleteContainer(this.container.ContainerID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
+        this.dialogService.openAlertDialog(res.Message);
       this.responseMessage = res.Message;}
-      alert(this.responseMessage)
       this.router.navigate(["container-management"])
     })
+  }
+  })
   }
 
   Save(){
-    this.api.updateContainer(this.container).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-      this.responseMessage = res.Message;}
-      alert(this.responseMessage)
-      this.router.navigate(["container-management"])
+    this.dialogService.openConfirmDialog('Are you sure you want to update this container?')
+    .afterClosed().subscribe(res => {
+      if(res){
+        this.api.updateContainer(this.container).subscribe( (res:any)=> {
+        console.log(res);
+        if(res.Message){
+        this.dialogService.openAlertDialog(res.Message);}
+        this.router.navigate(["container-management"])
     })
+  }
+  })
   }
 
   cancel(){
+
+    this.dialogService.openConfirmDialog('Are you sure you want to Cancel?')
+    .afterClosed();
     this.showSave = false;
     this.inputEnabled = false;
     this.showButtons = true;

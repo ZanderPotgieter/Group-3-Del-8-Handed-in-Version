@@ -7,7 +7,7 @@ import {Container} from './container-management/container';
 import {FormBuilder, Validators} from '@angular/forms';
 import { FormGroup, FormControl} from '@angular/forms';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
-
+import { DialogService } from './shared/dialog.service';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class AppComponent  implements OnInit {
   title = 'ORDRA';
   dateVal = new Date();
 
-  constructor(private api : LoginService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api : LoginService, private router: Router, private fb: FormBuilder, private dialogService: DialogService) { }
 regForm: FormGroup;
 showLogin: boolean = true;
 showNav: boolean = false;
@@ -82,6 +82,8 @@ reportingEnabled: boolean = false;
       UserSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
       UserCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
       UserEmail: ['', [Validators.required, Validators.email]],   
+      UserPassword: [''], 
+      ConfirmPassword: [''],
     }); 
   }
 
@@ -182,19 +184,19 @@ showRP()
 
 
 saveUser(){
-  //this.user.UserPassword = this.password;
+  this.user.UserPassword = this.password;
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
   if(res.Error){
     this.errorMessage = res.Error;
-    alert(this.errorMessage);
+    this.dialogService.openAlertDialog(this.errorMessage);
     this.showError = true;
     setTimeout(() => {
       this.showError = false;
     }, 5000);
   }else{
-    alert(res.Message);
-  //this.UserPassword = "";
+    this.dialogService.openAlertDialog(res.Message);
+  
 
   this.showLogin= true;
   this.showNav = false;
@@ -202,7 +204,8 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
   this.showContainerNotSelected = false;
   this.showResetPassword = false;
   this.showEnterOTP = false;
-  this.showGenerateOTP = false;}
+  this.showGenerateOTP = false;
+  this.showInvalidPassword = false;}
 })
 
 }
@@ -264,11 +267,13 @@ sendEmail(){
     if(res.Error)
     {
       this.errorMessage = res.Error;
-      alert(this.errorMessage);
+      this.dialogService.openAlertDialog(this.errorMessage);
+  
      
     }
     else{
-      alert(res.Message);
+      this.dialogService.openAlertDialog(res.Message);
+      
         
     this.showLogin= false;
     this.showNav = false;
@@ -276,7 +281,7 @@ sendEmail(){
     this.showContainerNotSelected = false;
     this.showResetPassword = false;
     this.showEnterOTP = true;
-    this.showGenerateOTP = true;}
+    this.showGenerateOTP = false;}
   })
   }
 
@@ -287,11 +292,13 @@ sendEmail(){
       if(res.Error)
       {
         this.errorMessage = res.Error;
-        alert(this.errorMessage);
+        this.dialogService.openAlertDialog(this.errorMessage);
+        //alert(this.errorMessage);
        
       }
       else{
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
+        //alert(res.Message);
           
       this.showLogin= false;
       this.showNav = false;
@@ -319,11 +326,13 @@ sendEmail(){
       if(res.Error)
       {
         this.errorMessage = res.Error;
-        alert(this.errorMessage);
+        this.dialogService.openAlertDialog(this.errorMessage);
+       // alert(this.errorMessage);
         
       }
       else{
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
+       // alert(res.Message);
           
       this.showLogin= true;
       this.showNav = false;

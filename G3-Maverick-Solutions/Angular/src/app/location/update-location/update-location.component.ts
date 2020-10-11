@@ -24,10 +24,30 @@ export class UpdateLocationComponent implements OnInit {
   showSearchEdit: boolean = true;
   showResultsEdit: boolean = false;
   name : string;
+  statuses: StatusVm[];
+  areas: AreaVM[];
+  containers: ContainerVm[];
 
   ngOnInit(): void {
-    this.resetForm();
-    this.refreshList();
+    /* this.resetForm();
+    this.refreshList(); */
+    this.api.getStatuses().subscribe(value => {
+      if (value!=null){
+        this.statuses = value;
+      }
+    });
+
+    this.api.getAreas().subscribe(value => {
+      if (value!=null){
+        this.areas = value;
+      }
+    });
+
+    this.api.getContainers().subscribe(value => {
+      if (value!=null){
+        this.containers = value;
+      }
+    });
   }
 
 
@@ -67,9 +87,9 @@ export class UpdateLocationComponent implements OnInit {
   }
 
 
-  refreshList() {
+  /* refreshList() {
     this.api.getAreas().then(res => this.api.areaList = res as AreaVM[]);
-    this.api.getStatuses().then(res => this.api.statusList = res as StatusVm[]);
+    //this.api.getStatuses().then(res => this.api.statusList = res as StatusVm[]);
     this.api.getContainers().then(res => this.api.containerList = res as ContainerVm[]);
 
   }
@@ -78,7 +98,7 @@ export class UpdateLocationComponent implements OnInit {
     this.api.areaList = [];
     this.api.statusList = [];
     this.api.containerList = [];
-  }
+  } */
 
   gotoGPSManagement() {
     this.router.navigate(['gps-management']);

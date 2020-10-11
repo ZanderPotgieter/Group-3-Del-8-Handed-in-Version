@@ -16,7 +16,8 @@ namespace ORDRA_API.Models
     {
         public int ProductID { get; set; }
         public int SupplierOrderID { get; set; }
-        public Nullable<int> SOPQuantity { get; set; }
+        public Nullable<int> SOPQuantityOrdered { get; set; }
+        public Nullable<int> SOPQuantityRecieved { get; set; }
     
         public virtual Product Product { get; set; }
         public virtual Supplier_Order Supplier_Order { get; set; }

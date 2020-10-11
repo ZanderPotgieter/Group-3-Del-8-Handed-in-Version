@@ -1,6 +1,9 @@
 export class SupplierOrder {
     SupplierOrderID: number;
-    SupplierOrderStatusID: number;
     SupplierID: number;
+    SupName: string;
+    SupEmail: string;
+    ContainerID: number;
+    Status: string;
     SODate: Date;
 }

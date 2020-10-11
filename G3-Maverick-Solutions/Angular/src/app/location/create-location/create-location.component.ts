@@ -8,7 +8,7 @@ import { ContainerVm} from './../container-vm';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-create-location',
@@ -18,16 +18,50 @@ import { Router } from '@angular/router';
 export class CreateLocationComponent implements OnInit {
   http: any;
 
-  constructor(public api: LocationService, private router: Router) { }
+  constructor(public api: LocationService, private router: Router, private fb: FormBuilder) { }
   location : Location = new Location();
   responseMessage: string = "Request Not Submitted";
+  angForm: FormGroup;
+  statuses: StatusVm[];
+  areas: AreaVM[];
+  containers: ContainerVm[];
 
   ngOnInit(): void {
-    this.resetForm();
-    this.refreshList();
+    /* //this.resetForm();
+    //this.refreshList();
     console.log(this.api.areaList);
     console.log(this.api.statusList);
-    console.log(this.api.containerList);
+    console.log(this.api.containerList); */
+
+    this.api.getStatuses().subscribe(value => {
+      if (value!=null){
+        this.statuses = value;
+      }
+    });
+
+    this.api.getAreas().subscribe(value => {
+      if (value!=null){
+        this.areas = value;
+      }
+    });
+
+    this.api.getContainers().subscribe(value => {
+      if (value!=null){
+        this.containers = value;
+      }
+    });
+
+    this.angForm= this.fb.group({  
+      LocName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+  
+      AreaName: [''],
+      ContainerName: [''],
+      StatusName: [''],
+      AreaID: ['', [Validators.required]],
+      ContainerID: [''],
+      StatusID: [''],
+      Locname: ['', [Validators.required]],
+    });
   }
 
   addLocation(){
@@ -48,7 +82,7 @@ export class CreateLocationComponent implements OnInit {
 
   //ADD FOR LOCATION AREA
 
-  refreshList() {
+ /*  refreshList() {
     this.api.getAreas().then(res => this.api.areaList = res as AreaVM[]);
     this.api.getStatuses().then(res => this.api.statusList = res as StatusVm[]);
     this.api.getContainers().then(res => this.api.containerList = res as ContainerVm[]);
@@ -59,7 +93,7 @@ export class CreateLocationComponent implements OnInit {
     this.api.areaList = [];
     this.api.statusList = [];
     this.api.containerList = [];
-  }
+  } */
 
 }
 

@@ -1,5 +1,8 @@
 export class SupplierOrderProduct {
-    ProductID: number;
-    SupplierOrderID: number;
-    SOPQuantity: number;
+    ProductID : number;
+    SupplierID : number;
+    ProdName : string;
+    ProdDescription : string;
+    SOPQuantityOrdered : number;
+    SOPQuantityRecieved : number;
 }

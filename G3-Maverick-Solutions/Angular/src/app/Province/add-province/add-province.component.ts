@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ProvinceService } from '../province.service';
 import { Province } from '../province';
 import { Router } from '@angular/router';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
+
 
 @Component({
   selector: 'app-add-province',
@@ -11,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class AddProvinceComponent implements OnInit {
 
- 
+  angForm: FormGroup;
 
   dataSaved = false;
   provinceForm : any;
@@ -20,7 +22,7 @@ export class AddProvinceComponent implements OnInit {
 
   
 
-  constructor(private provinceService: ProvinceService, private formBuilder: FormBuilder, private router: Router) { };
+  constructor(private provinceService: ProvinceService, private formBuilder: FormBuilder, private router: Router, private fb: FormBuilder ) { };
 
   province : Province = new Province();
   responseMessage: string = "Request Not Submitted";
@@ -33,6 +35,9 @@ export class AddProvinceComponent implements OnInit {
  // name : string;
 
   ngOnInit(): void {
+    this.angForm= this.fb.group({  
+      ProvName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
+    });
     
   }
 
@@ -51,6 +56,19 @@ addProvince()
     this.router.navigate(["gps-management"])
   }) 
 
+}
+
+  getAllProvinces(){
+    this.provinceService.getAllProvinces().subscribe( (res:any) =>{
+      console.log(res);
+      if(res.Message)
+      {
+        this.responseMessage = res.Message;
+      }
+      alert(this.responseMessage)
+      this.router.navigate(["gps-management"])
+    })
+  }
   
 
 
@@ -75,7 +93,6 @@ addProvince()
     );
   }  */
 
-}
 
 
   Cancel(){

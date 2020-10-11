@@ -1,39 +1,48 @@
 <body>
     <h1>GPS Management</h1>
     <form>
-        <br/>
-        <div class="card" id="location">
-            <label>Location</label>
+        <div class="card">
+                <button style="width: 25%;" (click)="location()">Location</button>
+                <br>
+                <button style="width: 25%;" (click)="area()">Area</button>
+                <br>
+                <button style="width: 25%;" (click)="province()">Province</button>
+        </div>
+        <br>
+        <div class="card" *ngIf="showlocation">
+            <label style="text-align: center;">Location</label>
             <br>
-            <button routerLink="/create-location" type="submit">Add Location</button>         
-            <button routerLink="/search-location" type="submit">Search Location</button>       
-            <button routerLink="/update-location" type="submit">Update Location</button>                
+            <button  style="width: 25%;" routerLink="/create-location" type="submit">Add Location</button>  
+            <br>       
+            <button style="width: 25%;" routerLink="/search-location" type="submit">Search Location</button>       
+            <br>
+            <button style="width: 25%;" routerLink="/update-location" type="submit">Update Location</button>                
         </div>
         <br><br>
-        <div class="card" id="area ">
-            <label>Area</label>
+        <div class="card" *ngIf="showarea">
+            <label style="text-align: center;">Area</label>
             <br>
-            <button routerLink="/createarea" type="submit">Add Area</button>
-            
-            <button routerLink="/searcharea" type="submit">Search Area</button>
-            
-            <button routerLink="/searcharea" type="submit">Update Area</button>
-           
-            <button routerLink="/searchArea" type="submit">Remove Area</button>
+            <button style="width: 25%;" routerLink="/createarea" type="submit">Add Area</button>
+            <br>
+            <button style="width: 25%;" routerLink="/searcharea" type="submit">Search Area</button>
+            <br>
+            <button style="width: 25%;" routerLink="/searcharea" type="submit">Update Area</button>
+            <br>
+            <button style="width: 25%;" routerLink="/searchArea" type="submit">Remove Area</button>
             
             
         </div>
         <br><br>
-        <div class="card" id="province ">
-            <label>Province </label>
+        <div class="card" *ngIf="showprovince">
+            <label style="text-align: center;">Province </label>
             <br>
-            <button routerLink="/add-province" type="submit">Add Province</button>
-            
-            <button routerLink="/search-province" type="submit">Search Province</button>
-            
-            <button routerLink="/seatch-province" type="submit">Update Province </button>
-           
-            <button routerLink="/search-province" type="submit">Remove Province </button>
+            <button style="width: 25%;" routerLink="/add-province" type="submit">Add Province</button>
+            <br>
+            <button style="width: 25%;" routerLink="/search-province" type="submit">Search Province</button>
+            <br>
+            <button style="width: 25%;" routerLink="/seatch-province" type="submit">Update Province </button>
+            <br>
+            <button style="width: 25%;" routerLink="/search-province" type="submit">Remove Province </button>
             
             
         </div>

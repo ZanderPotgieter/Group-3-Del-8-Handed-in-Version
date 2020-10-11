@@ -13,6 +13,9 @@
                    <mat-radio-button value= 4 (click)="selectContainer()">Container</mat-radio-button>
                    <mat-radio-button value= 5 (click)="searchBtn()">All Products</mat-radio-button>
                </mat-radio-group>
+               <div class="left">
+                <button type="submit" (click)="Cancel()">Cancel</button>
+                </div>
             </div>
 
             <div class="divleft" *ngIf="showBarcodeInput">
@@ -98,19 +101,28 @@
             <br>
             <label for="ProductCategoryID" hidden="true" ></label><input type="number" hidden ="true" formControlName="ProductCategoryID" class="form-control" [(ngModel)]="Product.ProductCategoryID" id="ProductCategoryID" name="ProductCategoryID" pattern="[0-9]+[.,]?[0-9]*" required [readonly] = "this.inputEnabled">
             <br>
-            <label for="ProdName">Name:</label><input type="text" formControlName="ProdName" class="form-control" [(ngModel)]="Product.ProdName"  id="ProdName"  name ="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+            <label for="ProdName">Name:</label><input type="text" formControlName="ProdName" class="form-control" [(ngModel)]="Product.ProdName"  id="ProdName"  name ="ProdName" pattern="[a-zA-Z ]*" required [readonly] = "inputEnabled">
             <br>
-            <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="Product.ProdDesciption"  id="ProdDesciption"  name ="ProdDesciption" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+            <label for="ProdDesciption">Description:</label><input type="text" formControlName="ProdDesciption" class="form-control" [(ngModel)]="Product.ProdDesciption"  id="ProdDesciption"  name ="ProdDesciption" pattern="[a-zA-Z ]*" required [readonly] = "inputEnabled">
             <br>
-            
-            
-            <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="Product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
-            <br>
-            <label for="ProdBarcode">Barcode:</label><input type="text" formControlName="ProdBarcode" class="form-control" [(ngModel)]="Product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "this.inputEnabled">
         
+            <label for="ProdReLevel">Reorder level:</label><input type="number" formControlName="ProdReLevel" class="form-control" [(ngModel)]="Product.ProdReLevel" id="ProdReLevel" name="ProdReLevel" pattern="[0-9 ]*" required [readonly] = "inputEnabled">
+            <br>
+            <label for="ProdBarcode">Barcode:</label><input type="text" formControlName="ProdBarcode" class="form-control" [(ngModel)]="Product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "inputEnabled">
+            <br>
+            <label for="SupplierID">Change Supplier:</label>
+                  <select  required formControlName="SelectSup" name="SelectSup" [(ngModel)]="SelectSup" (ngModelChange)="loadSupplier($event)">
+                     
+                    <option  *ngFor="let supplier of suppliers" [ngValue]="supplier">{{supplier.SupName}}</option>
+                  </select>
+                  <br>
+                <span style="color:red" *ngIf="pdForm.get('SelectSup').errors && (pdForm.get('SelectSup').touched || pdForm.get('SelectSup').dirty)">
+                  <span *ngIf="pdForm.get('SelectSup').errors.required">Select Supplier required.</span>
+              </span>
             <br>
             <label>Supplier:</label><label style="width:500px">{{supplier}}</label>
             <br>
+            
             <label class="subheadinglabel">Current Price:</label>
             <br>
             <label >Cost Price(R):</label><label>{{Price.CPriceR}}</label>
@@ -197,15 +209,26 @@
                  
                 </table> 
            </div>
-           <div class="divleft">
-            <button type="submit" (click)="Update()"> Update</button>
+           <div class="divleft" *ngIf="allButton">
+            <button type="submit" (click)="enableInputs()"> Update</button>
             <button type="submit" (click)="Delete()">Delete</button>
             <button  type="submit" (click)="showAdd()">New Price</button>
-            <button type="submit" (click)="showPrice()">Show Price List</button>
-            <button type="submit" (click)="Cancel()">Cancel</button>
+            <button type="submit" (click)="showPrice()">Price List</button>
+            
+            
+
+        </div>
+        <div class="divleft" *ngIf="saveOption">
+            <button type="submit" (click)="Update()">Save</button>
+            
+
         </div>
         
         </div>
+        <div class="left">
+            <button type="submit" (click)="Cancel()">Cancel</button>
+        </div>
+       
         
 
     <div class="card" *ngIf="showAllProductsResults">

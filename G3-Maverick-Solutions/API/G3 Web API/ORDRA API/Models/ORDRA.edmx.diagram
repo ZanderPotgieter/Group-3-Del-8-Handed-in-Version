@@ -111,6 +111,7 @@
         <AssociationConnector Association="OrdraDBModel.FK_STakeProduct" />
         <AssociationConnector Association="OrdraDBModel.FK_STake" />
         <AssociationConnector Association="OrdraDBModel.FK_STUser" />
+        <AssociationConnector Association="OrdraDBModel.FK_SOContainer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

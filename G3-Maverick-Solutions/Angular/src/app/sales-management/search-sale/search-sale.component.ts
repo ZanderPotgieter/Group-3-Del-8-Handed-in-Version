@@ -13,6 +13,8 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { DialogService } from '../../shared/dialog.service';
+
 @Component({
   selector: 'app-search-sale',
   templateUrl: './search-sale.component.html',
@@ -20,7 +22,7 @@ import { Observable } from 'rxjs';
 })
 export class SearchSaleComponent implements OnInit {
 
-  constructor(private api: SalesService,private router: Router, private fb: FormBuilder) { }
+  constructor(private api: SalesService,private router: Router, private fb: FormBuilder,private dialogService: DialogService) { }
   searchSaleForm: FormGroup;
   dateVal: Date;
   date: Date;
@@ -72,7 +74,7 @@ export class SearchSaleComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
         this.productsWithPrice = res.products;
        
@@ -113,7 +115,7 @@ export class SearchSaleComponent implements OnInit {
      console.log(res);
      if(res.Message != null){
        this.responseMessage = res.Message;
-       alert(this.responseMessage)}
+       this.dialogService.openAlertDialog(this.responseMessage)}
        else{
          this.saleList = res.Sales;
        }
@@ -134,7 +136,7 @@ export class SearchSaleComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
         this.responseMessage = res.Message;
-        alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(this.responseMessage)}
         else{
           this.viewSaleList = res.Sales;
           this.saleDate = res.saleDate;
@@ -180,7 +182,7 @@ export class SearchSaleComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
             this.searchedSales = res;
        
@@ -204,7 +206,7 @@ export class SearchSaleComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
             this.searchedSales = res;
        
@@ -231,7 +233,7 @@ export class SearchSaleComponent implements OnInit {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+      this.dialogService.openAlertDialog(this.responseMessage)}
       else{
             this.saleProducts = res.saleProducts;
             this.saleDate = res.saleDate;

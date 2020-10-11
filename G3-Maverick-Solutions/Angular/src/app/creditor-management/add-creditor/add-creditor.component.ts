@@ -27,7 +27,7 @@ export class AddCreditorComponent implements OnInit {
   creditor : Creditor = new Creditor();
   supplier: Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
-
+  creditorNull: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
@@ -40,8 +40,10 @@ export class AddCreditorComponent implements OnInit {
     this.credForm= this.bf.group({   
       CredBank: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],   
       CredBranch: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],
-      CredAccount: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
-      CredType: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],      
+      CredAccount: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(12), Validators.pattern('[0-9]*')]],   
+      CredAccountBalance: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(12), Validators.pattern('[0-9]*')]], 
+      CredType: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
+      SupplierID: ['', [Validators.required]],      
     });
     
     this.creditorService.getAllSuppliers()
@@ -61,27 +63,7 @@ addSupplier(val : Supplier){
   this.selectedSupplier = val;
 }
 
-  
 
-Save(){
-  this.dialogService.openConfirmDialog('Are you sure you want to add this creditor?')
-    .afterClosed().subscribe(res => {
-      if(res){
-  this.creditor.SupplierID = 3;
-  this.creditorService.addCreditor(this.creditor).subscribe( (res: any)=> {
-    console.log(res);
-    if(res.Message){
-      this.dialogService.openAlertDialog(res.Message);
-      this.router.navigate(["creditor-management"]);}
-      else if (res.Error){
-        alert(res.Error);
-      }
-     
-  })
-}
-});
-  
-}
 
   gotoCreditorManagement()
   {
@@ -154,9 +136,33 @@ cancel(){
   this.router.navigate(["gps-management"])
 }
 
-
-
+Save(){
+  if (this.creditor.SupplierID == null || this.creditor.CredAccountBalance ==null || this.creditor.CredBank == null || this.creditor.CredBranch==null)
+    {
+      this.creditorNull = true;
+    }
+    else
+    {
+  this.dialogService.openConfirmDialog('Are you sure you want to add this creditor?')
+    .afterClosed().subscribe(res => {
+      if(res){
+  this.creditorService.addCreditor(this.creditor).subscribe( (res: any)=> {
+    console.log(res);
+    if(res.Message){
+      this.dialogService.openAlertDialog(res.Message);
+      this.router.navigate(["creditor-management"]);}
+      else if (res.Error){
+        alert(res.Error);
+      }
+    })
+  }
+})
 }
+}
+    
+}
+
+
 
 
   

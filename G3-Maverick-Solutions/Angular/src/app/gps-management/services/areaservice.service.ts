@@ -35,11 +35,11 @@ export class AreaserviceService {
     Area, httpOptions);  
   }   
 
-  updateArea(newArea: Area): Observable<Area>   {  
+  updateArea(Area: Area): Observable<Area> {  
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post<Area>(this.url + '/updateArea',  
-    newArea, httpOptions);  
-  } 
+    return this.http.put<Area>(this.url + '/updateArea',  
+    Area, httpOptions);  
+  }  
 
   deleteArea(id: number) {   
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  

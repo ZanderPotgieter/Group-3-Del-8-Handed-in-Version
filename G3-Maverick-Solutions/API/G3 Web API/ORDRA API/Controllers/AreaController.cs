@@ -52,29 +52,32 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Area> AreaList = db.Areas.ToList();
-                List<dynamic> areas = new List<dynamic>();
-                foreach (var ar in AreaList)
-                {
-                    dynamic area = new ExpandoObject();
-                    area.ArName = ar.ArName;
-                    area.ArPostalCode = ar.ArPostalCode;
-                    area.AreaID = ar.AreaID;
-                    Province province = db.Provinces.Where(z => z.ProvinceID == ar.ProvinceID).FirstOrDefault();
-                    area.ProvName = province.ProvName;
-                    area.ProvinceID = province.ProvinceID;
-                    Area_Status status = db.Area_Status.Where(z => z.AreaStatusID == ar.AreaStatusID).FirstOrDefault();
-                    area.Status = status.ASDescription;
-                    area.AreaStatusID = ar.AreaStatusID;
-                    areas.Add(ar);
-                }
+                List<Area> areaList = db.Areas.ToList();
+                /* List<dynamic> locations = new List<dynamic>();
+                 foreach (var loc in locList)
+                 {
+                     dynamic location = new ExpandoObject();
+                     location.LocationName = loc.LocName;
+                     location.LocationID = loc.LocationID;
+                     Area area = db.Areas.Where(z => z.AreaID == loc.AreaID).FirstOrDefault();
+                     location.AreaName = area.ArName;
+                     location.AreaID = loc.AreaID;
+                     Container container = db.Containers.Where(z => z.ContainerID == loc.ContainerID).FirstOrDefault();
+                     location.ContainerName = container.ConName;
+                     location.ContainerID = loc.ContainerID;
+                     Location_Status status = db.Location_Status.Where(z => z.LocationStatusID == loc.LocationStatusID).FirstOrDefault();
+                     location.StatusName = status.LSDescription;
+                     location.StatusID = loc.LocationStatusID;
+                     locations.Add(loc);
+                 }
 
-                toReturn.Locations = areas;
+                 toReturn.Locations = locations;*/
+                toReturn.Areas = areaList;
 
             }
             catch (Exception error)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Something Went Wrong" + error;
             }
 
             return toReturn;
@@ -240,9 +243,18 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    db.Areas.Remove(objectArea);
-                    db.SaveChanges();
-                    toReturn.Message = "The area has successfully been Deleted.";
+                    List<Location> locations = db.Locations.Where(x => x.AreaID == id).ToList();
+                    if (locations.Count == 0)
+                    {
+                        db.Areas.Remove(objectArea);
+                        db.SaveChanges();
+                        toReturn.Message = "The area has successfully been Deleted.";
+
+                    }
+                    else
+                    {
+                        toReturn.Message = "Removing Area Restricted";
+                    }
                 }
 
             }

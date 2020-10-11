@@ -50,6 +50,7 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Suppliers.ToList();
             }
+ 
             catch
             {
                 toReturn.Message = "Search Interrupted.Retry";

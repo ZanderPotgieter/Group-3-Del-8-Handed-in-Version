@@ -1,34 +1,29 @@
 <body>
   <h1>Creditor Payment Details</h1>
   <form>
-      <div class="card" >
-          
-        <div class="conatiner" style="padding-top:20px;">  
-          <div class="col-sm-5" style="padding-top:20px;padding-bottom:20px;" >  
-               <input class="form-control" type="text" placeholder="Search..."  >        
-          </div>  
-        </div>  
-          <table class="table table-striped">  
-            <thead class="thead-dark">  
-              <tr>  
-                <th>ID</th>  
-                <th>Creditor</th>  
-                <th>Date</th>  
-                <th>Amount</th> 
-              </tr>  
-            </thead>  
-            <tbody>  
-              <tr *ngFor="let creditorpayment of allPayments | async">  
-                <td>{{creditorpayment.PaymentID}}</td>  
-                <td>{{creditorpayment.CreditorID}}</td>  
-                <td>{{creditorpayment.CredPaymentDate}}</td>  
-                <td>{{creditorpayment.CredPaymentAmount}}</td> 
-              </tr>  
-            </tbody>
-          </table>  
+    <div class="card" *ngIf = "showViewAll">
+      <p class="subheadinglabel">Creditor Payments:</p>
 
-        <br>
-        </div>
+      <table>
+          <tr>
+              <th>Payment ID</th>
+              <th>Creditor/Supplier</th>
+              <th>Date</th>
+              <th>Amount</th>
+          </tr>
+
+
+          <tr *ngFor="let payments of payments">
+              <td>{{creditor.PaymentID}}</td>
+              <td><input type="text" class="form-control" [(ngModel)]="creditor.SupplierID" id="SupplierID" name="SupplierID"></td>
+              <td>{{creditor.CredPaymentDate}}</td>
+              <td>{{creditor.CredPaymentAmount}}</td>
+          
+          </tr>
+          
+      </table> 
+      <button type="submit" (click)="cancel()">Cancel</button> 
+  </div>
     
     </form>
   

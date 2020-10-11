@@ -1058,6 +1058,7 @@ namespace ORDRA_API.Controllers
             List<Product> products = new List<Product>();
             DateTime today = DateTime.Today;
             int year = DateTime.Now.Year;
+            dynamic toReturn = new ExpandoObject();
 
             DateTime begin = new DateTime(year, 01, 01);
             DateTime end = new DateTime(year, 12, 31, 23, 59, 0);
@@ -1070,7 +1071,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                throw;
+                toReturn.Message = "Failed to generate graph";
             }
 
             return getSaleReportObject(sales);
@@ -1123,7 +1124,7 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            toReturn.Error = "Container information not available to generate report";
+                            toReturn.Error = "Container information not available to generate graph";
                         }
                     }
 
@@ -1133,12 +1134,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Sale information not available to generate report";
+                    toReturn.Error = "Sale information not available to generate graph";
                 }
             }
             catch (Exception )
             {
-                toReturn.Error = "Failed to generate report";
+                toReturn.Error = "Failed to generate graph";
             }
             return toReturn;
         }
@@ -1151,6 +1152,7 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             List<Marked_Off> markedProducts = new List<Marked_Off>();
             List<Product> products = new List<Product>();
+            dynamic toReturn = new ExpandoObject();
             //DateTime today = DateTime.Today;
             int year = DateTime.Now.Year;
 
@@ -1163,9 +1165,9 @@ namespace ORDRA_API.Controllers
                 sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList();//.Where(z => (z.SaleDate >= begin) || (z.SaleDate <= end))
                                                                                                  //db.Marked_Off.Include(z => z.Product).Include(z => z.Marked_Off_Reason).ToList();
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                toReturn.Message = "Failed to generate graph";
             }
 
             return getSalePieChartObject(sales);
@@ -1190,7 +1192,7 @@ namespace ORDRA_API.Controllers
                     {
                         dynamic name = new ExpandoObject();
                         decimal rev = 0;
-                        if (item != null || item.Key != null)
+                        if (item != null)
                         {
                             dynamic container = new ExpandoObject();
                             container.ID = item.Key;
@@ -1218,7 +1220,7 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            toReturn.Error = "Container information not available to generate report";
+                            toReturn.Error = "Container information not available to generate graph";
                         }
                     }
 
@@ -1228,12 +1230,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Sale information not available to generate report";
+                    toReturn.Error = "Sale information not available to generate graph";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate report";
+                toReturn.Error = "Failed to generate graph";
             }
             return toReturn;
         }

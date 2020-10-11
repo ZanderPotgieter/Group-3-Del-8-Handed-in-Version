@@ -52,9 +52,9 @@ namespace ORDRA_API.Controllers
                 toReturn.Locations = locList;
                 
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Message = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get all locations";
             }
 
             return toReturn;
@@ -89,7 +89,7 @@ namespace ORDRA_API.Controllers
             }
             catch 
             {
-                toReturn.Message = "Search Interrupted.Retry";
+                toReturn.Message = "Failed to get location";
             }
 
             return toReturn;
@@ -191,7 +191,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception)
             {
-                toReturn.Message = "Update not successful.";
+                toReturn.Message = "Update unsuccessful";
 
             }
 
@@ -233,7 +233,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Message = "Statuses not found";
+                toReturn.Message = "Areas not found";
             }
             return toReturn;
         }
@@ -253,7 +253,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Message = "Statuses not found";
+                toReturn.Message = "Containers not found";
             }
             return toReturn;
         }

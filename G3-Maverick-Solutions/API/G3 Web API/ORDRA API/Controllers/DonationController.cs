@@ -30,9 +30,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Donations.Where(z => z.Donation_Recipient.RecipientID == id).ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get all Donations" ;
             }
 
             return toReturn;
@@ -51,9 +51,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Donation_Status.ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get statuses" ;
             }
             return toReturn;
         }
@@ -70,9 +70,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Containers.ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get containers";
             }
             return toReturn;
         }
@@ -107,7 +107,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donated products";
             }
 
             return toReturn;
@@ -132,7 +132,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation";
             }
 
             return toReturn;
@@ -207,20 +207,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Donation records not found";
+                        toReturn.Message = "Donation records not found";
                     }
                 }
                 else
                 {
 
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
 
                 }
             }
 
             catch 
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation";
             }
 
             return toReturn;
@@ -283,20 +283,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Donation records not found";
+                        toReturn.Message = "Donation records not found";
                     }
                 }
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation";
             }
 
             return toReturn;
@@ -356,20 +356,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Donation records not found";
+                        toReturn.Message = "Donation records not found";
                     }
                 }
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch 
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get Donation";
             }
 
             return toReturn;
@@ -397,14 +397,14 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation recipient";
             }
 
             return toReturn;
@@ -431,14 +431,14 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation recipient";
             }
 
             return toReturn;
@@ -461,9 +461,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Add UnSuccsessful";
-
-
+                toReturn.Message = "Add Unsuccsessful";
             }
 
             return toReturn;
@@ -486,9 +484,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Add UnSuccsessful";
-
-
+                toReturn.Error = "Add Unsuccsessful";
             }
 
             return toReturn;
@@ -521,13 +517,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
                 }
             }
 
             catch (Exception)
             {
-                toReturn.Error = "Update Unsuccessful";
+                toReturn.Message = "Update Unsuccessful";
 
             }
             return toReturn;
@@ -558,13 +554,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
                 }
             }
 
             catch (Exception)
             {
-                toReturn.Error = "Update Unsuccessful";
+                toReturn.Message = "Update Unsuccessful";
 
             }
             return toReturn;
@@ -586,7 +582,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Error = "Donation Not Found";
+                    toReturn.Message = "Donation Not Found";
                 }
                 else
                 { 
@@ -599,7 +595,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Delete Unsuccesful" ;
+                toReturn.Message = "Delete Unsuccesful" ;
             }
 
             return toReturn;
@@ -622,7 +618,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
                 }
                 else
                 {

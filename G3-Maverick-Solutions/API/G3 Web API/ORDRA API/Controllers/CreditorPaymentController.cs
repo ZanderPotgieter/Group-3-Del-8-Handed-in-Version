@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -126,8 +127,16 @@ namespace ORDRA_API.Controllers
             try
             {
                 db.Creditor_Payment.Add(newCreditorPayment);
-                db.SaveChanges();
-                toReturn.Message = "Add Succsessful";
+                Creditor creditor = db.Creditors.Where(x => x.SupplierID == newCreditorPayment.SupplierID).FirstOrDefault();
+                creditor.CredAccountBalance = creditor.CredAccountBalance - newCreditorPayment.CredPaymentAmount;
+                if (creditor.CredAccountBalance < newCreditorPayment.CredPaymentAmount)
+                {
+                    toReturn.Message = "Payment amount is in surplus of the Amount Owed. Not allowed";
+                }
+                else {
+                    db.SaveChanges();
+                    toReturn.Message = "Creditor payment added successfully.";
+                }
             }
             catch (Exception)
             {

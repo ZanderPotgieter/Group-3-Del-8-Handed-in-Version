@@ -84,7 +84,7 @@ namespace ORDRA_API.Controllers
                         order.CusSurname = ord.Customer.CusSurname;
                         order.CusOrdNumber = ord.CusOrdNumber;
                         order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
-                        order.CusOrdStatus = ord.CustomerOrderStatusID;
+                        order.CusOrdStatus = ord.Customer_Order_Status.CODescription;
                         orders.Add(order);
                     }
                     toReturn = orders;
@@ -99,6 +99,52 @@ namespace ORDRA_API.Controllers
                 toReturn = "Something Went Wrong" + error.Message;
             }
             return toReturn;
+        }
+
+        [HttpGet]
+        [Route("searchOrdersByDate/{date}")]
+        public object searchOrdersByDate(DateTime date)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            try
+            {
+                //List<Sale> searchedSales = db.Sales.Include(x => x.Product_Sale).Include(x => x.Payments).Include(x => x.User).Where(x => x.SaleDate == date).ToList();
+
+                //toReturn = searchedSales;
+
+                //List<Sale> sales = db.Sales.Include(x => x.User).ToList();
+                List<Customer_Order> orders = db.Customer_Order.Include(x => x.User).Where(x => x.CusOrdDate == date).ToList();
+                List<dynamic> searchedorders = new List<dynamic>();
+
+                foreach (Customer_Order order in orders)
+                {
+
+                    //  List<Sale> search = db.Sales.Include(x => x.User).Where(x => x.SaleDate == date).ToList();
+
+
+                    dynamic searched = new ExpandoObject();
+                    searched.CustomerOrderID = order.CustomerOrderID;
+                    searched.CusOrdDate = order.CusOrdDate;
+                    searched.UserName = order.User.UserName;
+                    searched.CusOrdSatus = order.Customer_Order_Status.CODescription;
+
+                    searchedorders.Add(searched);
+
+
+                }
+                toReturn = searchedorders;
+
+            }
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
+
+            return toReturn;
+
+
         }
 
         //Retrieve all orders
@@ -195,6 +241,52 @@ namespace ORDRA_API.Controllers
 
                             products.Add(productDetails);
                         }
+                        //set list of products to return object
+                        toReturn.orderProducts = products;
+
+                        var vatOnDate = db.VATs.Where(x => x.VATStartDate <= order.CusOrdDate).FirstOrDefault();
+                        if (vatOnDate != null)
+                        {
+
+                            ///Calculate Order Amounts 
+                            double vatPerc = (double)vatOnDate.VATPerc;
+                            double vat = (vatPerc / (vatPerc + 100)) * TotalIncVat;
+                            double TotalExcVat = TotalIncVat - vat;
+                            orderDate = Convert.ToDateTime(order.CusOrdDate);
+
+                            //Create objects to store the seperated details 
+                            dynamic cusOrder = new ExpandoObject();
+                            dynamic cusdetails = new ExpandoObject();
+                            dynamic calculations = new ExpandoObject();
+
+                            //Populate With Customer Order Details
+                            cusOrder.CustomerOrderID = order.CustomerOrderID;
+                            cusOrder.OrderNo = order.CusOrdNumber;
+                            cusOrder.CusOrdStatus = order.Customer_Order_Status.CODescription;
+                            cusOrder.OrderDate = orderDate.ToString("yyyy-MM-dd");
+
+                            //Populate With  Customer Details
+                            cusdetails.CustomerID = order.CustomerID;
+                            cusdetails.CusName = order.Customer.CusName;
+                            cusdetails.CusSurname = order.Customer.CusSurname;
+                            cusdetails.CusCell = order.Customer.CusCell;
+                            cusdetails.CusEmail = order.Customer.CusEmail;
+
+                            //Populate With Calculated Details
+                            calculations.TotalIncVat = TotalIncVat.ToString("#.##");
+                            calculations.TotalExcVat = TotalExcVat.ToString("#.##");
+                            calculations.Vat = vat.ToString("#.##");
+
+
+                            //set objects to return
+                            toReturn.orderDetails = cusOrder;
+                            toReturn.customerDetails = cusdetails;
+                            toReturn.calculatedValues = calculations;
+                            toReturn.orderProducts = products;
+
+                        }
+
+
                         else
                         {
                             toReturn.Message = "Something Went Wrong Price is null";
@@ -203,51 +295,6 @@ namespace ORDRA_API.Controllers
                     }
 
 
-                    var vatOnDate = db.VATs.Where(x => x.VATStartDate <= order.CusOrdDate).FirstOrDefault();
-                    if (vatOnDate != null)
-                    {
-
-                        ///Calculate Order Amounts 
-                        double vatPerc = (double)vatOnDate.VATPerc;
-                        double vat = (vatPerc / (vatPerc + 100)) * TotalIncVat;
-                        double TotalExcVat = TotalIncVat - vat;
-                        orderDate = Convert.ToDateTime(order.CusOrdDate);
-
-                        //Create objects to store the seperated details 
-                        dynamic cusOrder = new ExpandoObject();
-                        dynamic cusdetails = new ExpandoObject();
-                        dynamic calculations = new ExpandoObject();
-
-                        //Populate With Customer Order Details
-                        cusOrder.CustomerOrderID = order.CustomerOrderID;
-                        cusOrder.OrderNo = order.CusOrdNumber;
-                        cusOrder.OrderDate = orderDate.ToString("yyyy-MM-dd");
-
-                        //Populate With  Customer Details
-                        cusdetails.CustomerID = order.CustomerID;
-                        cusdetails.CusName = order.Customer.CusName;
-                        cusdetails.CusSurname = order.Customer.CusSurname;
-                        cusdetails.CusCell = order.Customer.CusCell;
-                        cusdetails.CusEmail = order.Customer.CusEmail;
-
-                        //Populate With Calculated Details
-                        calculations.TotalIncVat = TotalIncVat.ToString("#.##");
-                        calculations.TotalExcVat = TotalExcVat.ToString("#.##");
-                        calculations.Vat = vat.ToString("#.##");
-
-
-                        //set objects to return
-                        toReturn.orderDetails = cusOrder;
-                        toReturn.customerDetails = cusdetails;
-                        toReturn.calculatedValues = calculations;
-                        toReturn.orderProducts = products;
-
-                    }
-                    else
-                    {
-                        toReturn.Message = "Something Went Wrong VAT is null";
-
-                    }
                 }
                 else
                 {
@@ -403,13 +450,13 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-
+ 
             try
             {
 
 
                 Customer customer = db.Customers.Where(z => z.CusEmail == email).FirstOrDefault();
-                if (customer != null)
+                if (customer != null )
                 {
                     //sending an email
                     using (MailMessage mail = new MailMessage())
@@ -417,7 +464,7 @@ namespace ORDRA_API.Controllers
                         mail.From = new MailAddress("ordrasa@gmail.com");
                         mail.To.Add(email);
                         mail.Subject = "Your ORDRA order has arrived.";
-                        mail.Body = "<h1>You can collect your order </h1>";
+                        mail.Body = "<h1>Good day valued customer! Your order is ready to be collected at ORDRA Container" + "<h1>. The order number is: </h1>"  ;
                         mail.IsBodyHtml = true;
 
                         using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -431,7 +478,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Email not found";
+                    toReturn.Error = "Email not sent. Please check the email structure and the order status. Status should be 'Fulfilled'.";
                 }
 
                 return toReturn;
@@ -442,6 +489,94 @@ namespace ORDRA_API.Controllers
             }
             return toReturn;
         }
+
+        [HttpGet]
+        [Route("makeOrderPayment")]
+        public object makeOrderPayment(int customerorderID, float payAmount, int paymentTypeID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Customer_Order customerorder = db.Customer_Order.Where(x => x.CustomerOrderID == customerorderID).FirstOrDefault();
+                if (customerorder != null)
+                {
+                    Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
+                    if (paymentType != null)
+                    {
+                        Payment payment = new Payment();
+                        payment.CustomerOrderID = customerorder.CustomerOrderID;
+                        payment.Customer_Order = customerorder;
+                        payment.PayAmount = payAmount;
+                        payment.PayDate = DateTime.Now;
+                        payment.PaymentTypeID = paymentTypeID;
+                        db.Payments.Add(payment);
+                        db.SaveChanges();
+
+                        toReturn.Payment = db.Payments.ToList().LastOrDefault();
+                    }
+                    else
+                    {
+                        toReturn.Error = "Payment Type Not Found";
+                    }
+
+
+
+
+                }
+                else
+                {
+                    toReturn.Error = "Order Not Found";
+                }
+
+
+            }
+            catch
+            {
+                toReturn.Error = "Payment Add Unsuccessful";
+            }
+
+            return toReturn;
+        }
+
+        [HttpPut]
+        [Route("collectCusOrder")]
+        public object collectCusOrder(Customer_Order OrderUpdate)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            Customer_Order objectOrder = new Customer_Order();
+            dynamic toReturn = new ExpandoObject();
+            var id = OrderUpdate.CustomerOrderID;
+
+            try
+            {
+                objectOrder = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
+                if (objectOrder != null && objectOrder.CustomerOrderStatusID == 2)
+                {
+                    objectOrder.CustomerOrderStatusID = 3;
+                    db.SaveChanges();
+
+                    toReturn.Message = "The customer order has successfully been collected.";
+                }
+                else
+                {
+                    toReturn.Message = "Only 'Fulfilled' customer orders can be collected.";
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Cancellation not successful.";
+
+            }
+
+
+            return toReturn;
+        }
+
 
         // Cancel Sale
         [HttpGet]
@@ -462,7 +597,7 @@ namespace ORDRA_API.Controllers
                         //get container
                         Container container = db.Containers.Where(x => x.ContainerID == order.ContainerID).FirstOrDefault();
 
-                        //get list of products in Sale
+                        //get list of products in Order
                         List<Product_Order_Line> product_Orders = order.Product_Order_Line.ToList();
 
                         if (container != null)
@@ -734,124 +869,41 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
-
-        //collect Order Function
-        [HttpPost]
-        [Route("collectOrder")]
-        public dynamic collectOrder(int CustomerOrderID)
+        [HttpPut]
+        [Route("cancelCusOrder")]
+        public object cancelCusOrder(Customer_Order OrderUpdate)
         {
             db.Configuration.ProxyCreationEnabled = false;
+
+            Customer_Order objectOrder = new Customer_Order();
             dynamic toReturn = new ExpandoObject();
+            var id = OrderUpdate.CustomerOrderID;
 
-            try
+           try
             {
-                //Get the Order from the db
-                Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == CustomerOrderID).FirstOrDefault();
-
-                //get the collected customer order status
-                Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == 4).FirstOrDefault();
-
-                //set order status to collected
-                cus_order.Customer_Order_Status = order_Status;
-
-                db.SaveChanges();
-
-            }
-            catch (Exception error)
-            {
-                toReturn = error.Message;
-            }
-
-            return toReturn;
-        }
-
-        //UPDATE product
-        [HttpPost]
-        [Route("collectCustomerOrder")]
-        public object collectCustomerOrder(Customer_Order collectOrder)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-
-            try
-            {
-                //get category for product
-                Customer_Order_Status stat = db.Customer_Order_Status.Where(x => x.CustomerOrderStatusID == collectOrder.CustomerOrderStatusID).FirstOrDefault();
-
-                //save new product
-                Customer_Order collectOrd = db.Customer_Order.Where(x => x.CustomerOrderID == collectOrder.CustomerOrderID).FirstOrDefault();
-                if (collectOrd != null)
+                objectOrder = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
+                if (objectOrder != null && objectOrder.CustomerOrderStatusID == 1 || objectOrder.CustomerOrderStatusID == 2)
                 {
-                    collectOrd.CustomerOrderStatusID = 1;
+                    objectOrder.CustomerOrderStatusID = 4;
                     db.SaveChanges();
 
-                    toReturn.Message = "Order Collected";
+                    toReturn.Message =  "The customer order has successfully been cancelled.";
                 }
                 else
                 {
-                    toReturn.Message = "Nope";
-                }
-
+                    toReturn.Message = "Only 'Placed' or 'Fulfilled' customer orders can be collected.";
+                            }
+                        
+                    
+                
             }
+
             catch (Exception)
             {
-                toReturn.Message = "Nope";
+                toReturn.Message = "Cancellation not successful.";
 
             }
-            return toReturn;
-        }
 
-
-        //collect Order Function
-        [HttpPost]
-        [Route("cancelOrder")]
-        public dynamic cancelOrder(int CustomerOrderID)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            dynamic toReturn = new ExpandoObject();
-
-            try
-            {
-                //Get the Order from the db
-                Customer_Order cus_order = db.Customer_Order.Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderID == CustomerOrderID).FirstOrDefault();
-
-                //check if order is collected
-                if (cus_order.Customer_Order_Status.CODescription == "collected")
-                {
-                    toReturn.Message = "Collected Orders Can Not Be Cancelled";
-                }
-                else
-                {
-                    //get the cancelled customer order status
-                    Customer_Order_Status order_Status = db.Customer_Order_Status.Where(x => x.CODescription == "Retrieved").FirstOrDefault();
-
-
-                    //set order status to cancelled
-                    cus_order.Customer_Order_Status = order_Status;
-
-                    db.SaveChanges();
-
-
-                    //get products in order
-
-                    List<Product_Order_Line> orderProduct = db.Product_Order_Line.Include(x => x.Customer_Order).Include(x => x.Product).Where(x => x.Customer_Order.CustomerOrderID == cus_order.CustomerOrderID).ToList();
-                    foreach (var prod in orderProduct)
-                    {
-                        Return_Product return_Product = new Return_Product();
-                        return_Product.Product = prod.Product;
-                        return_Product.Quantity = prod.PLQuantity;
-
-                        db.Return_Product.Add(return_Product);
-
-                    }
-                }
-
-            }
-            catch (Exception error)
-            {
-                toReturn = error.Message;
-            }
 
             return toReturn;
         }

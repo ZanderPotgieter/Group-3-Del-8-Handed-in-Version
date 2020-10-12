@@ -6,6 +6,8 @@ import { DonatedProduct } from '../donated-product';
 import { Donation } from '../donation';
 import { DonationRecipient } from '../donation-recipient';
 import { DonationStatus } from '../donation-status';
+import { ContainerProduct  } from '../container-product';
+import { Product } from '../product';
 import { Container } from '../container'
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
@@ -24,6 +26,7 @@ export class CreateDonationComponent implements OnInit {
   donation: Donation = new Donation();
   donationRecipient: DonationRecipient = new DonationRecipient();
   donatedProduct: DonatedProduct = new DonatedProduct();
+  donationStatus: DonationStatus = new DonationStatus();
   responseMessage: string = "Request Not Submitted";
   donationForm: any;
   donation1: Donation = new Donation();
@@ -33,6 +36,7 @@ export class CreateDonationComponent implements OnInit {
   inputEnabled:boolean = true;
   showAddDon: boolean = false
   showResults: boolean = false;
+  showDonation: boolean = true;
   cell : string;
   
   showSearch: boolean = true;
@@ -48,6 +52,19 @@ export class CreateDonationComponent implements OnInit {
   showAddProduct: boolean = false;
   showSearchSelection: boolean = false;
   showNameSearch: boolean = false;
+  showContainer: boolean = false;
+  showTable: boolean = false;
+  showDonatedProduct: boolean = false;
+
+  containerID: number;
+  donationID: number;
+  productID: number;
+  dpQuantity: number;
+  
+  products: Product[];
+  donatedProducts: DonatedProduct[];
+  containerProducts: ContainerProduct[];
+ 
 
 
   //donForm: FormGroup;
@@ -62,12 +79,80 @@ export class CreateDonationComponent implements OnInit {
 
   }
 
+  selectContainer(id: any)
+  {
+    this.showNameSearch = true;
+    this.showContainer = false;
+    this.showName = false;
+    this.showCell = false;
+    this.showSave = false;
+    this.inputEnabled = false;
+    this.showButtons = false;
+    this.showDonation = false;
+    this.showDonatedProduct = true;
+    
+    this.showSearch = false;
+    this.showResults = false; 
+    this.showAddDon = false;
+    this.containerID = id;
+    this.donationService.getAllContainerProducts(this.containerID).subscribe((value:any) => {
+      if (value!=null)
+      {
+        this.containerProducts = value.ContainerProducts;
+        this.products = value.Products;
+      }
+    });
+  }
+
+  addProduct(prodID: any, prodQuantity: any)
+  {
+    this.productID = prodID;
+    this.dpQuantity = prodQuantity;
+    this.getAddedDonation();
+    this.donationService.addDonatedProduct(this.productID, this.containerID, this.donationID, this.dpQuantity).subscribe( (res:any)=> 
+    {
+
+      console.log(res);
+      if(res.Message == "Add Succsessful")
+      {
+        this.responseMessage = res.Message;
+        this.donatedProducts = res.DonatedProduct;
+        this.showTable = true;
+
+
+      }
+      else{
+        //display error message 
+      }
+    })    
+  }
+
+  saveProducts()
+  {
+    //display saved successfully 
+    this.router.navigate(['donation-management']);
+  }
+
+  deleteProduct()
+  {
+
+  }
+
   ngOnInit(): void {
     this.donationService.getDonationStatuses().subscribe(value => {
         if (value!=null){
           this.statuses = value;
         }
       });
+
+      this.donationService.getAllContainers().subscribe(value => {
+        if (value!=null)
+        {
+          this.containers = value;
+        }
+      });
+
+      
 
       this.angForm= this.fb.group({  
         cell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9 ]*')]],  
@@ -83,6 +168,9 @@ export class CreateDonationComponent implements OnInit {
         DonDate: ['', [Validators.required ]],
         //DSDescription: [''], 
         DonationStatusID: ['', [Validators.required ]],
+        ContainerID: [''],
+        ProductID: [''],
+        DPQuantity: [''], 
          
       }); 
 
@@ -100,6 +188,11 @@ export class CreateDonationComponent implements OnInit {
     this.showSearch = true;
     this.showResults = false; 
     this.showAddDon = false;
+    this.showDonation = true;
+    this.showDonatedProduct = false;
+    this.showContainer = false;
+    this.showNameSearch = false;
+    this.showTable = false;
   }
 
   showSearchByName()
@@ -113,6 +206,12 @@ export class CreateDonationComponent implements OnInit {
     this.showSearch = true;
     this.showResults = false; 
     this.showAddDon = false;
+    this.showDonation = true;
+    this.showDonatedProduct = false;
+    this.showContainer = false;
+    this.showNameSearch = false;
+    this.showTable = false;
+  
   }
 
   gotoDonationManagement()
@@ -140,12 +239,18 @@ export class CreateDonationComponent implements OnInit {
         this.donationRecipient.RecipientID = res.RecipientID;
         this.donationRecipient.DrName = res.DrName;
         this.donationRecipient.DrSurname = res.DrSurname;
-        this.donationRecipient.DrCell = res. DrCell;
+        this.donationRecipient.DrCell = res.DrCell;
         this.donationRecipient.DrEmail = res.DrEmail;
 
         this.showSearch = true;
         this.showResults = true;
         this.showAddDon = true;
+        this.showDonation = true;
+        this.showDonatedProduct = false;
+        this.showContainer = false;
+        this.showNameSearch = false;
+        this.showTable = false;
+
       }
       
 
@@ -168,12 +273,18 @@ export class CreateDonationComponent implements OnInit {
         this.donationRecipient.RecipientID = res.RecipientID;
         this.donationRecipient.DrName = res.DrName;
         this.donationRecipient.DrSurname = res.DrSurname;
-        this.donationRecipient.DrCell = res. DrCell;
+        this.donationRecipient.DrCell = res.DrCell;
         this.donationRecipient.DrEmail = res.DrEmail;
+        this.cell = res.DrCell;
 
         this.showSearch = true;
         this.showResults = true;
         this.showAddDon = true;
+        this.showDonation = true;
+        this.showDonatedProduct = false;
+        this.showContainer = false;
+        this.showNameSearch = false;
+        this.showTable = false;
       }
 
       
@@ -188,18 +299,63 @@ export class CreateDonationComponent implements OnInit {
    this.donation1.DonDescription = this.donation.DonDescription;
    this.donation1.DonDate =  this.donation.DonDate;
    this.donation1.DonAmount = this.donation.DonAmount;
+   this.cell = this.donationRecipient.DrCell;
    console.log(this.donation1)
 
     this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
     {
 
       console.log(res);
-      if(res.Message)
+      if(res.Message == "Add Succsessful")
       {
         this.responseMessage = res.Message;
+        alert(this.responseMessage);
+        this.showContainer = true; 
+        this.showNameSearch = false;
+        this.showTable = false;
+        this.showSearch = false;
+        this.showResults = false;
+        this.showAddDon = false;
+        this.showDonation = false;
+        this.showDonatedProduct = true;
       }
-      alert(this.responseMessage)
-      this.router.navigate(["donation-management"])
+      
+    })
+  }
+
+  getAddedDonation()
+  {
+    this.donationService.getAddedDonation(this.cell).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if (res.Message != null)
+      {
+        this.responseMessage = res.Message;
+        alert(this.responseMessage)
+
+      }
+      else 
+      {
+        //get donation  details 
+        this.donationRecipient.RecipientID = res.recipient.RecipientID;
+        this.donationRecipient.DrName = res.recipient.DrName;
+        this.donationRecipient.DrSurname = res.recipient.DrSurname;
+        this.donationRecipient.DrEmail= res.recipient.DrEmail;
+        this.donationRecipient.DrCell = res.recipient.DrCell;
+
+        this.donation.DonAmount = res.donation.DonAmount;
+        this.donation.DonDate = res.donation.DonDate;
+        this.donation.DonDescription = res.donation.DonDescription
+        this.donation.DonationStatusID = res.donation.DonationStatusID;
+        this.donation.DonationID = res.donation.DonationID;
+        this.donationID = res.donation.DonationID;
+
+        this.donationStatus.DSDescription = res.donation.DonStatus;
+        this.donationStatus.DonationStatusID = res.donation.DonationStatusID;
+        
+      }
+
+      
     })
   }
   

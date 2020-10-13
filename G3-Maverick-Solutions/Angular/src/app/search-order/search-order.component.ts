@@ -275,7 +275,7 @@ export class SearchOrderComponent implements OnInit {
 
 
     sendNotification(){
-      this.dialogService.openConfirmDialog('Confirm that this order is fulfilled and ready to be collected?')
+      this.dialogService.openConfirmDialog('Send email to ' + this.customer.CusName + ' ' +this.customer.CusSurname)
     .afterClosed().subscribe(res => {
       if(res){
       this.api.sendNotification(this.customer.CusEmail).subscribe((res : any)=>{

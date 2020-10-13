@@ -67,7 +67,7 @@ export class CompleteStockTakeComponent implements OnInit {
           else if(res.Message){
           this.dialogService.openAlertDialog(res.Message)
            
-        }else if(res == null){
+        }else if(res.stock_Takes == null){
           this.dialogService.openAlertDialog("No Stock Take Forms Filled In Today")
         }
           else{

@@ -54,17 +54,17 @@ export class AddVatComponent implements OnInit {
           }
       })
     }
-    if(this.found = true){
+    if(this.found == true){
       this.dialogService.openAlertDialog("Duplicate Vat Start Date Found")
     }
-    if(this.vat.VATStartDate < this.date){
+    if((this.vat.VATStartDate.getMonth() < this.date.getMonth()) && (this.vat.VATStartDate.getDate() < this.date.getDate())  && (this.vat.VATStartDate.getFullYear() < this.date.getFullYear())){
       this.errorMessage = "Vat Start Date Cannot Be In The Past"; 
           this.showError = true;
           setTimeout(() => {
             this.showError = false;
           }, 6000);
     }
-
+    
 
   }
 

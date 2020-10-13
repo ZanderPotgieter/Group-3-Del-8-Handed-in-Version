@@ -91,7 +91,7 @@ export class AdminDashboardComponent {
           labels: keys,
           datasets: [
             {
-            label:'Sales Revenue per container for current year',
+            label:'Sales Revenue per container for current day',
             data: Vals, 
             fill: false,
             barPercentage: 0.70,
@@ -211,7 +211,7 @@ export class AdminDashboardComponent {
           options:{
             resposive: true,
             legend:{
-              position: 'top',
+              position: 'bottom',
             },
             title:{
               text: "Current year Revenue By Container",

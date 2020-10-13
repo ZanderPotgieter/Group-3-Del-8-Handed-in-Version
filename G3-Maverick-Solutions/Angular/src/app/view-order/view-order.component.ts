@@ -18,19 +18,8 @@ export class ViewOrderComponent implements OnInit {
   }
   CustomerOrder : CustomerOrder = new CustomerOrder();
 CustomerOrderID: number;
-  collectOrder(){
-    this.dialogService.openConfirmDialog('Confirm the Customer has Collected the order?')
-    .afterClosed().subscribe(res => {
-      if(res){
-    this.api.collectOrder(this.CustomerOrderID).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Message){
-        this.dialogService.openAlertDialog(res.Message);}
-      //this.router.navigate(["customer-management"])
-    })
-  }
-  });
-  }
+
+  
 }
 
 

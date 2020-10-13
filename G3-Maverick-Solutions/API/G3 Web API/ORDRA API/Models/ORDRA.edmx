@@ -64,6 +64,7 @@
             <PropertyRef Name="PaymentID" />
           </Key>
           <Property Name="PaymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierID" Type="int" />
           <Property Name="CreditorID" Type="int" />
           <Property Name="CredPaymentDate" Type="date" />
           <Property Name="CredPaymentAmount" Type="real" />
@@ -592,6 +593,18 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CredPayment">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Creditor_Payment" Type="Self.Creditor_Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="Creditor_Payment">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CredPaymentC">
           <End Role="Creditor" Type="Self.Creditor" Multiplicity="0..1" />
           <End Role="Creditor_Payment" Type="Self.Creditor_Payment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1306,6 +1319,10 @@
             <End Role="Container_Product" EntitySet="Container_Product" />
           </AssociationSet>
           <AssociationSet Name="FK_CredPayment" Association="Self.FK_CredPayment">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CredPaymentC" Association="Self.FK_CredPaymentC">
             <End Role="Creditor" EntitySet="Creditor" />
             <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
           </AssociationSet>
@@ -1601,6 +1618,8 @@
           <Property Name="CredPaymentDate" Type="DateTime" Precision="0" />
           <Property Name="CredPaymentAmount" Type="Single" />
           <NavigationProperty Name="Creditor" Relationship="Self.FK_CredPayment" FromRole="Creditor_Payment" ToRole="Creditor" />
+          <Property Name="SupplierID" Type="Int32" />
+          <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredPayment1" FromRole="Creditor_Payment" ToRole="Supplier" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -1973,6 +1992,7 @@
           <NavigationProperty Name="Creditors" Relationship="Self.FK_CredSupplier" FromRole="Supplier" ToRole="Creditor" />
           <NavigationProperty Name="Products" Relationship="Self.FK_ProdSup" FromRole="Supplier" ToRole="Product" />
           <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOSupplier" FromRole="Supplier" ToRole="Supplier_Order" />
+          <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPayment1" FromRole="Supplier" ToRole="Creditor_Payment" />
         </EntityType>
         <EntityType Name="Supplier_Order">
           <Key>
@@ -2947,6 +2967,10 @@
             <End Role="Container" EntitySet="Containers" />
             <End Role="Supplier_Order" EntitySet="Supplier_Order" />
           </AssociationSet>
+          <AssociationSet Name="FK_CredPayment1" Association="OrdraDBModel.FK_CredPayment1">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Stock_Take">
           <Key>
@@ -3081,6 +3105,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CredPayment1">
+          <End Type="OrdraDBModel.Supplier" Role="Supplier" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Creditor_Payment" Role="Creditor_Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="Creditor_Payment">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3149,6 +3185,7 @@
           <EntitySetMapping Name="Creditor_Payment">
             <EntityTypeMapping TypeName="OrdraDBModel.Creditor_Payment">
               <MappingFragment StoreEntitySet="Creditor_Payment">
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
                 <ScalarProperty Name="CreditorID" ColumnName="CreditorID" />
                 <ScalarProperty Name="CredPaymentDate" ColumnName="CredPaymentDate" />

@@ -30,9 +30,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Donations.Where(z => z.Donation_Recipient.RecipientID == id).ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get all Donations" ;
             }
 
             return toReturn;
@@ -51,9 +51,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Donation_Status.ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get statuses" ;
             }
             return toReturn;
         }
@@ -70,9 +70,9 @@ namespace ORDRA_API.Controllers
             {
                 toReturn = db.Containers.ToList();
             }
-            catch (Exception error)
+            catch (Exception)
             {
-                toReturn.Error = "Something Went Wrong" + error;
+                toReturn.Message = "Failed to get containers";
             }
             return toReturn;
         }
@@ -107,7 +107,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donated products";
             }
 
             return toReturn;
@@ -132,7 +132,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation";
             }
 
             return toReturn;
@@ -207,20 +207,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Donation records not found";
+                        toReturn.Message = "Donation records not found";
                     }
                 }
                 else
                 {
 
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
 
                 }
             }
 
             catch 
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation";
             }
 
             return toReturn;
@@ -283,20 +283,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Donation records not found";
+                        toReturn.Message = "Donation records not found";
                     }
                 }
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation";
             }
 
             return toReturn;
@@ -356,20 +356,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Donation records not found";
+                        toReturn.Message = "Donation records not found";
                     }
                 }
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch 
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get Donation";
             }
 
             return toReturn;
@@ -397,14 +397,14 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation recipient";
             }
 
             return toReturn;
@@ -431,14 +431,14 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
 
                 }
             }
 
             catch
             {
-                toReturn.Error = "Search Interrupted. Retry";
+                toReturn.Message = "Failed to get donation recipient";
             }
 
             return toReturn;
@@ -461,9 +461,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Add UnSuccsessful";
-
-
+                toReturn.Message = "Add Unsuccsessful";
             }
 
             return toReturn;
@@ -486,9 +484,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Add UnSuccsessful";
-
-
+                toReturn.Error = "Add Unsuccsessful";
             }
 
             return toReturn;
@@ -521,13 +517,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
                 }
             }
 
             catch (Exception)
             {
-                toReturn.Error = "Update Unsuccessful";
+                toReturn.Message = "Update Unsuccessful";
 
             }
             return toReturn;
@@ -558,13 +554,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Record Not Found";
+                    toReturn.Message = "Record Not Found";
                 }
             }
 
             catch (Exception)
             {
-                toReturn.Error = "Update Unsuccessful";
+                toReturn.Message = "Update Unsuccessful";
 
             }
             return toReturn;
@@ -586,7 +582,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Error = "Donation Not Found";
+                    toReturn.Message = "Donation Not Found";
                 }
                 else
                 { 
@@ -599,7 +595,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Delete Unsuccesful" ;
+                toReturn.Message = "Delete Unsuccesful" ;
             }
 
             return toReturn;
@@ -622,7 +618,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectDonation == null)
                 {
-                    toReturn.Error = "Donation Record Not Found";
+                    toReturn.Message = "Donation Record Not Found";
                 }
                 else
                 {
@@ -661,14 +657,47 @@ namespace ORDRA_API.Controllers
         }
 
         [HttpGet]
-        [Route("addProduct")]
-        public object addProduct(int productID )
+        [Route("addDonatedProduct")]
+        public object addDonatedProduct(int prodID, int contID, int donID ,int quantity )
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             try
             {
-                
+                //check quantity of container
+                Container_Product conProd = db.Container_Product.Where(z => (z.ProductID == prodID) && (z.ContainerID == contID)).FirstOrDefault();
+                Donated_Product donProdObj = db.Donated_Product.Where(z => (z.DonationID == donID) && (z.ProductID == prodID) ).FirstOrDefault();   //to check if product has already been added
+         
+                if (conProd.CPQuantity >= quantity)
+                {
+                    if(donProdObj == null)
+                    {
+                        Donated_Product donProd = new Donated_Product();
+                        donProd.ProductID = prodID;
+                        donProd.DonationID = donID;
+                        donProd.DPQuantity = quantity;
+                        db.Donated_Product.Add(donProd);
+                        conProd.CPQuantity = conProd.CPQuantity - quantity;
+                        db.SaveChanges();
+                        toReturn.Message = "Add Successful";
+                    }
+                    else
+                    {
+                        donProdObj.DPQuantity = donProdObj.DPQuantity + quantity;
+                        conProd.CPQuantity = conProd.CPQuantity - quantity;
+                        db.SaveChanges();
+                        toReturn.Message = "Add Successful";
+                    }
+
+                    
+
+                    toReturn.DonatedProducts = db.Donated_Product.Where(z => z.DonationID == donID).ToList();
+
+                }
+                else
+                {
+                    toReturn.Message = "Not enough stock on hand. Available qunatity = " + conProd.CPQuantity;
+                }
             }
             catch(Exception)
             {
@@ -679,5 +708,78 @@ namespace ORDRA_API.Controllers
                  
         }
 
+        [HttpGet]
+        [Route("getAllContainerProducts")]
+        public object getAllContainerProducts(int containerID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                //List<dynamic> products = new List<dynamic>();
+                List<Container_Product> containerProducts = db.Container_Product.Where(z => z.ContainerID == containerID).ToList();
+                List<Product> products = new List<Product>();
+
+                if (containerProducts.Count!=0)
+                {
+                    foreach(var item in containerProducts)
+                    {
+                        dynamic product = new ExpandoObject();
+                        product = db.Products.Where(z => z.ProductID == item.ProductID).FirstOrDefault();
+                        products.Add(product);
+
+                    }
+                }
+
+                toReturn.ContainerProducts = containerProducts;
+                toReturn.Products = products;
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Failed to get all product";
+            }
+
+            return toReturn;
+        }
+
+        [HttpGet]
+        [Route("getAllContainers")]
+        public object getAllContainers()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                toReturn = db.Containers.ToList();
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Failed to get all containers";
+            }
+
+            return toReturn;
+
+        }
+
+        [HttpGet]
+        [Route("getAddedDonation")]
+        public object getAddedDonation(string cell)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                Donation_Recipient rec = db.Donation_Recipient.Where(z => z.DrCell == cell).FirstOrDefault();
+                Donation donation = db.Donations.Where(z => z.RecipientID == rec.RecipientID).ToList().LastOrDefault();
+                toReturn.Donation = searchDonationByID(donation.DonationID);
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Failed to get donation";
+            }
+
+            return toReturn;
+
+        }
     }
 }

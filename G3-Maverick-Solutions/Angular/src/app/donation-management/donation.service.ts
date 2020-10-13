@@ -4,8 +4,11 @@ import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs'; 
 import { DonationRecipient } from './donation-recipient';
 import { DonationStatus } from './donation-status';
+import {ContainerProduct } from './container-product';
 import { Donation } from './donation';
 import { DonatedProduct } from './donated-product';
+import { Product } from './product';
+import { Container } from './container';
 
 @Injectable({
   providedIn: 'root'
@@ -112,15 +115,15 @@ export class DonationService {
  
   }
 
-  getAllDonatedProducts(): Observable<any[]>
+  getAllDonatedProducts(donationID: number): Observable<any[]>
   {
-    return this.http.get<any[]>(this.Donurl + '/getAllDonatedProducts');
+    return this.http.get<any[]>(this.Donurl + '/getAllDonatedProducts?=' + donationID);
   }
 
-  addDonatedProduct(donatedProduct: DonatedProduct): Observable<DonatedProduct>
+  addDonatedProduct(prodID:number, contID:number, donID:number, quantity: number): Observable<DonatedProduct>
   {
     const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
-    return this.http.post<DonatedProduct>(this.Donurl + '/addCDonation/', donatedProduct, httpOptions);
+    return this.http.post<DonatedProduct>(this.Donurl + '/addDonatedProduct?prodID=' +prodID + '&contID=' + contID +'&donID=' +donID +'&quantity='+ quantity,httpOptions);
   }
 
   updateDonatedProduct(donatedProduct: DonatedProduct): Observable<DonatedProduct>
@@ -146,10 +149,20 @@ export class DonationService {
     return this.http.get<DonationRecipient>(this.Donurl + '/searchDonationRecipientByName?name=' +name+'&surname='+surname);
   }
 
+   //get all container
+   getAllContainers(): Observable<Container[]>
+   {
+     return this.http.get<Container[]>(this.Donurl + '/getAllContainers');
+   }
 
- /*  searchSupplier(name: string): Observable<any>
+   getAllContainerProducts(containerID: number): Observable<ContainerProduct[]>
+   {
+     return this.http.get<ContainerProduct[]>(this.Donurl + '/getAllContainerProducts?=' + containerID);
+   }
+
+  getAddedDonation(cell: string): Observable<Donation[]>
   {
-    return this.http.get<Donation>(this.url + '/searchSupplier?name=' +name);
-  } */
+    return this.http.get<Donation[]>(this.Donurl + '/getAddedDonation?cell=' +cell);
+  }
 
 }

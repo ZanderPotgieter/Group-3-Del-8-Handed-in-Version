@@ -391,11 +391,14 @@ GO
 CREATE TABLE Creditor_Payment
 (
 	PaymentID int Primary Key identity(1,1) Not Null,
+	SupplierID int,
 	CreditorID int,
 	CredPaymentDate date,
 	CredPaymentAmount float(2),
-	CONSTRAINT FK_CredPayment FOREIGN KEY (CreditorID)
-    REFERENCES Creditor(CreditorID)
+	CONSTRAINT FK_CredPaymentC FOREIGN KEY (CreditorID)
+    REFERENCES Creditor(CreditorID),
+	CONSTRAINT FK_CredPayment FOREIGN KEY (SupplierID)
+    REFERENCES Supplier(SupplierID)
 )
 GO
 
@@ -858,10 +861,10 @@ INSERT INTO Creditor (SupplierID, CredAccountBalance, CredBank, CredBranch, Cred
 VALUES ('1', '20120.00', 'ABSA', 'Hatfield','1339543203', 'Check'),
 	   ('2', '12789.50','FNB', 'Lynnwood','1235543503', 'Check');
 
-INSERT INTO Creditor_Payment (CreditorID, CredPaymentDate, CredPaymentAmount)
-VALUES ('2' , '2020-03-21', '6050.00'),
-	   ('1' , '2020-05-30', '12500.00'),
-	   ('2', '2020-07-10', '15900.00');
+INSERT INTO Creditor_Payment (CreditorID, SupplierID, CredPaymentDate, CredPaymentAmount)
+VALUES ('2','2' , '2020-03-21', '6050.00'),
+	   ('1','1' , '2020-05-30', '12500.00'),
+	   ('2', '2', '2020-07-10', '15900.00');
 
 INSERT INTO Supplier_Order_Status (SOSDescription)
 VALUES ('Placed'),
@@ -930,8 +933,6 @@ VALUES('1','4','20','2020-06-10'),
 	   ('1','5','20','2020-06-09'),
 	   ('2','6','35','2020-06-08'),
 	   ('3','4','20','2020-06-09');
-
-
 
 
 

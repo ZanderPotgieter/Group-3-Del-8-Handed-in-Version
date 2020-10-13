@@ -63,7 +63,7 @@ namespace ORDRA_API.Controllers
                                     }
                                     else
                                     {
-                                        toReturn.Error = "Creditor payment information not available to add in the report";
+                                        toReturn.Message = "Creditor payment information not available to add in the report";
                                     }
                                 }
 
@@ -72,13 +72,13 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                toReturn.Error = "Supplier Information not available to add in the report";
+                                toReturn.Message = "Supplier Information not available to add in the report";
                             }
                         }
                     }
                     else
                     {
-                        toReturn.Error = "Supplier Information not available to add in the report";
+                        toReturn.Message = "Supplier Information not available to add in the report";
                     }
 
 
@@ -86,13 +86,13 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Information not available to generate report";
+                    toReturn.Message = "Information not available to generate report";
                 }
 
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate report ";
+                toReturn.Message = "Failed to generate report ";
             }
             return toReturn;
         }
@@ -131,25 +131,25 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                toReturn.Error = "Sale information not available to add in report";
+                                toReturn.Message = "Sale information not available to add in report";
                             }
                         }
                         toReturn.ChartData = categories;
                     }
                     else
                     {
-                        toReturn.Error = "Product category information not available to add in report";
+                        toReturn.Message = "Product category information not available to add in report";
                     }
  
                 }
                 else
                 {
-                    toReturn.Error = "Information not available to generate report";
+                    toReturn.Message = "Information not available to generate report";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate the report";
+                toReturn.Message = "Failed to generate the report";
             }
             return toReturn;
         }
@@ -181,6 +181,7 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             List<Customer_Order> orders = new List<Customer_Order>();
+            dynamic toReturn = new ExpandoObject();
             try
             {
 
@@ -209,7 +210,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                throw;
+                toReturn.Message = "failed to generate report";
             }
 
             return getCustomerOrderReportObject(orders);
@@ -240,7 +241,6 @@ namespace ORDRA_API.Controllers
                             if (item != null)
                             {
                                 dynamic customer = new ExpandoObject();
-                                customer.Details = item.Key;
                                 decimal Grouptot = 0;
 
                                 //getting the order details
@@ -248,7 +248,7 @@ namespace ORDRA_API.Controllers
                                 foreach (var cusItem in item)
                                 {
                                     List<Product_Order_Line> prodOrderLine = db.Product_Order_Line.Where(z => z.CustomerOrderID == cusItem.CustomerOrderID).ToList();
-                                    if (cusItem != null && cusItem.CusOrdDate != null && cusItem.CusOrdNumber != null && cusItem.Customer_Order_Status.CODescription != null && prodOrderLine!=null )
+                                    if (prodOrderLine.Count!=0 /*cusItem != null && cusItem.CusOrdDate != null && cusItem.CusOrdNumber != null && cusItem.Customer_Order_Status.CODescription != null && prodOrderLine!=null */)
                                     {
                                        
                                         //getting the product details
@@ -271,31 +271,35 @@ namespace ORDRA_API.Controllers
                                             }
                                             else
                                             {
-                                                toReturn.Error = "Product information not available to add to the report";
+                                                toReturn.Message = "Product information not available to add to the report";
                                             }
                                         }
                                         //toReturn.Products = orderProds;
 
 
-                                        dynamic orderObject = new ExpandoObject();
-                                        orderObject.OrderNum = cusItem.CusOrdNumber;
-                                        orderObject.Product = orderProds;
-                                        orderObject.Date = cusItem.CusOrdDate;
-                                        orderObject.Status = cusItem.Customer_Order_Status.CODescription;
-                                        orderObject.Total = total;
-                                        cusOrders.Add(orderObject);
-                                        Grouptot = Grouptot + total;
+                                       if (orderProds.Count !=0)
+                                        {
+                                            dynamic orderObject = new ExpandoObject();
+                                            orderObject.OrderNum = cusItem.CusOrdNumber;
+                                            orderObject.Product = orderProds;
+                                            orderObject.Date = cusItem.CusOrdDate;
+                                            orderObject.Status = cusItem.Customer_Order_Status.CODescription;
+                                            orderObject.Total = total;
+                                            cusOrders.Add(orderObject);
+                                            Grouptot = Grouptot + total;
+                                        }
 
                                         //toReturn.Orders = cusOrders;
                                     }
                                     else
                                     {
-                                        toReturn.Error = "Customer order information not available to add to the report";
+                                        toReturn.Message = "Customer order information not available to add to the report";
                                     }
                                 }
 
-                                if (cusOrders!=null)
+                                if (cusOrders.Count!=0)
                                 {
+                                    customer.Details = item.Key;
                                     customer.Orders = cusOrders;
                                     customer.Total = Grouptot;
                                     customerGroups.Add(customer);
@@ -303,7 +307,7 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                toReturn.Error = "Customer information not available to add to the report";
+                                toReturn.Message = "Customer information not available to add to the report";
                             }
                         }
                         toReturn.Customers = customerGroups;
@@ -311,17 +315,17 @@ namespace ORDRA_API.Controllers
                    }
                    else
                    {
-                        toReturn.Error = "Customer order information not available to add to the report";
+                        toReturn.Message = "Customer order information not available to add to the report";
                    }
                 }
                 else
                 {
-                    toReturn.Error = "Information not available to generate report";
+                    toReturn.Message = "Information not available to generate report";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate report" ;
+                toReturn.Message = "Failed to generate report" ;
             }
             return toReturn;
         }
@@ -368,7 +372,7 @@ namespace ORDRA_API.Controllers
                                     {
                                        
                                         //getting the product details
-                                        if (prodSale != null)
+                                        if (prodSale.Count!= 0)
                                         {
                                             decimal saleTotal = 0;
                                             List<dynamic> prodList = new List<dynamic>();
@@ -390,7 +394,7 @@ namespace ORDRA_API.Controllers
                                                 }
                                                 else
                                                 {
-                                                    toReturn.Error = "Sale product information not available to add to the report";
+                                                    toReturn.Message = "Sale product information not available to add to the report";
                                                 }
                                             }
                                             //toReturn.Products = orderProds;
@@ -407,14 +411,14 @@ namespace ORDRA_API.Controllers
                                         }
                                         else
                                         {
-                                            toReturn.Error = "Container information not available to add to the report";
+                                            toReturn.Message = "Container information not available to add to the report";
                                         }
 
                                         //toReturn.Orders = cusOrders;
                                     }
                                     else
                                     {
-                                        toReturn.Error = "Sale information not available to add to the report";
+                                        toReturn.Message = "Sale information not available to add to the report";
                                     }
 
                                 }
@@ -431,7 +435,7 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                toReturn.Error = "Sale information not available to add to the report";
+                                toReturn.Message = "Sale information not available to add to the report";
                             }
                         }
                         toReturn.TableData = catGroups;
@@ -440,12 +444,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Information not available to generate report";
+                    toReturn.Message = "Information not available to generate report";
                 }
             }
             catch (Exception )
             {
-                toReturn.Error = "Failed to generate report" ;
+                toReturn.Message = "Failed to generate report" ;
             }
             return toReturn;
         }
@@ -464,7 +468,7 @@ namespace ORDRA_API.Controllers
                 List<Supplier> suppliers = db.Suppliers.ToList();
                 if (suppliers == null)
                 {
-                    toReturn.Error = "Sale product information not available to generate report";
+                    toReturn.Message = "Sale product information not available to generate report";
                 }
                 else
                 {
@@ -484,7 +488,7 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            toReturn.Error = "Supplier information not available to add to the report";
+                            toReturn.Message = "Supplier information not available to add to the report";
                         }
                     }
 
@@ -495,7 +499,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception )
             {
-                toReturn.Error = "Failed to generate report" ;
+                toReturn.Message = "Failed to generate report" ;
             }
 
             return toReturn;
@@ -510,6 +514,7 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             List<Marked_Off> markedProducts = new List<Marked_Off>();
             List<Product> products = new List<Product>();
+            dynamic toReturn = new ExpandoObject();
             try
             {
 
@@ -538,7 +543,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                throw;
+                toReturn.Message = "Failed to generate graph";
             }
 
             return getMarkedOffProductReportObject(markedProducts);
@@ -604,7 +609,7 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                toReturn.Error = "Marked off product information not available to add to the report";
+                                toReturn.Message = "Marked off product information not available to add to the report";
                             }
                         }
                         if (markedProducts!=null)
@@ -619,12 +624,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Marked off products information not available to generate report";
+                    toReturn.Message = "Marked off products information not available to generate report";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate report" ;
+                toReturn.Message = "Failed to generate report" ;
             }
             return toReturn;
         }
@@ -674,12 +679,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Information not available to generate report";
+                    toReturn.Message = "Information not available to generate report";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate" ;
+                toReturn.Message = "Failed to generate" ;
             }
             return toReturn;
         }
@@ -725,7 +730,7 @@ namespace ORDRA_API.Controllers
                             }
                             else
                             {
-                                toReturn.Error = "Product information not available to add to the report";
+                                toReturn.Message = "Product information not available to add to the report";
                             }
                         }
 
@@ -764,12 +769,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "TThere are no products";
+                    toReturn.Message = "Product information not available to generate report";
                 }
             }
-            catch (Exception error)
+            catch (Exception )
             {
-                toReturn.Error = "Report failed to generate " + error;
+                toReturn.Message = "Report failed to generate " ;
             }
             return toReturn;
         }
@@ -780,6 +785,7 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             List<Donation> donations = new List<Donation>();
+            dynamic toReturn = new ExpandoObject();
             try
             {
                 switch (selectedOptionID)
@@ -804,9 +810,9 @@ namespace ORDRA_API.Controllers
                 }
 
             }
-            catch (Exception)
+            catch 
             {
-                throw;
+                toReturn.Message = "Failed to generate graph";
             }
 
             return getDonationReportObject(donations);
@@ -873,12 +879,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Information not available to generate report";
+                    toReturn.Message = "Information not available to generate report";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to generate report ";
+                toReturn.Message = "Failed to generate report ";
             }
             return toReturn;
         }
@@ -892,13 +898,13 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             toReturn.TableData = null;
 
-            /*try
-            {*/
+            try
+            {
                 List<User> users = db.Users.Include(z=>z.User_Type).ToList();
                
                 if (users == null)
                 {
-                    toReturn.Error = "There are no registered system users";
+                    toReturn.Message = "There are no registered system users";
                 }
                 else
                 {
@@ -925,7 +931,7 @@ namespace ORDRA_API.Controllers
                                 }
                                 else
                                 {
-                                    toReturn.Error = "User information not available to add to the report";
+                                    toReturn.Message = "User information not available to add to the report";
                                 }
                             }
                             role.Users = userList;
@@ -933,7 +939,7 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            toReturn.Error = "User typle information not available to add to the report";
+                            toReturn.Message = "User typle information not available to add to the report";
                         }   
                         
                     }
@@ -942,11 +948,11 @@ namespace ORDRA_API.Controllers
                     toReturn.Count = count;
 
                 }
-            /*}
+            }
             catch (Exception)
             {
-                toReturn.Error = "Report failed to generate" ;
-            }*/
+                toReturn.Message = "Report failed to generate" ;
+            }
 
             return toReturn;
 

@@ -1,33 +1,53 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Area } from '../model/area.model';
+import { AreaStatus } from '../areastatus';
+import { Province } from 'src/app/Province/province';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AreaserviceService {
-  areaData: Area;
-  areaList: Area[];
+  url = 'https://localhost:44399/API/Area'
   constructor(private http: HttpClient) { }
 
-  getAreas() {
-    return this.http.get(environment.ApiUrl + '/Areas').toPromise();
+  getAllProvinces(): Observable<Province[]> {  
+    return this.http.get<Province[]>('https://localhost:44399/Api/Province' + '/getAllProvinces');  
   }
+  getAllAreaStatus(): Observable<AreaStatus[]> {  
+    return this.http.get<AreaStatus[]>(this.url + '/GetAllAreaStatus');  
+  } 
 
-  getArea(obj: Area) {
-    return this.http.get(environment.ApiUrl + '/Areas/' + obj.AreaID).toPromise();
-  }
+  getAllAreas() {  
+    return this.http.get(this.url + '/getAllAreas');  
+  } 
 
-  postArea(obj: Area) {
-    return this.http.post(environment.ApiUrl + '/Areas', obj);
-  }
+  getAreaByID(id: number){  
+    return this.http.get(this.url + '/getAreaByID/' + id);  
+  } 
 
-  putArea(obj: Area) {
-    return this.http.put(environment.ApiUrl + '/Areas/' + obj.AreaID, obj);
-  }
+  addArea(Area: Area): Observable<Area> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.post<Area>(this.url + '/addArea',  
+    Area, httpOptions);  
+  }   
 
-  deleteArea(id: number) {
-    return this.http.delete(environment.ApiUrl + '/Areas/' + id);
-  }
+  updateArea(Area: Area): Observable<Area> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.put<Area>(this.url + '/updateArea',  
+    Area, httpOptions);  
+  }  
+
+  deleteArea(id: number) {   
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.delete<Area>(this.url + '/deleteArea?id='+id, httpOptions);  
+  } 
+
+  searchArea(name: string){  
+    return this.http.get(this.url + '/searchArea?name='+name).pipe(map(result => result));  
+  } 
+
 }

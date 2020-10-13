@@ -61,9 +61,12 @@ export class CustomerOrderService {
     return this.http.get(this.url + '/searchAll').pipe(map(result => result));  
   } 
 
+  searchAllFulfilled(){  
+    return this.http.get(this.url + '/searchAllFulfilled').pipe(map(result => result));  
+  } 
 
-  initiatePlaceOrder(customerID : number ){
-    return this.http.get(this.url + '/initiatePlaceOrder/'+customerID).pipe(map(result => result)); 
+  initiatePlaceOrder(customerID : number, session : any ){
+    return this.http.post(this.url + '/initiatePlaceOrder/'+customerID, session, this.httpOptions).pipe(map(result => result)); 
 
   }
 
@@ -72,35 +75,40 @@ export class CustomerOrderService {
     return this.http.post(this.url + '/sendOrderEmail?email=' + email, this.httpOptions);
   }
 
+  addCustomerOrderProduct(productID: number, customerorderID: number, quantity){
+    return this.http.get(this.url + '/addCustomerOrderProduct?productID='+productID+'&customerorderID='+customerorderID +'&quantity='+quantity, this.httpOptions)
+  }
+
+  removeCustomerOrderProduct(productID: number, customerorderID: number, quantity){
+    return this.http.get(this.url + '/removeCustomerOrderProduct?productID='+productID+'&customerorderID='+customerorderID +'&quantity='+quantity, this.httpOptions)
+  }
+
   placeOrder(order: CustomerOrder) : Observable<CustomerOrder>{
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
     return this.http.post<CustomerOrder>(this.url + '/placeOrder',  
-    order, httpOptions); 
+    order , httpOptions); 
   }
 
-  cancelOrder(CustomerOrderID : number){
-    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post(this.url + '/cancelOrder',  
-    CustomerOrderID, httpOptions); 
-  }
+  makeOrderPayment(customerorderID: number, payAmount: number, paymentTypeID:number){
+    return this.http.get(this.url + '/makeOrderPayment?customerorderID='+customerorderID+'&payAmount='+payAmount +'&paymentTypeID='+paymentTypeID, this.httpOptions)
+    }
 
-  collectOrder(CustomerOrderID : number){
-    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post(this.url + '/collectOrder',  
-    CustomerOrderID, httpOptions); 
-  }
+  cancelCustomerOrder(customerorderID: number){
+    return this.http.get(this.url + '/cancelCustomerOrder?customerorderID='+customerorderID, this.httpOptions)
+   }
 
-  collectCustomerOrder(CustomerOrder: CustomerOrder): Observable<CustomerOrder> {  
+  cancelCusOrder(CustomerOrder: CustomerOrder): Observable<CustomerOrder> {  
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.put<CustomerOrder>(this.url + '/collectCustomerOrder',  
+    return this.http.put<CustomerOrder>(this.url + '/cancelCusOrder',  
     CustomerOrder, httpOptions);  
   }  
 
-  sendNotification(selectedOrders: string[]){
+  collectCusOrder(CustomerOrder: CustomerOrder): Observable<CustomerOrder> {  
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post<CustomerOrder[]>(this.url + '/sendNotification',  
-    selectedOrders, httpOptions); 
-  }
+    return this.http.put<CustomerOrder>(this.url + '/collectCusOrder',  
+    CustomerOrder, httpOptions);  
+  }  
+  
 
   getOrdersByStatus(status: string){
     return this.http.get(this.url + '/getOrdersByStatus?status=' +status).pipe(map(result => result))
@@ -113,6 +121,17 @@ export class CustomerOrderService {
   getAllCustomers(): Observable<Customer[]> {  
     return this.http.get<Customer[]>(this.urlcus + '/getAllCustomers');  
   }
+
+  getUserDetails(session: any){
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
+    return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, httpOptions);
+  }
+
+  sendNotification(email: String)
+  {
+    return this.http.post(this.url + '/sendNotification?email=' + email, this.httpOptions);
+  }
+
 
 
 }

@@ -97,6 +97,9 @@
         <div class="divleft"  >
           <button type="submit"  (click)="createEmployee()">Save Profile</button>
           <button type="submit" (click)="cancel()">Cancel</button>
+
+          <button type="submit" (click)="gotoUploadImage()" >Upload Image</button>
+          <button type="submit"  (click)="gotoUploadCv()">Upload CV</button>
         </div>
       </div>
   </div>
@@ -114,11 +117,11 @@
             <div class="card-panel teal lighten-2">
               <label class="subheadinglabel" >Add Employee Image</label>
             </div>
-            <form  #imageForm = ngForm (ngSubmit)= "OnSubmit(Caption, Image, employee.EmployeeID)">
+            <form  #imageForm = ngForm (ngSubmit)= "OnSubmit(Caption, Image,EmployeeID)">
               <div class="row">
                 <div class="input-field col s12">
                   <!-- <label for="Caption">Caption: </label> -->
-                  <input type="text" formControlName="caption"  #caption ngModel name="caption" id="caption" pattern="[[a-zA-Z ]*]" required>
+                  <!-- <input type="text" formControlName="caption"  #caption ngModel name="caption" id="caption" pattern="[[a-zA-Z ]*]" required> -->
                   <!-- <span style="color:red" *ngIf="imgForm.get('caption').errors && (imgForm.get('caption').touched || imgForm.get('caption').dirty)">
                     <span *ngIf="imgForm.get('caption').errors.required">Caption is required.</span>
                     <span *ngIf="imgForm.get('caption').errors.minlength || imgForm.get('caption').errors.maxlength">Surname must be greater that 2 characters and less than 25 characters</span>
@@ -128,7 +131,7 @@
               </div>
               <img [src]="imageUrl" img style="width:350px; height: 300px"> <br>
                 <input type="file" formControlName="image" name="image" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
-                <button type="submit" class="btn-large btn-submit" [disabled]="Image.value=='' || !imageForm.valid">Submit </button>  
+                <button type="submit" class="btn-large btn-submit" >Submit </button>  
             </form>
           </div>
         </div>
@@ -146,7 +149,7 @@
             <div class="row">
               <div class="input-field col s12">
                 <!-- <label for="CaptionCV" visible="false">Caption: </label> -->
-                <input type="text" formControlName="captionCV"  #captionCV ngModel name="captionCV" id="captionCV" pattern="[[a-zA-Z ]*]" required>
+                <!-- <input type="text" formControlName="captionCV"  #captionCV ngModel name="captionCV" id="captionCV" pattern="[[a-zA-Z ]*]" required> -->
                 <!-- <span style="color:red" *ngIf="cvForm.get('captionCV').errors && (cvForm.get('captionCV').touched || cvForm.get('captionCV').dirty)">
                   <span *ngIf="cvForm.get('captionCV').errors.required">Caption is required.</span>
                   <span *ngIf="cvForm.get('captionCV').errors.minlength || Form.get('captionCV').errors.maxlength">Surname must be greater that 2 characters and less than 25 characters</span>
@@ -154,7 +157,7 @@
                 </span> -->
               </div>
             </div>
-            <iframe src="/assets/doc/OrdraPDF.pdf" type="application/pdf" style="width:100%; height: 600px"> </iframe><br>
+            <iframe src="cvUrl" type="application/pdf" style="width:100%; height: 600px"> </iframe><br>
               <input type="file" formControlName="cv" name="cv" #CV accept="pdf/*" (change)="handleFileInputCV($event.target.files)">
               <button type="submit" class="btn-large btn-submit" >Submit </button> 
           </form>

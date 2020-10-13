@@ -1,6 +1,6 @@
 <body>
     <h1>Add Creditor Payment</h1>
-    <form > 
+    <form [formGroup]="credForm">
         
         <div class="card" id="creditor">
   
@@ -8,23 +8,33 @@
             <br>
             <div class="divleft">
               <div class="divleft" >
-                <label for="CreditorID">Creditor:  </label>
-                <input type="number" class="form-control" [(ngModel)]="creditorpayment.CreditorID" id="CreditorID" name="CreditorID" required>
-                <select required>
-                  <option value="0">--Select--</option>
-                  <option [value]="type" *ngFor= "let supplier of suppliers">{{supplier.SupName}}</option>
-                </select>
-            </div> 
+                <label>Creditor:</label>
+                  <select required formControlName="SupplierID" class="form-control" [(ngModel)]="creditorpayment.SupplierID"  name="SupplierID" id="SupplierID" required>
+                        
+                        <option  *ngFor="let supplier of suppliers" value="{{supplier.SupplierID}}">{{supplier.SupName}}</option>
+                  </select>
+                  <br>
+                      <span style="color:red" *ngIf="credForm.get('SupplierID').errors && (credForm.get('SupplierID').touched || credForm.get('SupplierID').dirty)">
+                          <span *ngIf="credForm.get('SupplierID').errors.required">Creditor is required.</span>
+                      </span>
+                </div>
             <br/>
             <div class="divleft" >
-              <label for="CredPaymentDate">Date of Payment:  </label>
-              <input type="date" class="form-control" [(ngModel)]="creditorpayment.CredPaymentDate" id="CredPaymentDate" name="CredPaymentDate" required>
-          </div>
+              <label for="CredPaymentDate">Date of Payment:  </label>  
+              <input type="date" class="form-control" [(ngModel)]="creditorpayment.CredPaymentDate" id="CredPaymentDate" [ngModelOptions]="{standalone: true}" name="CredPaymentDate" required>
+              <span style="color:red" *ngIf="credForm.get('CredPaymentDate').errors && (credForm.get('CredPaymentDate').touched || credForm.get('CredPaymentDate').dirty)">
+                <span *ngIf="credForm.get('CredPaymentDate').errors.required">Date is required.</span>
+            </span>
+            </div>
   
           <div class="divleft" >
             <label for="CredPaymentAmount">Amount:  </label>
-            <input type="text" class="form-control" [(ngModel)]="creditorpayment.CredPaymentAmount" id="CredPaymentAmount" name="CredPaymentAmount" required>
-        </div>
+            <input type="text" class="form-control" [(ngModel)]="creditorpayment.CredPaymentAmount" id="CredPaymentAmount" [ngModelOptions]="{standalone: true}" name="CredPaymentAmount" required>
+            <span style="color:red" *ngIf="credForm.get('CredPaymentAmount').errors && (credForm.get('CredPaymentAmount').touched || credForm.get('CredPaymentAmount').dirty)">
+              <span *ngIf="credForm.get('CredPaymentAmount').errors.required">Amount is required.</span>
+              <span *ngIf="credForm.get('CredPaymentAmount').errors.pattern">Only numbers/digits allowed.<br></span>
+          </span>
+          </div>
   
             
         <button type="submit" (click)="addCreditorPayment()">Add Creditor Payment</button> 

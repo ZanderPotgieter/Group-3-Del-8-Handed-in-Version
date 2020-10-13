@@ -18,7 +18,9 @@ namespace ORDRA_API.Models
         public Nullable<int> CreditorID { get; set; }
         public Nullable<System.DateTime> CredPaymentDate { get; set; }
         public Nullable<float> CredPaymentAmount { get; set; }
+        public Nullable<int> SupplierID { get; set; }
     
         public virtual Creditor Creditor { get; set; }
+        public virtual Supplier Supplier { get; set; }
     }
 }

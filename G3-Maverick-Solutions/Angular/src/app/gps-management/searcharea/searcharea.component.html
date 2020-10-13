@@ -1,39 +1,170 @@
-<h1>Search Area</h1>
-<br>
-<div class="card">
-    <!--<p style="text-align: left;color: orange;"><u>Enter Area Details for Search:</u></p>
-    <br>
-    <form class="col s12 white" style="align-content: left;">
-        <div class="row">
-          <div class="input-field col s6">
-            <label>Area Name:</label>
-            <input type="text" name="ArName" #ArName="ngModel" [(ngModel)]="service.areaData.ArName">
-          </div>
-          <div class="input-field col s6">
-            <label>Province:</label>
-            <select  class="form-control" style="background-color: rgba(0,0,0,0);" name="ProvinceID" #ProvinceID="ngModel" [(ngModel)]="service.areaData.ProvinceID"
-            (change)="selectProvince($event.target)">
-            <option value="0" >-- Select --</option>
-            <option *ngFor="let area of service.areaList" value="{{area.ProvinceID}}">{{area.ProvName}}"></option>
-          </select>
-          </div>
-          <div class="input-field col s6">
-            <label>Area Status:</label>
-            <select class="form-control"  style="background-color: rgba(0,0,0,0);" name="AreaStatusID" #AreaStatusID="ngModel" [(ngModel)]="service.areaData.AreaStatusID"
-            (change)="selectAreaStatus($event.target)">
-                <option value="0" >-- Select --</option>
-                <option *ngFor="let area of service.areaList" value="{{ area.AreaStatusID}}">{{area.AreaStautsID.ASDescription}}"> </option>
-              </select>
-          </div>
+<body>
+    <h1>Area Details</h1>
+    <form [formGroup]="arForm">
+      <div class="card" *ngIf = "showOptions"> 
+          <button type="submit"   (click)="gotoSearch()" >Search By Name</button>
+          <button type="submit"   (click)="getAll()">View All Areas</button>
+      </div> 
+      
+      <div class="card" *ngIf = "showViewAll">
+          <p class="subheadinglabel">List of all areas:</p>
+  
+          <table>
+              <tr>
+                  <th>Area Name</th>
+                  <th>Action</th>
+              </tr>
+  
+  
+              <tr *ngFor="let area of areas">
+                  <td>{{area.ArName}}</td>
+                  <th><button (click)="view(area.ArName)">View</button></th>
+              
+              </tr>
+              
+          </table> 
+          <button type="submit" (click)="cancel()">Cancel</button> 
+      </div>
+      
+    <div class="card" *ngIf = "showSearch">
+            <br>
+        <div class="divleft"  >
+            <label class="subheadinglabel" >Enter Area Name to search </label>
+        <br>
+            <label for="name">Area Name:       </label>
+            <input class="searchinput" formControlName="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name"  pattern="[a-zA-Z ]*" required>
+            <br>
+                  <span style="color:red" *ngIf="arForm.get('name').errors && (arForm.get('name').touched || arForm.get('name').dirty)">
+                      <span *ngIf="arForm.get('name').errors.required">Name is required.</span>
+                      <span *ngIf="arForm.get('name').errors.minlength || arForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                      <span *ngIf="arForm.get('name').errors.pattern">Only text characters.</span>
+                  </span>
         </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <button class="btn-large btn-submit" type="submit"  (click)="SearchArea()">Search Area</button>
-            <button class="btn-large btn-submit" type="submit"  routerLink="./">Cancel</button>
-          </div>
+        <br>
+  
+        <div class="divleft">
+            <button type="submit"   (click)="searchArea()" >Search</button>
+            <button type="submit"   (click)="gotoGPSManagement()">Cancel</button>
         </div>
-    </form>-->
+  
     </div>
     <br>
+    <div class="card" *ngIf = "showResults">
+        <br>
+        <div class="divleft" >
+            <label class="subheadinglabel"> Searched Area Details:</label>
+        </div>
+    
+        <div class="divleft" >
+            <label for="ArName">Area Name:       </label>
+            <input type="text" formControlName="ArName" class="form-control" [(ngModel)]="area.ArName" id="ArName" name="ArName" required [readonly] = "this.inputEnabled">
+        </div>
+  
+  
+        <br>
+        <div class="divleft" >
+            <label for="ArPostalCode">Postal Code:       </label>
+            <input type="text" formControlName="ArPostalCode" class="form-control" [(ngModel)]="area.ArPostalCode" id="ArPostalCode" name="ArPostalCode" required [readonly] = "this.inputEnabled">
+        </div>
+  
+        <br>
+        <div class="divleft"  >
+            <label for="ProvinceID">Province:     </label>
+            <input type="text" formControlName="ProvName" class="form-control" [(ngModel)]="area.ProvinceID" id="ProvinceID" name="ProvinceID" required [readonly] = "this.inputEnabled">
+        </div>
+  
+        <br>
+        <div class="divleft" >
+            <label for="AreaStatusID">Status: </label>
+            <input type="text" class="form-control" formControlName="StatusName" [(ngModel)]="area.AreaStatusID" id="AreaStatusID" name="AreaStatusID" required [readonly] = "this.inputEnabled"> 
+        </div>
+        <br><br>
+  
+        <div class="divleft" *ngIf="showButtons">
+          <button type="submit"  (click)="gotoUpdate()" >Update</button>
+          <button type="submit"  (click)="deleteArea()" >Delete</button>
+            <button type="submit"  (click)="gotoGPSManagement()" >Cancel</button>
+         </div>
+  
+         <div class="divleft" *ngIf="showSave" >
+         <button type="submit" (click)="updateArea()">Save</button>
+         <button type="submit"  (click)="gotoGPSManagement()">Cancel</button>
+        </div>
+        
+    </div>
+  
+    <div  *ngIf = "showResultsEdit">
+      <br>       
+          <div class="card">
+            <div class="divleft">
+            <div class="subheadinglabel" id="area">Enter Area Details:</div>
+              <br>
+  
+              <div class="divleft" >
+              <label for="ArName">Area Name:   </label>
+              <input type="text" formControlName="ArName" class="form-control" [(ngModel)]="area.ArName" id="ArName" name="ArName"  required> 
+              <br>
+              <span style="color:red" *ngIf="arForm.get('ArName').errors && (arForm.get('ArName').touched || arForm.get('ArName').dirty)">
+                <span *ngIf="arForm.get('ArName').errors.required">Name is required.</span>
+                <span *ngIf="arForm.get('ArName').errors.minlength || arForm.get('ArName').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
+                <span *ngIf="arForm.get('ArName').errors.pattern">Only text characters.</span>
+            </span>
+              
+                  
+          </div>
+  
+          <div class="divleft" >
+            <label for="ArPostalCode">Postal Code:   </label>
+            <input type="text" formControlName="ArPostalCode" class="form-control" [(ngModel)]="area.ArPostalCode" id="ArPostalCode" name="ArPostalCode"  required> 
+            <br>
+            <span style="color:red" *ngIf="arForm.get('ArPostalCode').errors && (arForm.get('ArPostalCode').touched || arForm.get('ArPostalCode').dirty)">
+                <span *ngIf="arForm.get('ArPostalCode').errors.required">Postal Code is required.<br></span>
+                <span *ngIf="arForm.get('ArPostalCode').errors.minlength">Postal Code is 4 digits.</span>
+                <span *ngIf="arForm.get('ArPostalCode').errors.maxlength">Postal Code is 4 digits.</span>
+                <!--<span *ngIf="arForm.get('ArPostalCode').errors.pattern">Only numbers allowed.<br></span>-->
+            </span>
+                
+        </div>
+               
+              <div class="divleft" >
+               <label>Province</label>
+                <select required formControlName="ProvinceID" class="form-control" [(ngModel)]="area.ProvinceID" name="ProvinceID" id="ProvinceID" required>
+                      <option  *ngFor="let province of provinces" value="{{province.ProvinceID}}">{{province.ProvName}}</option>
+                </select>
+                <span style="color:red" *ngIf="arForm.get('ProvinceID').errors && (arForm.get('ProvinceID').touched || arForm.get('ProvinceID').dirty)">
+                    <span *ngIf="arForm.get('ProvinceID').errors.required">Province is required.</span>
+                </span>
+                <br>
+               </div>   
+  
+               <div class="divleft" >
+                  <label>Area Status</label>
+                  <select required formControlName="StatusID" class="form-control" [(ngModel)]="area.AreaStatusID" name="AreaStatusID" id="AreaStatusID" required>
+                        <option  *ngFor="let status of statuses" value="{{status.AreaStatusID}}">{{status.ASDescription}}</option>
+                  </select>
+                  <br>
+                  <span style="color:red" *ngIf="arForm.get('StatusID').errors && (arForm.get('StatusID').touched || arForm.get('StatusID').dirty)">
+                    <span *ngIf="arForm.get('StatusID').errors.required">Status is required.</span>
+                </span>
+                  <br>
+                </div>
+              
+              
+              <button type="button" (click)="updateArea()">Update</button> 
+              <button type="button" (click)="gotoGPSManagement()" >Cancel</button>
+            </div>
+          </div>
+    </div>
+    <br>
+    </form>
+  </body>
+  
+  
+  
+  
+  
+  
+  
+
 
 

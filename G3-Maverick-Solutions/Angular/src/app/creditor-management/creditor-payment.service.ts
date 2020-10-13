@@ -19,6 +19,10 @@ export class CreditorPaymentService {
     return this.http.get<CreditorPayment[]>(this.url + '/getAllCreditorPayments');  
   }
 
+  getAllSuppliers(): Observable<Supplier[]> {  
+    return this.http.get<Supplier[]>('https://localhost:44399/Api/Supplier' + '/getAllSuppliers');  
+  }
+
   getCreditorPayment(Id: number): Observable<CreditorPayment> {  
     return this.http.get<CreditorPayment>(this.url + '/getCreditorPayment/' + Id);  
   } 

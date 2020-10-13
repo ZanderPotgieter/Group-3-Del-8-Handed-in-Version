@@ -117,7 +117,7 @@
                 <div class="divleft">
                     
                     <label for="Name">Still Due: R</label>
-                    <input type = "number"  min=0.00 class="form-control" [(ngModel)]="creditor.CredAccountBalance" [ngModelOptions]="{standalone: true}" name="CredAccountBalance" id="CredAccountBalance"  required [readonly] = "this.inputDisabled"> 
+                    <input type = "number"  min=0.00 class="form-control" [(ngModel)]="creditor.CredAccountBalance" [ngModelOptions]="{standalone: true}" name="CredAccountBalance" id="CredAccountBalance"  required [readonly] = "this.inputEnabled"> 
                 </div> 
                 
                 <div class="divleft" *ngIf="showButtons">

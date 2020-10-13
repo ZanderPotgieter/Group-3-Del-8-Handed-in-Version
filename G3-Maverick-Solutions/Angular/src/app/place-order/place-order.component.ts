@@ -188,7 +188,6 @@ ngOnInit(): void {
           this.customer.CusCell = res.CusCell;
           this.customer.CusEmail = res.CusEmail;
           
-
           this.CustomerID = res.CustomerID;
           this.showDetails = true;
           this.showInitiate = false;
@@ -205,7 +204,6 @@ ngOnInit(): void {
   }
 
   initiatePlaceOrder(ID: any){
-   // this.CustomerID = parseInt(this.api.currentCustomerID.toString());
 
      this.api.initiatePlaceOrder(ID, this.session).subscribe( (res:any)=> {
               console.log(res);
@@ -255,12 +253,16 @@ ngOnInit(): void {
 
     for(let prod of this.productsWithPrice ){
         this.selectedProduct = prod;
+       
         this.quantity = this.selectedProduct.Quantity + 1;
         this.updateList();
+    
       
       
     }
-    }
+    
+
+  }
 
     updateList(){
       for(let prod of this.orderProducts){

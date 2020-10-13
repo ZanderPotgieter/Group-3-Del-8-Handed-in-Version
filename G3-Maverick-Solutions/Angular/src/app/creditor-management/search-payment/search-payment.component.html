@@ -4,25 +4,23 @@
     <div class="card" *ngIf = "showViewAll">
       <p class="subheadinglabel">Creditor Payments:</p>
 
-      <table>
-          <tr>
-              <th>Payment ID</th>
-              <th>Creditor/Supplier</th>
-              <th>Date</th>
-              <th>Amount</th>
-          </tr>
-
-
-          <tr *ngFor="let payments of payments">
-              <td>{{creditor.PaymentID}}</td>
-              <td><input type="text" class="form-control" [(ngModel)]="creditor.SupplierID" id="SupplierID" name="SupplierID"></td>
-              <td>{{creditor.CredPaymentDate}}</td>
-              <td>{{creditor.CredPaymentAmount}}</td>
-          
-          </tr>
-          
-      </table> 
-      <button type="submit" (click)="cancel()">Cancel</button> 
+      <table class="table table-striped">  
+        <thead class="thead-dark">  
+          <tr>  
+            <th>PaymentID</th>    
+            <th>Amount R</th>  
+            <th>Date</th>  
+          </tr>  
+        </thead>  
+        <tbody>  
+          <tr *ngFor="let pay of allPayments | async">  
+            <td>{{pay.PaymentID}}</td>  
+            <td>{{pay.CredPaymentAmount}}</td>  
+            <td>{{pay.CredPaymentDate}}</td>   
+          </tr>  
+        </tbody>  
+      </table>   
+      <button type="submit" (click)=gotoCreditorManagment()>Cancel</button> 
   </div>
     
     </form>

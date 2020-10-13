@@ -89,28 +89,25 @@ export class CustomerOrderService {
     order , httpOptions); 
   }
 
-  cancelOrder(CustomerOrderID : number){
-    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post(this.url + '/cancelOrder',  
-    CustomerOrderID, httpOptions); 
-  }
-
-  collectOrder(CustomerOrderID : number){
-    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post(this.url + '/collectOrder',  
-    CustomerOrderID, httpOptions); 
-  }
-
-  collectCustomerOrder(collectOrder: CustomerOrder): Observable<CustomerOrder>   {  
-    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
-    return this.http.post<CustomerOrder>(this.url + '/collectCustomerOrder',  
-    collectOrder, httpOptions);  
-  }  
+  makeOrderPayment(customerorderID: number, payAmount: number, paymentTypeID:number){
+    return this.http.get(this.url + '/makeOrderPayment?customerorderID='+customerorderID+'&payAmount='+payAmount +'&paymentTypeID='+paymentTypeID, this.httpOptions)
+    }
 
   cancelCustomerOrder(customerorderID: number){
     return this.http.get(this.url + '/cancelCustomerOrder?customerorderID='+customerorderID, this.httpOptions)
    }
 
+  cancelCusOrder(CustomerOrder: CustomerOrder): Observable<CustomerOrder> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.put<CustomerOrder>(this.url + '/cancelCusOrder',  
+    CustomerOrder, httpOptions);  
+  }  
+
+  collectCusOrder(CustomerOrder: CustomerOrder): Observable<CustomerOrder> {  
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };  
+    return this.http.put<CustomerOrder>(this.url + '/collectCusOrder',  
+    CustomerOrder, httpOptions);  
+  }  
   
 
   getOrdersByStatus(status: string){
@@ -130,7 +127,7 @@ export class CustomerOrderService {
     return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, httpOptions);
   }
 
-  sendNotification(email: string)
+  sendNotification(email: String)
   {
     return this.http.post(this.url + '/sendNotification?email=' + email, this.httpOptions);
   }

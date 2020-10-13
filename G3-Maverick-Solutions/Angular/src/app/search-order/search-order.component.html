@@ -58,7 +58,7 @@
 
         <div *ngIf="showList" class="card">
             <div class="divleft">
-                <br>  <label class="subheadinglabel" >Orders:</label><br>
+                <br>  <label class="subheadinglabel" >Customer Orders:</label><br>
                 <table>   
                
                     <tr>
@@ -87,6 +87,10 @@
                 <label class="subheadinglabel" >Customer Order Details </label>
             </div>
 
+            <div class="divleft" >
+                <label class="displaylabel" for="cusOrdID">Order ID:      </label>
+               <label id="cusOrdID" name="cusOrdID">{{orderDetails.CustomerOrderID}}</label>
+               </div>
 
             <div class="divleft" >
                 <label class="displaylabel" for="cusOrdNo">Order No:      </label>
@@ -96,11 +100,6 @@
                <div class="divleft" >
                <label class="displaylabel" for="OrdDate">Date:      </label>
                  <label  id="OrdDate" name="OrdDate">{{orderDetails.CusOrdDate}}</label>
-               </div>
-
-               <div class="divleft" >
-                <label class="displaylabel" for="cusOrdNo">Status:      </label>
-               <label id="cusOrdNo" name="cusOrdNo">{{orderDetails.CusOrdStatus}}</label>
                </div>
                
             
@@ -149,14 +148,6 @@
                     <td><button class="btntable" style="height: 30px;" (click) ="remove(ndx)">X</button></td>
                 </tr>
 
-                <tr >
-                    
-                    <th></th>
-                    <th></th>
-                    <th>Subtotal (Exc VAT):</th>
-                    <th>R{{calculatedValues.TotalExcVat}}</th>
-                </tr>
-
                 <tr>
                     
                     
@@ -171,16 +162,42 @@
                     <th></th>
                     <th></th>
                     <th>TOTAL:</th>
-                    <th>R{{calculatedValues.TotalExcVat}}</th>
+                    <th>R{{calculatedValues.TotalIncVat}}</th>
                 </tr>
             </table>
 
         <div class="divleft">
-        <button  type="submit" (click)="Collect()" >Collect Order</button>
+        <button  type="submit" (click)="collectOrder()" >Collect Order</button>
         <button type="submit" (click)="cancelOrder()">Cancel Order</button>
         <button  type="submit"  (click)="sendNotification()" >Send Notification</button>
         <button  type="submit" (click)="gotoCustomerOrderManagement()">Back</button>
         </div>
+
+        <div  class="card" style="padding: 2px 2px;" *ngIf = "showPay">
+            <div class="divleft" >
+                <label for="Product">Payment Method: </label>
+                 <select required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
+                     <option *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
+                 </select>
+             </div>
+      
+             <div class="divleft">
+                <label for="quantity">Amount </label>
+                <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+                
+              </div>
+              <div class="divleft" *ngIf="ShowOustanding">
+                <label style="width :300px">Outstanding Amount: R{{outstandingAmt}}</label>
+              </div>
+              <div class="divleft" *ngIf="showChange">
+                 <label style="width :300px">Change: R{{change}}</label>
+               </div>
+         
+             <div class="divleft">
+              <button type="submit" (click)="makePayment()">Make Payment</button>
+             </div>
+      
+            </div>
     </div>
 
     

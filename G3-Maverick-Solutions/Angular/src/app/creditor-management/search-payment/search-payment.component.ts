@@ -50,6 +50,10 @@ export class SearchPaymentComponent implements OnInit {
 
   }  
 
+  gotoCreditorManagment(){
+    this.router.navigate(['creditor-management']);
+  }
+
   getAll(){
     this.credpayment.getAllCreditorPayments().subscribe( (res:any)=> {
       console.log(res);

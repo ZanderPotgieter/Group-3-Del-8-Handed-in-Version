@@ -1,7 +1,7 @@
 <body>
     <h1>Search Donation Recipient</h1>
     <form>
-        <div class="card" > 
+        <div class="card" *ngIf= "showOptions"> 
             <p class="subheadinglabel">Search Donation Recipient By:</p>
             <div class="divleft">
                 <button type="submit" (click)="All()">All Donation Recipients</button>

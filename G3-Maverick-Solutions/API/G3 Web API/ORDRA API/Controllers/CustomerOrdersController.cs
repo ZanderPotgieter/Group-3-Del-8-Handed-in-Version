@@ -882,7 +882,7 @@ namespace ORDRA_API.Controllers
            try
             {
                 objectOrder = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
-                if (objectOrder != null && objectOrder.CustomerOrderStatusID == 1 || objectOrder.CustomerOrderStatusID == 2)
+                if (objectOrder != null && objectOrder.CustomerOrderStatusID == 1)
                 {
                     objectOrder.CustomerOrderStatusID = 4;
                     db.SaveChanges();
@@ -891,7 +891,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Message = "Only 'Placed' or 'Fulfilled' customer orders can be collected.";
+                    toReturn.Message = "Only 'Placed' customer orders can be cancelled.";
                             }
                         
                     

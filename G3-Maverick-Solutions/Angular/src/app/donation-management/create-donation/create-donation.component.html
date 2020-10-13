@@ -1,6 +1,7 @@
 
 <body>
     <h1 *ngIf = "showDonation" >Create Donation</h1>
+    <h1 *ngIf="showDonatedProduct">Add Donated Products</h1>
     <form [formGroup]="angForm">        
         <div class="card" *ngIf = "showSearch">
             <label class="subheadinglabel">Search for donation recipient:</label>
@@ -68,26 +69,26 @@
                 <br>
 
                 <label for="Name">Name</label>
-                <input type = "text" formControlName="DrName" class="form-control" [(ngModel)]="donationRecipient.DrName" name="DrName" id="DrName"  required [readonly] = "this.inputEnabled">     
+                <input type = "text" formControlName="DrName" class="form-control" [(ngModel)]="donationRecipient.DrName" name="DrName" id="DrName"  required [readonly] = "this.inputDisabled">     
                 <br>
             </div>
 
             <div class="divleft">
                 <label for="Name">Surname</label>
-                <input type = "text" formControlName="DrSurname" class="form-control" [(ngModel)]="donationRecipient.DrSurname" name="DrSurname" id="DrSurname"  required [readonly] = "this.inputEnabled">     
+                <input type = "text" formControlName="DrSurname" class="form-control" [(ngModel)]="donationRecipient.DrSurname" name="DrSurname" id="DrSurname"  required [readonly] = "this.inputDisabled">     
                 <br>
             </div>
 
             <div class="divleft">
                 <label for="Name">Cell Number</label>
-                <input type = "text" formControlName="DrCell" class="form-control" [(ngModel)]="donationRecipient.DrCell" name="DrCell" id="DrCell"  required [readonly] = "this.inputEnabled">  
+                <input type = "text" formControlName="DrCell" class="form-control" [(ngModel)]="donationRecipient.DrCell" name="DrCell" id="DrCell"  required [readonly] = "this.inputDisabled">  
    
                 <br>
             </div>
 
             <div class="divleft">
                 <label for="Name">Email</label>
-                <input type = "text" formControlName="DrEmail" class="form-control" [(ngModel)]="donationRecipient.DrEmail" name="DrEmail" id="DrEmial"  required [readonly] = "this.inputEnabled"> 
+                <input type = "text" formControlName="DrEmail" class="form-control" [(ngModel)]="donationRecipient.DrEmail" name="DrEmail" id="DrEmial"  required [readonly] = "this.inputDisabled"> 
     
                 <br>
             </div> 
@@ -105,7 +106,6 @@
 
             <label>Status</label>
             <select required formControlName="DonationStatusID" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
-                <option value="0">--Select--</option>
                 <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
             </select>
             <br>
@@ -157,16 +157,18 @@
 
 
 
-    <h1 *ngIf="showDonatedProduct">Add Donated Products</h1>
+   
         <div *ngIf="showContainer" class="card">
             <div class="divleft">
                 <label class="subheadinglabel" >Select container that donated products:</label>
                 <br>
                 <label>Container </label>
-                <select required formControlName="ContainerID" class="form-control" [(ngModel)]="container.ContainerID" name="ContainerID" id="ContainerID" >
-                    <option value="0">--Select--</option>
+                <select required formControlName="ContainerID" class="form-control" [(ngModel)]="container.ContainerID" name="ContainerID" id="ContainerID" required >
                     <option  *ngFor="let container of containers" value="{{container.ContainerID}}">{{container.ConName}}</option>
-                </select>
+              </select>
+                <!-- <select required formControlName="ContainerID" name="ContainerID" [(ngModel)]="container.ContainerID" (ngModelChange)="ContainerSelection($event)">
+                    <option *ngFor="let con of containers" [ngValue]="con">{{con.ConName}}</option>
+                </select> -->
 
                 <button type="submit" (click)="selectContainer(container.ContainerID)" >Select container</button>
                 <button type="button" (click)="cancel()" >Cancel</button>
@@ -175,18 +177,21 @@
 
         <div *ngIf="showNameSearch" class="card">
             <div class="divleft"> 
-                <label>Container: {{container.ConName}}</label>
+                <label>Products donated from Container: {{container.ConName}}</label>
                 <br>
                 <label class="subheadinglabel" >Select Product:</label>
-                <label>Product </label>
-                <select required formControlName="ProductID" class="form-control" [(ngModel)]="product.ProductID" name="ProductID" id="ProductID" >
-                    <option value="0">--Select--</option>
+                <label for="Product">Product: </label>
+                <select required formControlName="ProductID" class="form-control" [(ngModel)]="product.ProductID" name="ProductID" id="ProductID" required >
                     <option  *ngFor="let product of products" value="{{product.ProductID}}">{{product.ProdName}}</option>
-                </select>
+              </select>
+                <!-- <select required formControlName="ProductID" name="ProductID" [(ngModel)]="donatedProduct.ProductID" (ngModelChange)="addProduct($event)">
+                    <option *ngFor="let product of products" [ngValue]="product">{{product.Prodname}}</option>
+                </select> -->
+                <br>
                 <label>Quantity</label>
                 <input type = "number" formControlName="DPQuantity" class="form-control" [(ngModel)]="donatedProduct.DPQuantity" name="DPQuantity" id="DPQuantity"  pattern="[0-9]*" required >
             </div>
-            <button type="submit" (click)="addProduct(product.ProductID, donatedProduct.DPQuantity)" >Add Product</button>
+            <button type="submit" (click)="addProduct(donatedProduct.ProductID, donatedProduct.DPQuantity)" >Add Product</button>
             <button type="button" (click)="cancel()" >Cancel</button>
         </div> 
     

@@ -30,14 +30,14 @@ namespace ORDRA_API.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
             toReturn.TableData = null;
-            try
-            {
+            /*try
+            {*/
                 List<Creditor_Payment> credPayments = new List<Creditor_Payment>();
-                credPayments = db.Creditor_Payment.Include(z => z.Creditor).Include(z => z.Creditor.Supplier).Where(z => z.Creditor.CredAccountBalance > 0).ToList();
+                credPayments = db.Creditor_Payment.Include(z => z.Creditor).Include(z => z.Supplier).ToList();
                 if (credPayments != null)
                 {
                     //table data
-                    var suppliers = credPayments.GroupBy(z => z.Creditor.Supplier.SupName);
+                    var suppliers = credPayments.GroupBy(z => z.SupplierID);
                     List<dynamic> supplierGroups = new List<dynamic>();
 
                     if (suppliers != null)
@@ -46,29 +46,48 @@ namespace ORDRA_API.Controllers
                         {
                             if (item != null && item.Key !=null )
                             {
-                                dynamic supplier = new ExpandoObject();
-                                supplier.SupName = item.Key;            //table title
-                                                                        //var balance = db.Creditors.Where(z=>z.SupplierID == )
-                                supplier.Balance = item.Select(c => c.Creditor.CredAccountBalance).FirstOrDefault();
-                                List<dynamic> payments = new List<dynamic>();
-                                foreach (var paymentItem in item )
-                                {
-                                    if (paymentItem != null && paymentItem.CredPaymentAmount != null && paymentItem.CredPaymentDate != null)
-                                    {
-                                        dynamic paymentObject = new ExpandoObject();
-                                        DateTime credDate = Convert.ToDateTime(paymentItem.CredPaymentDate);
-                                        paymentObject.CredPaymentDate = credDate.Date;
-                                        paymentObject.CredPaymentAmount = paymentItem.CredPaymentAmount;
-                                        payments.Add(paymentObject);
-                                    }
-                                    else
-                                    {
-                                        toReturn.Message = "Creditor payment information not available to add in the report";
-                                    }
-                                }
 
-                                supplier.Payments = payments;
-                                supplierGroups.Add(supplier);
+                                var id = item.Key;
+                                var cred = db.Creditors.Where(z => z.SupplierID == id).FirstOrDefault();
+                                if (cred!=null)
+                                {
+                                    dynamic supplier = new ExpandoObject();
+                                    supplier.SupID = item.Key;
+
+                                    Supplier sup = db.Suppliers.Where(z => z.SupplierID == id).FirstOrDefault();
+
+                                    supplier.SupName = sup.SupName;
+                                    supplier.Balance = cred.CredAccountBalance;
+                                  
+                                    //supplier.Balance = item.Select(c => c.Creditor.CredAccountBalance).FirstOrDefault();
+                                    List<dynamic> payments = new List<dynamic>();
+                                    foreach (var paymentItem in item)
+                                    {
+                                        if (paymentItem.SupplierID == id /*!= null && paymentItem.CredPaymentAmount != null && paymentItem.CredPaymentDate != null*/)
+                                        {
+                                            if (paymentItem != null && paymentItem.CredPaymentAmount != null && paymentItem.CredPaymentDate != null)
+                                            {
+                                                dynamic paymentObject = new ExpandoObject();
+                                                DateTime credDate = Convert.ToDateTime(paymentItem.CredPaymentDate);
+                                                paymentObject.CredPaymentDate = credDate.Date;
+                                                paymentObject.CredPaymentAmount = paymentItem.CredPaymentAmount;
+                                                payments.Add(paymentObject);
+                                            }
+                                            else
+                                            {
+                                                toReturn.Message = "Creditor payment information not available to add in the report";
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            toReturn.Message = "Creditor payment information not available to add in the report";
+                                        }
+                                    }
+
+                                    supplier.Payments = payments;
+                                    supplierGroups.Add(supplier);
+                            }
                             }
                             else
                             {
@@ -89,11 +108,11 @@ namespace ORDRA_API.Controllers
                     toReturn.Message = "Information not available to generate report";
                 }
 
-            }
+            /*}
             catch (Exception)
             {
                 toReturn.Message = "Failed to generate report ";
-            }
+            }*/
             return toReturn;
         }
 

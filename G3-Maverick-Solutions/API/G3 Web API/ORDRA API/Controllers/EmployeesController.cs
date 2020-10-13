@@ -73,7 +73,7 @@ namespace ORDRA_API.Controllers
 
 
             }
-            catch (Exception error)
+            catch (Exception)
             {
                 toReturn.Error = "Failed to get Employee record" ;
             }

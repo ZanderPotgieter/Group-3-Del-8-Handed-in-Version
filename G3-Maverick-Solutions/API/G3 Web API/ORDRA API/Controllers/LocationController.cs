@@ -78,7 +78,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectLocation == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Location Record Not Found";
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace ORDRA_API.Controllers
                 else
                 {
 
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Location Record Not Found";
 
                 }
             }
@@ -144,7 +144,7 @@ namespace ORDRA_API.Controllers
             {
                 db.Locations.Add(newLocation);
                 db.SaveChanges();
-                toReturn.Message = "Add Succsessful";
+                toReturn.Message = "Location Add Succsessful";
             }
             catch (Exception)
             {
@@ -191,7 +191,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception)
             {
-                toReturn.Message = "Update unsuccessful";
+                toReturn.Message = "Location Update unsuccessful";
 
             }
 

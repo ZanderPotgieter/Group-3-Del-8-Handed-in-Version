@@ -4,7 +4,7 @@ export class Creditor {
     CredAccountBalance: number;
     CredBank: string;
     CredBranch: string;
-    CredAccount: number;
+    CredAccount: string; 
     CredType: string;
 }
 

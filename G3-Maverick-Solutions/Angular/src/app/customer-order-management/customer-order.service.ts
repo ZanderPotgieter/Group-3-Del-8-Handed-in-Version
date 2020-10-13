@@ -7,6 +7,7 @@ import{map} from 'rxjs/operators';
 //import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs';
 import { Customer } from '../customer-management/customer';
+import { PaymentType } from '../sales-management/payment-type';
 @Injectable({
   providedIn: 'root'
 })
@@ -122,14 +123,18 @@ export class CustomerOrderService {
     return this.http.get<Customer[]>(this.urlcus + '/getAllCustomers');  
   }
 
+  getAllPaymentTypes(): Observable<PaymentType[]> {  
+    return this.http.get<PaymentType[]>('https://localhost:44399/Api/CustomerOrders' + '/getAllPaymentTypes');  
+  }
+
   getUserDetails(session: any){
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
     return this.http.post('https://localhost:44399/Api/Login/getUserDetails',session, httpOptions);
   }
 
-  sendNotification(email: String)
+  sendNotification(email: String, number: string)
   {
-    return this.http.post(this.url + '/sendNotification?email=' + email, this.httpOptions);
+    return this.http.post(this.url + '/sendNotification?email=' + email+'&number='+ number, this.httpOptions);
   }
 
 

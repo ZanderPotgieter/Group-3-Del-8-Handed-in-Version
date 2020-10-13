@@ -13,6 +13,7 @@ import{map} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { User } from '../user';
+import { DialogService } from '../shared/dialog.service';
 
 
 
@@ -33,7 +34,7 @@ export class PlaceOrderComponent implements OnInit {
     this._allCus = value;  
   }  
 
-  constructor(private api: CustomerOrderService, private router: Router, private bf: FormBuilder) { }
+  constructor(private api: CustomerOrderService, private router: Router, private bf: FormBuilder, private dialogService: DialogService) { }
   cusorderForm: FormGroup;
 
   loadDisplay(){  
@@ -78,6 +79,7 @@ export class PlaceOrderComponent implements OnInit {
 
   catSelection: number;
   prodSelection : number = 0;
+  CID : number = 0;
 
   prodNotSelected: boolean = false;
   quantyNull: boolean = false;
@@ -103,20 +105,6 @@ export class PlaceOrderComponent implements OnInit {
 CustomerID: number;
 
 ngOnInit(): void {
-
-  if(!localStorage.getItem("accessToken")){
-    this.router.navigate([""]);
-  }
-  else {
-    this.session = {"token" : localStorage.getItem("accessToken")}
-
-    this.api.getUserDetails(this.session).subscribe( (res:any) =>{
-      console.log(res);
-      this.user = res;
-     
-    });
-      
-    }
 
 
   this.loadDisplay();   
@@ -192,7 +180,7 @@ ngOnInit(): void {
           this.showDetails = true;
           this.showInitiate = false;
           this.customerNull = false;
-         this.initiatePlaceOrder(res.CustomerID)
+         this.initiatePlaceOrder();
       }
           
 
@@ -203,13 +191,25 @@ ngOnInit(): void {
 
   }
 
-  initiatePlaceOrder(ID: any){
+  initiatePlaceOrder(){
+    if(!localStorage.getItem("accessToken")){
+      this.router.navigate([""]);
+    }
+    else {
+      this.session = {"token" : localStorage.getItem("accessToken")}
+  
+      this.api.getUserDetails(this.session).subscribe( (res:any) =>{
+        console.log(res);
+        this.user = res;
+       
+      });
+        
+      }
 
-     this.api.initiatePlaceOrder(ID, this.session).subscribe( (res:any)=> {
+     this.api.initiatePlaceOrder(this.customer.CustomerID, this.session).subscribe( (res:any)=> {
               console.log(res);
               if(res.Message != null){
-                this.responseMessage = res.Message;
-                alert(this.responseMessage)}
+                this.dialogService.openAlertDialog(this.errorMessage);}
                 else{
                 //set customer details
                 this.customer = res.customer;
@@ -315,49 +315,48 @@ ngOnInit(): void {
     }
 
     listProducts(){
+      this.api.addCustomerOrderProduct(this.selectedProduct.ProductID, this.customerOrder.CustomerOrderID, this.quantity).subscribe((res: any) =>{
+        console.log(res);
+        if (res.Error){
+          alert(res.Error);
+        }
+        
+      })
       if(this.quantity == 0 || this.prodSelection == null){
-       this.prodNotSelected = true;
-         this.quantyNull = true;
-       }
-       else{
-         this.prodNotSelected = false;
-         this.quantyNull = false;
-         if(this.quantity <= this.selectedProduct.CPQuantity)
-         {
+        this.prodNotSelected = true;
+          this.quantyNull = true;
+        }
+        else{
+          this.prodNotSelected = false;
+          this.quantyNull = false;
           
-       this.selectedProduct.Quantity = this.quantity;
-       this.selectedProduct.Subtotal = (this.quantity * this.selectedProduct.Price)
-       this.orderProducts.push(this.selectedProduct);
-     
-     
-       this.total = this.total + this.selectedProduct.Subtotal;
-     
-       this.TotalIncVat = this.total;
-       this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
-       this.TotalExcVat = this.total - this.Vat;
+           
+        this.selectedProduct.Quantity = this.quantity;
+        this.selectedProduct.Subtotal = (this.quantity * this.selectedProduct.Price)
+        this.orderProducts.push(this.selectedProduct);
       
-     
-       this.orderDetails.TotalIncVat = this.TotalIncVat;
-       this.orderDetails.Vat  = this.Vat;
-       this.orderDetails.TotalExcVat = this.TotalExcVat;
-     
-      this.displayTotal = this.TotalIncVat.toFixed(2);
-      this.displayVat = this.Vat.toFixed(2);
-      this.displaySubtotal = this.TotalExcVat.toFixed(2);
-    
-     
-     this.showTable = true;
-     this.showQuantity = false;
-
-     this.api.addCustomerOrderProduct(this.selectedProduct.ProductID, this.customerOrder.CustomerOrderID, this.quantity).subscribe((res: any) =>{
-       console.log(res);
-       if (res.Error){
-         alert(res.Error);
-       }
+      
+        this.total = this.total + this.selectedProduct.Subtotal;
+      
+        this.TotalIncVat = this.total;
+        this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
+        this.TotalExcVat = this.total - this.Vat;
        
-     })
+      
+        this.orderDetails.TotalIncVat = this.TotalIncVat;
+        this.orderDetails.Vat  = this.Vat;
+        this.orderDetails.TotalExcVat = this.TotalExcVat;
+      
+       this.displayTotal = this.TotalIncVat.toFixed(2);
+       this.displayVat = this.Vat.toFixed(2);
+       this.displaySubtotal = this.TotalExcVat.toFixed(2);
      
-         }
+      
+      this.showTable = true;
+      this.showQuantity = false;
+
+     
+         
      }
      
      }
@@ -438,16 +437,8 @@ else{
 
   placeOrder()
   {
-    //this.customerOrder.Product_Order_Line = this.prodOrderLine;
-    
-     this.api.placeOrder(this.customerOrder).subscribe( (res:any)=> {
-       console.log(res);
-       if(res.Message){
-       this.responseMessage = res.Message;}
-       alert(this.responseMessage)
-       this.router.navigate(["customer-order-management"])
-     })
-
+    this.dialogService.openAlertDialog("Customer Order has been successfully placed for " + this.customer.CusName + ' ' + this.customer.CusSurname) ;
+    this.router.navigate(["customer-order-management"])
   }
 
   gotoCustomerOrderManagement()
@@ -455,7 +446,7 @@ else{
     this.api.cancelCustomerOrder(this.customerOrder.CustomerOrderID).subscribe((res: any)=> {
       console.log(res);
       if(res.Message){
-        alert(res.Message);
+        this.dialogService.openAlertDialog(this.errorMessage);
     this.router.navigate(["customer-order-management"])
   }
 } )

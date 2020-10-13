@@ -10,8 +10,8 @@
             <label class="subheadinglabel" >Enter Customer Details: </label>
         </div>
      
-        <div class="divleft"  style="float:left; width:40%;">
-            <label for="cusName">Name:     </label>
+        <div class="divleft"  style="float:left; width:45%;">
+            <label for="cusName">Name:</label>
             <input class="searchinput" type="text" formControlName="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" id="name" name="name" pattern="[a-zA-Z ]*" required>
                   <span style="color:red" *ngIf="cusorderForm.get('name').errors && (cusorderForm.get('name').touched || cusorderForm.get('name').dirty)">
                     <br>
@@ -19,21 +19,20 @@
                       <span *ngIf="cusorderForm.get('name').errors.pattern">Only text characters.<br></span>
                   </span>
        </div>
-       <div class="divleft"  style="float:left; width:60%;">
-        <label for="surname">Surname:     </label>
+       <div class="divleft"  style="float:left; width:55%;">
+        <label for="surname">Surname:</label>
         <input class="searchinput" type="text" formControlName="surname" [(ngModel)]="surname" [ngModelOptions]="{standalone: true}" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
         <span style="color:red" *ngIf="cusorderForm.get('surname').errors && (cusorderForm.get('surname').touched || cusorderForm.get('surname').dirty)">
             <br>
             <span *ngIf="cusorderForm.get('surname').errors.required">Surname is required.<br></span>
             <span *ngIf="cusorderForm.get('surname').errors.pattern">Only text characters.<br></span>
-        </span>
-        <br>
-            <button style="float:left;" (click) = "getCustomer()" >Place Order</button>
+        </span>   
+        </div>
+        <button style="float:left;" (click) = "getCustomer()" >Place Order</button>
 
             <div *ngIf="customerNull" class ="divleft">
                 <label style="color: red; font-size: 13px; width :200px">Please enter search criteira.</label>
             </div>
-        </div>
 
         <table class="table table-striped">  
             <thead class="thead-dark">  
@@ -99,11 +98,10 @@
                 </div>
 
                 <div class="divleft" style="float:left; width:50%;">   
-                    <div class="form-group" [ngClass] ="{}">
                 <label  class="displaylabel" for="cusEmail" style="width:100px">Email:</label>
                 <label id="email"  name="email" [(ngModel)]="email" id="txtEmail" >{{customer.CusEmail}}</label>
       
-            </div>
+            
                 </div>
             </div>
          </div>
@@ -137,7 +135,6 @@
                     <label style="color: red; font-size: 13px; width :1000px">No quantity has been entered. Please enter a quantity for the product. </label>
                 </div>
                 <button style="height: 30px;" (click)="listProducts()">Add</button>
-                <button type="submit" (click)="gotoCustomerOrderManagement()">Cancel</button>
          </div>
         </div>
         <br>

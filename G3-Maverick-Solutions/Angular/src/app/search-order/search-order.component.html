@@ -62,6 +62,7 @@
                 <table>   
                
                     <tr>
+                        <th>Container</th>
                         <th>OrderNo</th>
                         <th>Status</th>
                         <th>Name</th>
@@ -70,6 +71,7 @@
                         
                     </tr>
                     <tr *ngFor="let item of searchedOrders, index as ndx">
+                        <td>{{item.CusOrdContainer}}</td>
                         <td>{{item.CusOrdNumber}}</td>
                         <td>{{item.CusOrdStatus}}</td>
                         <td>{{item.CusName}}</td>
@@ -164,6 +166,14 @@
                     <th>TOTAL:</th>
                     <th>R{{calculatedValues.TotalIncVat}}</th>
                 </tr>
+
+                <tr>
+                    
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th><button  type="submit" (click)="showPayment()" >Pay</button></th>
+                </tr>
             </table>
 
         <div class="divleft">
@@ -181,11 +191,11 @@
                  </select>
              </div>
       
-             <div class="divleft">
-                <label for="quantity">Amount </label>
-                <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
-                
-              </div>
+                <div class="divleft">
+                    <label for="quantity">Amount </label>
+                    <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+                    
+                  </div>
               <div class="divleft" *ngIf="ShowOustanding">
                 <label style="width :300px">Outstanding Amount: R{{outstandingAmt}}</label>
               </div>

@@ -62,7 +62,7 @@ export class SearchOrderComponent implements OnInit {
 
   selectedOrder: SearchedOrder = new SearchedOrder();
   searchedOrders: SearchedOrder[] = [];
-  payments: Payment[] = [];
+  payments: PaymentType[] = [];
   paymentTypes: PaymentType[] =[];
   showPay: boolean = false;
   selectedPayment: PaymentType = new PaymentType();
@@ -76,17 +76,26 @@ export class SearchOrderComponent implements OnInit {
       cell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
         
     }); 
+
+    this.api.getAllPaymentTypes()
+    .subscribe(value => {
+      if (value != null) {
+        this.paymentTypes = value;
+      }
+    });
   }
 
   showPayment(){
     this.showPay = true;
   }
 
-  addPayment(val: PaymentType){
-    if(val == null){
-      this.paymentNotSelected= true
-    }
-    this.paymentPush(val);
+  loadPayment(val: PaymentType){
+   
+    this.addPayment(val);
+  }
+
+  addPayment(val : PaymentType){
+    this.selectedPayment = val;
   }
 
   paymentPush(val: PaymentType){
@@ -131,27 +140,21 @@ export class SearchOrderComponent implements OnInit {
 
   makePayment(){
         
-  
-    if( this.amountpaid >= this.calculatedValues.TotalIncVat){
-      this.dialogService.openAlertDialog("Payment Resticted: R"+ this.amountpaid+ " already paid")
-    }
-    else{
-    this.amountpaid = this.amountpaid + this.amount;
 
-    if(this.calculatedValues.TotalIncVat > this.amountpaid){
-      this.outstandingAmt = this.calculatedValues.TotalIncVat;
+    if(this.calculatedValues.TotalIncVat > this.amount){
+      this.outstandingAmt = this.calculatedValues.TotalIncVat - this.amount;
       this.total = this.outstandingAmt;
       this.change = 0;
       this.ShowOustanding = true;
     }
-    else if(this.calculatedValues.TotalIncVat == this.amountpaid){
+    else if(this.calculatedValues.TotalIncVat == this.amount){
       this.total = 0;
       this.change = 0;
       this.outstandingAmt = 0;
       this.ShowOustanding = false;
     }
-    else if ( this.calculatedValues.TotalIncVat < this.amountpaid){
-      this.change = this.amountpaid - this.calculatedValues.TotalIncVat
+    else if ( this.calculatedValues.TotalIncVat < this.amount){
+      this.change = this.amount - this.calculatedValues.TotalIncVat
       this.total = 0;
       this.outstandingAmt = 0;
       this.ShowOustanding = false;
@@ -159,7 +162,7 @@ export class SearchOrderComponent implements OnInit {
     }
 
 
-    this.api.makeOrderPayment(this.orderDetails.CustomerOrderID, this.amount,this.selectedPayment.PaymentTypeID).subscribe((res:any) => {
+    this.api.makeOrderPayment(this.orderDetails.CustomerOrderID, this.calculatedValues.TotalIncVat,1).subscribe((res:any) => {
       console.log(res);
       if(res.Error)(
         this.dialogService.openAlertDialog(res.Error)
@@ -167,8 +170,6 @@ export class SearchOrderComponent implements OnInit {
     })
   }
    
-    
-  }
 
   searchByOrderNo(){
     this.api.searchByOrderNo(this.orderNo).subscribe( (res:any)=> {
@@ -266,7 +267,7 @@ export class SearchOrderComponent implements OnInit {
             {
               this.dialogService.openAlertDialog(res.Message);
             }
-            this.router.navigate(["customer-order-management"])
+            //this.router.navigate(["customer-order-management"])
           })
         }
       })
@@ -275,10 +276,10 @@ export class SearchOrderComponent implements OnInit {
 
 
     sendNotification(){
-      this.dialogService.openConfirmDialog('Send email to ' + this.customer.CusName + ' ' +this.customer.CusSurname)
+      this.dialogService.openConfirmDialog('Send email to ' + this.customer.CusName + ' ' +this.customer.CusSurname + '?')
     .afterClosed().subscribe(res => {
       if(res){
-      this.api.sendNotification(this.customer.CusEmail).subscribe((res : any)=>{
+      this.api.sendNotification(this.customer.CusEmail, this.orderDetails.CusOrdNumber).subscribe((res : any)=>{
         console.log(res);
         if(res.Error)
         {

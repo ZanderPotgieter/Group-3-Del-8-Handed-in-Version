@@ -109,7 +109,7 @@
                 <td>{{item.UserName}}</td>
                 <td>{{item.UserSurname}}</td>
                 <td>{{item.UserCell}}</td>
-                <td><button (click)="view(item.UserName, item.UserSurname)">View</button></td>
+                <td><button style="height: 30px;"class="btntable" (click)="view(item.UserName, item.UserSurname)">View</button></td>
             </tr>
             
         </table> 
@@ -124,17 +124,17 @@
             <br>   
             <div class="divleft" >
                 <label for="UserName">Name:       </label>
-                <input class="searchinput" formControlName="UserName" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserName" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputDisabled">
                 <br>
 
                 <label for="UserSurname">Surname:   </label>
-                <input class="searchinput" formControlName="UserSurname" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserSurname" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputDisabled">
                 <br>
                 <label for="UserCell">Cell Number:  </label>
-                <input class="searchinput" formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputDisabled">
                 <br>
                 <label for="UserEmail">Email:      </label>
-                <input class="searchinput" formControlName="UserEmail" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="UserEmail" [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputDisabled">
                 <br>
             </div>
         </div>>

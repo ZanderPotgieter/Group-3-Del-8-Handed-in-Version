@@ -1,6 +1,6 @@
 
 <body>
-    <h1>Create Donation</h1>
+    <h1 *ngIf = "showDonation" >Create Donation</h1>
     <form [formGroup]="angForm">        
         <div class="card" *ngIf = "showSearch">
             <label class="subheadinglabel">Search for donation recipient:</label>
@@ -155,34 +155,60 @@
             </div>
         </div>
 
-        <div class="card" *ngIf = "showAddProduct">
-            <div *ngIf="showSearchSelection" class="card"> 
 
-                <div class="divleft" style="padding: 2px 2px;">
-                  <label class="subheadinglabel" >Add Products:</label>
-                </div>
-                <div class="divleft" >
-                  <mat-radio-group  aria-label="Select Option">
-                    <mat-radio-button  value = 1 (click)="useBardode()" >Use Barcode</mat-radio-button>
-                    <mat-radio-button value = 2 (click)="useName()" >Use Product Name</mat-radio-button>
-                  </mat-radio-group>
-                </div>
+
+    <h1 *ngIf="showDonatedProduct">Add Donated Products</h1>
+        <div *ngIf="showContainer" class="card">
+            <div class="divleft">
+                <label class="subheadinglabel" >Select container that donated products:</label>
+                <br>
+                <label>Container </label>
+                <select required formControlName="ContainerID" class="form-control" [(ngModel)]="container.ContainerID" name="ContainerID" id="ContainerID" >
+                    <option value="0">--Select--</option>
+                    <option  *ngFor="let container of containers" value="{{container.ContainerID}}">{{container.ConName}}</option>
+                </select>
+
+                <button type="submit" (click)="selectContainer(container.ContainerID)" >Select container</button>
+                <button type="button" (click)="cancel()" >Cancel</button>
             </div>
-
-
-            <div *ngIf="showNameSearch" class="card">
-                <div class="divleft"> 
-                    <label class="subheadinglabel" >Search Product:</label>
-                    <label>Product </label>
-                    <select required formControlName="Prod" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
-                        <option value="0">--Select--</option>
-                        <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
-                    </select>
-                </div>
-            </div> 
-
-
         </div>
+
+        <div *ngIf="showNameSearch" class="card">
+            <div class="divleft"> 
+                <label>Container: {{container.ConName}}</label>
+                <br>
+                <label class="subheadinglabel" >Select Product:</label>
+                <label>Product </label>
+                <select required formControlName="ProductID" class="form-control" [(ngModel)]="product.ProductID" name="ProductID" id="ProductID" >
+                    <option value="0">--Select--</option>
+                    <option  *ngFor="let product of products" value="{{product.ProductID}}">{{product.ProdName}}</option>
+                </select>
+                <label>Quantity</label>
+                <input type = "number" formControlName="DPQuantity" class="form-control" [(ngModel)]="donatedProduct.DPQuantity" name="DPQuantity" id="DPQuantity"  pattern="[0-9]*" required >
+            </div>
+            <button type="submit" (click)="addProduct(product.ProductID, donatedProduct.DPQuantity)" >Add Product</button>
+            <button type="button" (click)="cancel()" >Cancel</button>
+        </div> 
+    
+    <div *ngIf="showTable" class="card">
+        
+        <table title="Donated products">
+            <th>Product Name </th>
+            <th>Quantity</th>
+            <th>Action</th>
+            
+            
+            <tr *ngFor= "let don of donatedProducts, index as ndx" >
+                <td>{{don.ProductID}} </td>
+                <td>{{don.DPQuantity}}</td>
+                <td><button type="submit" (click)="deleteProduct()" >Delete</button></td>
+            </tr> 
+        </table> 
+
+        <button  type="submit" (click)="saveProducts()" >Save products</button>
+        
+    </div>
+        
      </form> 
 
     <router-outlet></router-outlet>

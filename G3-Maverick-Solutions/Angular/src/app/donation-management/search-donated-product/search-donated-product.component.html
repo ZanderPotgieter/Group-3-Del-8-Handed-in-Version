@@ -4,6 +4,51 @@
     <h1>Add Donated Product</h1>
 <form>
     
+    
+        <!-- <div *ngIf="showSearchSelection" class="card"> 
+
+            <div class="divleft" style="padding: 2px 2px;">
+              <label class="subheadinglabel" >Add Products:</label>
+            </div>
+            <div class="divleft" >
+              <mat-radio-group  aria-label="Select Option">
+                <mat-radio-button  value = 1 (click)="useBardode()" >Use Barcode</mat-radio-button>
+                <mat-radio-button value = 2 (click)="useName()" >Use Product Name</mat-radio-button>
+              </mat-radio-group>
+            </div>
+        </div> -->
+
+        <div *ngIf="showContainer" class="card">
+            <div class="divleft">
+                <label class="subheadinglabel" >Select container that donated products:</label>
+                <label>Container </label>
+                <select required formControlName="ContainerID" class="form-control" [(ngModel)]="container.ContainerID" name="ContainerID" id="ContainerID" >
+                    <option value="0">--Select--</option>
+                    <option  *ngFor="let container of containers" value="{{container.ContainerID}}">{{container.ConName}}</option>
+                </select>
+
+                <button type="submit" (click)="selectContainer" >Select container</button>
+
+            </div>
+
+
+        </div>
+
+
+        <div *ngIf="showNameSearch" class="card">
+            <div class="divleft"> 
+                <label class="subheadinglabel" >Select Product:</label>
+                <label>Product </label>
+                <select required formControlName="Prod" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
+                    <option value="0">--Select--</option>
+                    <option  *ngFor="let product of productsList" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
+                </select>
+                <label>Quantity</label>
+                <input type="number" class>
+
+            </div>
+        </div> 
+
     <div class="card">
         <div class="divleft">
         <label class="subheadinglabel">Enter product details </label>

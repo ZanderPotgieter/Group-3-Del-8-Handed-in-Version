@@ -131,16 +131,17 @@ namespace ORDRA_API.Controllers
                 creditor.CredAccountBalance = creditor.CredAccountBalance - newCreditorPayment.CredPaymentAmount;
                 if (creditor.CredAccountBalance < newCreditorPayment.CredPaymentAmount)
                 {
-                    toReturn.Message = "Payment amount is in surplus of the Amount Owed. Not allowed";
+                    float amount = (float)(creditor.CredAccountBalance + newCreditorPayment.CredPaymentAmount);
+                    toReturn.Message = "Payment is greater than the Creditor's Balance. Balance for this Creditor is R" + amount;
                 }
                 else {
                     db.SaveChanges();
-                    toReturn.Message = "Creditor payment added successfully.";
+                    toReturn.Message = "Creditor payment has been added successfully. Balance = R" + creditor.CredAccountBalance;
                 }
             }
             catch (Exception)
             {
-                toReturn.Message = "Add UnSuccsessful";
+                toReturn.Message = "Payment not added. The selected supplier is not a creditor for ORDRA.";
 
 
             }

@@ -5,6 +5,7 @@ import { ToastrModule } from 'ngx-toastr';
 /*run npm i @angular/material - npm i @material/dialog*/
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeManagementComponent } from './employee-management/employee-management.component';
@@ -100,6 +101,7 @@ import { UpdateVatComponent } from './product-management/vat/update-vat/update-v
 import { SupplierDetailComponent } from './supplier-order-management/supplier-detail/supplier-detail.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -247,7 +249,7 @@ import { ReceiveStockComponent } from './supplier-order-management/receive-stock
       progressBar: true
     }),
     MatRadioModule,
-    ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
+    ReactiveFormsModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDatepickerModule
   ],
   exports:[MakeSaleComponent],
   providers: [HttpClientModule, ProductCategoryService, DatePipe],

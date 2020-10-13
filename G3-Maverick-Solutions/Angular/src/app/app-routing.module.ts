@@ -48,12 +48,15 @@ import { Component, NgModule } from '@angular/core';
     import { AddCreditorComponent } from './creditor-management/add-creditor/add-creditor.component';
     import { SearchCreditorComponent } from './creditor-management/search-creditor/search-creditor.component';
     
+    //---Sale Subsystem Imports----//
     import { MakeSaleComponent } from './sales-management/make-sale/make-sale.component';
     import { PaymentSelectComponent } from './sales-management/payment-select/payment-select.component';
     import { SearchSaleComponent } from './sales-management/search-sale/search-sale.component';
+
+    //------Supplier Order  Subsytem Imports----//
     import { PlaceSupplierOrderComponent } from './supplier-order-management/place-supplier-order/place-supplier-order.component';
     import { SearchSupplierOrderComponent } from './supplier-order-management/search-supplier-order/search-supplier-order.component';
-
+    import{ReceiveStockComponent} from './supplier-order-management/receive-stock/receive-stock.component';
 
     //----Supplier Subsystem Imports----//
     import { AddSupplierComponent} from './add-supplier/add-supplier.component';
@@ -352,6 +355,10 @@ import { Component, NgModule } from '@angular/core';
         {
             path: 'search-supplier-order',
             component: SearchSupplierOrderComponent,
+        },
+        {
+            path:'receive-stock',
+            component: ReceiveStockComponent,
         },
 
         //----Container Subsystem Routing---//

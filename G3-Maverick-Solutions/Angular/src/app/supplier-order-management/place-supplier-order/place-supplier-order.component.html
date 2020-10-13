@@ -6,7 +6,7 @@
       <div class="card" *ngIf="showBacklog">
             <div class="subheadinglabel" id="backlogprods">Backlog Products:</div>
             <br>
-            <span style="color:red" *ngIf="showError">
+            <span style="color:orangered" *ngIf="showError">
               {{errorMessage}}</span>
 
             <table class="table table-striped">  
@@ -18,9 +18,10 @@
                 </tr>  
               </thead>  
               <tbody>  
-                <tr *ngFor="let product of products; index as ndx">  
+                <tr *ngFor="let product of products; index as ndx; trackBy:trackByndx;">  
                   <td>{{product.ProdName}}</td>
-                  <td>{{product.QuantityToOrder}}</td>
+                  <td><input style="width: 70%" type = "number"  name="a{{ndx}}" [(ngModel)] ="products[ndx].QuantityToOrder"></td>
+                  
                   <td><button type="submit" (click) = "addProduct(ndx)">Add</button><br></td>
                 </tr>  
               </tbody>
@@ -28,7 +29,7 @@
   
         
           <div class="divleft">
-            <button (click) = "viewOrders()" >View Supplier Orders</button>
+            <button style="width:30%" (click) = "viewOrders()" >View Supplier Orders</button>
             <button routerLink="/supplier-order-management" type="submit" >Cancel</button><br>
           </div>
 
@@ -38,9 +39,9 @@
         <div class="card" *ngIf="showOrders">
           <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
             <th style="padding: 0px">Date</th>
-            <th style="width: 35%;padding: 0px">Supplier</th>
+            <th style="padding: 0px">Supplier</th>
             <th style=" padding: 0px">Status</th>
-            <th style="padding: 0px"></th>
+            <th style=" width: 20%; padding: 0px"></th>
         
         <tr *ngFor="let item of supplierOrders; index as ndx">
             <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
@@ -67,24 +68,22 @@
 
   <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
    <th style="padding: 0px">Product</th>
-   <th style="width: 35%; padding: 0px">Description</th>
+   <th style="width: 50%; padding: 0px">Description</th>
    <th style="padding: 0px">Ordered</th>
-   <th style="padding: 0px">Received</th>
 
 <tr *ngFor="let item of orderproducts; index as ndx">
    <td>{{item.ProdName}}</td>
    <td>{{item.ProdDescription}}</td>
    <td>{{item.SOPQuantityOrdered}}</td>
-   <td>{{item.SOPQuantityRecieved}}</td>
 
 </tr>
 
 </table>
 <br>
 <div class= "divleft">
-  <button type="submit" (click)="PlaceOrder()">Place Order</button>
-  <button type="submit" (click)="CancelOrder()">Cancel Order</button>
-  <button type="submit" (click)="Back()">Back To List</button>
+  <button type="submit" style="width:30%" (click)="PlaceOrder()">Place Order</button>
+  <button type="submit" style="width:30%" (click)="CancelOrder()">Cancel Order</button>
+  <button type="submit"style="width:30%" (click)="Back()">Back To List</button>
 </div>
 
         </div>

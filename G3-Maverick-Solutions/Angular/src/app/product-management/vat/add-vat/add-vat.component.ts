@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { Vat } from '../../vat';
 import { DialogService } from '../../../shared/dialog.service';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-vat',
@@ -11,15 +12,22 @@ import { DialogService } from '../../../shared/dialog.service';
 })
 export class AddVatComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private dialogService: DialogService) { }
-
+  constructor(private productService: ProductService,private fb: FormBuilder, private router: Router, private dialogService: DialogService) { }
+  VatForm: FormGroup;
   vat : Vat = new Vat();
   list: Vat[] = [];
   date = new Date();
   responseMessage: string = "Request Not Submitted";
   found: boolean;
+  showError = false;
+  errorMessage: string;
 
   ngOnInit(): void {
+    this.VatForm= this.fb.group({
+       
+      VatPerc: ['', [Validators.required]],
+      VatStartDate: ['', [Validators.required]],
+    }); 
     this.productService.getVat().subscribe((res:any)=> {
       console.log(res);
       this.list = res.VAT;
@@ -48,6 +56,13 @@ export class AddVatComponent implements OnInit {
     }
     if(this.found = true){
       this.dialogService.openAlertDialog("Duplicate Vat Start Date Found")
+    }
+    if(this.vat.VATStartDate < this.date){
+      this.errorMessage = "Vat Start Date Cannot Be In The Past"; 
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+          }, 6000);
     }
 
 

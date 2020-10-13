@@ -24,7 +24,9 @@ export class StockTakeFormComponent implements OnInit {
   Todaysdate: Date = new Date();
   showForm: boolean = false;
   showButton:boolean = true;
+  errorMessage: string;
 
+  showError = false;
   SelectReason: number;
   container: Container;
   stocktake: StockTake = new StockTake();
@@ -74,8 +76,8 @@ export class StockTakeFormComponent implements OnInit {
 
     this.productService.initateStockTake(this.session).subscribe((res: any)=>{
       console.log(res);
-          if(res.Error != null){ 
-            this.dialogService.openAlertDialog(res.Message)}
+          if(res.Error){ 
+            this.dialogService.openAlertDialog(res.Error)}
           else{
             this.stocktakeID = res.stock_TakeID;
             this.container = res.container;
@@ -93,6 +95,14 @@ export class StockTakeFormComponent implements OnInit {
     this.productService.addStockTakeProduct(this.stocktakeID, this.list[ndx].ProductID, this.list[ndx].Subtotal)
     .subscribe((res: any)=>{
       console.log(res);
+      if(res.Message){
+        this.errorMessage = res.Message; 
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+          }, 5000);
+      }
+
     })
 
   }

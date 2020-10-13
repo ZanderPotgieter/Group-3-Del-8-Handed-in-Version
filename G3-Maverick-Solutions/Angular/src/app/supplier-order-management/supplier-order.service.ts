@@ -62,7 +62,7 @@ export class SupplierOrderService {
   }
 
   getSupplierOrdersByID(id : number){
-    return this.http.get(this.url + '/getSupplierOrdersByContainer?id=' + id);
+    return this.http.get(this.url + '/getSupplierOrdersByID?id=' + id);
   }
 
   getSupplierOrdersByStatus(id : number){
@@ -77,7 +77,13 @@ export class SupplierOrderService {
     return this.http.get(this.url + '/cancelSupplierOrder?id=' + id);
   }
 
+sendEmail(id : number){
+    return this.http.get(this.url + '/sendEmail?supplierOrderID=' + id);
+  }
 
+  receiveOrderProduct( supplierOrderID: number, productID: number, quantity: number){
+    return this.http.get(this.url + '/receiveOrderProduct?supplierOrderID='+supplierOrderID+'&productID='+productID+'&quantity=' +quantity)
+  }
 
 
 

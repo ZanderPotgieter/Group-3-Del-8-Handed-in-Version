@@ -28,6 +28,7 @@ export class AddProductComponent implements OnInit {
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
   quantity: number;
+  date: Date = new Date();
  
   Select: number;
   SelectSup: number;

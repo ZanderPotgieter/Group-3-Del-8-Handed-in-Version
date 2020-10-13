@@ -110,18 +110,17 @@
             <br>
             <label for="ProdBarcode">Barcode:</label><input type="text" formControlName="ProdBarcode" class="form-control" [(ngModel)]="Product.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required [readonly] = "inputEnabled">
             <br>
+            <label>Supplier:</label><label style="width:500px">{{supplier}}</label>
+            <br>
             <label for="SupplierID">Change Supplier:</label>
-                  <select  required formControlName="SelectSup" name="SelectSup" [(ngModel)]="SelectSup" (ngModelChange)="loadSupplier($event)">
+                  <select formControlName="SelectSup" name="SelectSup" [(ngModel)]="SelectSup" (ngModelChange)="loadSupplier($event)">
                      
                     <option  *ngFor="let supplier of suppliers" [ngValue]="supplier">{{supplier.SupName}}</option>
                   </select>
                   <br>
-                <span style="color:red" *ngIf="pdForm.get('SelectSup').errors && (pdForm.get('SelectSup').touched || pdForm.get('SelectSup').dirty)">
-                  <span *ngIf="pdForm.get('SelectSup').errors.required">Select Supplier required.</span>
-              </span>
+                
             <br>
-            <label>Supplier:</label><label style="width:500px">{{supplier}}</label>
-            <br>
+            
             
             <label class="subheadinglabel">Current Price:</label>
             <br>
@@ -220,14 +219,11 @@
         </div>
         <div class="divleft" *ngIf="saveOption">
             <button type="submit" (click)="Update()">Save</button>
-            
-
+                <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
         
         </div>
-        <div class="left">
-            <button type="submit" (click)="Cancel()">Cancel</button>
-        </div>
+        
        
         
 

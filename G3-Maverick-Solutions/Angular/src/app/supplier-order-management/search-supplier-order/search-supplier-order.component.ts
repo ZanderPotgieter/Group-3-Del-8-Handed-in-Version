@@ -211,8 +211,6 @@ export class SearchSupplierOrderComponent implements OnInit {
       this.index = ndx
       this.selectedOrder = this.supplierOrders[ndx];
       this.selectedOrderID = this.supplierOrders[ndx].SupplierOrderID
-
-      this.selecteddate = this.date.toDateString();
       this.api.getSupplierOrdersByID(this.supplierOrders[ndx].SupplierOrderID).subscribe((res:any) =>{
         console.log(res)
         if(res.Error){
@@ -263,21 +261,9 @@ export class SearchSupplierOrderComponent implements OnInit {
  
   
   Cancel(){
-    this.dialogService.openConfirmDialog('Are You Sure You Want to Cancel This Order?')
-    .afterClosed().subscribe(res => {
-      if(res){
-    this.api.cancelSupplierOrder(this.selectedOrderID).subscribe((res:any) =>{
-      console.log(res);
-      if(res.Error){
-        this.dialogService.openAlertDialog(res.Error)
-      }
-      else{
-        this.dialogService.openAlertDialog(res.Message)
-        this.router.navigate(["search-supplier-order"])
-      }
-    })}
-      
-  })
+    
+        this.router.navigate(["supplier-order-management"])
+   
 }
 
 

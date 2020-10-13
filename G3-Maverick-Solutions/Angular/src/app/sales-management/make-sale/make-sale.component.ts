@@ -435,8 +435,7 @@ export class MakeSaleComponent implements OnInit {
               if(res == true){
                 this.dialogService.openAlertDialog("Sale Completed Successfully");
                 this.dialogService.openAlertDialog("Some Products are now low in stock. Click OK to view");
-                //alert("Sale Completed Successfully");
-                //alert("Some Products are now low in stock. Click OK to view");
+                
                 this.router.navigate(['lowstock'])
               }
               if(res == false){

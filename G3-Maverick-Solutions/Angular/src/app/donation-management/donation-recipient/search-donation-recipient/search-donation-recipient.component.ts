@@ -19,6 +19,7 @@ export class SearchDonationRecipientComponent implements OnInit {
   donationRecipient : DonationRecipient = new DonationRecipient();
   responseMessage: string = "Request Not Submitted";
 
+  showOptions: boolean = true;
   showAll: boolean = false;
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -51,11 +52,13 @@ export class SearchDonationRecipientComponent implements OnInit {
     this.allRecipients = this.donationSerive.getAllDonationRecipients();
     this.showAll = true;
     this.showSearch = false;
+    this.showOptions = true;
   }
 
   Input(){
     this.showSearch = true;
     this.showAll = false;
+    this.showOptions = false;
   }
 
   Search(){

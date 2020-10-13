@@ -64,15 +64,21 @@ export class ViewSupplierComponent implements OnInit {
   }
 
   view(ndx: number){
-    this.api.searchSupplier(this.suppliers[ndx].SupName).subscribe( (res:any)=> {
+    this.search(this.suppliers[ndx].SupName)
+
+  }
+  search(name : string){
+   this.api.searchSupplier(name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      this.dialogService.openAlertDialog(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      //alert(this.responseMessage)
+    }
       else{
-          this.supplier = res.supplier;
-          this.products = res.products;
+        this.supplier = res.supplier;
+        this.products = res.products;
 
+          
       this.showSearch = false;
       this.showResults = true;
       this.showTable = false;
@@ -87,7 +93,7 @@ export class ViewSupplierComponent implements OnInit {
     this.api.searchSupplier(this.name).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-        this.dialogService.openAlertDialog(res.Message);;
+        this.dialogService.openAlertDialog(res.Message);
       //alert(this.responseMessage)
     }
       else{

@@ -1,13 +1,27 @@
 <body>
-    <form>
+    <form [formGroup]="VatForm">
         <h1>Add VAT</h1>
         <div class="card">
             <div class="divleft">
                 <label class="subheadinglabel">Enter VAT Details:</label>
                 <br>
-                <label for="VATPerc">VAT Percentage:</label><input type="text" class="form-control" [(ngModel)]="vat.VATPerc" id="VATPerc" name="VATPerc" required>
+                <label for="VATPerc">VAT Percentage:</label> <input type="text" formControlName="VatPerc" [(ngModel)]="vat.VATPerc" id="VATPerc" name="VATPerc" required>
                 <br>
-                <label for="VATStartDate">VAT Start Date:</label><input type="date" class="form-control" [(ngModel)]="vat.VATStartDate" id="VATStartDate" name="VATStartDate" min= "{{date | date: 'MM/dd/yyyy'}}" required>
+                <span style="color:red" *ngIf="VatForm.get('VatPerc').errors && (VatForm.get('VatPerc').touched || VatForm.get('VatPerc').dirty)">
+                    <span *ngIf="VatForm.get('VatPerc').errors.required">Vat percentage is required.</span>
+                    </span>
+                <!--<label for="VATStartDate">VAT Start Date:</label>
+                <div>
+                    <input matInput [min]="date" [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="vat.VATStartDate" >
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </div>-->
+                <label for="VATStartDate">VAT Start Date:</label><input type="date" formControlName="VatStartDate" [(ngModel)]="vat.VATStartDate" id="VATStartDate" name="VATStartDate" min= "{{date | date: 'MM/dd/yyyy'}}" required>
+                <span style="color:red" *ngIf="VatForm.get('VatStartDate').errors && (VatForm.get('VatStartDate').touched || VatForm.get('VatStartDate').dirty)">
+                    <span *ngIf="VatForm.get('VatStartDate').errors.required">Vat start date is required.</span>
+                    </span>
+                    <span style="color:red" *ngIf="showError">
+                        {{errorMessage}}</span>
                 <button type="submit" (click)="Save()">Add VAT</button>
                 <button type="submit" (click)="Cancel()">Cancel</button>
             </div>

@@ -4,6 +4,8 @@ import {ProductDetails} from 'src/app/customer-order-management/product-details'
 import {User} from 'src/app/user';
 import { Router } from '@angular/router';
 import {SalesService} from 'src/app/sales-management/sales.service';
+import { DialogService } from '../../shared/dialog.service';
+
 
 @Component({
   selector: 'app-lowstock',
@@ -12,7 +14,7 @@ import {SalesService} from 'src/app/sales-management/sales.service';
 })
 export class LowstockComponent implements OnInit {
 
-  constructor(private productService: ProductService, private router: Router, private saleService: SalesService) { }
+  constructor(private productService: ProductService, private router: Router, private saleService: SalesService,private dialogService: DialogService) { }
 
   list: ProductDetails[] = [];
   showNone: boolean = false;
@@ -47,11 +49,21 @@ export class LowstockComponent implements OnInit {
      
 
       Cancel(){
+        this.router[('product-management')];
 
       }
 
-      BackLog(){
+      Backlog(ndx: number){
         
+        this.productService.addProductToBacklog(this.list[ndx].ProductID, this.user.ContainerID).subscribe((res:any)=>{
+          if(res.Error){
+            this.dialogService.openAlertDialog(res.Error);
+          }
+          if(res.Message){
+            this.dialogService.openAlertDialog(res.Message);
+            this.router[('product-management')]
+          }
+        })
       }
 
 

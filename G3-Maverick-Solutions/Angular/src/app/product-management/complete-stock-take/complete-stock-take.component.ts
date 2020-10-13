@@ -29,6 +29,7 @@ export class CompleteStockTakeComponent implements OnInit {
   stocktakes: StockTake[] =[];
   index: number;
   date = this.Todaysdate.toDateString();
+  stocktakeID : number;
 
   showMarkOff: boolean = false;
   NoForm: boolean = true;
@@ -60,11 +61,24 @@ export class CompleteStockTakeComponent implements OnInit {
 
         this.productService.getTodaysStockTake(this.date, res.ContainerID).subscribe( (res:any) =>{
           console.log(res);
-          
-         
+          if(res.Error){
+            this.dialogService.openAlertDialog(res.Error)
+          }
+          else if(res.Message){
+          this.dialogService.openAlertDialog(res.Message)
+           
+        }else if(res == null){
+          this.dialogService.openAlertDialog("No Stock Take Forms Filled In Today")
+        }
+          else{
+              
             this.stocktakes = res.stock_Takes
             this.showList = true;
             this.NoForm = false;
+
+          }
+          
+         
           
         
         })
@@ -86,6 +100,7 @@ export class CompleteStockTakeComponent implements OnInit {
         this.container = res.container;
         this.list = res.products;
         this.stocktake = res.stocktake;
+        this.stocktakeID = res.stock_TakeID;
 
         this.showTable = true;
         this.showList = false;
@@ -98,7 +113,7 @@ export class CompleteStockTakeComponent implements OnInit {
   }
 
   Complete(){
-    this.productService.completeStockTake(this.stocktakes[this.index].StockTakeID).subscribe((res:any)=>{
+    this.productService.completeStockTake( this.stocktakeID).subscribe((res:any)=>{
       if(res.Error){
         this.dialogService.openAlertDialog(res.Error);
       }
@@ -151,7 +166,7 @@ export class CompleteStockTakeComponent implements OnInit {
     this.MarkedOffProduct.MoQuantity = this.MOQuantity;
     this.MarkedOffProduct.MoDate = this.Todaysdate;
     this.MarkedOffProduct.ProductID = this.list[this.index].ProductID;
-    this.MarkedOffProduct.StockTakeID = this.stocktake.StockTakeID;
+    this.MarkedOffProduct.StockTakeID = this.stocktakeID;
     this.MarkedOffProduct.UserID = this.user.UserID;
     this.list[this.index].MoQuantity = this.MOQuantity;
     
@@ -167,6 +182,8 @@ export class CompleteStockTakeComponent implements OnInit {
           this.showSaveError = true;
       }
       else{
+        this.response = res.Message;
+        this.showSaveError = true;
         this.showMarkOff = false;
         this.list[this.index].MoQuantity = this.MOQuantity;
 

@@ -210,13 +210,17 @@ export class SearchManagerComponent implements OnInit {
    }
 
    addContainer(val: Container){
-    this.showlist(val);
+     if(val != null){
+      this.showlist(val);
+     }
+    
   }
 
 
   showlist(val: Container){
+    if(val != null){
     this.selectedContainers.push(val);
-    this.manager.Containers.push(val);
+    this.manager.Containers.push(val);}
     
   }
 
@@ -238,16 +242,21 @@ export class SearchManagerComponent implements OnInit {
 
   
   deleteManager(){
-    this.dialogService.openConfirmDialog('Delete Manager Profile')
+    this.dialogService.openConfirmDialog('Delete Manager Profile?')
     .afterClosed().subscribe(res => {
       if(res){
     this.api.deleteManager(this.manager.ManagerID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
-      this.responseMessage = res.Message;}
+      this.responseMessage = res.Message;
       this.dialogService.openAlertDialog(this.responseMessage)
       //alert(this.responseMessage)
-      this.router.navigate(["manager-management"])
+      this.router.navigate(["manager-management"])}
+      if(res.Error){
+
+      }
+
+      
     })
   }})
 

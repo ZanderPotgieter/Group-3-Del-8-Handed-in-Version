@@ -185,6 +185,10 @@ export class ProductService {
     return this.http.get<MarkedOff[]>(this.url + '/getAllMarkedOffProductsByReason?id='+id);  
   }
 
+  addProductToBacklog(productID: number, containerID: number){
+    return this.http.get(this.url + '/addProductToBacklog?productID='+productID +'&containerID='+ containerID)
+  }
+
 
   
   

@@ -80,7 +80,7 @@ export class SearchProductComponent implements OnInit {
   moveToContainer: boolean = false;
   selectedContainerID: number;
   supplier: string;
-  SelectSup = 0;
+  SelectSup: number;
   
 
   ngOnInit() {
@@ -99,7 +99,7 @@ export class SearchProductComponent implements OnInit {
       PriceStartDate: ['', [Validators.required]],
       PriceEndDate: [''],
       ProductCategoryID: [''],
-      SelectSup: ['', [Validators.required]],
+      SelectSup: [''],
     });
     
     this.pdForm= this.fb.group({
@@ -240,8 +240,8 @@ export class SearchProductComponent implements OnInit {
   }
 
   loadSupplier(val: Supplier){
-   
-    this.addSupplier(val);
+   if(val != null){
+    this.addSupplier(val);}
   }
 
   addSupplier(val : Supplier){

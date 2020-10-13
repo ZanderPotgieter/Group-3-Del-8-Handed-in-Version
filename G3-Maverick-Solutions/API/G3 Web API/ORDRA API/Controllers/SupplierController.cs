@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-   using System.Dynamic;
-using System.Data.Entity;
-using System.Web.Http.Cors;
+﻿using HtmlAgilityPack;
 using ORDRA_API.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Dynamic;
+using System.IO;
+using System.Linq;
+using System.Net.Mail;
+using System.Web.Http;
+using System.Web.Http.Cors;
+using System.Web.UI.WebControls;
 
 namespace ORDRA_API.Controllers
 {
@@ -97,6 +99,7 @@ namespace ORDRA_API.Controllers
                     {
 
                         Supplier newSupplier = new Supplier();
+                        newSupplier.SupplierID = Supplier.SupplierID;
                         newSupplier.SupName = Supplier.SupName;
                         newSupplier.SupCell = Supplier.SupCell;
                         newSupplier.SupEmail = Supplier.SupEmail;
@@ -326,6 +329,8 @@ namespace ORDRA_API.Controllers
             }
             return toReturn;
         }
+
+       
 
     }
 }

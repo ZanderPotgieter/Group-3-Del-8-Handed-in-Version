@@ -12,6 +12,8 @@
         <div class = "divleft">
             <label style="width: 100%">Date: {{Todaysdate | date: 'yyyy-MM-dd'}}</label>
         </div>
+        <span style="color:red" *ngIf="showError">
+            {{errorMessage}}</span>
             
         <table style="width: 100%; padding: 0px">
                 <th style="width: 30%;padding: 0px">Product Name</th>

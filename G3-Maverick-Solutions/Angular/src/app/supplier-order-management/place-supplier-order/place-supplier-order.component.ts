@@ -63,10 +63,15 @@ export class PlaceSupplierOrderComponent implements OnInit {
       
     })
       
+  }
+
+  trackByndx(ndx: number, item:any): any{
+    return ndx;
   }  
 
   addProduct(ndx: number){
-    this.api.addProductToOrder(this.user.ContainerID,this.products[ndx].SupplierID, this.products[ndx].ProductID,this.products[ndx].QauntityToOrder).subscribe((res:any)=>
+    this.quantity = this.products[ndx].QuantityToOrder;
+    this.api.addProductToOrder(this.user.ContainerID,this.products[ndx].SupplierID, this.products[ndx].ProductID, this.quantity).subscribe((res:any)=>
       {
         console.log(res)
         if (res.Error){

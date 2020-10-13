@@ -34,7 +34,8 @@
                <label style="width: 100%">Status {{selectedOrder.Status}}</label>
              </div>
            </div>
-          
+           <span style="color:red" *ngIf="showError">
+            {{errorMessage}}</span>
          
            <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
             <th style="width: 35%;padding: 1px">Product</th>
@@ -45,7 +46,7 @@
          <tr *ngFor="let item of orderproducts; index as ndx; trackBy:trackByndx;">
             <td>{{item.ProdName}}</td>
             <td>{{item.SOPQuantityOrdered}}</td>
-            <td><input style="width: 70%" type = "text"  name="a{{ndx}}" [readonly]="enableInput" [(ngModel)] ="list[ndx].SOPQuantityRecieved"></td>
+            <td><input style="width: 95%" type = "number"  name="a{{ndx}}" [(ngModel)] ="orderproducts[ndx].SOPQuantityRecieved"></td>
             <td><button style="border-radius: 10px; width: 95%;" (click)="save(ndx)"><i class="small material-icons">save</i></button></td>
             
          
@@ -54,7 +55,7 @@
          </table>
          <br>
          <div class= "divleft">
-           <button type="submit" style="width:30%" (click)="Done()">Save All Changes</button>
+           <button type="submit" (click)="Done()">Done</button>
            <button type="submit" (click)="Back()">Back To List</button>
          </div>
          

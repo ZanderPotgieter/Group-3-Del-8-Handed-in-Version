@@ -25,11 +25,12 @@ export class ReceiveStockComponent implements OnInit {
   showdate = false;
   date: Date = new Date();
   selecteddate = this.date.toDateString();
-
+  quantity:number;
   showList = false;
   selectedOrderID: number;
   selectedOrder: SupplierOrder = new SupplierOrder;
   supplierOrders: SupplierOrder[] = [];
+  errorMessage: string;
 
 
 
@@ -38,7 +39,7 @@ export class ReceiveStockComponent implements OnInit {
   ngOnInit(): void {
     
       
-      this.api.getSupplierOrdersByContainer(1).subscribe((res:any) =>{
+      this.api.getSupplierOrdersByStatus(1).subscribe((res:any) =>{
         console.log(res)
         if(res.Error){
           this.dialogService.openAlertDialog(res.Error)
@@ -88,7 +89,19 @@ Back()
   }
 
   save(ndx: number){
-    
+    this.quantity = this.orderproducts[ndx].SOPQuantityRecieved;
+    this.api.receiveOrderProduct(this.supplierOrder.SupplierOrderID, this.orderproducts[ndx].ProductID, this.quantity)
+    .subscribe((res: any)=>{
+      console.log(res);
+      if(res.Message){
+        this.errorMessage = res.Message; 
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+          }, 5000);
+      }
+
+    })
   }
 
 }

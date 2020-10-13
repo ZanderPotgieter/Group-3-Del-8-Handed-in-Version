@@ -1,6 +1,6 @@
 export class Container {
     ContainerID: number;
-    InActive: number;
+    //InActive: boolean;
     ConName: string;
     ConDescription: string;
 }

@@ -60,6 +60,8 @@ export class CreateDonationComponent implements OnInit {
   donationID: number;
   productID: number;
   dpQuantity: number;
+
+  donationNull: boolean = false;
   
   products: Product[];
   donatedProducts: DonatedProduct[];
@@ -68,16 +70,6 @@ export class CreateDonationComponent implements OnInit {
 
 
   //donForm: FormGroup;
-
-  useBarcode()
-  {
-
-  }
-
-  useName()
-  {
-
-  }
 
   selectContainer(id: any)
   {
@@ -115,21 +107,20 @@ export class CreateDonationComponent implements OnInit {
       console.log(res);
       if(res.Message == "Add Succsessful")
       {
-        this.responseMessage = res.Message;
+        this.dialogService.openAlertDialog(res.Message);
         this.donatedProducts = res.DonatedProduct;
         this.showTable = true;
-
-
       }
       else{
-        //display error message 
+        this.dialogService.openAlertDialog(res.Message);
+        this.router.navigate(['donation-management']);
       }
     })    
   }
 
   saveProducts()
   {
-    //display saved successfully 
+    this.dialogService.openAlertDialog('Donated products added successfully');
     this.router.navigate(['donation-management']);
   }
 
@@ -259,37 +250,40 @@ export class CreateDonationComponent implements OnInit {
 
   searchDonationRecipientByName()
   {
-    this.donationService.searchDonationRecipientByName(this.name, this.surname).subscribe( (res:any) =>
+    if (this.name == null || this.surname==null)
     {
-      console.log(res);
-      if(res.Error != null)
+      this.donationNull = true;
+    }
+    else
+    {
+      this.donationService.searchDonationRecipientByName(this.name, this.surname).subscribe( (res:any) =>
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
-      }
-      else
-      {
-        console.log(res)
-        this.donationRecipient.RecipientID = res.RecipientID;
-        this.donationRecipient.DrName = res.DrName;
-        this.donationRecipient.DrSurname = res.DrSurname;
-        this.donationRecipient.DrCell = res.DrCell;
-        this.donationRecipient.DrEmail = res.DrEmail;
-        this.cell = res.DrCell;
+        console.log(res);
+        if(res.Message != null)
+        {
+          this.dialogService.openAlertDialog(res.Message);
+        }
+        else
+        {
+          console.log(res)
+          this.donationRecipient.RecipientID = res.RecipientID;
+          this.donationRecipient.DrName = res.DrName;
+          this.donationRecipient.DrSurname = res.DrSurname;
+          this.donationRecipient.DrCell = res.DrCell;
+          this.donationRecipient.DrEmail = res.DrEmail;
+          this.cell = res.DrCell;
 
-        this.showSearch = true;
-        this.showResults = true;
-        this.showAddDon = true;
-        this.showDonation = true;
-        this.showDonatedProduct = false;
-        this.showContainer = false;
-        this.showNameSearch = false;
-        this.showTable = false;
-      }
-
-      
-
-    })
+          this.showSearch = true;
+          this.showResults = true;
+          this.showAddDon = true;
+          this.showDonation = true;
+          this.showDonatedProduct = false;
+          this.showContainer = false;
+          this.showNameSearch = false;
+          this.showTable = false;
+        }
+      })
+    }
   }
 
   addDonation()
@@ -302,25 +296,45 @@ export class CreateDonationComponent implements OnInit {
    this.cell = this.donationRecipient.DrCell;
    console.log(this.donation1)
 
-    this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
+    if (this.donation1.DonAmount==null || this.donation1.DonDate== null || this.donation1.DonDescription==null || this.donation1.RecipientID==null || this.donation1.DonationStatusID==null)
     {
-
-      console.log(res);
-      if(res.Message == "Add Succsessful")
-      {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage);
-        this.showContainer = true; 
-        this.showNameSearch = false;
-        this.showTable = false;
-        this.showSearch = false;
-        this.showResults = false;
-        this.showAddDon = false;
-        this.showDonation = false;
-        this.showDonatedProduct = true;
-      }
-      
-    })
+      this.donationNull = true;
+    }
+    else
+    {
+      this.dialogService.openConfirmDialog('Are you sure you want to add this donation?')
+      .afterClosed().subscribe(res => {
+        if (res)
+        {
+          this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
+          {
+            console.log(res);
+            if(res.Message == "Add Succsessful")
+            {
+              //this.dialogService.openAlertDialog(res.Message);
+              alert(res.Message);
+              this.showContainer = true; 
+              this.showNameSearch = false;
+              this.showSearch = false;
+              this.showSave = false;
+              this.showTable = false;
+              this.showSearch = false;
+              this.showResults = false;
+              this.showAddDon = false;
+              this.showDonation = false;
+              this.showDonatedProduct = true;
+            }
+            else 
+            {
+              //this.dialogService.openAlertDialog(res.Message);
+              alert(res.Message);
+              this.router.navigate(["donation-management"])
+            }
+          })
+        }
+      })
+    }
+    
   }
 
   getAddedDonation()
@@ -330,9 +344,7 @@ export class CreateDonationComponent implements OnInit {
       console.log(res);
       if (res.Message != null)
       {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
-
+        this.dialogService.openAlertDialog(res.Message);
       }
       else 
       {

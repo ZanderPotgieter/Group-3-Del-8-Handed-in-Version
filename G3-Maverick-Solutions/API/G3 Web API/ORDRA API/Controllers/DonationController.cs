@@ -750,7 +750,7 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             try
             {
-                toReturn.Containers = db.Containers.ToList();
+                toReturn = db.Containers.ToList();
             }
             catch (Exception)
             {

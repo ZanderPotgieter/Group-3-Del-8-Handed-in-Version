@@ -157,7 +157,7 @@ export class DonationService {
 
    getAllContainerProducts(containerID: number): Observable<ContainerProduct[]>
    {
-     return this.http.get<ContainerProduct[]>(this.Donurl + '/getAllContainerProducts?=' + containerID);
+     return this.http.get<ContainerProduct[]>(this.Donurl + '/getAllContainerProducts?containerID=' + containerID);
    }
 
   getAddedDonation(cell: string): Observable<Donation[]>

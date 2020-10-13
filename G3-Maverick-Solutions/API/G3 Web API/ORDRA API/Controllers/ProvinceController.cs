@@ -57,7 +57,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectProvince == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Province Record Not Found";
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace ORDRA_API.Controllers
 
                 if (dupCheck == true)
                 {
-                    toReturn.Message = "Duplicate record";
+                    toReturn.Message = "Duplicate province record";
                 }
                 else if (dupCheck == false)
                 {
@@ -163,7 +163,7 @@ namespace ORDRA_API.Controllers
                     {
                         db.Provinces.Add(newProvince);
                         db.SaveChanges();
-                        toReturn.Message = "Add Successful";
+                        toReturn.Message = "Province Add Successful";
                     }
 
                 }
@@ -173,7 +173,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Message = "Add Unsuccsessful";
+                toReturn.Message = "Province Add Unsuccsessful";
 
 
             }
@@ -207,7 +207,7 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Message = "Duplicate record";
+                        toReturn.Message = "Duplicate province record";
                     }
 
 
@@ -224,7 +224,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception)
             {
-                toReturn.Message = "Update Unsuccessful";
+                toReturn.Message = "Province Updated Unsuccessful";
 
             }
 
@@ -248,7 +248,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectProvince == null)
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "Province Record Not Found";
                 }
                 else
                 {
@@ -257,7 +257,7 @@ namespace ORDRA_API.Controllers
                     {
                         db.Provinces.Remove(objectProvince);
                         db.SaveChanges();
-                        toReturn.Message = "Delete Successful";
+                        toReturn.Message = "Province Deleted Successful";
                     }
                     else
                     {

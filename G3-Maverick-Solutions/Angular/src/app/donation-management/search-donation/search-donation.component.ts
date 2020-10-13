@@ -41,6 +41,7 @@ export class SearchDonationComponent implements OnInit {
   showAllDons: boolean = false;
   showText: boolean = false;
   showInput: boolean = false;
+  inputDisabled:boolean = true;
 
   cell : string;
   name: string;

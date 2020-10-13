@@ -34,6 +34,7 @@ export class SearchemployeeComponent implements OnInit {
   showUpload: boolean = false;
   showImg: boolean = false;
   showCv: boolean = false;
+  inputDisabled:boolean = true;
 
   imageUrl: string = "/assets/img/DefaultUser.jpg";
 

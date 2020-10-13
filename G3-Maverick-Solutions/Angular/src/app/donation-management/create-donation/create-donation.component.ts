@@ -45,10 +45,13 @@ export class CreateDonationComponent implements OnInit {
 
   statuses: DonationStatus[];
   containers: Container[];
+  container: Container = new Container();
+  product: Product = new Product();
 
   name: string;
   surname: string;
 
+  inputDisabled:boolean = true;
   showAddProduct: boolean = false;
   showSearchSelection: boolean = false;
   showNameSearch: boolean = false;
@@ -66,6 +69,8 @@ export class CreateDonationComponent implements OnInit {
   products: Product[];
   donatedProducts: DonatedProduct[];
   containerProducts: ContainerProduct[];
+  prodNotSelected: boolean = false;
+  prodBarcode: string;
  
 
 
@@ -128,6 +133,32 @@ export class CreateDonationComponent implements OnInit {
   {
 
   }
+
+  ContainerSelection(val: Container){
+    this.setContainer(val);
+  }
+  
+  setContainer(val: Container){
+    //this.currentContainer = val;
+    this.containerID = val.ContainerID;
+    this.container = val;
+    //this.containerSelected = true;
+   // this.showContainerNotSelected = false;
+  
+  }
+
+  ProductSelection(val: Product){
+    if(val == null){
+      this.prodNotSelected= true
+    }
+    this.prodPush(val);
+  }
+
+  prodPush(val: Product){
+    this.product = val;
+    this.productID = val.ProductID;
+    this.prodBarcode = val.ProdBarcode;
+    }
 
   ngOnInit(): void {
     this.donationService.getDonationStatuses().subscribe(value => {
@@ -309,7 +340,7 @@ export class CreateDonationComponent implements OnInit {
           this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
           {
             console.log(res);
-            if(res.Message == "Add Succsessful")
+            if(res.Message == "Add Successful")
             {
               //this.dialogService.openAlertDialog(res.Message);
               alert(res.Message);
@@ -318,6 +349,8 @@ export class CreateDonationComponent implements OnInit {
               this.showSearch = false;
               this.showSave = false;
               this.showTable = false;
+              this.showName = false;
+              this.showCell = false;
               this.showSearch = false;
               this.showResults = false;
               this.showAddDon = false;
@@ -348,12 +381,12 @@ export class CreateDonationComponent implements OnInit {
       }
       else 
       {
-        //get donation  details 
+        /* //get donation  details 
         this.donationRecipient.RecipientID = res.recipient.RecipientID;
         this.donationRecipient.DrName = res.recipient.DrName;
         this.donationRecipient.DrSurname = res.recipient.DrSurname;
         this.donationRecipient.DrEmail= res.recipient.DrEmail;
-        this.donationRecipient.DrCell = res.recipient.DrCell;
+        this.donationRecipient.DrCell = res.recipient.DrCell; */
 
         this.donation.DonAmount = res.donation.DonAmount;
         this.donation.DonDate = res.donation.DonDate;

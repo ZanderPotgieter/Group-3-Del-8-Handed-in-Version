@@ -381,7 +381,7 @@ CREATE TABLE Creditor
 	CredAccountBalance float(2),
 	CredBank varchar(30),
 	CredBranch varchar(40),
-	CredAccount int,
+	CredAccount varchar(15),
 	CredType varchar(20),
 	CONSTRAINT FK_CredSupplier FOREIGN KEY (SupplierID)
     REFERENCES Supplier(SupplierID)

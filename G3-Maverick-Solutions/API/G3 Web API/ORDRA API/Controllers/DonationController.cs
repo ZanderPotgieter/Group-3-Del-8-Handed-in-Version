@@ -457,11 +457,11 @@ namespace ORDRA_API.Controllers
             {
                 db.Donations.Add(newDonation);
                 db.SaveChanges();
-                toReturn.Message = "Add Succsessful";
+                toReturn.Message = "Donation Add Successful";
             }
             catch (Exception)
             {
-                toReturn.Message = "Add Unsuccsessful";
+                toReturn.Message = "Donation Add Unsuccessful";
             }
 
             return toReturn;
@@ -480,11 +480,11 @@ namespace ORDRA_API.Controllers
             {
                 db.Donations.Add(newDonProd);
                 db.SaveChanges();
-                toReturn.Message = "Add Succsessful";
+                toReturn.Message = "Donated Product Add Successful";
             }
             catch (Exception)
             {
-                toReturn.Error = "Add Unsuccsessful";
+                toReturn.Error = "Donated Product Add Unsuccessful";
             }
 
             return toReturn;
@@ -513,17 +513,17 @@ namespace ORDRA_API.Controllers
                     //objectDonation.Donated_Product = donationUpdate.Donated_Product;
                     db.SaveChanges();
 
-                    toReturn.Message = "Update Successful";
+                    toReturn.Message = "Donation Update Successful";
                 }
                 else
                 {
-                    toReturn.Message = "Record Not Found";
+                    toReturn.Message = "DOnation Record Not Found";
                 }
             }
 
             catch (Exception)
             {
-                toReturn.Message = "Update Unsuccessful";
+                toReturn.Message = "Donation Update Unsuccessful";
 
             }
             return toReturn;
@@ -550,7 +550,7 @@ namespace ORDRA_API.Controllers
 
                     db.SaveChanges();
 
-                    toReturn.Message = "Update Successfull";
+                    toReturn.Message = "Donated product Update Successful";
                 }
                 else
                 {
@@ -560,7 +560,7 @@ namespace ORDRA_API.Controllers
 
             catch (Exception)
             {
-                toReturn.Message = "Update Unsuccessful";
+                toReturn.Message = "Donated product Update Unsuccessful";
 
             }
             return toReturn;
@@ -624,13 +624,13 @@ namespace ORDRA_API.Controllers
                 {
                     db.Donations.Remove(objectDonation);
                     db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    toReturn.Message = "Donated Product Deleted Successfully";
                 }
 
             }
             catch (Exception )
             {
-                toReturn.Message = "Delete Unsuccessful";
+                toReturn.Message = "Donated Product Delete Unsuccessful";
             }
 
             return toReturn;
@@ -679,14 +679,14 @@ namespace ORDRA_API.Controllers
                         db.Donated_Product.Add(donProd);
                         conProd.CPQuantity = conProd.CPQuantity - quantity;
                         db.SaveChanges();
-                        toReturn.Message = "Add Successful";
+                        toReturn.Message = "Donated Products Added Successfully";
                     }
                     else
                     {
                         donProdObj.DPQuantity = donProdObj.DPQuantity + quantity;
                         conProd.CPQuantity = conProd.CPQuantity - quantity;
                         db.SaveChanges();
-                        toReturn.Message = "Add Successful";
+                        toReturn.Message = "Donated Products Added Successfully";
                     }
 
                     
@@ -767,16 +767,48 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            try
-            {
-                Donation_Recipient rec = db.Donation_Recipient.Where(z => z.DrCell == cell).FirstOrDefault();
-                Donation donation = db.Donations.Where(z => z.RecipientID == rec.RecipientID).ToList().LastOrDefault();
-                toReturn.Donation = searchDonationByID(donation.DonationID);
-            }
-            catch (Exception)
+            /*try
+            {*/
+                Donation_Recipient donationRecipient = db.Donation_Recipient.Where(z => z.DrCell == cell).FirstOrDefault();
+                Donation donation = db.Donations.Where(z => z.RecipientID == donationRecipient.RecipientID).ToList().LastOrDefault();
+                //toReturn.Donation = searchDonationByID(donation.DonationID);
+                //var donation = db.Donations.Include(z => z.Donation_Status).Include(z => z.Donation_Recipient).Include(z => z.Donated_Product).Where(z => z.DonationID == ID).FirstOrDefault();
+                //var donationRecipient = db.Donation_Recipient.Where(x => x.RecipientID == donation.RecipientID).FirstOrDefault();
+
+                if (donationRecipient != null)
+                {
+                    dynamic recipientDet = new ExpandoObject();
+                    recipientDet.DrName = donationRecipient.DrName;
+                    recipientDet.DrSurname = donationRecipient.DrSurname;
+                    recipientDet.DrEmail = donationRecipient.DrEmail;
+                    recipientDet.DrCell = donationRecipient.DrCell;
+                    recipientDet.RecipientID = donationRecipient.RecipientID;
+
+                    toReturn.recipient = recipientDet;
+
+                    // toReturn = donations
+                    if (donation != null)
+                    {
+                        dynamic don = new ExpandoObject();
+                        don.DonationID = donation.DonationID;
+                        don.RecipientID = donation.RecipientID;
+                        don.DonAmount = donation.DonAmount;
+                        don.DonDate = donation.DonDate;
+                        don.DonDescription = donation.DonDescription;
+                        don.DonationStatusID = donation.DonationStatusID;
+                        //don.DonStatus = donation.Donation_Status.DSDescription;
+                        toReturn.donation = don;
+
+                    }
+
+
+                    
+                }
+            //}
+            /*catch (Exception)
             {
                 toReturn.Message = "Failed to get donation";
-            }
+            }*/
 
             return toReturn;
 

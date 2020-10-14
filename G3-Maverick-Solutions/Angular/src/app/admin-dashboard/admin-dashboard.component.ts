@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { formatDate} from '@angular/common';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { DashboardService } from './dashboard.service';
 
 //import * as jsPDF from 'jspdf';
@@ -19,16 +20,19 @@ import { Chart } from 'chart.js';
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
+  providers: [DatePipe],
   styleUrls: ['./admin-dashboard.component.scss']
 })
 export class AdminDashboardComponent {
 
+  dateVal = new Date();
   selectedOption: any;
   showErrorMessage: boolean = false;
   chart: Chart;
   TableData: object;
   totalBalance: any;
   pieChart: Chart; 
+  date: string;
 
   /** Based on the screen size, switch from standard to one column per row */
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
@@ -77,6 +81,10 @@ export class AdminDashboardComponent {
  
         let keys = res['ChartData'].map((z)=>z.Name);
         let Vals = res['ChartData'].map((z)=>z.Sum);
+        let today = res['Today'];
+
+        /* var datePipe = new DatePipe('en-US');
+        this.date = datePipe.transform(today, 'dd/MM/yyyy'); */
         
  
          let totalTot = res['ChartData'].map((z) => z.Sum);
@@ -91,58 +99,54 @@ export class AdminDashboardComponent {
           labels: keys,
           datasets: [
             {
-            label:'Sales Revenue per container for current day',
-            data: Vals, 
-            fill: false,
-            barPercentage: 0.70,
-            backgroundColor: [
-              
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(190, 204, 102, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(102, 204, 194, 1)',
-              'rgba(180, 75, 75, 1)'
-                
- 
-            ],
-            borderColor: [
-              
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(190, 204, 102, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(102, 204, 194, 1)',
-              'rgba(180, 75, 75, 1)'
-            ],
-            borderWidth: 1
-          }],
-          options:{
+              label:'Sales Revenue per container for current day',
+              data: Vals, 
+              fill: false,
+              barPercentage: 0.70,
+              backgroundColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(190, 204, 102, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(102, 204, 194, 1)',
+                'rgba(180, 75, 75, 1)'],
+              borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(190, 204, 102, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(102, 204, 194, 1)',
+                'rgba(180, 75, 75, 1)'],
+              borderWidth: 1
+            }],
+         },
+        options:{
             legend:{
               display: false,
             },
             title:{
-              text: "Revenue By Container",
-              fontSize: 50,
+              text: 'Sales Revenue per container for current day' ,
+              fontSize: 15, 
+              display: true,
             },
             scales:{
               xAxes: [{
                 display: true,
+                label: 'Revenue',
               }],
               yAxes:[{
                 display: true,
+                label: 'Containers',
                 ticks:{
                 beginAtZero: true,
                 }
               }],
             }
           }
-        }
- 
       })
     });
  }
@@ -165,6 +169,7 @@ export class AdminDashboardComponent {
  
         let keys = res['ChartData'].map((z)=>z.Name);
         let Vals = res['ChartData'].map((z)=>z.Sum);
+        let year = res['Year'];
         
  
          let totalTot = res['ChartData'].map((z) => z.Sum);
@@ -179,53 +184,43 @@ export class AdminDashboardComponent {
           labels: keys,
           datasets: [
             {
-            label:'Sales Revenue per container for current year',
-            data: Vals, 
-            fill: false,
-            backgroundColor: [
-              
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(190, 204, 102, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(102, 204, 194, 1)',
-              'rgba(180, 75, 75, 1)'
-                
- 
-            ],
-            borderColor: [
-              
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(190, 204, 102, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(102, 204, 194, 1)',
-              'rgba(180, 75, 75, 1)'
-            ],
-            borderWidth: 1
+              label:'Sales Revenue per container for current year: ' + year,
+              data: Vals, 
+              fill: false,
+              backgroundColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(190, 204, 102, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(102, 204, 194, 1)',
+                'rgba(180, 75, 75, 1)'],
+              borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(190, 204, 102, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(102, 204, 194, 1)',
+                'rgba(180, 75, 75, 1)'],
+              borderWidth: 1
           }],
-          options:{
-            resposive: true,
+        },
+        options:{
             legend:{
               position: 'bottom',
-            },
+              display: true,},
             title:{
-              text: "Current year Revenue By Container",
-              fontSize: 50,
-            },
+              text: "Sales Revenue per container for current year: " + year,
+              display: true,
+              position: 'top',
+              fontSize: 15,},
             animation: {
               animateScale: true,
-              animateRotate: true,
-            },
-            
-        
+              animateRotate: true,},
           }
-        }
- 
       })
     });
  }

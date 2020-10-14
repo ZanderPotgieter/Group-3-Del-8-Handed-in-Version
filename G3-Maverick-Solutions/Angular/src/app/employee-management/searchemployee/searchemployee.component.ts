@@ -8,7 +8,7 @@ import {Directive, HostBinding, Input} from '@angular/core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { EmployeeCV } from '../model/employee-cv';
 import { EmployeePicture } from '../model/employee-picture';
-
+import { DialogService } from 'src/app/shared/dialog.service';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
@@ -51,7 +51,7 @@ export class SearchemployeeComponent implements OnInit {
   employeeCvs: EmployeeCV[] = [];
   employeePictures: EmployeePicture[] = [];
 
-  constructor(private api: EmployeeService, private router: Router, private sanitizer: DomSanitizer, private fb: FormBuilder) { }
+  constructor(private api: EmployeeService, private router: Router, private sanitizer: DomSanitizer, private fb: FormBuilder, private dialogService: DialogService) { }
 
   ngOnInit(){
     this.empForm= this.fb.group({  
@@ -94,10 +94,9 @@ export class SearchemployeeComponent implements OnInit {
   {
     this.api.getImage(this.employee.EmployeeID).subscribe (( res: any) => {
       console.log(res);
-      if(res.Error != null)
+      if(res.Message != null)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else{
         this.imageUrl = res.Image;
@@ -120,10 +119,9 @@ export class SearchemployeeComponent implements OnInit {
   {
     this.api.getAll().subscribe( (res:any)=> {
       console.log(res);
-      if(res.Error != null)
+      if(res.Message != null)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -171,9 +169,8 @@ export class SearchemployeeComponent implements OnInit {
   searchEmployee(){
     this.api.searchEmployee(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Error != null){
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+      if(res.Message != null){
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -216,21 +213,22 @@ export class SearchemployeeComponent implements OnInit {
   }
 
   Save(){
-    this.employee.UserID = this.user.UserID;
-     this.api.updateEmployee(this.employee).subscribe( (res:any)=> {
-       console.log(res);
-       if(res.Error !=null)
-       {
-       this.responseMessage = res.Error;
-       alert(this.responseMessage)
-       }
-       else if(res.Message != null)
-       {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
-       }
-       this.router.navigate(["employee-management"])
-     })
+
+    this.dialogService.openConfirmDialog('Are you sure you want to update this employee?')
+    .afterClosed().subscribe(res => {
+      if (res)
+      {
+        this.employee.UserID = this.user.UserID;
+        this.api.updateEmployee(this.employee).subscribe( (res:any)=> {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message);
+          }
+          this.router.navigate(["employee-management"])
+        })
+      }
+    })
  
    }
 
@@ -251,19 +249,19 @@ export class SearchemployeeComponent implements OnInit {
 
   
   deleteEmployee(){
-    this.api.deleteEmployee(this.employee.EmployeeID).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Error)
+    this.dialogService.openConfirmDialog("Are you sure you want to delete this employee?")
+    .afterClosed().subscribe(res => {
+      if(res)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage);
+        this.api.deleteEmployee(this.employee.EmployeeID).subscribe( (res:any)=> {
+          console.log(res);
+          if(res.Message)
+          {
+            this.dialogService.openAlertDialog(res.Message);
+          }
+          this.router.navigate(["employee-management"])
+        })
       }
-      else if(res.Message)
-      {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage);
-      }
-      this.router.navigate(["employee-management"])
     })
 
   }
@@ -287,10 +285,9 @@ export class SearchemployeeComponent implements OnInit {
   {
     this.api.getImages(this.employee.EmployeeID).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Error != null)
+      if(res.Message)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -312,10 +309,9 @@ export class SearchemployeeComponent implements OnInit {
   {
     this.api.getCvs(this.employee.EmployeeID).subscribe( (res:any)=> {
       console.log(res);
-      if(res.Error != null)
+      if(res.Message)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {

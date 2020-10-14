@@ -1065,9 +1065,8 @@ namespace ORDRA_API.Controllers
 
             List<Sale> sales = new List<Sale>();
             try
-            {                                                                                     //.Where(z=> (z.SaleDate >= begin) || (z.SaleDate<=end))
-                sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList(); //.Where(z => z.SaleDate == today)
-                                                                                                  //db.Marked_Off.Include(z => z.Product).Include(z => z.Marked_Off_Reason).ToList();
+            {                                                                                     
+                sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).Where(z => z.SaleDate == today).ToList(); //.Where(z => z.SaleDate == today)
             }
             catch (Exception)
             {
@@ -1079,6 +1078,8 @@ namespace ORDRA_API.Controllers
         public dynamic getSaleReportObject(List<Sale> sales)
         {
             dynamic toReturn = new ExpandoObject();
+            List<Container> allCons = db.Containers.ToList();
+            List<Container> addedCons = new List<Container>();
             //toReturn.TableData = null;
             toReturn.ChartData = null;
             try
@@ -1104,22 +1105,35 @@ namespace ORDRA_API.Controllers
                             //List<Product_Sale> saleProds = db.Product_Sale.Where(z => z.SaleID == id).ToList();
                             Container nameObj = db.Containers.Where(z => z.ContainerID == id).FirstOrDefault();
                             name = nameObj.ConName;
-                            var sum = 0;    //Convert.ToInt32(item.Sum(z => z.SaleID), CultureInfo.InvariantCulture);
+                            addedCons.Add(nameObj);
 
-                            //calculating revenue
-                            var saleId = item.Select(z => z.SaleID).FirstOrDefault();
-                            List<Product_Sale> prodSale = db.Product_Sale.Where(z => z.SaleID == saleId).ToList();
-                            foreach (var prod in prodSale)
+                            
+                            
+                           // List<decimal> cal = new List<decimal>();
+                            foreach(var net in item)
                             {
-                                var quantity = Convert.ToDecimal(prod.PSQuantity);
-                                var prodId = prod.ProductID;
-                                Price price = db.Prices.Where(z => z.ProductID == prodId).ToList().LastOrDefault();
-                                var salePrice = Convert.ToDecimal(price.UPriceR);
-                                rev = rev + (quantity * salePrice);
+                                //calculating revenue
+                                var saleId = net.SaleID;
+                                List<Product_Sale> prodSale = db.Product_Sale.Where(z => z.SaleID == saleId).ToList();
+
+                                foreach (var prod in prodSale)
+                                {
+                                    var quantity = Convert.ToDecimal(prod.PSQuantity);
+                                    var prodId = prod.ProductID;
+                                    Price price = db.Prices.Where(z => z.ProductID == prodId).ToList().LastOrDefault();
+                                    var salePrice = Convert.ToDecimal(price.UPriceR);
+                                    var prodTot = (quantity * salePrice);
+                                    rev += prodTot;
+                                    //cal.Add(prodTot);
+                                }
                             }
+                            
+
+                            
 
                             container.Sum = rev;
                             container.Name = name;
+                            //container.Sales = prodSale;
                             containers.Add(container);
                         }
                         else
@@ -1128,9 +1142,37 @@ namespace ORDRA_API.Controllers
                         }
                     }
 
-                    toReturn.ChartData = containers;
+                    List<Container> notAdded = new List<Container>();
+                    foreach (var allItem in allCons)
+                    {
+                        Boolean check = false;
+                        foreach (var addedItem in addedCons)
+                        {
+                            if (allItem.ContainerID == addedItem.ContainerID)
+                            {
+                                check = true;
+                            }
 
-                    
+                        }
+
+                        if (check == false)
+                        {
+                            notAdded.Add(allItem);
+                        }
+                    }
+
+                    foreach (var item in notAdded)
+                    {
+                        dynamic add = new ExpandoObject();
+                        add.Sum = 0;
+                        add.Name = item.ConName;
+                        containers.Add(add);
+                    }
+
+                    toReturn.ChartData = containers;
+                    DateTime today = DateTime.Today;
+                    toReturn.Today = today;
+
                 }
                 else
                 {
@@ -1163,7 +1205,6 @@ namespace ORDRA_API.Controllers
             try
             {
                 sales = db.Sales.Include(z => z.Container).Include(z => z.Product_Sale).ToList();//.Where(z => (z.SaleDate >= begin) || (z.SaleDate <= end))
-                                                                                                 //db.Marked_Off.Include(z => z.Product).Include(z => z.Marked_Off_Reason).ToList();
             }
             catch
             {
@@ -1186,6 +1227,8 @@ namespace ORDRA_API.Controllers
 
                     var conList = sales.GroupBy(z => z.ContainerID);
                     List<dynamic> containers = new List<dynamic>();
+                    List<Container> allCons = db.Containers.ToList();
+                    List<Container> addedCons = new List<Container>();
 
 
                     foreach (var item in conList)
@@ -1200,19 +1243,24 @@ namespace ORDRA_API.Controllers
                             //List<Product_Sale> saleProds = db.Product_Sale.Where(z => z.SaleID == id).ToList();
                             Container nameObj = db.Containers.Where(z => z.ContainerID == id).FirstOrDefault();
                             name = nameObj.ConName;
-                            var sum = 0;    //Convert.ToInt32(item.Sum(z => z.SaleID), CultureInfo.InvariantCulture);
+
+                            addedCons.Add(nameObj);
 
                             //calculating revenue
-                            var saleId = item.Select(z => z.SaleID).FirstOrDefault();
-                            List<Product_Sale> prodSale = db.Product_Sale.Where(z => z.SaleID == saleId).ToList();
-                            foreach (var prod in prodSale)
+                            foreach(var act in item)
                             {
-                                var quantity = Convert.ToDecimal(prod.PSQuantity);
-                                var prodId = prod.ProductID;
-                                Price price = db.Prices.Where(z => z.ProductID == prodId).ToList().LastOrDefault();
-                                var salePrice = Convert.ToDecimal(price.UPriceR);
-                                rev = rev + (quantity * salePrice);
+                                var saleId = act.SaleID;
+                                List<Product_Sale> prodSale = db.Product_Sale.Where(z => z.SaleID == saleId).ToList();
+                                foreach (var prod in prodSale)
+                                {
+                                    var quantity = Convert.ToDecimal(prod.PSQuantity);
+                                    var prodId = prod.ProductID;
+                                    Price price = db.Prices.Where(z => z.ProductID == prodId).ToList().LastOrDefault();
+                                    var salePrice = Convert.ToDecimal(price.UPriceR);
+                                    rev = rev + (quantity * salePrice);
+                                }
                             }
+                            
 
                             container.Sum = rev;
                             container.Name = name;
@@ -1224,8 +1272,36 @@ namespace ORDRA_API.Controllers
                         }
                     }
 
-                    toReturn.ChartData = containers;
+                    List<Container> notAdded = new List<Container>();
+                   foreach (var allItem in allCons)
+                   {
+                        Boolean check = false;
+                        foreach(var addedItem in addedCons)
+                        {
+                            if (allItem.ContainerID == addedItem.ContainerID)
+                            {
+                                check = true;
+                            }
 
+                        }
+
+                        if(check==false)
+                        {
+                            notAdded.Add(allItem);
+                        }
+                   }
+
+                   foreach (var item in notAdded)
+                    {
+                        dynamic add = new ExpandoObject();
+                        add.Sum = 0;
+                        add.Name = item.ConName;
+                        containers.Add(add);
+                    }
+
+                    toReturn.ChartData = containers;
+                    int year = DateTime.Now.Year;
+                    toReturn.Year = year;
 
                 }
                 else

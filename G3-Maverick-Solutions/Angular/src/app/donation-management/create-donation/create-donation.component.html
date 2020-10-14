@@ -177,21 +177,20 @@
 
         <div *ngIf="showNameSearch" class="card">
             <div class="divleft"> 
-                <label>Products donated from Container: {{container.ConName}}</label>
+                <label  class="subheadinglabel"> Products donated from Container: {{container.ConName}}</label>
                 <br>
-                <label class="subheadinglabel" >Select Product:</label>
                 <label for="Product">Product: </label>
-                <select required formControlName="ProductID" class="form-control" [(ngModel)]="product.ProductID" name="ProductID" id="ProductID" required >
+                <select formControlName="ProductID" class="form-control" [(ngModel)]="product.ProductID" name="ProductID" id="ProductID" required >
                     <option  *ngFor="let product of products" value="{{product.ProductID}}">{{product.ProdName}}</option>
               </select>
-                <!-- <select required formControlName="ProductID" name="ProductID" [(ngModel)]="donatedProduct.ProductID" (ngModelChange)="addProduct($event)">
+                <!-- <select required formControlName="ProductID" name="ProductID" [(ngModel)]="product.ProductID" (ngModelChange)="addProduct($event)">
                     <option *ngFor="let product of products" [ngValue]="product">{{product.Prodname}}</option>
                 </select> -->
                 <br>
                 <label>Quantity</label>
                 <input type = "number" formControlName="DPQuantity" class="form-control" [(ngModel)]="donatedProduct.DPQuantity" name="DPQuantity" id="DPQuantity"  pattern="[0-9]*" required >
             </div>
-            <button type="submit" (click)="addProduct(donatedProduct.ProductID, donatedProduct.DPQuantity)" >Add Product</button>
+            <button type="submit" (click)="addProduct(product.ProductID, donatedProduct.DPQuantity)" >Add Product</button>
             <button type="button" (click)="cancel()" >Cancel</button>
         </div> 
     

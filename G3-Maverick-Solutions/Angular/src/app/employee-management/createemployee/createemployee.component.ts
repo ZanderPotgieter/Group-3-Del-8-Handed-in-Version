@@ -175,70 +175,85 @@ handleFileInputCV(file: FileList)
       this.api.searchEmployee(this.name,this.surname).subscribe( (res:any)=> {
         console.log(res);
         
-          //Get User Details
-          this.user.UserID = res.user.UserID;
-          this.user.UserName = res.user.UserName;
-          this.user.UserSurname = res.user.UserSurname;
-          this.user.UserCell = res.user.UserCell;
-          this.user.UserEmail = res.user.UserEmail;
-  
-          //Get Employee Details
-          if (this.employee== null) //check if employee exist
+          if (res.Message!=null)
           {
-            this.showButton = true;
-            /* this.showDate = true;
-            this.showText = false; */
+            this.dialogService.openAlertDialog(res.Message);
           }
-          else //display employee details if record exists
-          { 
-            //alert(this.dupMessage);
-            this.employee.EmployeeID = res.employee.EmployeeID;
-            this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
-            this.employee.EmpStartDate = res.employee.EmpStartDate;
-            this.empID = res.employee.EmployeeID;
-  
-            this.showButton = false;
-           /*  this.showDate = false;
-            this.showText = true; */
-          }
-        this.showSearch = false;
-        this.showResults = true;
-        this.showNewEmp = true;
-        this.showUpload = false;
-        this.showUploadImg= false;
-        this.showUploadCv = false;
+          else 
+          {
+                  //Get User Details
+                this.user.UserID = res.user.UserID;
+                this.user.UserName = res.user.UserName;
+                this.user.UserSurname = res.user.UserSurname;
+                this.user.UserCell = res.user.UserCell;
+                this.user.UserEmail = res.user.UserEmail;
         
-      })
+                //Get Employee Details
+                if (this.employee== null) //check if employee exist
+                {
+                  this.showButton = true;
+                  /* this.showDate = true;
+                  this.showText = false; */
+                }
+                else //display employee details if record exists
+                { 
+                  //alert(this.dupMessage);
+                  this.employee.EmployeeID = res.employee.EmployeeID;
+                  this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
+                  this.employee.EmpStartDate = res.employee.EmpStartDate;
+                  this.empID = res.employee.EmployeeID;
+        
+                  this.showButton = false;
+                /*  this.showDate = false;
+                  this.showText = true; */
+                }
+              this.showSearch = false;
+              this.showResults = true;
+              this.showNewEmp = true;
+              this.showUpload = false;
+              this.showUploadImg= false;
+              this.showUploadCv = false; 
+          }
+        })
     }
 
   }
 
 
   createEmployee(){
-      this.employee.UserID = this.user.UserID;
-      this.api.createEmployee(this.employee).subscribe( (res:any)=> {
-      console.log(res);
-      if(res.Error != null)   //check if error occured
-      {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage);
-        this.router.navigate(["employee-management"]);
+    if (this.employee.EmpStartDate == null || this.employee.EmpShiftsCompleted ==null)
+    {
+      this.employeeNull = true;
+    }
+    else
+    {
+      this.dialogService.openConfirmDialog('Are you sure you want to add teh employee?')
+      .afterClosed().subscribe(res => {
+        if (res)
+        {
+          this.employee.UserID = this.user.UserID;
+          this.api.createEmployee(this.employee).subscribe( (res:any)=> {
+          console.log(res);
+          if(res.Message == "Employee Profile Succesfully Created")   //check if error occured
+          {
+
+            this.dialogService.openAlertDialog(res.Message);
+            this.showSearch = false;
+            this.showResults = true;
+            this.showNewEmp = false;
+            this.showUpload = true;
+            this.showUploadImg= false;
+            this.showUploadCv = false;
+          }
+          else 
+          {
+            this.dialogService.openAlertDialog(res.Message);
+            this.router.navigate(["employee-management"]);
+          }      
+        })
       }
-      else if (res.Message != null )
-      {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage);
-        this.showSearch = false;
-        this.showResults = true;
-        this.showNewEmp = false;
-        this.showUpload = true;
-        this.showUploadImg= false;
-        this.showUploadCv = false;
-        
-      }      
-    })
-    
-    
+      })
+    }
   }
 
   gotoEmployeeManagement(){

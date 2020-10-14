@@ -62,20 +62,20 @@ namespace ORDRA_API.Controllers
                     }
                     else
                     {
-                        toReturn.Error = "Employee Record Not Found";
+                        toReturn.Message = "Employee Record Not Found";
                     }
 
                 }
                 else
                 {
-                    toReturn.Error = "User Record Not Found";
+                    toReturn.Message = "User Record Not Found";
                 }
 
 
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to get Employee record" ;
+                toReturn.Message = "Failed to get Employee record" ;
             }
 
             return toReturn;
@@ -128,13 +128,13 @@ namespace ORDRA_API.Controllers
                         }
                         else
                         {
-                            toReturn.Error = "Employee Record Not Found";
+                            toReturn.Message = "Employee Record Not Found";
                         }
 
                     }
                     else
                     {
-                        toReturn.Error = "User Record Not Found";
+                        toReturn.Message = "User Record Not Found";
                     }
                 }
 
@@ -144,7 +144,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to get Employee records" ;
+                toReturn.Message = "Failed to get Employee records" ;
             }
 
             return toReturn;
@@ -171,12 +171,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Image not available";
+                    toReturn.Message = "Image not available";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to get image";
+                toReturn.Message = "Failed to get image";
             }
 
             return toReturn;
@@ -196,12 +196,12 @@ namespace ORDRA_API.Controllers
                 toReturn.Employees = db.Users.Include(x => x.Employees).Include(x => x.Employees).ToList();
                 if (toReturn.Employees == null)
                 {
-                    toReturn.Error = "There are no employees";
+                    toReturn.Message = "There are no employees";
                 }
             }
             catch (Exception )
             {
-                toReturn.Error = "Failed to get all employees";
+                toReturn.Message = "Failed to get all employees";
             }
 
             return toReturn;
@@ -224,7 +224,7 @@ namespace ORDRA_API.Controllers
 
                 if (employee == null)
                 {
-                    toReturn.Error = "Employee Profile Not Found";
+                    toReturn.Message= "Employee Profile Not Found";
                 }
                 else
                 {
@@ -235,7 +235,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception )
             {
-                toReturn.Error = "Failed to get employee record " ;
+                toReturn.Message = "Failed to get employee record " ;
             }
 
             return toReturn;
@@ -270,12 +270,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Employee Profile Not Found";
+                    toReturn.Message = "Employee Profile Not Found";
                 }
             }
             else
             {
-                toReturn.Error = "Employee already exists ";
+                toReturn.Message = "Employee already exists ";
             }
             
             }
@@ -310,12 +310,12 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "Employee Profile Not Found";
+                    toReturn.Message = "Employee Profile Not Found";
                 }
             }
             catch (Exception)
             {
-                toReturn.Error = "Failed to update employee record" ;
+                toReturn.Message = "Failed to update employee record" ;
             }
 
             return toReturn;
@@ -335,7 +335,7 @@ namespace ORDRA_API.Controllers
 
                 if (employee == null)
                 {
-                    toReturn.Error = "Employee profile Not Found";
+                    toReturn.Message = "Employee profile Not Found";
                 }
                 else
                 {
@@ -347,7 +347,7 @@ namespace ORDRA_API.Controllers
             }
             catch (Exception )
             {
-                toReturn.Error = "Failed to delete employee record " ;
+                toReturn.Message = "Failed to delete employee record " ;
             }
 
             return toReturn;
@@ -494,7 +494,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "CV not found";
+                toReturn.Message = "CV not found";
             }
             return toReturn;
         }
@@ -519,7 +519,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Error = "Images not found";
+                toReturn.Message = "Images not found";
             }
             return toReturn;
         }

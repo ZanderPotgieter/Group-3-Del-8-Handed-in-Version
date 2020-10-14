@@ -227,9 +227,9 @@ namespace ORDRA_API.Controllers
                 toReturn = containers;
 
             }
-            catch
+            catch (Exception exp)
             {
-                toReturn = "Containers Not Loaded, Please Reload page";
+                toReturn = exp.Message;
 
             }
             return toReturn;

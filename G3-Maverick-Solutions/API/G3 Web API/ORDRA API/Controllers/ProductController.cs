@@ -1330,10 +1330,11 @@ namespace ORDRA_API.Controllers
                 db.Marked_Off.Add(newMarkedOff);
                 db.SaveChanges();
                 toReturn.Message = "Product Mark Off Succsessful";
+                toReturn.MarkedOff = newMarkedOff;
             }
             catch
             {
-                toReturn.Message = "Product Mark Off UnSuccsessful";
+                toReturn.Error = "Product Mark Off UnSuccsessful";
 
 
             }
@@ -1725,7 +1726,7 @@ namespace ORDRA_API.Controllers
                                 product.ProdName = prod.ProdName;
                                 product.ProdDescription = prod.ProdDesciption;
                                 product.STCount = take_Product.STProductCount;
-
+                            
                                 if (container_Product != null)
                                 {
                                     product.CPQuantity = container_Product.CPQuantity;

@@ -99,7 +99,7 @@ export class SearchProductComponent implements OnInit {
       ProdReLevel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9 ]*')]], 
       CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
-      PriceStartDate: ['', [Validators.required]],
+      PriceStartDate: ['', [Validators.required]], 
       PriceEndDate: [''],
       ProductCategoryID: [''],
       SelectSup: [''],
@@ -416,7 +416,7 @@ export class SearchProductComponent implements OnInit {
     if(this.found == true){
       this.dialogService.openAlertDialog("Duplicate Price Start Date Found")
     }
-    if((this.newPrice.PriceStartDate.getMonth() < this.date.getMonth()) && (this.newPrice.PriceStartDate.getDate() < this.date.getDate())  && (this.newPrice.PriceStartDate.getFullYear() < this.date.getFullYear())){
+    if(this.newPrice.PriceStartDate < this.date){
       this.errorMessage = "Price Start Date Cannot Be In The Past"; 
           this.showError = true;
           setTimeout(() => {
@@ -430,7 +430,16 @@ export class SearchProductComponent implements OnInit {
   
 
   update(ndx: number){
-    return  this.productService.getProductByName(this.list[ndx].Prodname).subscribe( (res:any)=> {
+    if (this.list != null){
+      this.productID = this.list[ndx].ProductID
+    }
+    if(this.productList != null){
+      this.productID = this.productList[ndx].ProductID
+    }
+    if(this.product_conlist != null){
+      this.productID = this.product_conlist[ndx].ProductID
+    }
+    this.productService.getProductByID(this.productID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
@@ -449,17 +458,23 @@ export class SearchProductComponent implements OnInit {
           this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
           this.Price.ProductID = res.Product.ProductID;
 
+          
+
           this.pricelist = res.PriceList;
+          this.category = res.ProductCategory;
+          
           this.product_conlist = res.ProductContainers;
           this.supplier = res.supplier;
 
-
       }
-    this.showBarcodeResult = false;
-    this.showProductResult = true;
-    this.showCategoryResults = false;
-    this.showContainerResults = false;
-    this.showAllProductsResults = false;})
+      this.showBarcodeInput = false;
+      this.showBarcodeResult = false;
+      this.showProductResult = true;
+      this.showCategoryResults = false;
+      this.showContainerResults = false;
+      this.showAllProductsResults = false;
+      
+    })
   }
 
   Update(){

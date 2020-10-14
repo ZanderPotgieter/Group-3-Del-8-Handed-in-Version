@@ -18,7 +18,7 @@ export class AddVatComponent implements OnInit {
   list: Vat[] = [];
   date = new Date();
   responseMessage: string = "Request Not Submitted";
-  found: boolean;
+  found = false;
   showError = false;
   errorMessage: string;
 
@@ -57,7 +57,7 @@ export class AddVatComponent implements OnInit {
     if(this.found == true){
       this.dialogService.openAlertDialog("Duplicate Vat Start Date Found")
     }
-    if((this.vat.VATStartDate.getMonth() < this.date.getMonth()) && (this.vat.VATStartDate.getDate() < this.date.getDate())  && (this.vat.VATStartDate.getFullYear() < this.date.getFullYear())){
+    if(this.vat.VATStartDate < this.date){
       this.errorMessage = "Vat Start Date Cannot Be In The Past"; 
           this.showError = true;
           setTimeout(() => {

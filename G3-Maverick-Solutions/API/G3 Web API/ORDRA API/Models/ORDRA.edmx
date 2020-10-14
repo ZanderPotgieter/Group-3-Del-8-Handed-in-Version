@@ -56,7 +56,7 @@
           <Property Name="CredAccountBalance" Type="real" />
           <Property Name="CredBank" Type="varchar" MaxLength="30" />
           <Property Name="CredBranch" Type="varchar" MaxLength="40" />
-          <Property Name="CredAccount" Type="varchar" MaxLength="15" />
+          <Property Name="CredAccount" Type="int" />
           <Property Name="CredType" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Creditor_Payment">
@@ -1595,20 +1595,6 @@
           <NavigationProperty Name="Container" Relationship="Self.FK_CPContainer" FromRole="Container_Product" ToRole="Container" />
           <NavigationProperty Name="Product" Relationship="Self.FK_CPProduct" FromRole="Container_Product" ToRole="Product" />
         </EntityType>
-        <EntityType Name="Creditor">
-          <Key>
-            <PropertyRef Name="CreditorID" />
-          </Key>
-          <Property Name="CreditorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="CredAccountBalance" Type="Single" />
-          <Property Name="CredBank" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CredBranch" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="CredAccount" Type="String" />
-          <Property Name="CredType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Creditor_Payment" Relationship="Self.FK_CredPayment" FromRole="Creditor" ToRole="Creditor_Payment" />
-          <NavigationProperty Name="Supplier" Relationship="Self.FK_CredSupplier" FromRole="Creditor" ToRole="Supplier" />
-        </EntityType>
         <EntityType Name="Creditor_Payment">
           <Key>
             <PropertyRef Name="PaymentID" />
@@ -1617,9 +1603,9 @@
           <Property Name="CreditorID" Type="Int32" />
           <Property Name="CredPaymentDate" Type="DateTime" Precision="0" />
           <Property Name="CredPaymentAmount" Type="Single" />
-          <NavigationProperty Name="Creditor" Relationship="Self.FK_CredPayment" FromRole="Creditor_Payment" ToRole="Creditor" />
           <Property Name="SupplierID" Type="Int32" />
           <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredPayment1" FromRole="Creditor_Payment" ToRole="Supplier" />
+          <NavigationProperty Name="Creditor" Relationship="OrdraDBModel.FK_CredPaymentC" FromRole="Creditor_Payment" ToRole="Creditor" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -1989,10 +1975,10 @@
           <Property Name="SupStreet" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="SupSuburb" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="SupCode" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Creditors" Relationship="Self.FK_CredSupplier" FromRole="Supplier" ToRole="Creditor" />
           <NavigationProperty Name="Products" Relationship="Self.FK_ProdSup" FromRole="Supplier" ToRole="Product" />
           <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOSupplier" FromRole="Supplier" ToRole="Supplier_Order" />
           <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPayment1" FromRole="Supplier" ToRole="Creditor_Payment" />
+          <NavigationProperty Name="Creditors" Relationship="OrdraDBModel.FK_CredSupplier" FromRole="Supplier" ToRole="Creditor" />
         </EntityType>
         <EntityType Name="Supplier_Order">
           <Key>
@@ -2212,30 +2198,6 @@
             </Principal>
             <Dependent Role="Container_Product">
               <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CredPayment">
-          <End Role="Creditor" Type="Self.Creditor" Multiplicity="0..1" />
-          <End Role="Creditor_Payment" Type="Self.Creditor_Payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Creditor">
-              <PropertyRef Name="CreditorID" />
-            </Principal>
-            <Dependent Role="Creditor_Payment">
-              <PropertyRef Name="CreditorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CredSupplier">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
-          <End Role="Creditor" Type="Self.Creditor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Supplier">
-              <PropertyRef Name="SupplierID" />
-            </Principal>
-            <Dependent Role="Creditor">
-              <PropertyRef Name="SupplierID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2685,7 +2647,6 @@
           <EntitySet Name="Area_Status" EntityType="Self.Area_Status" />
           <EntitySet Name="Containers" EntityType="Self.Container" />
           <EntitySet Name="Container_Product" EntityType="Self.Container_Product" />
-          <EntitySet Name="Creditors" EntityType="Self.Creditor" />
           <EntitySet Name="Creditor_Payment" EntityType="Self.Creditor_Payment" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="Customer_Order" EntityType="Self.Customer_Order" />
@@ -2768,14 +2729,6 @@
           <AssociationSet Name="FK_CPProduct" Association="Self.FK_CPProduct">
             <End Role="Product" EntitySet="Products" />
             <End Role="Container_Product" EntitySet="Container_Product" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CredPayment" Association="Self.FK_CredPayment">
-            <End Role="Creditor" EntitySet="Creditors" />
-            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CredSupplier" Association="Self.FK_CredSupplier">
-            <End Role="Supplier" EntitySet="Suppliers" />
-            <End Role="Creditor" EntitySet="Creditors" />
           </AssociationSet>
           <AssociationSet Name="FK_COCustomer" Association="Self.FK_COCustomer">
             <End Role="Customer" EntitySet="Customers" />
@@ -2971,6 +2924,15 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
           </AssociationSet>
+          <EntitySet Name="Creditors" EntityType="OrdraDBModel.Creditor" />
+          <AssociationSet Name="FK_CredPaymentC" Association="OrdraDBModel.FK_CredPaymentC">
+            <End Role="Creditor" EntitySet="Creditors" />
+            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CredSupplier" Association="OrdraDBModel.FK_CredSupplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Creditor" EntitySet="Creditors" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Stock_Take">
           <Key>
@@ -3117,6 +3079,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Creditor">
+          <Key>
+            <PropertyRef Name="CreditorID" />
+          </Key>
+          <Property Name="CreditorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="CredAccountBalance" Type="Single" />
+          <Property Name="CredBank" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CredBranch" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="CredAccount" Type="Int32" />
+          <Property Name="CredType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPaymentC" FromRole="Creditor" ToRole="Creditor_Payment" />
+          <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredSupplier" FromRole="Creditor" ToRole="Supplier" />
+        </EntityType>
+        <Association Name="FK_CredPaymentC">
+          <End Type="OrdraDBModel.Creditor" Role="Creditor" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Creditor_Payment" Role="Creditor_Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Creditor">
+              <PropertyRef Name="CreditorID" />
+            </Principal>
+            <Dependent Role="Creditor_Payment">
+              <PropertyRef Name="CreditorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CredSupplier">
+          <End Type="OrdraDBModel.Supplier" Role="Supplier" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Creditor" Role="Creditor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="Creditor">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3166,19 +3166,6 @@
                 <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="CPQuantity" ColumnName="CPQuantity" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Creditors">
-            <EntityTypeMapping TypeName="OrdraDBModel.Creditor">
-              <MappingFragment StoreEntitySet="Creditor">
-                <ScalarProperty Name="CreditorID" ColumnName="CreditorID" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="CredAccountBalance" ColumnName="CredAccountBalance" />
-                <ScalarProperty Name="CredBank" ColumnName="CredBank" />
-                <ScalarProperty Name="CredBranch" ColumnName="CredBranch" />
-                <ScalarProperty Name="CredAccount" ColumnName="CredAccount" />
-                <ScalarProperty Name="CredType" ColumnName="CredType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3629,6 +3616,19 @@
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
                 <ScalarProperty Name="StockTakeProductID" ColumnName="StockTakeProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Creditors">
+            <EntityTypeMapping TypeName="OrdraDBModel.Creditor">
+              <MappingFragment StoreEntitySet="Creditor">
+                <ScalarProperty Name="CredType" ColumnName="CredType" />
+                <ScalarProperty Name="CredAccount" ColumnName="CredAccount" />
+                <ScalarProperty Name="CredBranch" ColumnName="CredBranch" />
+                <ScalarProperty Name="CredBank" ColumnName="CredBank" />
+                <ScalarProperty Name="CredAccountBalance" ColumnName="CredAccountBalance" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="CreditorID" ColumnName="CreditorID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

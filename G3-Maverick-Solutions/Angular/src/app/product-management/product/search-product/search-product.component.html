@@ -154,16 +154,12 @@
               <span *ngIf="searchForm.get('UPriceR').errors.pattern">Only numbers allowed.</span>
             </span>
             <br>
-            <label for="PriceStartDate" style="width: 200px">Price Start Date:</label>
-            <!--<input matInput [min]="minDate" [matDatepicker]="picker"  formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>-->
-            <input type="date"  formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>
+            <label for="PriceStartDate">Price Start Date:</label> <input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" [min]="date" required>
             <br>
             <span style="color:red" *ngIf="pdForm.get('PriceStartDate').errors && (pdForm.get('PriceStartDate').touched || pdForm.get('PriceStartDate').dirty)">
-              <span *ngIf="searchForm.get('PriceStartDate').errors.required">Price start date is required.</span>
-            </span>
-            <br>
+              <span *ngIf="pdForm.get('PriceStartDate').errors.required">Price start date is required.</span>
+              <!--<span *ngIf="pdForm.get('PriceStartDate').errors.min">Price start date cannot be in the past</span>
+            --></span>
             <span style="color:red" *ngIf="showError">
                 {{errorMessage}}</span>
             <button type="submit" (click)="saveadd()">Save</button>

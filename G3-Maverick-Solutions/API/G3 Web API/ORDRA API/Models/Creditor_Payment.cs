@@ -20,7 +20,7 @@ namespace ORDRA_API.Models
         public Nullable<float> CredPaymentAmount { get; set; }
         public Nullable<int> SupplierID { get; set; }
     
-        public virtual Creditor Creditor { get; set; }
         public virtual Supplier Supplier { get; set; }
+        public virtual Creditor Creditor { get; set; }
     }
 }

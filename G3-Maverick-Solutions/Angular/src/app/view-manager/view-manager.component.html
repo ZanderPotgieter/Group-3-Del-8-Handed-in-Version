@@ -1,9 +1,11 @@
 
     <h1>Search Manager Profile</h1>
+    <div class="divright">
+        <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
     <form [formGroup] = "empForm">
     <div  class="card" >
         <div class="divleft" >
-            <br>
             <mat-radio-group aria-label="Select Option To Search">
                 <mat-radio-button value= 1 (click)="search()">Search Manager</mat-radio-button>
                 <mat-radio-button value= 2 (click)="viewAll()">View All Managers</mat-radio-button>

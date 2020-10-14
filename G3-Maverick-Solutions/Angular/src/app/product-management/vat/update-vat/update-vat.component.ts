@@ -22,6 +22,8 @@ export class UpdateVatComponent implements OnInit {
   showadd: boolean = false;
   enableInput: boolean = true;
   responseMessage : string;
+  todaysDate: string;
+  selectedDate: string;
   
 
   ngOnInit(){
@@ -46,8 +48,16 @@ export class UpdateVatComponent implements OnInit {
 
  
 
-  update(){
-    this.enableInput = false;
+  update(ndx: number){
+    this.selectedDate = this.list[ndx].VATStartDate.toString();
+    this.todaysDate = this.date.toString();
+    if(this.selectedDate == this.todaysDate){
+      this.dialogService.openAlertDialog("Update Retricted For Selected VAT ")
+    }
+    else{
+      this.enableInput = false;
+    }
+    
   }
 
   saveupdate(vatUpdate: Vat){

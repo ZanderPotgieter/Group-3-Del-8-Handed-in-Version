@@ -35,7 +35,7 @@ export class CompleteStockTakeComponent implements OnInit {
   NoForm: boolean = true;
   response: string;
   showTable: boolean = false;
-  showList: boolean = true;
+  showList: boolean = false;
   user: User = new User();
   employee: string;
   session: any;
@@ -61,27 +61,20 @@ export class CompleteStockTakeComponent implements OnInit {
 
         this.productService.getTodaysStockTake(this.date, res.ContainerID).subscribe( (res:any) =>{
           console.log(res);
-           if(res.stock_Takes){
-          
-        
-            this.stocktakes = res.stock_Takes
-            this.showList = true;
-            this.NoForm = false;
-
-          }
-          if(this.stocktakes.length == 0){
-            this.dialogService.openAlertDialog("No Stock Take Forms Filled In Today")
-          }
-          
          
-          
-        
+              this.stocktakes = res.stock_Takes;
+              this.showList = true;
+            
+         
         })
         
         
       })
-    
-  }
+      }
+
+      if(this.stocktakes == null){
+        this.dialogService.openAlertDialog("No Stock Take Forms Filled In Today")
+      }
 }
 
   Start(ndx: number){
@@ -127,12 +120,19 @@ export class CompleteStockTakeComponent implements OnInit {
       this.index = ndx;
       this.selectedProduct = this.list[ndx];
       this.MOQuantity = this.list[ndx].CPQuantity - this.list[ndx].STCount;
+      this.MarkedOffProduct.ContainerID = this.container.ContainerID;
+      this.MarkedOffProduct.MoQuantity = this.list[ndx].CPQuantity - this.list[ndx].STCount;
+      this.MarkedOffProduct.MoDate = this.Todaysdate;
+      this.MarkedOffProduct.ProductID = this.list[ndx].ProductID;
+      this.MarkedOffProduct.StockTakeID = this.stocktakeID;
+      this.MarkedOffProduct.UserID = this.user.UserID;
+      this.list[this.index].MoQuantity = this.MOQuantity;
   
       this.showMarkOff = true;
       this.showSaveError = false;
     }
     else{
-      alert("Mark Off Resticted. Stock Count Is Greater Or Equal To Quantity")
+      this.dialogService.openAlertDialog("Cannot Mark Off if stock count is greater or equal to quantity")
     }
 
     this.productService.getAllMarkedOffReasons().subscribe((res:any) =>
@@ -157,19 +157,15 @@ export class CompleteStockTakeComponent implements OnInit {
 
   setReason(val: MarkedOffReason){
     this.MarkedOffProduct.ReasonID = val.ReasonID;
-    this.MarkedOffProduct.ContainerID = this.container.ContainerID;
-    this.MarkedOffProduct.MoQuantity = this.MOQuantity;
-    this.MarkedOffProduct.MoDate = this.Todaysdate;
-    this.MarkedOffProduct.ProductID = this.list[this.index].ProductID;
-    this.MarkedOffProduct.StockTakeID = this.stocktakeID;
-    this.MarkedOffProduct.UserID = this.user.UserID;
-    this.list[this.index].MoQuantity = this.MOQuantity;
     
 
 
   }
 
   Save(){
+    
+   
+
     this.productService.AddMarkedOff(this.MarkedOffProduct).subscribe((res:any)=>{
       console.log(res);
       if(res.Error){

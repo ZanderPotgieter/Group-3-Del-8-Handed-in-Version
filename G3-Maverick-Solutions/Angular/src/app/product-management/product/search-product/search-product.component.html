@@ -137,33 +137,24 @@
             <div *ngIf="showadd" class="divleft">
             <label class="subheadinglabel">Enter New Price Details</label>
             <br>
-
-            <label for="CPriceR">Cost Price(R):</label>
-            <input style="width:80px;" type="number"  min="1"  formControlName="CPriceR" class="form-control" [(ngModel)]="newPrice.CPriceR" id="CPriceR" name="CPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+            <label for="CPrice">Cost Price(R):</label><input type="number"  formControlName="CPrice" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPrice" pattern="[0-9]+[.,]?[0-9]*" min="1">
+            
+            
             <br>
-            <span style="color:red" *ngIf="pdForm.get('CPriceR').errors && (pdForm.get('CPriceR').touched || pdForm.get('CPriceR').dirty)">
-                <span *ngIf="searchForm.get('CPriceR').errors.required">Cost Price is required.</span>
-                <span *ngIf="pdForm.get('CPriceR').errors.minlength || pdForm.get('CPriceR').errors.maxlength">Cost Price must be greater than 1 number.</span>
-                <span *ngIf="pdForm.get('CPriceR').errors.pattern">Only numbers allowed.</span>
-              </span>
-              <br>
-            <label for="UPriceR">Unit Price(R):</label>
-            <input style="width:80px;" type="number"  min="1"  formControlName="UPriceR" class="form-control" [(ngModel)]="newPrice.UPriceR" id="UPriceR" name="UPriceR" pattern="[0-9]+[.,]?[0-9]*" required>
+                <label for="UPrice">Unit Price(R):</label><input type="number"  formControlName="UPrice" class="form-control" [(ngModel)]="price.UPriceR" id="UPrice" name="UPrice" pattern="[0-9]+[.,]?[0-9]*"  min="1">
+            
+            
             <br>
-            <span style="color:red" *ngIf="pdForm.get('UPriceR').errors && (pdForm.get('UPriceR').touched || pdForm.get('UPriceR').dirty)">
-              <span *ngIf="searchForm.get('UPriceR').errors.required">Unit Price is required.</span>
-              <span *ngIf="searchForm.get('UPriceR').errors.minlength || pdForm.get('UPriceR').errors.maxlength">Unit Price must be greater than 1 number and less than 2 number.</span>
-              <span *ngIf="searchForm.get('UPriceR').errors.pattern">Only numbers allowed.</span>
-            </span>
-            <br>
+                <label style="width: 100%;" for="PriceStartDate">Price Start Date: {{date | date: 'yyyy-MM-dd'}}</label><!--<input type="text" formControlName="price" [(ngModel)]="date" name="price" disabled="true">
             <label for="PriceStartDate">Price Start Date:</label> <input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" [min]="date" required>
             <br>
             <span style="color:red" *ngIf="pdForm.get('PriceStartDate').errors && (pdForm.get('PriceStartDate').touched || pdForm.get('PriceStartDate').dirty)">
               <span *ngIf="pdForm.get('PriceStartDate').errors.required">Price start date is required.</span>
-              <!--<span *ngIf="pdForm.get('PriceStartDate').errors.min">Price start date cannot be in the past</span>
-            --></span>
+              <span *ngIf="pdForm.get('PriceStartDate').errors.min">Price start date cannot be in the past</span>
+            </span>-->
+            <br>
             <span style="color:red" *ngIf="showError">
-                {{errorMessage}}</span>
+                {{errorMessage}}</span><br>
             <button type="submit" (click)="saveadd()">Save</button>
         </div>
 
@@ -240,7 +231,7 @@
     
                     <td>{{item.ProdName}}</td>
                     <td>{{item.ProdReLevel}}</td>
-                    <td ><button  style="border-radius: 10px; width: 90%;" (click)="update(ndx)">view</button></td>
+                    <td ><button  style="border-radius: 10px; width: 90%;" (click)="views(ndx)">view</button></td>
                 </tr>
              
             </table>  
@@ -263,7 +254,7 @@
                     <td>{{item.Prodname}}</td>
                     <td>{{item.Quantity}}</td>
                     <td>{{item.CPQuantity}}</td>
-                    <td ><button  style="border-radius: 10px; width: 90%;" (click)="update(ndx)">view</button></td>
+                    <td ><button  style="border-radius: 10px; width: 90%;" (click)="view(ndx)">view</button></td>
                 </tr>
              
             </table> 

@@ -165,4 +165,9 @@ export class DonationService {
     return this.http.get<Donation[]>(this.Donurl + '/getAddedDonation?cell=' +cell);
   }
 
+  getDonatedProducts(donationID: number): Observable<DonatedProduct[]>
+  {
+    return this.http.get<DonatedProduct[]>(this.Donurl + '/getDonatedProducts?donID=' + donationID);
+  }
+
 }

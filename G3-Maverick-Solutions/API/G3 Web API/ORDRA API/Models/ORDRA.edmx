@@ -109,6 +109,7 @@
           </Key>
           <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="DonationID" Type="int" Nullable="false" />
+          <Property Name="ContainerID" Type="int" />
           <Property Name="DPQuantity" Type="int" />
         </EntityType>
         <EntityType Name="Donation">
@@ -625,6 +626,18 @@
             </Principal>
             <Dependent Role="Creditor">
               <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DonProdContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Donated_Product" Type="Self.Donated_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Donated_Product">
+              <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1330,6 +1343,10 @@
             <End Role="Supplier" EntitySet="Supplier" />
             <End Role="Creditor" EntitySet="Creditor" />
           </AssociationSet>
+          <AssociationSet Name="FK_DonProdContainer" Association="Self.FK_DonProdContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Donated_Product" EntitySet="Donated_Product" />
+          </AssociationSet>
           <AssociationSet Name="FK_DonRecipient" Association="Self.FK_DonRecipient">
             <End Role="Donation_Recipient" EntitySet="Donation_Recipient" />
             <End Role="Donation" EntitySet="Donation" />
@@ -1583,6 +1600,7 @@
           <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STakeContainer" FromRole="Container" ToRole="Stock_Take" />
           <NavigationProperty Name="Supplier_Order" Relationship="OrdraDBModel.FK_SOContainer" FromRole="Container" ToRole="Supplier_Order" />
           <Property Name="InActive" Type="Boolean" />
+          <NavigationProperty Name="Donated_Product" Relationship="OrdraDBModel.FK_DonProdContainer" FromRole="Container" ToRole="Donated_Product" />
         </EntityType>
         <EntityType Name="Container_Product">
           <Key>
@@ -1658,6 +1676,8 @@
           <Property Name="DPQuantity" Type="Int32" />
           <NavigationProperty Name="Donation" Relationship="Self.FK_DPDonation" FromRole="Donated_Product" ToRole="Donation" />
           <NavigationProperty Name="Product" Relationship="Self.FK_DPProduct" FromRole="Donated_Product" ToRole="Product" />
+          <Property Name="ContainerID" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_DonProdContainer" FromRole="Donated_Product" ToRole="Container" />
         </EntityType>
         <EntityType Name="Donation">
           <Key>
@@ -2933,6 +2953,10 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="Creditor" EntitySet="Creditors" />
           </AssociationSet>
+          <AssociationSet Name="FK_DonProdContainer" Association="OrdraDBModel.FK_DonProdContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Donated_Product" EntitySet="Donated_Product" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Stock_Take">
           <Key>
@@ -3091,7 +3115,7 @@
           <Property Name="CredType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPaymentC" FromRole="Creditor" ToRole="Creditor_Payment" />
           <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredSupplier" FromRole="Creditor" ToRole="Supplier" />
-          <Property Name="CredAccount" Type="String" Nullable="false" />
+          <Property Name="CredAccount" Type="String" Unicode="false" FixedLength="false" MaxLength="15" />
         </EntityType>
         <Association Name="FK_CredPaymentC">
           <End Type="OrdraDBModel.Creditor" Role="Creditor" Multiplicity="0..1" />
@@ -3114,6 +3138,18 @@
             </Principal>
             <Dependent Role="Creditor">
               <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DonProdContainer">
+          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
+          <End Type="OrdraDBModel.Donated_Product" Role="Donated_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Donated_Product">
+              <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3219,6 +3255,7 @@
           <EntitySetMapping Name="Donated_Product">
             <EntityTypeMapping TypeName="OrdraDBModel.Donated_Product">
               <MappingFragment StoreEntitySet="Donated_Product">
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="DonationID" ColumnName="DonationID" />
                 <ScalarProperty Name="DPQuantity" ColumnName="DPQuantity" />

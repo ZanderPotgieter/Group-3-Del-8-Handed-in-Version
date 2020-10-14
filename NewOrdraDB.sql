@@ -481,10 +481,13 @@ CREATE TABLE Donated_Product
 (
 	ProductID int,
 	DonationID int,
+	ContainerID int,
 	DPQuantity int,
 	Primary Key(ProductID, DonationID),
 	CONSTRAINT FK_DPProduct FOREIGN KEY (ProductID)
     REFERENCES Product(ProductID),
+	CONSTRAINT FK_DonProdContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID),
 	CONSTRAINT FK_DPDonation FOREIGN KEY (DonationID)
     REFERENCES Donation(DonationID)
 )
@@ -897,9 +900,12 @@ VALUES ('1', '2', '5000.00', '2020-01-29', 'Donated to help less priviledged chi
 	   ('1', '1', '6000.00' , '2020-05-20', 'Donated to help people affected by COVID 19');
 
 INSERT INTO Donated_Product (ProductID, DonationID, DPQuantity)
-VALUES ('1', '1', '20'),
-	   ('2', '2', '50'),
-	   ('3', '2', '15');
+INSERT INTO Donated_Product (ProductID, DonationID, ContainerID, DPQuantity)
+VALUES ('1', '1', '1', '20'),
+	   ('2', '2', '2', '50'),
+	   ('3', '2', '2', '15'),
+	   ('2', '1', '1', '15');
+
 
 INSERT INTO Marked_Off_Reason (MODescription)
 VALUES ('Damaged'),

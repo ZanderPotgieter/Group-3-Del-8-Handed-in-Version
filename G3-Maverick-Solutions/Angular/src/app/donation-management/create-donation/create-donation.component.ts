@@ -108,11 +108,23 @@ export class CreateDonationComponent implements OnInit {
   {
     this.productID = prodID;
     this.dpQuantity = prodQuantity;
-    this.getAddedDonation();
-    console.log(this.productID);
-    console.log(this.containerID);
-    console.log(this.donationID);
-    console.log(this.dpQuantity);
+    //this.getAddedDonation();
+
+    //getting the added donation id 
+    this.donationService.getAddedDonation(this.cell).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if (res.Message != null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+      }
+      else 
+      {
+         //get donation  details  
+        this.donationID = res.donationID;
+      }
+    })
+  
     /* this.donationService.addDonatedProduct(this.productID, this.containerID, this.donationID, this.dpQuantity).subscribe( (res:any)=> 
     {
 
@@ -256,10 +268,9 @@ export class CreateDonationComponent implements OnInit {
     this.donationService.searchDonationRecipientByCell(this.cell).subscribe( (res:any) =>
     {
       console.log(res);
-      if(res.Error != null)
+      if(res.Message != null)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -348,8 +359,7 @@ export class CreateDonationComponent implements OnInit {
             console.log(res);
             if(res.Message == "Donation Add Successful")
             {
-              //this.dialogService.openAlertDialog(res.Message);
-              alert(res.Message);
+              this.dialogService.openAlertDialog(res.Message);
               this.showContainer = true; 
               this.showNameSearch = false;
               this.showSearch = false;
@@ -365,8 +375,8 @@ export class CreateDonationComponent implements OnInit {
             }
             else 
             {
-              //this.dialogService.openAlertDialog(res.Message);
-              alert(res.Message);
+              this.dialogService.openAlertDialog(res.Message);
+              
               this.router.navigate(["donation-management"])
             }
           })

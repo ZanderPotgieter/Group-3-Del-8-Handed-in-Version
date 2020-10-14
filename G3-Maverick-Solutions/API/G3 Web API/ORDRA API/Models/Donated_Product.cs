@@ -17,8 +17,10 @@ namespace ORDRA_API.Models
         public int ProductID { get; set; }
         public int DonationID { get; set; }
         public Nullable<int> DPQuantity { get; set; }
+        public Nullable<int> ContainerID { get; set; }
     
         public virtual Donation Donation { get; set; }
         public virtual Product Product { get; set; }
+        public virtual Container Container { get; set; }
     }
 }

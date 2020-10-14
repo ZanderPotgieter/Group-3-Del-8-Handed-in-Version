@@ -56,7 +56,7 @@
           <Property Name="CredAccountBalance" Type="real" />
           <Property Name="CredBank" Type="varchar" MaxLength="30" />
           <Property Name="CredBranch" Type="varchar" MaxLength="40" />
-          <Property Name="CredAccount" Type="int" />
+          <Property Name="CredAccount" Type="varchar" MaxLength="15" />
           <Property Name="CredType" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Creditor_Payment">
@@ -3088,10 +3088,10 @@
           <Property Name="CredAccountBalance" Type="Single" />
           <Property Name="CredBank" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="CredBranch" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="CredAccount" Type="Int32" />
           <Property Name="CredType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPaymentC" FromRole="Creditor" ToRole="Creditor_Payment" />
           <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredSupplier" FromRole="Creditor" ToRole="Supplier" />
+          <Property Name="CredAccount" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="FK_CredPaymentC">
           <End Type="OrdraDBModel.Creditor" Role="Creditor" Multiplicity="0..1" />
@@ -3622,8 +3622,8 @@
           <EntitySetMapping Name="Creditors">
             <EntityTypeMapping TypeName="OrdraDBModel.Creditor">
               <MappingFragment StoreEntitySet="Creditor">
-                <ScalarProperty Name="CredType" ColumnName="CredType" />
                 <ScalarProperty Name="CredAccount" ColumnName="CredAccount" />
+                <ScalarProperty Name="CredType" ColumnName="CredType" />
                 <ScalarProperty Name="CredBranch" ColumnName="CredBranch" />
                 <ScalarProperty Name="CredBank" ColumnName="CredBank" />
                 <ScalarProperty Name="CredAccountBalance" ColumnName="CredAccountBalance" />

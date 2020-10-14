@@ -13,6 +13,7 @@
             <br>
             <label for="name">Name:       </label>
             <input class="searchinput" formControlName ="name" class="form-control" [(ngModel)]="name" type="text" id="name" name="name" pattern="[a-zA-Z ]*" required>
+            <br>
             <span style="color:red" *ngIf="empForm.get('name').errors && (empForm.get('name').touched || empForm.get('name').dirty)">
                 <span *ngIf="empForm.get('name').errors.required">Name is required.</span>
                 <span *ngIf="empForm.get('name').errors.minlength || empForm.get('name').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
@@ -22,6 +23,7 @@
 
             <label for="cusSurname">Surname:   </label>
             <input class="searchinput" formControlName ="surname" class="form-control" [(ngModel)]="surname" type="text" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
+            <br>
             <span style="color:red" *ngIf="empForm.get('surname').errors && (empForm.get('surname').touched || empForm.get('surname').dirty)">
                 <span *ngIf="empForm.get('surname').errors.required">Surname is required.</span>
                 <span *ngIf="empForm.get('surname').errors.minlength || empForm.get('surname').errors.maxlength">Name must be greater than 2 characters and less than 25 characters</span>
@@ -116,7 +118,6 @@
         <button type="submit" (click)="cancel()">Cancel</button> 
     </div>
 
-    <br><br>
     <div *ngIf = "showResults" class="card">
         <div class="divleft">
             <br>
@@ -139,7 +140,6 @@
             </div>
         </div>>
 
-        <br>
         <div class="divleft" >
             <label class="subheadinglabel">Employee Work Details:</label>
             <br>
@@ -157,15 +157,21 @@
                 <label for="EmployeeStartDate">Work Start Date: </label>
                 <input class="searchinput" formControlName="EmpStartDate" [ngModel]="employee.EmpStartDate | date: 'yyyy-MM-dd' "  (ngModelChange)="employee.EmployeeStartDate=$event" type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled"> 
             </div>  
-            <br>
+            
             <div class="divleft">
                 <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
-                <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+                <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted"  pattern="[0-9 ]*" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="empForm.get('EmpShiftsCompleted').errors && (empForm.get('EmpShiftsCompleted').touched || empForm.get('EmpShiftsCompleted').dirty)">
+                    <span *ngIf="empForm.get('EmpShiftsCompleted').errors.required">Number of shifts completed is required.</span>
+                    <span *ngIf="empForm.get('EmpShiftsCompleted').errors.pattern">Only numbers allowed.</span>
+                </span>
             </div>
+
         </div>
 
 
-        <br><br>
+        <br>
         <div class="divleft" *ngIf="showButtons">
         <button type="submit" (click)="update()">Update</button>
         <button type="submit" (click)="deleteEmployee()">Delete</button>

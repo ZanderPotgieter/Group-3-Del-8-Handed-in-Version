@@ -70,7 +70,7 @@ export class SearchemployeeComponent implements OnInit {
       caption: [''],
       captionCV: [''],
 
-      EmpShiftsCompleted: ['',[Validators.required]],
+      EmpShiftsCompleted: ['',[Validators.required, Validators.pattern('[0-9]*')]],
       EmpStartDate: ['',[Validators.required]],
        
     });  

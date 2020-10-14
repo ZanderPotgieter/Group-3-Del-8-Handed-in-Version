@@ -295,8 +295,8 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             Employee employeeDetails = new Employee();
 
-            /*try
-            {*/
+            try
+            {
 
 
             //Set Manager Details To Return object
@@ -309,19 +309,23 @@ namespace ORDRA_API.Controllers
                         employeeDetails.EmpStartDate = employee.EmpStartDate;
                         employeeDetails.EmpShiftsCompleted = employee.EmpShiftsCompleted;
                         db.SaveChanges();
-                        toReturn.Message = "Update Successful";
+                        toReturn.Message = "Employee profile Update Successful";
                     }
                     else
                     {
                         toReturn.Message = "Employee Profile Not Found";
                     }
                 }
+                else
+                {
+                toReturn.Message = "Employee profile not found";
+                }
                  
-            /*}
+            }
             catch (Exception)
             {
                 toReturn.Message = "Failed to update employee record" ;
-            }*/
+            }
 
             return toReturn;
         }
@@ -346,7 +350,7 @@ namespace ORDRA_API.Controllers
                 {
                      db.Employees.Remove(employee);
                     db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    toReturn.Message = "Employee profile Delete Successful";
 
                 }
             }

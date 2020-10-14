@@ -180,13 +180,41 @@
 <br>
         <div class="divleft" *ngIf="showButtons">
         <button type="submit" (click)="update()">Update</button>
-        <!-- <button type="submit" >Edit donated products</button> -->
+        <button type="submit" >Edit donated products</button> 
         </div>
 
         <div class="divleft" *ngIf="showSave" >
             <button type="submit" (click)="Save()">Save</button>
             <button type="submit" (click)="cancel()">Cancel</button>
         </div>
+</div>
+
+<div  *ngIf = "showEditProduct" class="card" id="donation">
+    <label > <span style="white-space: nowrap;">Donated Product Details</span></label>
+    <br>
+    <table>
+        <tr>
+            <!-- <th>Status</th> -->
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+            <th>Action</th>
+        </tr>
+
+        <tr *ngFor= "let don of donatedProducts, index as ndx" >
+            <!-- <td>{{don.DonationStatus.DSDescription}}</td> -->
+            <td>{{don.DonationID}}</td>
+            <td>{{don.DonDate | date }}</td> 
+            <td><button style="height: 30px;"class="btntable" (click)="view(don.DonationID)">Edit</button></td>
+            <td><button style="height: 30px;"class="btntable" (click)="view(don.DonationID)">Delete</button></td>
+        </tr>
+    
+    </table>
+    
+    
+    <br><br>
+    
+    <button type="submit" (click)="cancel()">Cancel</button>
 </div>
 
 

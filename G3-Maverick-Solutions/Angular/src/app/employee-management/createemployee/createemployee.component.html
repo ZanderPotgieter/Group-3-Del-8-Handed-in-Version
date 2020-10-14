@@ -88,10 +88,11 @@
 
         <div class="divleft">
           <label for="EmpShiftsCompleted">Shifts Completed:      </label>
-          <input type="number" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" id="EmpShiftsCompleted" name="EmpShiftsCompleted"  required>
+          <input type="number" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" id="EmpShiftsCompleted" pattern="[0-9 ]*"  name="EmpShiftsCompleted"  required>
           <br>
           <span style="color:red" *ngIf="empForm.get('empShiftsCompleted').errors && (empForm.get('empShiftsCompleted').touched || empForm.get('empShiftsCompleted').dirty)">
                 <span *ngIf="empForm.get('empShiftsCompleted').errors.required">Number of shifts completed is required.</span>
+                <span *ngIf="empForm.get('empShiftsCompleted').errors.pattern">Only numbers allowed.</span>
           </span>
         </div>
 

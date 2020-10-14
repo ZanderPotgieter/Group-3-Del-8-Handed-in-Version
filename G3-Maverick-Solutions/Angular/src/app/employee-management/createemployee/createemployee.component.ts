@@ -151,7 +151,7 @@ handleFileInputCV(file: FileList)
       cv: [''],
       image: [''],
 
-      empShiftsCompleted: ['',[Validators.required]],
+      empShiftsCompleted: ['',[Validators.required, Validators.pattern('[0-9]*')]],
       empStartDate: ['',[Validators.required]],
     }); 
 

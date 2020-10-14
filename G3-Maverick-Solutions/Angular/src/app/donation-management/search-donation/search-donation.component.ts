@@ -46,6 +46,7 @@ export class SearchDonationComponent implements OnInit {
   showText: boolean = false;
   showInput: boolean = false;
   inputDisabled:boolean = true;
+  showEditProduct: boolean = false;
 
   cell : string;
   name: string;

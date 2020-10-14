@@ -57,9 +57,10 @@ export class AddPaymentComponent implements OnInit {
         if(res){
     this.api.addCreditorPayment(this.creditorpayment).subscribe( (res: any)=> {
       console.log(res);
+      this.router.navigate(["creditor-management"]);
       if(res.Message){
         this.dialogService.openAlertDialog(res.Message);
-        this.router.navigate(["creditor-management"]);}
+        }
         else if (res.Error){
           alert(res.Error);
         }

@@ -6,4 +6,5 @@ export class SearchedOrder {
     CusOrdNumber: string;
     CusOrdDate: string;
     CusOrdStatus: string;
+    CusOrdContainer: string;
 }

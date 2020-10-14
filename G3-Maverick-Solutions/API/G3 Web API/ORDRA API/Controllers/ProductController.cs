@@ -1506,37 +1506,43 @@ namespace ORDRA_API.Controllers
                         if (prod.CPQuantity <= prod.Product.ProdReLevel)
                         {
 
-                            Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == prod.ProductID).ToList().LastOrDefault();
-                            if (price != null)
-                            {
-                                double Price = (double)price.UPriceR;
-                                dynamic productDetails = new ExpandoObject();
-                                productDetails.ProductCategoryID = prod.Product.ProductCategoryID;
-                                productDetails.ProductID = prod.Product.ProductID;
-                                productDetails.ProdBarcode = prod.Product.ProdBarcode;
-                                productDetails.ProdDescription = prod.Product.ProdDesciption;
-                                productDetails.Prodname = prod.Product.ProdName;
-                                productDetails.CPQuantity = prod.CPQuantity;
-                                productDetails.Quantity = prod.Product.ProdReLevel;
-                                productDetails.Price = Math.Round(Price, 2);
-                                productDetails.Subtotal = 0.0;
+                            Product_Backlog backlog = db.Product_Backlog.Where(x => x.ContainerID == containerID && x.ProductID == prod.ProductID).FirstOrDefault();
+                            
+                                
+                                dynamic product = new ExpandoObject();
+                                product.ProductID = prod.Product.ProductID;
+                                product.ProdDescription = prod.Product.ProdDesciption;
+                                product.ProdName = prod.Product.ProdName;
+                                product.CPQuantity = prod.CPQuantity;
+                                product.ProdReLevel = prod.Product.ProdReLevel;
+                                if(backlog != null)
+                                {
+                                    product.QuantityToOrder = backlog.QuantityToOrder;
+                                    product.DateModified = Convert.ToDateTime(backlog.DateModified).ToString("yyyy-MM-dd");
+                                }
+                                else
+                                {
+                                    product.QuantityToOrder = 0;
+                                    product.DateModified = "None";
+                                }
+                                
 
-                                products.Add(productDetails);
-                            }
+                                products.Add(product);
+                            
                         }
                         toReturn.products = products;
                     }
                 }
                 else
                 {
-                    toReturn.Message = "Container Not Found";
+                    toReturn.Error = "Container Not Found";
 
                 }
 
             }
             catch
             {
-                toReturn.Message = "Search interrupted. Retry";
+                toReturn.Error = "Search interrupted. Retry";
             }
 
             return toReturn;
@@ -1558,10 +1564,11 @@ namespace ORDRA_API.Controllers
                 if (backlog != null)
                 {
                     //add back the quantity
-                    backlog.QuantityToOrder = (product.ProdReLevel * 3);
+                    backlog.QuantityToOrder = backlog.QuantityToOrder + (product.ProdReLevel * 4);
                     backlog.DateModified = DateTime.Now;
                     db.SaveChanges();
                     toReturn.Message = "Product Added To Backlog Successfully";
+                    toReturn.quantity = backlog.QuantityToOrder;
                 }
                 else
                 {
@@ -1574,6 +1581,7 @@ namespace ORDRA_API.Controllers
                     db.Product_Backlog.Add(backlog1);
                     db.SaveChanges();
                     toReturn.Message = "Product Added To Backlog Successfully";
+                    toReturn.quantity = backlog1.QuantityToOrder;
                 }
 
             }
@@ -1844,6 +1852,10 @@ namespace ORDRA_API.Controllers
                     }
 
                     toReturn.stock_Takes = stock_Takes1;
+                    if(stock_Takes1.Count != 0)
+                    {
+                        toReturn.Message = "No Stock Takes";
+                    }
                 }
                 else
                 {

@@ -61,26 +61,20 @@ export class CompleteStockTakeComponent implements OnInit {
 
         this.productService.getTodaysStockTake(this.date, res.ContainerID).subscribe( (res:any) =>{
           console.log(res);
-           if(res.Message)
-           {
-              this.dialogService.openAlertDialog("No Stock Take Forms Filled In Today")
-            }
-            else{
+         
               this.stocktakes = res.stock_Takes;
               this.showList = true;
-            }
-          
-          
-          
+            
          
-          
-        
         })
         
         
       })
-    
-  }
+      }
+
+      if(this.stocktakes == null){
+        this.dialogService.openAlertDialog("No Stock Take Forms Filled In Today")
+      }
 }
 
   Start(ndx: number){

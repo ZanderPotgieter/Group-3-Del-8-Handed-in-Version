@@ -104,4 +104,8 @@ Back()
     })
   }
 
+  Done(){
+      this.router[('supplier-order-management')]
+  }
+
 }

@@ -156,10 +156,10 @@ export class PlaceSupplierOrderComponent implements OnInit {
     this.api.placeSupplierOrder(this.selectedOrderID).subscribe((res:any) =>{
       console.log(res);
       if(res.Error){
-        this.dialogService.openAlertDialog(res.Error)
+        this.dialogService.openAlertDialog("Supplier Order Email sending failed")
       }
       else{
-        this.dialogService.openAlertDialog(res.Message)
+        this.dialogService.openAlertDialog("Supplier Order Email successfuly Sent")
         this.showBacklog = false;
         this.showOrders = true;
         this.showSupOrder = false;

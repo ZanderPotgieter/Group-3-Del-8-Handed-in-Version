@@ -60,13 +60,13 @@
 
                 
             <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
-                    <th style="width: 30%;padding: 0px">Product Name</th>
-                    <th style="width: 20%;padding: 0px">Quantity</th>
-                    <th style="width: 20%; padding: 0px">Stock Count</th>
-                    <th style="width: 20%; padding: 0px">Marked Off</th>
+                    <th style="width: 35%;padding: 0px">Product Name</th>
+                    <th style="padding: 0px">Quantity</th>
+                    <th style="padding: 0px">Stock Count</th>
+                    <th style="width: 22%; padding: 0px">Marked Off</th>
     
                 <tr *ngFor="let item of list; index as ndx">
-                    <td>{{item.ProNname}}</td>
+                    <td>{{item.ProdName}}</td>
                     <td>{{item.CPQuantity}}</td>
                     <td>{{item.STCount}}</td>
                     <td>{{item.MoQuantity}}</td> 

@@ -313,7 +313,7 @@ namespace ORDRA_API.Controllers
 
                 if (manager == null)
                 {
-                    toReturn.Message = "Manager ProfileNot Found";
+                    toReturn.Message = "Manager ProfileN ot Found";
                     
                 }
                 else
@@ -328,6 +328,7 @@ namespace ORDRA_API.Controllers
                         User_Type usertype = db.User_Type.Where(x => x.UTypeDescription == "Employee").FirstOrDefault();
 
                         //set usertype to manager
+                        user.UserTypeID = usertype.UserTypeID;
                         user.User_Type = usertype;
                         db.SaveChanges();
 
@@ -342,13 +343,13 @@ namespace ORDRA_API.Controllers
                     manager = db.Managers.Where(x => x.ManagerID == id).FirstOrDefault();
                     db.Managers.Remove(manager);
                     db.SaveChanges();
-                    toReturn.Message = "Delete Successful";
+                    toReturn.Message = "Manager Profile Delete Successful";
 
                 }
             }
             catch
             {
-                toReturn.Message = "Delete Resticted";
+                toReturn.Message = "Manager Profile Delete Unsuccessful";
             }
 
             return toReturn;

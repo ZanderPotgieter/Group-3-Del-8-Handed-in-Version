@@ -105,10 +105,10 @@ export class UsersComponent implements OnInit {
     this.api.updateUserType(id, description).subscribe((res:any)=>{
       console.log(res)
       if(res.Message){
-        alert(res.Message);
+        this.dialogService.openAlertDialog(res.Message);
       }
       if(res.Error){
-        alert(res.Error);
+        this.dialogService.openAlertDialog(res.Error);
       }
     })
   }
@@ -155,17 +155,13 @@ export class UsersComponent implements OnInit {
   
 
   delete(ndx: number){
-    this.userAccess.splice(ndx,1);
-    //this.userTA.AccessID = this.selectedAccess.id;
-    //this.userTA.UserTypeID = this.selectedtype.id;
-    //call service to remove user access
-
-    this.api.removeUserTypeAccess(this.selectedAccess.id, this.selectedtype.id).subscribe((res:any) =>{
+     this.api.removeUserTypeAccess(this.userAccess[ndx].id, this.selectedtype.id).subscribe((res:any) =>{
       console.log(res);
       if(res.Error){
         this.dialogService.openAlertDialog(res.Error)
       }
       if(res.Message){
+        this.userAccess.splice(ndx,1);
         this.message = res.Message;
         this.showError = true;
   setTimeout(() => {
@@ -174,6 +170,8 @@ export class UsersComponent implements OnInit {
       }
       
     })
+
+    
   }
 
 
@@ -181,7 +179,7 @@ export class UsersComponent implements OnInit {
     this.router.navigate(['admin']);
   }
   Done(){
-    alert("Access Changes Saved");
+    this.dialogService.openAlertDialog("Access Changes Saved");
     this.router.navigate(['admin']);
 
   }

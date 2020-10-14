@@ -164,8 +164,8 @@ namespace ORDRA_API.Controllers
             toReturn.product = new ExpandoObject();
 
 
-            //try
-            //{
+            try
+            {
                 //search for the supplier and product in the database
                 Supplier supplier = db.Suppliers.Where(X => X.SupplierID == supplierID).FirstOrDefault();
                 Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
@@ -235,12 +235,12 @@ namespace ORDRA_API.Controllers
 
 
 
-           // }
+        }
 
-            //catch
-            //{
-            //    toReturn.Error = "Search Interrupted. Retry";
-            //}
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
 
             return toReturn;
 
@@ -662,8 +662,8 @@ namespace ORDRA_API.Controllers
             toReturn.supplierOrder = new ExpandoObject();
 
 
-            //try
-            //{
+            try
+            {
                 Supplier_Order order = db.Supplier_Order.Where(x => x.SupplierOrderID == id).FirstOrDefault();
 
                 if (order != null)
@@ -714,12 +714,12 @@ namespace ORDRA_API.Controllers
                     toReturn.Error= "Supplier Order Not Found";
                 }
 
-            //}
+            }
 
-            //catch
-            //{
-            //    toReturn.Error = "Search Interrupted. Retry";
-            //}
+            catch
+            {
+                toReturn.Error = "Search Interrupted. Retry";
+            }
 
             return toReturn;
 
@@ -737,8 +737,8 @@ namespace ORDRA_API.Controllers
             toReturn.product = new ExpandoObject();
 
 
-            //try
-            //{
+            try
+            {
                 //search for the supplier and product in the database
                 Supplier supplier = db.Suppliers.Where(X => X.SupplierID == supplierID).FirstOrDefault();
                 Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
@@ -782,11 +782,11 @@ namespace ORDRA_API.Controllers
 
 
                 }
-            //}
-            //catch
-            //{
-            //    toReturn.Error = "Receiving Stock Failed";
-            //}
+            }
+            catch
+            {
+                toReturn.Error = "Receiving Stock Failed";
+            }
 
             return toReturn;
 
@@ -951,12 +951,12 @@ namespace ORDRA_API.Controllers
             if (prod != null)
             {
                 prod.SOPQuantityRecieved = quantity;
-                toReturn.Message = "Quantity Saved";
+                toReturn.Message = "Product Quantity Saved";
             }
             //}
             //catch
             //{
-            //    toReturn.Error = "Adding Product To Backlog Failed";
+            //    toReturn.Error = "Adding Product Qauntity Unsuccessful";
             //}
 
             return toReturn;

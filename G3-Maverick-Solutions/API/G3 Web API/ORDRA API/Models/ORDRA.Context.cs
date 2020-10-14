@@ -30,7 +30,6 @@ namespace ORDRA_API.Models
         public virtual DbSet<Area_Status> Area_Status { get; set; }
         public virtual DbSet<Container> Containers { get; set; }
         public virtual DbSet<Container_Product> Container_Product { get; set; }
-        public virtual DbSet<Creditor> Creditors { get; set; }
         public virtual DbSet<Creditor_Payment> Creditor_Payment { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Customer_Order> Customer_Order { get; set; }
@@ -72,5 +71,6 @@ namespace ORDRA_API.Models
         public virtual DbSet<VAT> VATs { get; set; }
         public virtual DbSet<Stock_Take> Stock_Take { get; set; }
         public virtual DbSet<Stock_Take_Product> Stock_Take_Product { get; set; }
+        public virtual DbSet<Creditor> Creditors { get; set; }
     }
 }

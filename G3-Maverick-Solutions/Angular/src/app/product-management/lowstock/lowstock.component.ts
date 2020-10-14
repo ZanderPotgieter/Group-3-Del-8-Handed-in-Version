@@ -55,13 +55,13 @@ export class LowstockComponent implements OnInit {
 
       Backlog(ndx: number){
         
-        this.productService.addProductToBacklog(this.list[ndx].ProductID, this.user.ContainerID).subscribe((res:any)=>{
+        return this.productService.addProductToBacklog(this.list[ndx].ProductID, this.user.ContainerID).subscribe((res:any)=>{
+          console.log();
           if(res.Error){
             this.dialogService.openAlertDialog(res.Error);
           }
           if(res.Message){
             this.dialogService.openAlertDialog(res.Message);
-            this.router[('product-management')]
           }
         })
       }

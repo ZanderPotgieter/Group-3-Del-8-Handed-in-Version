@@ -10,7 +10,6 @@
         <EntityTypeShape EntityType="OrdraDBModel.Area_Status" Width="1.5" PointX="4.5" PointY="41" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Container" Width="1.5" PointX="6.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Container_Product" Width="1.5" PointX="8.25" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Creditor" Width="1.5" PointX="3" PointY="18.625" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Creditor_Payment" Width="1.5" PointX="5.25" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Customer" Width="1.5" PointX="6.75" PointY="34.375" IsExpanded="true" />
         <EntityTypeShape EntityType="OrdraDBModel.Customer_Order" Width="1.5" PointX="9" PointY="35.25" IsExpanded="true" />
@@ -61,8 +60,6 @@
         <AssociationConnector Association="OrdraDBModel.FK_RPContainer" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_SContainer" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_CPProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_CredPayment" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_CredSupplier" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_COCustomer" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_COStatus" ManuallyRouted="false" />
         <AssociationConnector Association="OrdraDBModel.FK_COUser" ManuallyRouted="false" />
@@ -113,6 +110,9 @@
         <AssociationConnector Association="OrdraDBModel.FK_STUser" />
         <AssociationConnector Association="OrdraDBModel.FK_SOContainer" />
         <AssociationConnector Association="OrdraDBModel.FK_CredPayment1" />
+        <EntityTypeShape EntityType="OrdraDBModel.Creditor" Width="1.5" PointX="3" PointY="17.75" />
+        <AssociationConnector Association="OrdraDBModel.FK_CredPaymentC" />
+        <AssociationConnector Association="OrdraDBModel.FK_CredSupplier" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

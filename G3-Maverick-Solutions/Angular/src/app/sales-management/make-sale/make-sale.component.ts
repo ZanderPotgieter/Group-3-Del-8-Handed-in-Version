@@ -280,7 +280,7 @@ export class MakeSaleComponent implements OnInit {
         this.api.addSaleProduct(this.selectedProduct.ProductID, this.sale.SaleID, 1).subscribe((res: any) =>{
           console.log(res);
           if (res.Error){
-            alert(res.Error);
+            this.dialogService.openAlertDialog(res.Error);
           }
           
         })

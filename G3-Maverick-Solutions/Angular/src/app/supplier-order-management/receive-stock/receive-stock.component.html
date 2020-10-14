@@ -3,19 +3,19 @@
     <br>
     <form>
     <div class="card">
-        <div class="divleft">
+        <div class="divleft" *ngIf="!showOrder">
           <label class="subheadinglabel" style="width: 50%">List Of Placed Orders In Container</label>
         </div>
         <div *ngIf="showList">
-            <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
-             <th style="padding: 0px">Date</th>
-             <th style="width: 35%;padding: 0px">Supplier</th>
-             <th style="padding: 0px">Status</th>
-             <th style="padding: 0px"></th>
+            <table [ngModelOptions]="{standalone: true}">
+             <th >Date</th>
+             <th style="width: 50%;">Supplier</th>
+             <th >Status</th>
+             <th></th>
          
          <tr *ngFor="let item of supplierOrders; index as ndx">
              <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
-             <td>{{item.SupName}}</td>
+             <td style="width: 50%;">{{item.SupName}}</td>
              <td>{{item.Status}}</td>
              <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
          

@@ -71,7 +71,10 @@ export class SearchProductComponent implements OnInit {
     selectedSupplier: Supplier = new Supplier()
 
   quantity: number;
-  mydate: Date =new Date();
+  date: Date =new Date();
+  
+  showError = false;
+  errorMessage: string;
  
   Select: number;
   selectedCatID: number;
@@ -96,7 +99,7 @@ export class SearchProductComponent implements OnInit {
       ProdReLevel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9 ]*')]], 
       CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
-      PriceStartDate: ['', [Validators.required]],
+      PriceStartDate: ['', [Validators.required]], 
       PriceEndDate: [''],
       ProductCategoryID: [''],
       SelectSup: [''],
@@ -387,7 +390,7 @@ export class SearchProductComponent implements OnInit {
     this.router.navigate(['searched-product-details']);
   }
 
-  showAdd(){
+  addPrice(){
     this.showadd = true;
   }
 
@@ -413,6 +416,13 @@ export class SearchProductComponent implements OnInit {
     if(this.found == true){
       this.dialogService.openAlertDialog("Duplicate Price Start Date Found")
     }
+    if(this.newPrice.PriceStartDate < this.date){
+      this.errorMessage = "Price Start Date Cannot Be In The Past"; 
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+          }, 6000);
+    }
 
 
   }
@@ -420,8 +430,51 @@ export class SearchProductComponent implements OnInit {
   
 
   update(ndx: number){
-    this.prodBarcode = this.productList[ndx].ProdBarcode;
-    this.SearchBarcode();
+    if (this.list != null){
+      this.productID = this.list[ndx].ProductID
+    }
+    if(this.productList != null){
+      this.productID = this.productList[ndx].ProductID
+    }
+    if(this.product_conlist != null){
+      this.productID = this.product_conlist[ndx].ProductID
+    }
+    this.productService.getProductByID(this.productID).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      this.dialogService.openAlertDialog(this.responseMessage)}
+      else{
+          this.Product.ProdName = res.Product.ProdName;
+          this.Product.ProdDesciption = res.Product.ProdDesciption;
+          this.Product.ProdBarcode = res.Product.ProdBarcode;
+          this.Product.ProdReLevel = res.Product.ProdReLevel;
+          this.Product.ProductCategoryID = res.Product.ProductCategoryID;
+          this.Product.ProductID = res.Product.ProductID;
+          this.Price.CPriceR= res.CurrentPrice.CPriceR;
+          this.Price.UPriceR = res.CurrentPrice.UPriceR;
+          this.Price.PriceID = res.CurrentPrice.PriceID;
+          this.Price.PriceStartDate = res.CurrentPrice.PriceStartDate;
+          this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
+          this.Price.ProductID = res.Product.ProductID;
+
+          
+
+          this.pricelist = res.PriceList;
+          this.category = res.ProductCategory;
+          
+          this.product_conlist = res.ProductContainers;
+          this.supplier = res.supplier;
+
+      }
+      this.showBarcodeInput = false;
+      this.showBarcodeResult = false;
+      this.showProductResult = true;
+      this.showCategoryResults = false;
+      this.showContainerResults = false;
+      this.showAllProductsResults = false;
+      
+    })
   }
 
   Update(){

@@ -155,7 +155,7 @@
 
     <div class="divleft">
         <label for="ManNextOfKeenCell">Cell Number:       </label>
-        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required minlength="10" maxlength="10" pattern="[0-9 ]*">
+        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required minlength="10" maxlength="10" pattern="[0-9]*">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManNextOfKeenCell').errors && (empForm.get('ManNextOfKeenCell').touched || empForm.get('ManNextOfKeenCell').dirty)">
             <span *ngIf="empForm.get('ManNextOfKeenCell').errors.required">cell number is required.</span>

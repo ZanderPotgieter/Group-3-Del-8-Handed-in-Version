@@ -13,9 +13,9 @@
                    <mat-radio-button value= 4 (click)="selectContainer()">Container</mat-radio-button>
                    <mat-radio-button value= 5 (click)="searchBtn()">All Products</mat-radio-button>
                </mat-radio-group>
-               <div class="left">
+              <!-- <div class="left">
                 <button type="submit" (click)="Cancel()">Cancel</button>
-                </div>
+                </div>-->
             </div>
 
             <div class="divleft" *ngIf="showBarcodeInput">
@@ -129,7 +129,7 @@
             <label>Unit Price(R):</label><label>{{Price.UPriceR}}</label>
             <br>
             <label>Price Start Date:</label><label>{{Price.PriceStartDate}}</label>
-            
+        </div>
            
             <br>
             <div *ngIf="showadd" class="divleft">
@@ -154,21 +154,19 @@
               <span *ngIf="searchForm.get('UPriceR').errors.pattern">Only numbers allowed.</span>
             </span>
             <br>
-            <label for="PriceStartDate" style="width: 200px">Price Start Date:</label>
-            <input matInput [min]="minDate" [matDatepicker]="picker"  formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <!--<input type="date" [min]="mydate" formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" required>-->
+            <label for="PriceStartDate">Price Start Date:</label> <input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="newPrice.PriceStartDate" id="PriceStartDate" name="PriceStartDate" [min]="date" required>
             <br>
             <span style="color:red" *ngIf="pdForm.get('PriceStartDate').errors && (pdForm.get('PriceStartDate').touched || pdForm.get('PriceStartDate').dirty)">
-              <span *ngIf="searchForm.get('PriceStartDate').errors.required">Price start date is required.</span>
-            </span>
-            <br>
+              <span *ngIf="pdForm.get('PriceStartDate').errors.required">Price start date is required.</span>
+              <!--<span *ngIf="pdForm.get('PriceStartDate').errors.min">Price start date cannot be in the past</span>
+            --></span>
+            <span style="color:red" *ngIf="showError">
+                {{errorMessage}}</span>
             <button type="submit" (click)="saveadd()">Save</button>
         </div>
 
             <br>
-            </div>
+            
            
             <div *ngIf="showPriceList" class="divleft">
             <Label class="subheadinglabel">Price list:</Label>
@@ -211,7 +209,7 @@
            <div class="divleft" *ngIf="allButton">
             <button type="submit" (click)="enableInputs()"> Update</button>
             <button type="submit" (click)="Delete()">Delete</button>
-            <button  type="submit" (click)="showAdd()">New Price</button>
+            <button  type="submit" (click)="addPrice()">New Price</button>
             <button type="submit" (click)="showPrice()">Price List</button>
             
             

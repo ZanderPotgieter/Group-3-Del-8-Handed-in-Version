@@ -918,7 +918,7 @@ namespace ORDRA_API.Controllers
                     DateTime date = DateTime.Now.AddYears(1);
                     //save price for product;
                     Price addPrice = new Price();
-                    //addPrice.ProductID = product.ProductID;
+                    addPrice.ProductID = product.ProductID;
                     addPrice.Product = product;
                     addPrice.CPriceR = (float)newPrice.CPriceR;
                     addPrice.UPriceR = (float)newPrice.UPriceR;
@@ -1330,10 +1330,11 @@ namespace ORDRA_API.Controllers
                 db.Marked_Off.Add(newMarkedOff);
                 db.SaveChanges();
                 toReturn.Message = "Product Mark Off Succsessful";
+                toReturn.MarkedOff = newMarkedOff;
             }
             catch
             {
-                toReturn.Message = "Product Mark Off UnSuccsessful";
+                toReturn.Error = "Product Mark Off UnSuccsessful";
 
 
             }
@@ -1566,8 +1567,8 @@ namespace ORDRA_API.Controllers
                     Product_Backlog backlog1 = new Product_Backlog();
                     backlog1.ProductID = product.ProductID;
                     backlog1.QuantityToOrder = (product.ProdReLevel * 3);
-                    backlog.DateModified = DateTime.Now;
-                    backlog.ContainerID = containerID;
+                    backlog1.DateModified = DateTime.Now;
+                    backlog1.ContainerID = containerID;
                     db.Product_Backlog.Add(backlog1);
                     db.SaveChanges();
                 }
@@ -1575,7 +1576,7 @@ namespace ORDRA_API.Controllers
             }
             catch
             {
-                toReturn.Message = "Search interrupted. Retry";
+                toReturn.Message = "Adding Product To Backlog Unsuccesful";
             }
 
             return toReturn;
@@ -1725,7 +1726,7 @@ namespace ORDRA_API.Controllers
                                 product.ProdName = prod.ProdName;
                                 product.ProdDescription = prod.ProdDesciption;
                                 product.STCount = take_Product.STProductCount;
-
+                            
                                 if (container_Product != null)
                                 {
                                     product.CPQuantity = container_Product.CPQuantity;

@@ -6,13 +6,15 @@ import { DonatedProduct } from '../donated-product';
 import { Donation } from '../donation';
 import { DonationRecipient } from '../donation-recipient';
 import { DonationStatus } from '../donation-status';
-import { Container } from '../container'
+import { Container } from '../container';
+import { DatePipe } from '@angular/common';
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-donation',
   templateUrl: './search-donation.component.html',
+  providers: [DatePipe],
   styleUrls: ['./search-donation.component.scss']
 })
 export class SearchDonationComponent implements OnInit {
@@ -26,6 +28,8 @@ export class SearchDonationComponent implements OnInit {
   donatedProduct: DonatedProduct = new DonatedProduct();
   responseMessage: string = "Request Not Submitted";
   donationForm: any;
+
+  dateVal = new Date();
 
   donatedProducts: DonatedProduct[];
 

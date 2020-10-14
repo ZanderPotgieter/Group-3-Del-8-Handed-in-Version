@@ -8,12 +8,14 @@ import {Directive, HostBinding, Input} from '@angular/core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { EmployeeCV } from '../model/employee-cv';
 import { EmployeePicture } from '../model/employee-picture';
+import { DatePipe } from '@angular/common';
 import { DialogService } from 'src/app/shared/dialog.service';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-searchemployee',
   templateUrl: './searchemployee.component.html',
+  providers: [DatePipe],
   styleUrls: ['./searchemployee.component.scss']
 })
 export class SearchemployeeComponent implements OnInit {
@@ -23,6 +25,8 @@ export class SearchemployeeComponent implements OnInit {
   employee: Employee = new Employee();
   allowEdit:boolean = false;
   responseMessage: string = "Request Not Submitted";
+  showDate: boolean =false;
+  showTextDate: boolean =false;
 
   showSave: boolean = false;
   showButtons: boolean = true;
@@ -42,6 +46,8 @@ export class SearchemployeeComponent implements OnInit {
 
   name : string;
   surname : string;
+
+  dateVal = new Date();
 
   empForm: FormGroup;
   showImgs: boolean = false;
@@ -162,8 +168,11 @@ export class SearchemployeeComponent implements OnInit {
     
     this.showImgs = false;
     this.showCvs = false;
+    this.showAll = false;
     this.showBar = true;
     this.showUpload = false;
+    this.showDate= false;
+    this.showTextDate = false;
   }
 
   searchEmployee(){
@@ -187,15 +196,19 @@ export class SearchemployeeComponent implements OnInit {
       this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
       this.employee.EmpStartDate = res.employee.EmpStartDate;
 
-      }
       this.showSearch = false;
       this.showResults = true;
       this.showUpload = true;
       
       this.showImgs = false;
+      this.showAll = false;
       this.showCvs = false;
       this.showBar = true;
       this.showUpload = false;
+      this.showDate = false;
+      this.showTextDate = true;
+      }
+      
     })
 
   }
@@ -205,11 +218,14 @@ export class SearchemployeeComponent implements OnInit {
     this.showSave = true;
     this.showButtons = false;
     this.inputEnabled = false;
+    this.showTextDate = false;
+    this.showDate = true;
     
     this.showImgs = false;
     this.showCvs = false;
     this.showBar = true;
     this.showUpload = false;
+    this.showAll = false;
   }
 
   Save(){
@@ -225,7 +241,7 @@ export class SearchemployeeComponent implements OnInit {
           {
             this.dialogService.openAlertDialog(res.Message);
           }
-          this.router.navigate(["employee-management"])
+          //this.router.navigate(["employee-management"]);
         })
       }
     })
@@ -267,7 +283,8 @@ export class SearchemployeeComponent implements OnInit {
   }
 
   cancel(){
-    this.showSave = false;
+    this.router.navigate(["employee-management"])
+    /* this.showSave = false;
     this.inputEnabled = false;
     this.showButtons = true;
     
@@ -279,6 +296,8 @@ export class SearchemployeeComponent implements OnInit {
     this.showCvs = false;
     this.showBar = false;
     this.showUpload = false;
+    this.showDate = false;
+    this.showTextDate = false; */
   }
 
   getImages()

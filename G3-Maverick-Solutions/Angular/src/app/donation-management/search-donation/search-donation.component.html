@@ -117,7 +117,7 @@
                 <tr *ngFor= "let don of donations, index as ndx" >
                     <!-- <td>{{don.DonationStatus.DSDescription}}</td> -->
                     <td>{{don.DonationID}}</td>
-                    <td>{{don.DonDate}}</td> 
+                    <td>{{don.DonDate | date }}</td> 
                     <td>{{don.DonDescription}}</td> 
                     <td><button style="height: 30px;"class="btntable" (click)="view(don.DonationID)">View</button></td>
                 </tr>

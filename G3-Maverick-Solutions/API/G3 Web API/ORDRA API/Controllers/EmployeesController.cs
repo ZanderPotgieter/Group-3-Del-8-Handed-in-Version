@@ -295,28 +295,33 @@ namespace ORDRA_API.Controllers
             dynamic toReturn = new ExpandoObject();
             Employee employeeDetails = new Employee();
 
-            try
-            {
+            /*try
+            {*/
 
 
-                //Set Manager Details To Return object
-                employeeDetails = db.Employees.Where(x => x.EmployeeID == employee.EmployeeID).FirstOrDefault();
-                if (employeeDetails != null)
+            //Set Manager Details To Return object
+                if (employee!=null)
                 {
-                    employeeDetails.EmpStartDate = employee.EmpStartDate;
-                    employeeDetails.EmpShiftsCompleted = employee.EmpShiftsCompleted;
-                    db.SaveChanges();
-                    toReturn.Message = "Update Successful";
+                    var id = employee.EmployeeID;
+                    employeeDetails = db.Employees.Where(x => x.EmployeeID == id).FirstOrDefault();
+                    if (employeeDetails != null)
+                    {
+                        employeeDetails.EmpStartDate = employee.EmpStartDate;
+                        employeeDetails.EmpShiftsCompleted = employee.EmpShiftsCompleted;
+                        db.SaveChanges();
+                        toReturn.Message = "Update Successful";
+                    }
+                    else
+                    {
+                        toReturn.Message = "Employee Profile Not Found";
+                    }
                 }
-                else
-                {
-                    toReturn.Message = "Employee Profile Not Found";
-                }
-            }
+                 
+            /*}
             catch (Exception)
             {
                 toReturn.Message = "Failed to update employee record" ;
-            }
+            }*/
 
             return toReturn;
         }

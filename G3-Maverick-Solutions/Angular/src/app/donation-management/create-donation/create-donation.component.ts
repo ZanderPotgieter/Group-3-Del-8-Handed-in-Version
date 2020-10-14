@@ -10,6 +10,7 @@ import { ContainerProduct  } from '../container-product';
 import { Product } from '../product';
 import { Container } from '../container'
 import { Observable, from } from 'rxjs';
+import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { DialogService } from '../../shared/dialog.service';
@@ -17,6 +18,7 @@ import { DialogService } from '../../shared/dialog.service';
 @Component({
   selector: 'app-create-donation',
   templateUrl: './create-donation.component.html',
+  providers: [DatePipe],
   styleUrls: ['./create-donation.component.scss']
 })
 export class CreateDonationComponent implements OnInit {
@@ -50,6 +52,7 @@ export class CreateDonationComponent implements OnInit {
 
   name: string;
   surname: string;
+  dateVal = new Date();
 
   inputDisabled:boolean = true;
   showAddProduct: boolean = false;

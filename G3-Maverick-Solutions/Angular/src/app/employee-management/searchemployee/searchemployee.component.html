@@ -143,11 +143,25 @@
         <div class="divleft" >
             <label class="subheadinglabel">Employee Work Details:</label>
             <br>
-            <label for="EmployeeStartDate">Work Start Date: </label>
-            <input class="searchinput" formControlName="EmpStartDate" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
+
+
+            <div class="divleft" *ngIf="showDate">
+                <label for="EmployeeStartDate">Work Start Date: </label>
+                <input type="date" formControlName="EmpStartDate" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
+                <span style="color:red" *ngIf="empForm.get('EmpStartDate').errors && (EmpForm.get('EmpStartDate').touched || empForm.get('EmpStartDate').dirty)">
+                    <span *ngIf="empForm.get('EmpStartDate').errors.required">Employee Start date is required.</span>
+                </span>
+            </div>
+
+            <div class="divleft" *ngIf="showTextDate">
+                <label for="EmployeeStartDate">Work Start Date: </label>
+                <input class="searchinput" formControlName="EmpStartDate" [ngModel]="employee.EmpStartDate | date: 'yyyy-MM-dd' "  (ngModelChange)="employee.EmployeeStartDate=$event" type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled"> 
+            </div>  
             <br>
-            <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
-            <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+            <div class="divleft">
+                <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
+                <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+            </div>
         </div>
 
 

@@ -75,6 +75,7 @@
         <div class="divleft"  > 
           <label for="EmpStartDate">Work Start Date:       </label>
           <input type="date" formControlName="empStartDate" [(ngModel)]="employee.EmpStartDate " id="EmpStartDate" name="EmpStartDate" required>
+          <br>
           <span style="color:red" *ngIf="empForm.get('empStartDate').errors && (empForm.get('empStartDate').touched || empForm.get('empStartDate').dirty)">
           <span *ngIf="empForm.get('empStartDate').errors.required">Employee Start date is required.</span>
           </span>
@@ -88,6 +89,7 @@
         <div class="divleft">
           <label for="EmpShiftsCompleted">Shifts Completed:      </label>
           <input type="number" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" id="EmpShiftsCompleted" name="EmpShiftsCompleted"  required>
+          <br>
           <span style="color:red" *ngIf="empForm.get('empShiftsCompleted').errors && (empForm.get('empShiftsCompleted').touched || empForm.get('empShiftsCompleted').dirty)">
                 <span *ngIf="empForm.get('empShiftsCompleted').errors.required">Number of shifts completed is required.</span>
           </span>

@@ -1,11 +1,14 @@
 <body>
     <h1>Supplier Details</h1>
+    <div class="divright">
+        <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
     <form [formGroup]="supForm">
         <div class="card" *ngIf = "showSearch">
             
         <div class="divleft"  >
             <label class="subheadinglabel">Enter Supplier Name: </label>
-        <br>
+        
             <label for="name">Supplier Name:       </label>
             <input type="text" formControlName="name" [(ngModel)]="name" id="name" name="name" pattern="[a-zA-Z ]*" required>
                   <br>

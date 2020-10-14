@@ -443,13 +443,17 @@ else{
 
   gotoCustomerOrderManagement()
   {
+    this.dialogService.openConfirmDialog('Are you sure you want to cancel the order?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.cancelCustomerOrder(this.customerOrder.CustomerOrderID).subscribe((res: any)=> {
       console.log(res);
       if(res.Message){
-        this.dialogService.openAlertDialog(this.errorMessage);
+        this.dialogService.openAlertDialog("Customer Order Cancelled.");}
     this.router.navigate(["customer-order-management"])
-  }
-} )
+  })
+}
+});
 }
 
 

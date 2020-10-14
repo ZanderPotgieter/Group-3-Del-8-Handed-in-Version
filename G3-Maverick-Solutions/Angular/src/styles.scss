@@ -165,6 +165,7 @@ div {
 }
 
 
+
 form {
     display: $form-display;
     width: $full-width;
@@ -241,6 +242,20 @@ button {
 
 }
 
+.helpbutton {
+    $button-padding: 0px;
+$button-display: inline-block;
+$button-overflow: auto;
+$button-margin: 5px;
+$button-width: 5%;
+$button-height: 30px;
+$button-fontsize: 100%;
+$menu-button-width: 30%;
+$menu-button-height: 60px;
+$menu-button-fontsize: 100%;
+$menu-button-padding: 10px 25px;
+}
+
 //style for buttons on a menu page or any screen with just buttons
 .menubutton {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -263,6 +278,12 @@ button {
     padding: 2px 16px;
     text-align: left;
     width: $full-width;
+}
+
+.divright {
+    padding: 2px 16px;
+    text-align: right;
+    width: 96%;
 }
 
 //card class for menu
@@ -503,6 +524,16 @@ html {
     text-align: center;
     vertical-align: top;
     color: white;
+}
+
+.h1-section {
+    font-size: $heading-fontsize;
+    display: flex;
+    padding: $padding;
+    background-color: $extra-colour;
+    border-bottom: $extra-colour;
+    vertical-align: $heading_align;
+    color: $Websitecolor;
 }
 
 .header-section > div {

@@ -21,27 +21,32 @@ export class AddVatComponent implements OnInit {
   found = false;
   showError = false;
   errorMessage: string;
+  todaysdate: Date;
+  
 
   ngOnInit(): void {
     this.VatForm= this.fb.group({
        
       VatPerc: ['', [Validators.required]],
-      VatStartDate: ['', [Validators.required]],
+      //VatStartDate: ['', [Validators.required]],
     }); 
     this.productService.getVat().subscribe((res:any)=> {
       console.log(res);
       this.list = res.VAT;
+      this.todaysdate = res.Date;
       })
   }
+  
 
   Save(){
     for(let item of this.list){
-      if(item.VATStartDate == this.vat.VATStartDate){
+      if(item.VATStartDate == this.todaysdate){
+       
         this.found = true;
-        
       }
     }
     if(this.found == false){
+
       this.productService.addVat(this.vat).subscribe( (res: any)=> {
         console.log(res);
         if(res.Message){
@@ -52,20 +57,13 @@ export class AddVatComponent implements OnInit {
             this.responseMessage = res.Message;
             this.dialogService.openAlertDialog(this.responseMessage)
           }
-      })
-    }
-    if(this.found == true){
-      this.dialogService.openAlertDialog("Duplicate Vat Start Date Found")
-    }
-    if(this.vat.VATStartDate < this.date){
-      this.errorMessage = "Vat Start Date Cannot Be In The Past"; 
-          this.showError = true;
-          setTimeout(() => {
-            this.showError = false;
-          }, 6000);
-    }
-    
+      })}
+      else{
+        this.dialogService.openAlertDialog("Duplicate Vat Start Date Found")
+      }
 
+      this.found = false;
+ 
   }
 
   Cancel(){

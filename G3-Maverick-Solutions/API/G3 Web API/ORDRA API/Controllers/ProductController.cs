@@ -252,7 +252,7 @@ namespace ORDRA_API.Controllers
                 {
                     Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
-
+                    toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                     if (cat != null)
                     {
                         //Set Product Category Details
@@ -414,7 +414,7 @@ namespace ORDRA_API.Controllers
                 {
                     Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
-
+                    toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                     if (cat != null)
                     {
                         //Set Product Category Details
@@ -572,7 +572,7 @@ namespace ORDRA_API.Controllers
                 {
                     Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
-
+                    toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                     if (cat != null)
                     {
                         //Set Product Category Details
@@ -922,7 +922,7 @@ namespace ORDRA_API.Controllers
                     addPrice.Product = product;
                     addPrice.CPriceR = (float)newPrice.CPriceR;
                     addPrice.UPriceR = (float)newPrice.UPriceR;
-                    addPrice.PriceStartDate = newPrice.PriceStartDate;
+                    addPrice.PriceStartDate = DateTime.Now;
                     addPrice.PriceEndDate = date;
                     db.Prices.Add(addPrice);
                     db.SaveChanges();
@@ -1404,7 +1404,7 @@ namespace ORDRA_API.Controllers
                     vatList.Add(vat);
 
                 }
-
+                toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                 toReturn.VAT = vatList;
             }
             catch
@@ -1427,7 +1427,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                DateTime date = DateTime.Now.AddYears(1);
+                DateTime date = DateTime.Now.AddYears(10);
+                newVat.VATStartDate = DateTime.Now;
                 newVat.VATEndDate = date;
                 db.VATs.Add(newVat);
                 db.SaveChanges();
@@ -1560,6 +1561,7 @@ namespace ORDRA_API.Controllers
                     backlog.QuantityToOrder = (product.ProdReLevel * 3);
                     backlog.DateModified = DateTime.Now;
                     db.SaveChanges();
+                    toReturn.Message = "Product Added To Backlog Successfully";
                 }
                 else
                 {
@@ -1571,12 +1573,13 @@ namespace ORDRA_API.Controllers
                     backlog1.ContainerID = containerID;
                     db.Product_Backlog.Add(backlog1);
                     db.SaveChanges();
+                    toReturn.Message = "Product Added To Backlog Successfully";
                 }
 
             }
             catch
             {
-                toReturn.Message = "Adding Product To Backlog Unsuccesful";
+                toReturn.Error = "Adding Product To Backlog Unsuccesful";
             }
 
             return toReturn;
@@ -1665,6 +1668,7 @@ namespace ORDRA_API.Controllers
                         stock_Take_Product.STProductCount = STcount;
                         db.Stock_Take_Product.Add(stock_Take_Product);
                         db.SaveChanges();
+                        toReturn.Message = "Product Count Saved";
 
                         toReturn.stock_Take_Product = db.Stock_Take_Product.ToList().LastOrDefault();
                     }
@@ -1673,9 +1677,10 @@ namespace ORDRA_API.Controllers
                         found.STProductCount = STcount;
                         db.SaveChanges();
                         toReturn.stock_Take_Product = found;
+                        toReturn.Message = "Product Count Saved";
                     }
 
-                    toReturn.Message = "Product Count Saved";
+                    
                 }
                 else
                 {
@@ -1710,7 +1715,7 @@ namespace ORDRA_API.Controllers
                     Container con = db.Containers.Where(x => x.ContainerID == stock_Take.ContainerID).FirstOrDefault();
                     List<Stock_Take_Product> stock_Take_Product = db.Stock_Take_Product.Where(x => x.StockTakeID == stock_Take.StockTakeID).ToList();
                     List<dynamic> products = new List<dynamic>();
-                    if (stock_Take_Product != null)
+                    if (stock_Take_Product.Count != 0)
                     {
 
                         foreach (Stock_Take_Product take_Product in stock_Take_Product)
@@ -1825,7 +1830,7 @@ namespace ORDRA_API.Controllers
             try
             {
                 List<Stock_Take> stock_Takes = db.Stock_Take.Where(x => x.STakeDate == date && x.ContainerID == containerID && x.isCompleted == false).ToList();
-                if (stock_Takes != null)
+                if (stock_Takes.Count != 0)
                 {
                     List<Stock_Take> stock_Takes1 = new List<Stock_Take>();
                     foreach (Stock_Take stock_Take in stock_Takes)
@@ -1842,7 +1847,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    toReturn.Error = "No Incomplete Stock Take In Current Container On Date: " + DateTime.Now.ToShortDateString();
+                    toReturn.Message = "No Incomplete Stock Take In Current Container On Date: " + DateTime.Now.ToShortDateString();
                 }
             }
             catch

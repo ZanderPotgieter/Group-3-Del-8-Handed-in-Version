@@ -26,6 +26,9 @@ export class SearchProductComponent implements OnInit {
   containers: Container[];
   product : Product = new Product();
   minDate: Date = new Date();
+  
+  todaysdate: Date;
+  
 
   showBarcodeInput: boolean = false;
   showSelectProduct: boolean = false;
@@ -73,6 +76,8 @@ export class SearchProductComponent implements OnInit {
   quantity: number;
   date: Date =new Date();
   
+  price : Price = new Price();
+  
   showError = false;
   errorMessage: string;
  
@@ -97,9 +102,10 @@ export class SearchProductComponent implements OnInit {
       ProdName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdDesciption: ['', [Validators.required, Validators.minLength(2), Validators.pattern('[a-zA-Z ]*')]],  
       ProdReLevel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9 ]*')]], 
-      CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
-      UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
-      PriceStartDate: ['', [Validators.required]], 
+      CPrice: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
+      UPrice: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
+      //PriceStartDate: ['', [Validators.required]], 
+      //price:  [''],
       PriceEndDate: [''],
       ProductCategoryID: [''],
       SelectSup: [''],
@@ -280,6 +286,7 @@ export class SearchProductComponent implements OnInit {
           
           this.product_conlist = res.ProductContainers;
           this.supplier = res.supplier;
+          this.todaysdate = res.Date;
 
       }
       this.showBarcodeInput = false;
@@ -315,6 +322,7 @@ export class SearchProductComponent implements OnInit {
           this.pricelist = res.PriceList;
           this.product_conlist = res.ProductContainers;
           this.supplier = res.supplier;
+          this.todaysdate = res.Date;
 
 
       }
@@ -398,7 +406,7 @@ export class SearchProductComponent implements OnInit {
     this.newPrice.ProductID = this.Product.ProductID;
     
     for(let item of this.pricelist){
-      if(item.PriceStartDate == this.newPrice.PriceStartDate){
+      if(item.PriceStartDate == this.todaysdate){
         this.found = true;
         
       }
@@ -413,33 +421,20 @@ export class SearchProductComponent implements OnInit {
       }
       });
     }
-    if(this.found == true){
+    else{
       this.dialogService.openAlertDialog("Duplicate Price Start Date Found")
     }
-    if(this.newPrice.PriceStartDate < this.date){
-      this.errorMessage = "Price Start Date Cannot Be In The Past"; 
-          this.showError = true;
-          setTimeout(() => {
-            this.showError = false;
-          }, 6000);
-    }
+    this.found = false;
 
 
   }
 
   
 
-  update(ndx: number){
-    if (this.list != null){
-      this.productID = this.list[ndx].ProductID
-    }
-    if(this.productList != null){
-      this.productID = this.productList[ndx].ProductID
-    }
-    if(this.product_conlist != null){
-      this.productID = this.product_conlist[ndx].ProductID
-    }
-    this.productService.getProductByID(this.productID).subscribe( (res:any)=> {
+  view(ndx: number){
+
+   
+    this.productService.getProductByID(this.list[ndx].ProductID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
       this.responseMessage = res.Message;
@@ -465,6 +460,48 @@ export class SearchProductComponent implements OnInit {
           
           this.product_conlist = res.ProductContainers;
           this.supplier = res.supplier;
+
+      }
+      this.showBarcodeInput = false;
+      this.showBarcodeResult = false;
+      this.showProductResult = true;
+      this.showCategoryResults = false;
+      this.showContainerResults = false;
+      this.showAllProductsResults = false;
+      
+    })
+  }
+
+  views(ndx: number){
+
+   
+    this.productService.getProductByID(this.productList[ndx].ProductID).subscribe( (res:any)=> {
+      console.log(res);
+      if(res.Message != null){
+      this.responseMessage = res.Message;
+      this.dialogService.openAlertDialog(this.responseMessage)}
+      else{
+          this.Product.ProdName = res.Product.ProdName;
+          this.Product.ProdDesciption = res.Product.ProdDesciption;
+          this.Product.ProdBarcode = res.Product.ProdBarcode;
+          this.Product.ProdReLevel = res.Product.ProdReLevel;
+          this.Product.ProductCategoryID = res.Product.ProductCategoryID;
+          this.Product.ProductID = res.Product.ProductID;
+          this.Price.CPriceR= res.CurrentPrice.CPriceR;
+          this.Price.UPriceR = res.CurrentPrice.UPriceR;
+          this.Price.PriceID = res.CurrentPrice.PriceID;
+          this.Price.PriceStartDate = res.CurrentPrice.PriceStartDate;
+          this.Price.PriceEndDate = res.CurrentPrice.PriceEndDate;
+          this.Price.ProductID = res.Product.ProductID;
+
+          
+
+          this.pricelist = res.PriceList;
+          this.category = res.ProductCategory;
+          
+          this.product_conlist = res.ProductContainers;
+          this.supplier = res.supplier;
+          this.todaysdate = res.Date;
 
       }
       this.showBarcodeInput = false;

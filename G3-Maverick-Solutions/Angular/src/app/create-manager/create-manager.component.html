@@ -45,25 +45,19 @@
             <div class="divleft" >
                 <label for="UserName">Name:       </label>
                 <input class="searchinput" formControlName="UserName" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
-            
+            <br>
                 <label for="UserSurname">Surname:   </label>
                 <input class="searchinput" formControlName="UserSurname" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
-            </div>
-    
-            <br><br>
-            <div class="divleft" >
+            <br>
                 <label for="UserCell">Cell Number:  </label>
                 <input class="searchinput" formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
-         
+         <br>
                 <label for="UserEmail">Email:      </label>
                 <input class="searchinput" formControlName="UserEmail"[(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail"required [readonly] = "this.inputEnabled">
-            </div>
-    
-        <br>
-        <div class="divleft" >
+            <br>
             <label for="EmployeeStartDate">Work Start Date: </label>
             <input class="searchinput" formControlName="EmployeeStartDate" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
-           
+           <br>
             <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
             <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
         </div>
@@ -101,7 +95,7 @@
     <div class="divleft">
         <br>
     <label class="subheadinglabel" >Enter Manager Profile Details</label>
-<br>
+<br><br>
         <label for="ManQualification">Qualification:       </label>
         <input type="text"formControlName="ManQualification" [(ngModel)]="manager.ManQualification" id="ManQualification" name="ManQualification" required minlength="2" maxlength="50" pattern="[a-zA-Z ]*">
         <br>
@@ -111,9 +105,7 @@
             <span *ngIf="empForm.get('ManQualification').errors.pattern">Only text characters.</span>
           </span>
           <br>
-    </div>
-
-    <div class="divleft">
+    
         <label for="ManNationality">Nationality:       </label>
         <input type="text" formControlName="ManNationality" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" required minlength="2" maxlength="25" pattern="[a-zA-Z ]*">
         <br>
@@ -123,9 +115,6 @@
             <span *ngIf="empForm.get('ManNationality').errors.pattern">Only text characters.</span>
           </span>
           <br>
-    </div>
-
-    <div class="divleft">
         <label for="ManIDNumber">ID Number:       </label>
         <input type="text"  formControlName="ManIDNumber"[(ngModel)]="manager.ManIDNumber" id="ManIDNumber" name="ManIDNumber" required minlength="13" maxlength="13" pattern="[0-9 ]*">
         <br>
@@ -141,7 +130,7 @@
    
     <div class="divleft">
         <label class="subheadinglabel">Enter Next Of Keen Details:</label>
-        <br>
+        <br><br>
         <label for="ManNextOfKeenFName">Full Name:       </label>
         <input type="text" formControlName="ManNextOfKeenFName" [(ngModel)]="manager.ManNextOfKeenFName" id="ManNextOfKeenFName" name="ManNextOfKeenFName" required minlength="2" maxlength="25" pattern="[a-zA-Z ]*">
         <br>
@@ -151,11 +140,8 @@
             <span *ngIf="empForm.get('ManNextOfKeenFName').errors.pattern">Only text characters.</span>
           </span>
           <br>
-    </div>
-
-    <div class="divleft">
         <label for="ManNextOfKeenCell">Cell Number:       </label>
-        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required minlength="10" maxlength="10" pattern="[0-9]*">
+        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" required minlength="10" maxlength="10" pattern="[0-9 ]*">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManNextOfKeenCell').errors && (empForm.get('ManNextOfKeenCell').touched || empForm.get('ManNextOfKeenCell').dirty)">
             <span *ngIf="empForm.get('ManNextOfKeenCell').errors.required">cell number is required.</span>
@@ -164,10 +150,6 @@
           </span>
           <br>
     </div>
-    <br>
-
-    
-    
     <br>
     <div class="divleft"  >
          <button type="submit" (click)="createManager()">Save Profile</button>

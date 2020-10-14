@@ -16,7 +16,7 @@
 
 
             </div>
-            <div *ngIf = "showContainer">
+            <div class="divleft" *ngIf = "showContainer">
                 <label>Select Container</label><select [ngModelOptions]="{standalone: true}" required name="SelectContainer" [(ngModel)]="SelectContainer" (ngModelChange)="selectContainer($event)">
                 <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
                </select>
@@ -28,7 +28,7 @@
              
              </div>
             
-            <div *ngIf="showList">
+            <div class="divleft" *ngIf="showList">
                 <table [ngModelOptions]="{standalone: true}">
                     <th style="width: 10%; padding: 2px"></th>
                     <th>StockTake Date</th>
@@ -76,7 +76,7 @@
             </table>
 
         </div>
-        <div>
+        <div class="divleft">
             <button type="submit" (click)="Cancel()">Cancel</button>
         </div>
 

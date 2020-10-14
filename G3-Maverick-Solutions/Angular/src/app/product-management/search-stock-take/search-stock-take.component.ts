@@ -50,6 +50,7 @@ export class SearchStockTakeComponent implements OnInit {
       else{
         this.stocktakes = res.stock_Takes;
         this.showList = true;
+        this.showTable = false;
 
       }
     })
@@ -66,6 +67,7 @@ export class SearchStockTakeComponent implements OnInit {
       else{
         this.stocktakes = res.stock_Takes;
         this.showList = true;
+        this.showTable = false;
 
       }
     })
@@ -82,6 +84,7 @@ export class SearchStockTakeComponent implements OnInit {
       else{
         this.stocktakes = res.stock_Takes;
         this.showList = true;
+        this.showTable = false;
 
       }
     })
@@ -99,11 +102,15 @@ export class SearchStockTakeComponent implements OnInit {
     });
     this.showContainer = true;
     this.showList = false;
+    this.showTable = false;
+    
+
   }
 
   selectContainer(val: Container){
     this.selectedcontainerID = val.ContainerID;
     this.showList = false;
+    this.showTable = false;
     this.setContainer(val);
 
   }

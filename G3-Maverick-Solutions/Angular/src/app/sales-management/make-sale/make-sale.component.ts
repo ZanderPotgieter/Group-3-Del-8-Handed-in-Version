@@ -193,15 +193,22 @@ export class MakeSaleComponent implements OnInit {
               this.dialogService.openAlertDialog("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock");
             }
             else{
-            this.quantity = this.selectedProduct.Quantity + 1;
+            if(this.quantity == 1){
+              this.quantity = this.selectedProduct.Quantity + 1;
+              
+            }
+            else{
+              this.quantity = this.selectedProduct.Quantity + this.quantity;
+            }
             this.updateList();
+            
           }
           }
           
         }
 
         if(this.barcodeFound == false){
-          alert("Product Not In Stock");
+          this.dialogService.openAlertDialog("Product Not In Stock");
         }
 
         this.barcodeFound = false;
@@ -433,9 +440,9 @@ export class MakeSaleComponent implements OnInit {
               console.log(res);
               this.lowStock = res;
               if(res == true){
-                this.dialogService.openAlertDialog("Sale Completed Successfully");
-                this.dialogService.openAlertDialog("Some Products are now low in stock. Click OK to view");
                 
+                this.dialogService.openAlertDialog("Some Products are now low in stock. Click OK to view");
+                this.dialogService.openAlertDialog("Sale Completed Successfully");
                 this.router.navigate(['lowstock'])
               }
               if(res == false){

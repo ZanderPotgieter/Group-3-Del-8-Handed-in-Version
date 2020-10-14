@@ -76,12 +76,13 @@
               <span *ngIf="pdForm.get('UPriceR').errors.pattern">Only numbers allowed.</span>
             </span>
             <br>
-                <label for="PriceStartDate">Price Start Date:</label> <input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="price.PriceStartDate" id="PriceStartDate" name="PriceStartDate"  required>
+                <label style="width: 100%;" for="PriceStartDate">Price Start Date: {{date | date: 'yyyy-MM-dd'}}</label><!--<input type="text" formControlName="price" [(ngModel)]="date" name="price" disabled="true">
+               <input type="date" formControlName="PriceStartDate" class="form-control" [(ngModel)]="price.PriceStartDate" id="PriceStartDate" name="PriceStartDate"  required>
             <br>
             <span style="color:red" *ngIf="pdForm.get('PriceStartDate').errors && (pdForm.get('PriceStartDate').touched || pdForm.get('PriceStartDate').dirty)">
               <span *ngIf="pdForm.get('PriceStartDate').errors.required">Price start date is required.</span>
-              <!--<span *ngIf="pdForm.get('PriceStartDate').errors.min">Price start date cannot be in the past</span>
-            --></span>
+              <span *ngIf="pdForm.get('PriceStartDate').errors.min">Price start date cannot be in the past</span>
+            </span>-->
             <br>
             <label for="ProdBarcode">Barcode:</label><input type="number" formControlName="ProdBarcode" class="form-control" [(ngModel)]="newProduct.ProdBarcode" id="ProdBarcode" name="ProdBarcode" pattern="[0-9 ]*" required>
             <br>

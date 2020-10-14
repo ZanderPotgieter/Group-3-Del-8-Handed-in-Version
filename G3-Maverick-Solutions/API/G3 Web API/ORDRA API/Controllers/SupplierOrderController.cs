@@ -189,7 +189,7 @@ namespace ORDRA_API.Controllers
                     db.Supplier_Order.Add(newOrder);
                     db.SaveChanges();
                     //retrive the placed order
-                    Supplier_Order order = db.Supplier_Order.Where(x => x.SupplierID == supplierID && x.SODate == DateTime.Now && x.SupplierOrderStatusID == 1 && x.ContainerID == containerID).ToList().LastOrDefault();
+                    Supplier_Order order = db.Supplier_Order.ToList().LastOrDefault();
 
                     if (order != null)
                     {

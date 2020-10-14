@@ -482,16 +482,23 @@ namespace ORDRA_API.Controllers
                 foreach(Sale sale in sales)
                 {
 
-                  //  List<Sale> search = db.Sales.Include(x => x.User).Where(x => x.SaleDate == date).ToList();
+                    DateTime saledate = Convert.ToDateTime(sale.SaleDate);
+                    if (sale != null)
+                    {
 
-                    
-                        dynamic searched =new ExpandoObject();
-                        searched.SaleID = sale.SaleID;
-                        searched.SaleDate = sale.SaleDate;
-                        searched.UserName = sale.User.UserName;
+                        List<Product_Sale> product_Sale = db.Product_Sale.Where(x => x.SaleID == sale.SaleID).ToList();
 
-                        searchedsales.Add(searched);
-                    
+                        if (product_Sale.Count != 0)
+                        {
+                            dynamic searchedSale = new ExpandoObject();
+                            searchedSale.SaleID = sale.SaleID;
+                            searchedSale.UserName = sale.User.UserName;
+
+                            searchedSale.SaleDate = saledate.ToString("yyyy-MM-dd");
+                            searchedsales.Add(searchedSale);
+                        }
+                    }
+
 
                 }
                 toReturn = searchedsales;

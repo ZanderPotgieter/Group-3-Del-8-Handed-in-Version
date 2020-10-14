@@ -28,7 +28,8 @@ export class AddProductComponent implements OnInit {
   price : Price = new Price();
   responseMessage: string = "Request Not Submitted";
   quantity: number;
-  date: Date = new Date();
+  dateToday: Date = new Date();
+  date = this.dateToday.toString();
  
   Select: number;
   SelectSup: number;
@@ -54,7 +55,8 @@ export class AddProductComponent implements OnInit {
       ProdReLevel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9 ]*')]], 
       CPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
       UPriceR: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]+[.,]?[0-9]*')]],
-      PriceStartDate: ['', [Validators.required]], 
+     // PriceStartDate: ['', [Validators.required]], 
+     price:  [''],
       SelectCon: ['', [Validators.required]], 
       SelectProduct: ['', [Validators.required]],
       quantity: ['', [Validators.required]],

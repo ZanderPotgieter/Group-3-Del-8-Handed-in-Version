@@ -71,29 +71,22 @@
             <div class="divleft" >
                 <label for="UserName">Name:       </label>
                 <input class="searchinput" formControlName="UserName" [(ngModel)]="user.UserName"  type="text" id="UserName" name="UserName" required [readonly] = "this.inputEnabled">
-            
+            <br>
                 <label for="UserSurname">Surname:   </label>
                 <input class="searchinput" formControlName="UserSurname" [(ngModel)]="user.UserSurname" type="text" id="UserSurname" name="UserSurname" required [readonly] = "this.inputEnabled">
-            </div>
-    
-            <br><br>
-            <div class="divleft" >
+            <br>
                 <label for="UserCell">Cell Number:  </label>
-                <input class="searchinput"  formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled"d>
-         
+                <input class="searchinput" formControlName="UserCell" [(ngModel)]="user.UserCell"  type="text" id="UserCell" name="UserCell" required [readonly] = "this.inputEnabled">
+         <br>
                 <label for="UserEmail">Email:      </label>
-                <input class="searchinput" formControlName="UserEmail"  [(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail" required [readonly] = "this.inputEnabled">
-            </div>
-    
-        <br>
-        <div class="divleft" >
+                <input class="searchinput" formControlName="UserEmail"[(ngModel)]="user.UserEmail"  type="text" id="UserEmail" name="UserEmail"required [readonly] = "this.inputEnabled">
+            <br>
             <label for="EmployeeStartDate">Work Start Date: </label>
-            <input class="searchinput" formControlName="empStartDate" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
-           
+            <input class="searchinput" formControlName="EmployeeStartDate" [(ngModel)]="employee.EmpStartDate"  type="text" id="EmpStartDate" name="EmpStartDate" required [readonly] = "this.inputEnabled">
+           <br>
             <label for="EmployeeShiftsCompleted">Shifts Completed:    </label>
-            <input class="searchinput" formControlName="empShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
+            <input class="searchinput" formControlName="EmpShiftsCompleted" [(ngModel)]="employee.EmpShiftsCompleted" type="text" id="EmpShiftsCompleted" name="EmpShiftsCompleted" required [readonly] = "this.inputEnabled">
         </div>
-
 
     <div  class ="divleft">
         <label class="subheadinglabel">Containers Managed:</label> 
@@ -139,9 +132,6 @@
             <span *ngIf="empForm.get('ManQualification').errors.pattern">Only text characters.</span>
           </span>
           <br>
-    </div>
-
-    <div class="divleft">
         <label for="ManNationality">Nationality:       </label>
         <input type="text" formControlName="ManNationality" [(ngModel)]="manager.ManNationality" id="ManNationality" name="ManNationality" pattern="[a-zA-Z ]*" required  [readonly] = "allowEdit">
         <br>
@@ -151,9 +141,6 @@
             <span *ngIf="empForm.get('ManNationality').errors.pattern">Only text characters.</span>
           </span>
           <br>
-    </div>
-
-    <div class="divleft">
         <label for="ManIDNumber">ID Number:       </label>
         <input type="text" [(ngModel)]="manager.ManIDNumber" formControlName="ManIDNumber" id="ManIDNumber" name="ManIDNumber" pattern="[0-9 ]*" required  [readonly] = "allowEdit">
         <br>
@@ -179,11 +166,8 @@
             <span *ngIf="empForm.get('ManNextOfKeenFName').errors.pattern">Only text characters.</span>
           </span>
           <br>
-    </div>
-
-    <div class="divleft">
         <label for="ManNextOfKeenCell">Cell Number:       </label>
-        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" pattern="[0-9 ]*" required  [readonly] = "allowEdit">
+        <input type="text" formControlName="ManNextOfKeenCell" [(ngModel)]="manager.ManNextOfKeenCell" id="ManNextOfKeenCell" name="ManNextOfKeenCell" pattern="[0-9]*" required  [readonly] = "allowEdit">
         <br>
         <span style="color:red" *ngIf="empForm.get('ManNextOfKeenCell').errors && (empForm.get('ManNextOfKeenCell').touched || empForm.get('ManNextOfKeenCell').dirty)">
             <span *ngIf="empForm.get('ManNextOfKeenCell').errors.required">cell number is required.</span>
@@ -194,7 +178,6 @@
     </div>
     <br>
   
-    <br><br>
     <div class="divleft" *ngIf="showButtons">
        <button type="submit" (click)="enableInputs()">Update</button>
        <button type="submit" (click)="deleteManager()">Delete</button>

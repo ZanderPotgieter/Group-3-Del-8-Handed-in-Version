@@ -2,7 +2,10 @@
     <form>
         <h1>Complete Stock Take</h1>
             <div class = "card" >
-                
+                <div *ngIf="!showList">
+                    <label style="width: 100%">list Of Incomplete Stock Takes In Container:</label>
+                </div>
+               
 
                 <div *ngIf="showList">
                     <table>
@@ -43,7 +46,7 @@
                 <div class= "divleft" *ngIf="showMarkOff"> 
                     <label class="subheadinglabel"> Mark Off {{selectedProduct.ProdName}}</label><br>
                     <Label>Quantity: {{MOQuantity}} </Label>
-                    <label>Mark Off Reason:</label><select [ngModelOptions]="{standalone: true}" required formControlName="SelectReason" name="SelectReason" (ngModelChange)="setReason($event)">
+                    <label>Mark Off Reason:</label><select [ngModelOptions]="{standalone: true}" required sname="SelectReason" (ngModelChange)="setReason($event)">
                         <option  *ngFor="let reason of reasons" [ngValue]="reason" >{{reason.MODescription}}</option>
                        </select>
                        <br>

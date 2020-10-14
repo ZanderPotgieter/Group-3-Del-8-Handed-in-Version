@@ -899,7 +899,6 @@ VALUES ('1', '2', '5000.00', '2020-01-29', 'Donated to help less priviledged chi
 	   ('2', '3' ,'0.00', '2020-04-10', 'Donated to a program that tutors students for free'),
 	   ('1', '1', '6000.00' , '2020-05-20', 'Donated to help people affected by COVID 19');
 
-INSERT INTO Donated_Product (ProductID, DonationID, DPQuantity)
 INSERT INTO Donated_Product (ProductID, DonationID, ContainerID, DPQuantity)
 VALUES ('1', '1', '1', '20'),
 	   ('2', '2', '2', '50'),

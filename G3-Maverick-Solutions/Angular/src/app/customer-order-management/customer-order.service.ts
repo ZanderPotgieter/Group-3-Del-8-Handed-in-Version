@@ -51,7 +51,7 @@ export class CustomerOrderService {
   };
 
   searchByCell(cell : string){  
-    return this.http.get(this.url + '/searchByCell/'+cell).pipe(map(result => result));  
+    return this.http.get(this.url + '/searchByCell/'+cell, this.httpOptions);  
   } 
   
   searchByOrderNo(orderNo : string){  

@@ -77,12 +77,20 @@ export class SupplierOrderService {
     return this.http.get(this.url + '/cancelSupplierOrder?id=' + id);
   }
 
-sendEmail(id : number){
-    return this.http.get(this.url + '/sendEmail?supplierOrderID=' + id);
+  sendBackOrderEmail(id : number){
+    return this.http.post(this.url + '/sendBackOrderEmail?supplierOrderID=' + id , this.httpOptions);
   }
 
-  receiveOrderProduct( supplierOrderID: number, productID: number, quantity: number){
-    return this.http.get(this.url + '/receiveOrderProduct?supplierOrderID='+supplierOrderID+'&productID='+productID+'&quantity=' +quantity)
+  receiveOrderProduct( supplierOrderID: number, productID: number, quantity: number, containerID: number){
+    return this.http.get(this.url + '/receiveProductStock?supplierOrderID='+supplierOrderID+'&productID='+productID+'&quantity=' +quantity+'&containerID='+ containerID)
+  }
+
+  updateCustomerOrder(containerID: number, supplierOrderID: number){
+    return this.http.get(this.url + '/updateCustomerOrder?containerID='+containerID +'&supplierOrderID='+supplierOrderID)
+  }
+
+  getPlacedSupplierOrdersInContainer(containerID:number){
+    return this.http.get(this.url + '/getPlacedSupplierOrdersInContainer?containerID='+containerID)
   }
 
 

@@ -977,5 +977,59 @@ namespace ORDRA_API.Controllers
 
         }
 
+
+
+
+
+
+        [HttpGet]
+        [Route("getCreditorGraphData")]
+        
+        public dynamic getCreditorGraphData()
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+
+            //toReturn.TableData = null;
+            toReturn.ChartData = null;
+            try
+            {
+                List<Creditor> creditors = db.Creditors.Include(z=>z.Supplier).Where(z => z.CredAccountBalance > 0).ToList();
+
+                if (creditors != null)
+                {
+                    //chart data
+
+                    var catList = creditors.GroupBy(z => z.Supplier.SupName);
+                    List<dynamic> categories = new List<dynamic>();
+
+
+                    foreach (var item in catList)
+                    {
+                        dynamic category = new ExpandoObject();
+                        category.Name = item.Key;
+                        var sum = item.Select(z => z.CredAccountBalance);
+                        category.Sum = sum;
+
+                        categories.Add(category);
+                    }
+
+                    toReturn.ChartData = categories;
+
+                    
+                }
+                else
+                {
+                    toReturn.Message = "Creditor information not available to generate chart";
+                }
+            }
+            catch (Exception)
+            {
+                toReturn.Message = "Failed to generate report";
+            }
+            return toReturn;
+        }
+
     }
 }

@@ -64,16 +64,33 @@ namespace ORDRA_API.Properties {
         ///   Looks up a localized string similar to &lt;body&gt;
         ///    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
         ///        &lt;div style=&quot;border: thin solid #E1E1E1; background-color: #F0F0F0; margin-bottom: 10px;   padding-top: 3px; padding-bottom: 3px; padding-left:5px;&quot;&gt;
-        ///            &lt;h2&gt;Dear {supplier}&lt;/h2&gt;
-        ///            &lt;p&gt;We Would Like to Purchase the following Products:&lt;/p&gt;
-        ///        &lt;/div&gt;
-        ///        &lt;table&gt;
-        ///            &lt;thead&gt; &lt;/thead&gt;
-        ///            &lt;tbody id=&quot;dataTable&quot;&gt;
-        ///            &lt;/tbody&gt;
-        ///        &lt;/table&gt;
-        ///    &lt;/form&gt;
-        ///&lt;/body&gt;.
+        ///            &lt;h3&gt;Dear sales team&lt;/h3&gt;
+        ///            &lt;p&gt;We would received an incomplete Order.&lt;/p&gt;
+        ///            &lt;p&gt;We are yet to receive the folloing items:&lt;/p&gt;
+        ///            &lt;table&gt;
+        ///                &lt;thead&gt;
+        ///                    &lt;tr&gt;
+        ///                        &lt;th align=&quot;left&quot;&gt;Product&lt;/th&gt;
+        ///                       [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SupplierBackOrder {
+            get {
+                return ResourceManager.GetString("SupplierBackOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;body&gt;
+        ///    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
+        ///        &lt;div style=&quot;border: thin solid #E1E1E1; background-color: #F0F0F0; margin-bottom: 10px;   padding-top: 3px; padding-bottom: 3px; padding-left:5px;&quot;&gt;
+        ///           &lt;h3&gt;Dear sales team&lt;/h3&gt;
+        ///            &lt;p&gt;We would like to place an order from you for the following items:&lt;/p&gt;
+        ///            &lt;table&gt;
+        ///                &lt;thead&gt;
+        ///                    &lt;tr&gt;
+        ///                        &lt;th align=&quot;left&quot;&gt;Product&lt;/th&gt;
+        ///                        &lt;th align=&quot;left&quot;&gt;Quantity&lt;/th&gt;
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SupplierOrder {
             get {

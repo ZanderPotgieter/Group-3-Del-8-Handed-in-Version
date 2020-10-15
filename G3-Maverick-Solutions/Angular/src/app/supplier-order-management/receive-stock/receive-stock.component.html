@@ -6,14 +6,14 @@
     <form>
     <div class="card">
         <div class="divleft" *ngIf="!showOrder">
-          <label class="subheadinglabel" style="width: 50%">List Of Placed Orders In Container</label>
+          <label class="subheadinglabel" style="width: 100%">List Of Placed and Back Ordered Orders In Container</label>
         </div>
         <div *ngIf="showList">
             <table [ngModelOptions]="{standalone: true}">
              <th >Date</th>
              <th style="width: 50%;">Supplier</th>
              <th >Status</th>
-             <th></th>
+             <th>Action</th>
          
          <tr *ngFor="let item of supplierOrders; index as ndx">
              <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
@@ -26,8 +26,9 @@
          </table>
          </div>
          
-         <div *ngIf="showOrder">
+         <div class="left" *ngIf="showOrder">
            <label class="subheadinglabel">Supplier Order Details </label>
+           <label style="width: 100%">Supplier {{selectedOrder.SupName}}</label>
            <div class="left">
              <div style="float:left; width: 50%">
                <label style="width: 100%">Date: {{selectedOrder.SODate | date:'yyyy-MM-dd'}}</label>
@@ -36,14 +37,14 @@
                <label style="width: 100%">Status {{selectedOrder.Status}}</label>
              </div>
            </div>
-           <span style="color:red" *ngIf="showError">
+           <span style="color: orangered " *ngIf="showError">
             {{errorMessage}}</span>
          
            <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
-            <th style="width: 35%;padding: 1px">Product</th>
+            <th style="padding: 1px">Product</th>
             <th style="padding: 1px">Ordered</th>
             <th style="padding: 1px">Received</th>
-            <th  style= "width: 20%; padding: 1px"></th>
+            <th  style= " padding: 1px; width: 20%; padding: 1px">Save</th>
          
          <tr *ngFor="let item of orderproducts; index as ndx; trackBy:trackByndx;">
             <td>{{item.ProdName}}</td>
@@ -56,10 +57,19 @@
          
          </table>
          <br>
+         <div>
+          <div class= "divleft" *ngIf="showDone">
+            <button type="submit" style="width: 25%" (click)="Done()">Order Complete</button>
+            <button type="submit" style="width: 25%" (click)="BackOrder()">Place Back Order</button>
+          </div>
          <div class= "divleft">
-           <button type="submit" (click)="Done()">Done</button>
-           <button type="submit" (click)="Back()">Back To List</button>
+           <button type="submit" style="width: 25%" (click)="Back()">Back To List</button>
          </div>
+        
+         
+      </div>
+        
+
          
          </div>
          

@@ -64,4 +64,9 @@ export class ReportService {
   {
     return this.http.get(this.url + "getSaleReportData").pipe(map(result => result))
   }
+
+  getCreditorGraphData()
+  {
+    return this.http.get(this.url + "getCreditorGraphData").pipe(map(result => result))
+  }
 }

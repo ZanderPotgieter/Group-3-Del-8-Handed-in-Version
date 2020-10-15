@@ -128,6 +128,9 @@ export class ViewSupplierComponent implements OnInit {
   }
 
   deleteSupplier(){
+    this.dialogService.openConfirmDialog('Are you sure you want to delete this supplier?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.deleteSupplier(this.supplier.SupplierID).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message){
@@ -135,6 +138,8 @@ export class ViewSupplierComponent implements OnInit {
       this.dialogService.openAlertDialog(this.responseMessage)
       this.router.navigate(["supplier-management"])
     })
+  }
+})
 
   }
 

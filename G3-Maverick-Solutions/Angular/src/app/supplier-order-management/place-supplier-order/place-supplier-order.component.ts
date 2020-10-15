@@ -21,7 +21,7 @@ export class PlaceSupplierOrderComponent implements OnInit {
   constructor(public api :SupplierOrderService,private router: Router, private saleService: SalesService,private dialogService: DialogService) { }
 
   showButton = true;
-  showBacklog = true;
+  showBacklog = false;
   showOrders = false;
   showSupOrder = false;
   session: any;
@@ -57,6 +57,7 @@ export class PlaceSupplierOrderComponent implements OnInit {
         }
         else{
           this.products = res.products;
+          this.showBacklog = true;
           
         }
       })
@@ -153,12 +154,12 @@ export class PlaceSupplierOrderComponent implements OnInit {
     this.dialogService.openConfirmDialog('Order Email will be Sent to '+ this.selectedOrder.SupName + ' ?') 
     .afterClosed().subscribe(res => {
       if(res){
-    this.api.placeSupplierOrder(this.selectedOrderID).subscribe((res:any) =>{
-      console.log(res);
-      if(res.Error){
+    this.api.placeSupplierOrder(this.selectedOrderID).subscribe((resp:any) =>{
+      console.log(res)
+      if(resp.Error){
         this.dialogService.openAlertDialog("Supplier Order Email sending failed")
       }
-      else{
+      else if(res.Message){
         this.dialogService.openAlertDialog("Supplier Order Email successfuly Sent")
         this.showBacklog = false;
         this.showOrders = true;
@@ -182,7 +183,7 @@ export class PlaceSupplierOrderComponent implements OnInit {
       }
       else{
         this.dialogService.openAlertDialog(res.Message)
-        this.router.navigate(["search-supplier-order"])
+        this.router.navigate(["supplier-order-management"])
       }
     })}
       
@@ -190,7 +191,7 @@ export class PlaceSupplierOrderComponent implements OnInit {
 }
 
 Cancel(){
-  this.router.navigate(["search-supplier-order"])
+  this.router.navigate(["supplier-order-management"])
 }
 
 }

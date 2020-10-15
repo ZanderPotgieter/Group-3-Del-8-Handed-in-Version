@@ -81,8 +81,8 @@ export class SupplierOrderService {
     return this.http.post(this.url + '/sendBackOrderEmail?supplierOrderID=' + id , this.httpOptions);
   }
 
-  receiveOrderProduct( supplierOrderID: number, productID: number, quantity: number){
-    return this.http.get(this.url + '/receiveOrderProduct?supplierOrderID='+supplierOrderID+'&productID='+productID+'&quantity=' +quantity)
+  receiveOrderProduct( supplierOrderID: number, productID: number, quantity: number, containerID: number){
+    return this.http.get(this.url + '/receiveProductStock?supplierOrderID='+supplierOrderID+'&productID='+productID+'&quantity=' +quantity+'&containerID='+ containerID)
   }
 
   updateCustomerOrder(containerID: number, supplierOrderID: number){

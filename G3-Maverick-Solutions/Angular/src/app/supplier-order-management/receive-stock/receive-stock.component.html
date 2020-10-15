@@ -35,7 +35,7 @@
                <label style="width: 100%">Status {{selectedOrder.Status}}</label>
              </div>
            </div>
-           <span style="color:red" *ngIf="showError">
+           <span style="color: orangered " *ngIf="showError">
             {{errorMessage}}</span>
          
            <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
@@ -55,11 +55,19 @@
          
          </table>
          <br>
+         <div>
+          <div class= "divleft" *ngIf="showDone">
+            <button type="submit" style="width: 25%" (click)="Done()">Order Complete</button>
+            <button type="submit" style="width: 25%" (click)="BackOrder()">Place Back Order</button>
+          </div>
          <div class= "divleft">
-           <button type="submit" style="width: 25%" (click)="Done()">Done</button>
-           <button type="submit" style="width: 25%" (click)="BackOrder()">Place BackOrder</button>
            <button type="submit" style="width: 25%" (click)="Back()">Back To List</button>
          </div>
+        
+         
+      </div>
+        
+
          
          </div>
          

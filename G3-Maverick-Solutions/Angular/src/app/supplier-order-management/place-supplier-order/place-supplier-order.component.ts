@@ -159,7 +159,7 @@ export class PlaceSupplierOrderComponent implements OnInit {
       if(resp.Error){
         this.dialogService.openAlertDialog("Supplier Order Email sending failed")
       }
-      else if(res.Message){
+      else if(res.Message || res == true){
         this.dialogService.openAlertDialog("Supplier Order Email successfuly Sent")
         this.showBacklog = false;
         this.showOrders = true;

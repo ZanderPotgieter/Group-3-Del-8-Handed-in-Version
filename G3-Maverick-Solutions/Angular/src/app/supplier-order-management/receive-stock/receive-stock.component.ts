@@ -22,6 +22,8 @@ export class ReceiveStockComponent implements OnInit {
   showOrder = false;
   supplierOrder: SupplierOrder = new SupplierOrder();
   orderproducts: SupplierOrderProduct[] = [];
+  showBackOrder = false;
+  showDone = false;
 
   showdate = false;
   date: Date = new Date();
@@ -99,7 +101,7 @@ Back()
 
   save(ndx: number){
     this.quantity = this.orderproducts[ndx].SOPQuantityRecieved;
-    this.api.receiveOrderProduct(this.supplierOrder.SupplierOrderID, this.orderproducts[ndx].ProductID, this.quantity)
+    this.api.receiveOrderProduct(this.supplierOrder.SupplierOrderID, this.orderproducts[ndx].ProductID, this.quantity, this.supplierOrder.ContainerID)
     .subscribe((res: any)=>{
       console.log(res);
       if(res.Message){
@@ -108,14 +110,28 @@ Back()
           setTimeout(() => {
             this.showError = false;
           }, 5000);
+      }else{
+        this.errorMessage = "Failed To Save Quantity"; 
+        this.showError = true;
+        setTimeout(() => {
+          this.showError = false;
+        }, 5000);
       }
-
+      this.showBackOrder = true;
+      this.showDone = true;
     })
+
+
   }
 
   Done(){
-    this.api.updateCustomerOrder(this.supplierOrder.ContainerID,this.supplierOrder.SupplierOrderID).subscribe((res:any)=>{
+    this.api.updateCustomerOrder(this.supplierOrder.SupplierOrderID,this.supplierOrder.SupplierOrderID).subscribe((res:any)=>{
       console.log(res);
+      if(res.Message){
+        this.dialogService.openAlertDialog("Supplier Order Details Saved Succesfully")
+        this.showBackOrder = false;
+       this.showDone = false;
+      }
     })
     
     this.router.navigate(['supplier-order-management'])
@@ -123,22 +139,25 @@ Back()
   }
 
   BackOrder(){
+    this.api.updateCustomerOrder(this.supplierOrder.ContainerID, this.supplierOrder.SupplierOrderID).subscribe((resp:any)=>{
+      console.log(resp);
+    })
     this.dialogService.openConfirmDialog('Back Order Email will be Sent to '+ this.selectedOrder.SupName + ' ?') 
     .afterClosed().subscribe(res => {
       if(res){
     this.api.sendBackOrderEmail(this.supplierOrder.SupplierOrderID).subscribe((re:any)=>{
       console.log(re);
-      if(re.Message){
+      if(re.Message || re == true){
         
         this.router.navigate(['supplier-order-management'])
         this.dialogService.openAlertDialog("Supplier BackOrder Email successfuly Sent")
+        this.showBackOrder = false;
+        this.showDone = false;
       }
       if(re.Error){
         this.dialogService.openAlertDialog("Supplier Order Email sending failed")
       }
-    this.api.updateCustomerOrder(this.supplierOrder.ContainerID, this.supplierOrder.SupplierOrderID).subscribe((resp:any)=>{
-      console.log(resp);
-    })
+    
   })
     }})
     

@@ -63,8 +63,9 @@ export class SearchManagerComponent implements OnInit {
       caption: [''],
       captionCV: [''],
 
-      empShiftsCompleted: [''],
-      empStartDate: [''],
+      
+      EmpShiftsCompleted: [''],
+      EmployeeStartDate: [''],
 
       ManNationality: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
       ManQualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('[a-zA-Z ]*')]],

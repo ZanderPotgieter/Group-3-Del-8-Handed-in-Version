@@ -1103,6 +1103,7 @@ namespace ORDRA_API.Controllers
                                         }
                                 }
                             }
+
                         }
 
                         if(fulfilled == true)
@@ -1112,7 +1113,6 @@ namespace ORDRA_API.Controllers
                             db.SaveChanges();
                         }
 
-                    fulfilled = false;
                     }
                 }
 

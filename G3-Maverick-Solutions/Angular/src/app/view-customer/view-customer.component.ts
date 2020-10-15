@@ -40,6 +40,7 @@ export class ViewCustomerComponent implements OnInit {
   inputEnabled:boolean = true;
   showSearch: boolean = true;
   showResults: boolean = false;
+  customerNull: boolean = false;
 
   name : string;
   surname : string;
@@ -95,6 +96,12 @@ export class ViewCustomerComponent implements OnInit {
   }
 
   updateCustomer(){
+    if (this.customer.CusName == null || this.customer.CusSurname ==null || this.customer.CusEmail == null || this.customer.CusCell==null || this.customer.CusStreet==null || this.customer.CusStreetNr==null|| this.customer.CusCode==null || this.customer.CusSuburb==null)
+    {
+      this.customerNull = true;
+    }
+    else
+    {
     this.dialogService.openConfirmDialog('Are you sure you want to update this customer?')
     .afterClosed().subscribe(res => {
       if(res){
@@ -107,6 +114,7 @@ export class ViewCustomerComponent implements OnInit {
   }
   });
   }
+}
 
   deleteCustomer(){
     this.dialogService.openConfirmDialog('Are you sure you want to delete this customer?')

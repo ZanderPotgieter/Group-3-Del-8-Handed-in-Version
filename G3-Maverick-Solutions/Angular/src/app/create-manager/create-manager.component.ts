@@ -40,14 +40,14 @@ export class CreateManagerComponent implements OnInit {
 
   
   
-
+ 
   showTable: boolean = false;
   showButtons: boolean = true;
   inputEnabled:boolean = true;
   showSearch: boolean = true;
   showResults: boolean = false;
   showConatinerSelect: boolean = false;
-
+  managerNull: boolean = false;
 
   name : string;
   surname : string;
@@ -75,9 +75,7 @@ export class CreateManagerComponent implements OnInit {
   searchManager(){
     this.api.searchManager(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
-      //if(res.Message != null){
-      //this.responseMessage = res.Message;
-     // alert(this.responseMessage);
+      {
          /* //Get Manager Details
         this.manager.ManagerID = res.manager.ManagerID;
         this.manager.ManQualififaction = res.manager.ManQualififaction;
@@ -116,12 +114,20 @@ export class CreateManagerComponent implements OnInit {
       this.showSearch = false;
       this.showResults = true;
       
-    })
+    }}
+    )
+    
 
   }
 
 
   createManager(){
+    if (this.manager.ManIDNumber == null || this.manager.ManNationality ==null || this.manager.ManNextOfKeenFName == null || this.manager.ManQualification==null)
+    {
+      this.managerNull = true;
+    }
+    else
+    {
   
 
     /*this.selectedContainers.forEach(element => {
@@ -139,7 +145,7 @@ export class CreateManagerComponent implements OnInit {
       this.router.navigate(["manager-management"])
     })
   }
-})
+})}
 
   }
   gotoManagerManagement(){

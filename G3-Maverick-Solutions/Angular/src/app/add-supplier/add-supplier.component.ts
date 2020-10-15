@@ -20,6 +20,7 @@ export class AddSupplierComponent implements OnInit {
   supplier : Supplier = new Supplier();
   responseMessage: string = "Request Not Submitted";
   products: Product[] = [];
+  supplierNull: boolean = false;
 
   ngOnInit(): void {
 
@@ -45,6 +46,12 @@ export class AddSupplierComponent implements OnInit {
   }
 
   addSupplier(){
+    if (this.supplier.SupName == null || this.supplier.SupCode ==null || this.supplier.SupEmail == null || this.supplier.SupCell==null || this.supplier.SupStreet==null || this.supplier.SupStreetNr==null || this.supplier.SupSuburb==null)
+    {
+      this.supplierNull = true;
+    }
+    else
+    {
     this.dialogService.openConfirmDialog('Are you sure you want to add the supplier?')
     .afterClosed().subscribe(res => {
       if(res){
@@ -58,7 +65,7 @@ export class AddSupplierComponent implements OnInit {
     })
     }
   })
-
+    }
   }
 
   setProduct(val: Product){

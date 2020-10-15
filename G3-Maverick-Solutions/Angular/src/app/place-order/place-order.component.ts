@@ -38,7 +38,6 @@ export class PlaceOrderComponent implements OnInit {
   cusorderForm: FormGroup;
 
   loadDisplay(){  
-    debugger;  
     this.allCus= this.api.getAllCustomers();  
   
   } 
@@ -167,8 +166,8 @@ ngOnInit(): void {
     this.api.searchCustomer(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      }
       else{
           this.customer.CustomerID = res.CustomerID;
           this.customer.CusName = res.CusName;

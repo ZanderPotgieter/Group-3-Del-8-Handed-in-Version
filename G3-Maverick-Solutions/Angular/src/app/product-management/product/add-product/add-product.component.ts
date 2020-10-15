@@ -35,7 +35,7 @@ export class AddProductComponent implements OnInit {
   SelectSup: number;
   suppliers: Supplier[] = [];
   selectedCatID: number;
-
+  productNull: boolean = false;
   addToSystem: boolean = false;
   linkToContainer: boolean = false;
   
@@ -144,6 +144,12 @@ export class AddProductComponent implements OnInit {
   }
 
   Save(){
+    if (this.newProduct.ProdName == null || this.newProduct.ProdDesciption == null || this.newProduct.ProdReLevel == null )
+    {
+      this.productNull = true;
+    }
+    else
+    {
     this.dialogService.openConfirmDialog('Are you sure you want to add the product?')
           .afterClosed().subscribe(res => {
             if(res){
@@ -163,7 +169,7 @@ export class AddProductComponent implements OnInit {
     }
     })
     
-  }
+  }}
 
 
   Link(){

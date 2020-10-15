@@ -135,8 +135,11 @@
       <label>Email:</label>
       <input class="input"  name="email" [(ngModel)]="email" id="txtEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
     </div>
-    <span style="color:red" *ngIf="showError">
-      {{errorMessage}}</span>
+    <br>
+              <span style="color:red" *ngIf="regForm.get('email').errors && (regForm.get('email').touched || regForm.get('email').dirty)">
+                  <span *ngIf="regForm.get('email').errors.required">Email is required.<br></span>
+                  <span *ngIf="regForm.get('email').errors.email">Please enter in a valid email address.<br></span>
+              </span>
     
   
     <div class="form-row">

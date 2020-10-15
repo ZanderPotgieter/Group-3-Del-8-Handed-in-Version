@@ -50,6 +50,7 @@ export class SearchDonationComponent implements OnInit {
   inputDisabled:boolean = true;
   showEditProduct: boolean = false;
   donationNull: boolean = false;
+  showDonationDet: boolean = false;
 
   cell : string;
   name: string;
@@ -97,6 +98,7 @@ export class SearchDonationComponent implements OnInit {
     this.showResults = false; 
     this.showAllDons = false;
     this.showDonation = false;
+    this.showDonationDet = false;
     this.showText = false;
     this.showInput = false;
     this.showEditProduct = true;
@@ -134,6 +136,7 @@ export class SearchDonationComponent implements OnInit {
     this.showResults = false; 
     this.showAllDons = false;
     this.showDonation = false;
+    this.showDonationDet = false;
     this.showText = false;
     this.showInput = false;
   }
@@ -146,6 +149,7 @@ export class SearchDonationComponent implements OnInit {
     this.inputEnabled = true;
     this.showButtons = false;
     this.showDonation = false;
+    this.showDonationDet = false;
     
     this.showSearch = true;
     this.showResults = false; 
@@ -202,6 +206,7 @@ export class SearchDonationComponent implements OnInit {
         this.showResults = true; 
         this.showAllDons = true;
         this.showDonation = false;
+        this.showDonationDet = false;
         this.showText = false;
         this.showInput = false;
       }
@@ -234,6 +239,7 @@ export class SearchDonationComponent implements OnInit {
         this.showResults = true; 
         this.showAllDons = true;
         this.showDonation = false;
+        this.showDonationDet = false;
         this.showText = false;
         this.showInput = false;   
       }
@@ -278,6 +284,7 @@ export class SearchDonationComponent implements OnInit {
         this.showButtons = true;
         this.showAllDons = false;
         this.showDonation = true;
+        this.showDonationDet = true;
         this.showText = true;
         this.showInput = false;
 
@@ -299,6 +306,7 @@ export class SearchDonationComponent implements OnInit {
         this.showButtons = false;
         this.showAllDons = false;
         this.showDonation = true;
+        this.showDonationDet = true;
         this.showText = false;
         this.showInput = true;
   }
@@ -343,9 +351,9 @@ export class SearchDonationComponent implements OnInit {
             if (res.Message)
             {
               this.dialogService.openAlertDialog(res.Message);
-              this.router.navigate(["donation-management"])
+              
             }
-          
+            this.router.navigate(["donation-management"])
           })
         }
       })

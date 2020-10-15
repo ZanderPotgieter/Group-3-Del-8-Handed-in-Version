@@ -357,10 +357,15 @@ export class CreateDonationComponent implements OnInit {
           this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
           {
             console.log(res);
-            if(res.Message == "Donation Add Successful")
+            if (res.Message)
             {
               this.dialogService.openAlertDialog(res.Message);
-              this.showContainer = true; 
+            }
+            this.router.navigate(["donation-management"])
+            /* if(res.Message == "Donation Add Successful")
+            {
+              this.dialogService.openAlertDialog(res.Message);
+               this.showContainer = true; 
               this.showNameSearch = false;
               this.showSearch = false;
               this.showSave = false;
@@ -371,14 +376,15 @@ export class CreateDonationComponent implements OnInit {
               this.showResults = false;
               this.showAddDon = false;
               this.showDonation = false;
-              this.showDonatedProduct = true;
+              this.showDonatedProduct = false; 
+              this.router.navigate(["donation-management"])
             }
             else 
             {
               this.dialogService.openAlertDialog(res.Message);
               
               this.router.navigate(["donation-management"])
-            }
+            } */
           })
         }
       })

@@ -509,34 +509,34 @@ namespace ORDRA_API.Controllers
                 Customer_Order customerorder = db.Customer_Order.Where(x => x.CustomerOrderID == customerorderID).FirstOrDefault();
                 if (customerorder != null)
                 {
-                    if (customerorder.CustomerOrderStatusID == 2)
+                    if (customerorder.CustomerOrderStatusID != null)
                     {
-                        Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
-                        if (paymentType != null)
-                        {
-                            Payment payment = new Payment();
-                            payment.CustomerOrderID = customerorder.CustomerOrderID;
-                            payment.Customer_Order = customerorder;
-                            payment.PayAmount = payAmount;
-                            payment.PayDate = DateTime.Now;
-                            payment.PaymentTypeID = paymentTypeID;
-                            db.Payments.Add(payment);
-                            db.SaveChanges();
+                    Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
+                    if (paymentType != null)
+                    {
+                        Payment payment = new Payment();
+                        payment.CustomerOrderID = customerorder.CustomerOrderID;
+                        payment.Customer_Order = customerorder;
+                        payment.PayAmount = payAmount;
+                        payment.PayDate = DateTime.Now;
+                        payment.PaymentTypeID = paymentTypeID;
+                        db.Payments.Add(payment);
+                        db.SaveChanges();
 
-                            toReturn.Payment = db.Payments.ToList().LastOrDefault();
-                        }
-                        else
-                        {
-                            toReturn.Error = "Payment Type Not Found";
-                        }
+                        toReturn.Payment = db.Payments.ToList().LastOrDefault();
                     }
                     else
                     {
-                        toReturn.Error = "Order isn't elgible for payment.";
+                        toReturn.Error = "Payment Type Not Found";
                     }
+                }
+                else
+                {
+                toReturn.Error = "Order isn't elgible for payment.";
+                }
 
 
-
+            
                 }
                 else
                 {
@@ -564,14 +564,24 @@ namespace ORDRA_API.Controllers
             List<Payment> objectPayment = db.Payments.Include(x => x.Customer_Order).ToList();
             dynamic toReturn = new ExpandoObject();
             var id = OrderUpdate.CustomerOrderID;
+            List<Product_Order_Line> product_Orders = db.Product_Order_Line.Include(x => x.Customer_Order).Include(x => x.Product).Where(x => x.CustomerOrderID == objectOrder.CustomerOrderID).ToList();
 
             try
             {
                 objectOrder = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
                 objectP = db.Payments.Where(x => x.CustomerOrderID == id).FirstOrDefault();
+
                 if (objectP != null)
                 {
-                    if (objectOrder != null && objectOrder.CustomerOrderStatusID == 2)
+                    List<dynamic> products = new List<dynamic>();
+                    foreach (var prod in product_Orders)
+                    {
+                        Product product = db.Products.Where(x => x.ProductID == prod.ProductID).FirstOrDefault();
+                        Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == objectOrder.ContainerID && x.ProductID == prod.ProductID).FirstOrDefault();
+                        container_Product.CPQuantity = container_Product.CPQuantity - prod.PLQuantity;
+                        db.SaveChanges();
+                    }
+                        if (objectOrder.CustomerOrderStatusID != null)
                     {
                         objectOrder.CustomerOrderStatusID = 3;
                         db.SaveChanges();

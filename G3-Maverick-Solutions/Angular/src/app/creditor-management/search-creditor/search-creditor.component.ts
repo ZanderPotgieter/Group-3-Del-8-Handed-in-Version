@@ -121,7 +121,7 @@ removeCreditor(){
   this.dialogService.openConfirmDialog('Are you sure you want to remove this supplier as creditor?')
   .afterClosed().subscribe(res => {
     if(res){
-  this.api.removeCreditor(this.creditor.CreditorID).subscribe( (res:any)=> {
+  this.api.removeCreditor(this.creditor.SupplierID).subscribe( (res:any)=> {
     console.log(res);
     if(res.Message != null){
       this.dialogService.openAlertDialog(res.Message);

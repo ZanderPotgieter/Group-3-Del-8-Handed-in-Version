@@ -55,16 +55,17 @@
         </div>
 
         <div class="card" *ngIf="showSupOrder">
-          <label class="subheadinglabel">Supplier Order Details </label>
+          <label class="subheadinglabel">Supplier Order Details </label><br>
   <div class="left">
-    <div style="float:left; width: 50%">
+    <div style="float:left; width: 60%">
+      <label style="width: 100%">Supplier {{selectedOrder.SupName}}</label>
+    </div>
+    <div style="float:left; width: 40%">
       <label style="width: 100%">Date: {{selectedOrder.SODate | date:'yyyy-MM-dd'}}</label>
     </div>
-    <div style="float:left; width: 50%">
-      <label style="width: 100%">Status {{selectedOrder.Status}}</label>
-    </div>
+    
   </div>
- 
+ <br>
 
   <table [ngModelOptions]="{standalone: true}" style="width: 100%; padding: 0px">
    <th style="padding: 0px">Product</th>

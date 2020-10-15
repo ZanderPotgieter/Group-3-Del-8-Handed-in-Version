@@ -122,10 +122,13 @@ export class SearchManagerComponent implements OnInit {
         this.user.UserCell = res.user.UserCell;
         this.user.UserEmail = res.user.UserEmail;
 
-        //Get Employee Details
+        if(res.employee != null){
+          //Get Employee Details
         this.employee.EmployeeID = res.employee.EmployeeID;
         this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
         this.employee.EmpStartDate = res.employee.EmpStartDate;
+        }
+        
 
         //Get list Of Containers
         this.containers = res.containers;

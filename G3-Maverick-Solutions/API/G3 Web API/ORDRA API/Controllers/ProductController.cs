@@ -820,7 +820,7 @@ namespace ORDRA_API.Controllers
                     addPrice.Product = addedprod;
                     addPrice.CPriceR = (float)newProduct.CPriceR;
                     addPrice.UPriceR = (float)newProduct.UPriceR;
-                    addPrice.PriceStartDate = newProduct.PriceStartDate;
+                    addPrice.PriceStartDate = DateTime.Now;
                     addPrice.PriceEndDate = date;
                     db.Prices.Add(addPrice);
                     db.SaveChanges();

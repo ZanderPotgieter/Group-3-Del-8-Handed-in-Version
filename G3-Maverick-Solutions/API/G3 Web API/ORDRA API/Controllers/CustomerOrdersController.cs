@@ -509,25 +509,31 @@ namespace ORDRA_API.Controllers
                 Customer_Order customerorder = db.Customer_Order.Where(x => x.CustomerOrderID == customerorderID).FirstOrDefault();
                 if (customerorder != null)
                 {
-                    Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
-                    if (paymentType != null)
+                    if (customerorder.CustomerOrderStatusID == 2)
                     {
-                        Payment payment = new Payment();
-                        payment.CustomerOrderID = customerorder.CustomerOrderID;
-                        payment.Customer_Order = customerorder;
-                        payment.PayAmount = payAmount;
-                        payment.PayDate = DateTime.Now;
-                        payment.PaymentTypeID = paymentTypeID;
-                        db.Payments.Add(payment);
-                        db.SaveChanges();
+                        Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
+                        if (paymentType != null)
+                        {
+                            Payment payment = new Payment();
+                            payment.CustomerOrderID = customerorder.CustomerOrderID;
+                            payment.Customer_Order = customerorder;
+                            payment.PayAmount = payAmount;
+                            payment.PayDate = DateTime.Now;
+                            payment.PaymentTypeID = paymentTypeID;
+                            db.Payments.Add(payment);
+                            db.SaveChanges();
 
-                        toReturn.Payment = db.Payments.ToList().LastOrDefault();
+                            toReturn.Payment = db.Payments.ToList().LastOrDefault();
+                        }
+                        else
+                        {
+                            toReturn.Error = "Payment Type Not Found";
+                        }
                     }
                     else
                     {
-                        toReturn.Error = "Payment Type Not Found";
+                        toReturn.Error = "Order isn't elgible for payment.";
                     }
-
 
 
 

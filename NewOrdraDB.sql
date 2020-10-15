@@ -873,10 +873,10 @@ INSERT INTO Supplier_Order_Status (SOSDescription)
 VALUES ('Placed'),
 	   ('Cancelled'),
 	   ('Delivered'),
-	   ('BackOrderd');
+	   ('BackOrdered');
 
 INSERT INTO Supplier_Order (SupplierID, [ContainerID], SupplierOrderStatusID, SODate)
-VALUES ('1', '3', '1', '2020-04-10'),
+VALUES ('1', '3', '3', '2020-04-10'),
 	   ('3', '2', '2', '2020-02-28'),
 	   ('2', '1', '3', '2020-07-12');
 
@@ -938,7 +938,6 @@ VALUES('1','4','20','2020-06-10'),
 	   ('1','5','20','2020-06-09'),
 	   ('2','6','35','2020-06-08'),
 	   ('3','4','20','2020-06-09');
-
 
 
 

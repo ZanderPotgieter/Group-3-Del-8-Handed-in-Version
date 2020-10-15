@@ -63,8 +63,9 @@ export class SearchManagerComponent implements OnInit {
       caption: [''],
       captionCV: [''],
 
-      empShiftsCompleted: [''],
-      empStartDate: [''],
+      
+      EmpShiftsCompleted: [''],
+      EmployeeStartDate: [''],
 
       ManNationality: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],
       ManQualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('[a-zA-Z ]*')]],
@@ -122,10 +123,13 @@ export class SearchManagerComponent implements OnInit {
         this.user.UserCell = res.user.UserCell;
         this.user.UserEmail = res.user.UserEmail;
 
-        //Get Employee Details
+        if(res.employee != null){
+          //Get Employee Details
         this.employee.EmployeeID = res.employee.EmployeeID;
         this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
         this.employee.EmpStartDate = res.employee.EmpStartDate;
+        }
+        
 
         //Get list Of Containers
         this.containers = res.containers;

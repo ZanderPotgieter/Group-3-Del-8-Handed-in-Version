@@ -861,10 +861,10 @@ namespace ORDRA_API.Controllers
             toReturn.product = new ExpandoObject();
 
 
-            ///try
-            //{
+            try
+            {
                 //search for the supplier and product in the database
-               // Supplier supplier = db.Suppliers.Where(X => X.SupplierID == supplierID).FirstOrDefault();
+                // Supplier supplier = db.Suppliers.Where(X => X.SupplierID == supplierID).FirstOrDefault();
                 Product product = db.Products.Where(x => x.ProductID == productID).FirstOrDefault();
 
                 if ( product != null)
@@ -913,11 +913,11 @@ namespace ORDRA_API.Controllers
 
 
                 }
-            //}
-            //catch
-            //{
-            //    toReturn.Error = "Receiving Stock Failed";
-            //}
+        }
+            catch
+            {
+                toReturn.Error = "Receiving Stock Failed";
+            }
 
             return toReturn;
 
@@ -1103,6 +1103,7 @@ namespace ORDRA_API.Controllers
                                         }
                                 }
                             }
+
                         }
 
                         if(fulfilled == true)
@@ -1112,7 +1113,6 @@ namespace ORDRA_API.Controllers
                             db.SaveChanges();
                         }
 
-                    fulfilled = false;
                     }
                 }
 

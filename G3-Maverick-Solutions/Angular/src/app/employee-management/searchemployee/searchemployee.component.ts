@@ -133,7 +133,7 @@ export class SearchemployeeComponent implements OnInit {
       {
 
         this.user = res.user;
-        this.employee = res.employee;
+        this.employees = res.employee;
        /*  //Get User Details
         this.user.UserID = res.user.UserID;
         this.user.UserName = res.user.UserName;
@@ -195,6 +195,7 @@ export class SearchemployeeComponent implements OnInit {
       this.employee.EmployeeID = res.employee.EmployeeID;
       this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
       this.employee.EmpStartDate = res.employee.EmpStartDate;
+      this.employee.UserID = res.user.UserID;
 
       this.showSearch = false;
       this.showResults = true;
@@ -235,14 +236,15 @@ export class SearchemployeeComponent implements OnInit {
       if (res)
       {
         this.employee.UserID = this.user.UserID;
-        this.api.updateEmployee(this.employee).subscribe( (res:any)=> {
+        console.log(this.employee);
+         this.api.updateEmployee(this.employee).subscribe( (res:any)=> {
           console.log(res);
           if(res.Message)
           {
             this.dialogService.openAlertDialog(res.Message);
           }
           //this.router.navigate(["employee-management"]);
-        })
+        }) 
       }
     })
  

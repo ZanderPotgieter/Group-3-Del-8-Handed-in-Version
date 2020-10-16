@@ -1,6 +1,9 @@
 <body>
     
     <h1>View Customer Order</h1>
+    <div class="divright">
+        <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
 <form [formGroup] = 'orderForm'>
     <div *ngIf="showcriteria"class="card" style="padding: 2px 2px;" >
 
@@ -9,7 +12,6 @@
         </div>
         <div class="divleft">
             <button style="height: 30px;" (click)="selectedOrderNo()">Order No.</button>
-            <button style="height: 30px;" (click)="selectedCell()">Cell No.</button>
             <button style="height: 30px;" (click)="searchAll()">View all</button>
             <button style="height: 30px;" (click)="searchAllFulfilled()">Show Fulfilled Orders</button>
         </div>
@@ -147,7 +149,7 @@
                      <td>{{item.Quantity}}</td>
                      <td>R{{item.Price}}</td>
                     <td>R{{item.Subtotal}}</td>
-                    <td><button class="btntable" style="height: 30px;" (click) ="remove(ndx)">X</button></td>
+                <!--    <td><button class="btntable" style="height: 30px;" (click) ="remove(ndx)">X</button></td>-->
                 </tr>
 
                 <tr>
@@ -172,7 +174,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><button  type="submit" (click)="showPayment()" >Pay</button></th>
+                    <th><button  type="submit" style="height: 30px;" style="width: 70px;" (click)="showPayment()" >Pay</button></th>
                 </tr>
             </table>
 
@@ -186,14 +188,14 @@
         <div  class="card" style="padding: 2px 2px;" *ngIf = "showPay">
             <div class="divleft" >
                 <label for="Product">Payment Method: </label>
-                 <select required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
-                     <option *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
+                 <select [ngModelOptions]="{standalone: true}" required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
+                     <option [ngModelOptions]="{standalone: true}" *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
                  </select>
              </div>
       
                 <div class="divleft">
                     <label for="quantity">Amount </label>
-                    <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+                    <input  [ngModelOptions]="{standalone: true}" style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
                     
                   </div>
               <div class="divleft" *ngIf="ShowOustanding">

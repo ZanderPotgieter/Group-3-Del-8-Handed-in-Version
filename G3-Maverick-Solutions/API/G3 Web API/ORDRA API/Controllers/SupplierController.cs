@@ -136,7 +136,7 @@ namespace ORDRA_API.Controllers
                     else
                     {
 
-                        toReturn.Message = "Record Not Found";
+                        toReturn.Message = "Supplier Not Found";
 
                     }
                 }
@@ -176,7 +176,7 @@ namespace ORDRA_API.Controllers
                     newSuppliertoAdd.SupCode = newSupplier.SupCode;
                     db.Suppliers.Add(newSuppliertoAdd);
                     db.SaveChangesAsync();
-                    toReturn.Message = "Add Successful";
+                    toReturn.Message = "Supplier Add Successful";
                 }
                           
                 else
@@ -186,7 +186,7 @@ namespace ORDRA_API.Controllers
             }
                 catch (Exception)
                 {
-                    toReturn.Message = "Add UnSuccessful";
+                    toReturn.Message = "Supplier already exists.";
 
                 }
 

@@ -197,6 +197,7 @@ namespace ORDRA_API.Controllers
                                 dynamic prod = new ExpandoObject();
                                 prod.DPQuantity = prodObj.DPQuantity;
                                 prod.ProductID = prodObj.ProductID;
+                                prod.ContainerID = prodObj.ContainerID;
                                 prod.ProdName = prodObj.Product.ProdName;
                                 prodList.Add(prod);
                             }
@@ -273,6 +274,7 @@ namespace ORDRA_API.Controllers
                                 dynamic prod = new ExpandoObject();
                                 prod.DPQuantity = prodObj.DPQuantity;
                                 prod.ProductID = prodObj.ProductID;
+                                prod.ConatinerID = prodObj.Container;
                                 prod.ProdName = prodObj.Product.ProdName;
                                 prodList.Add(prod);
                             }
@@ -345,6 +347,7 @@ namespace ORDRA_API.Controllers
                             dynamic prod = new ExpandoObject();
                             prod.DPQuantity = prodObj.DPQuantity;
                             prod.ProductID = prodObj.ProductID;
+                            prod.ContainerID = prodObj.Container;
                             prod.ProdName = prodObj.Product.ProdName;
                             prodList.Add(prod);
                         }
@@ -676,6 +679,7 @@ namespace ORDRA_API.Controllers
                         donProd.ProductID = prodID;
                         donProd.DonationID = donID;
                         donProd.DPQuantity = quantity;
+                        donProd.ContainerID = contID;
                         db.Donated_Product.Add(donProd);
                         conProd.CPQuantity = conProd.CPQuantity - quantity;
                         db.SaveChanges();
@@ -767,8 +771,8 @@ namespace ORDRA_API.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             dynamic toReturn = new ExpandoObject();
-            /*try
-            {*/
+            try
+            {
                 Donation_Recipient donationRecipient = db.Donation_Recipient.Where(z => z.DrCell == cell).FirstOrDefault();
                 Donation donation = db.Donations.Where(z => z.RecipientID == donationRecipient.RecipientID).ToList().LastOrDefault();
                 //toReturn.Donation = searchDonationByID(donation.DonationID);
@@ -798,20 +802,62 @@ namespace ORDRA_API.Controllers
                         don.DonationStatusID = donation.DonationStatusID;
                         //don.DonStatus = donation.Donation_Status.DSDescription;
                         toReturn.donation = don;
+                        toReturn.donationID = donation.DonationID;
 
                     }
 
 
                     
                 }
-            //}
-            /*catch (Exception)
+            }
+            catch (Exception)
             {
                 toReturn.Message = "Failed to get donation";
-            }*/
+            }
 
             return toReturn;
 
+        }
+
+        [HttpGet]
+        [Route("getDonatedProducts")]
+        public object getDonatedProducts(int donID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            dynamic toReturn = new ExpandoObject();
+            try
+            {
+                List<dynamic> donList = new List<dynamic>();
+                List<Donated_Product> donated = db.Donated_Product.Where(z => z.DonationID == donID).ToList();
+                if (donated != null)
+                {
+                    foreach(var item in donated)
+                    {
+                        dynamic donObj = new ExpandoObject();
+                        donObj.DonationID = donID;
+                        donObj.ProductID = item.ProductID;
+                        donObj.ContainerID = item.ContainerID;
+                        donObj.DPQuantity = item.DPQuantity;
+
+                        //donObj.ProdName = item.Product.ProdName;
+                        //donObj.ConName = item.Container.ConName;
+
+                        donList.Add(donObj);
+                    }
+
+                    toReturn.donatedProducts = donList;
+                }
+                else
+                {
+                    toReturn.Message = "No donated products found";
+                }
+            }
+            catch
+            {
+                toReturn.Message = "Failed to get donated products";
+            }
+
+            return toReturn;
         }
     }
 }

@@ -113,6 +113,7 @@
         <EntityTypeShape EntityType="OrdraDBModel.Creditor" Width="1.5" PointX="3" PointY="17.75" />
         <AssociationConnector Association="OrdraDBModel.FK_CredPaymentC" />
         <AssociationConnector Association="OrdraDBModel.FK_CredSupplier" />
+        <AssociationConnector Association="OrdraDBModel.FK_DonProdContainer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

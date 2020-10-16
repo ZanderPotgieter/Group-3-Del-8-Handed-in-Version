@@ -44,10 +44,10 @@ export class CreditorService {
     return this.http.put<Creditor>(this.url + '/updateCreditor/', creditor, httpOptions);
   }
 
-  removeCreditor(creditorID: number): Observable<Creditor>
+  removeCreditor(supplierID: number): Observable<Creditor>
   {
     const httpOptions = { headers: new HttpHeaders ({ 'Content-Type': 'application/json'}) };
-    return this.http.delete<Creditor>(this.url + '/removeCreditor?id=' + creditorID, httpOptions);
+    return this.http.delete<Creditor>(this.url + '/removeCreditor?id=' + supplierID, httpOptions);
  
   }
 

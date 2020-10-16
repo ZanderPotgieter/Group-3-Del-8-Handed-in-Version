@@ -481,10 +481,13 @@ CREATE TABLE Donated_Product
 (
 	ProductID int,
 	DonationID int,
+	ContainerID int,
 	DPQuantity int,
 	Primary Key(ProductID, DonationID),
 	CONSTRAINT FK_DPProduct FOREIGN KEY (ProductID)
     REFERENCES Product(ProductID),
+	CONSTRAINT FK_DonProdContainer FOREIGN KEY (ContainerID)
+    REFERENCES Container(ContainerID),
 	CONSTRAINT FK_DPDonation FOREIGN KEY (DonationID)
     REFERENCES Donation(DonationID)
 )
@@ -870,10 +873,10 @@ INSERT INTO Supplier_Order_Status (SOSDescription)
 VALUES ('Placed'),
 	   ('Cancelled'),
 	   ('Delivered'),
-	   ('BackOrderd');
+	   ('BackOrdered');
 
 INSERT INTO Supplier_Order (SupplierID, [ContainerID], SupplierOrderStatusID, SODate)
-VALUES ('1', '3', '1', '2020-04-10'),
+VALUES ('1', '3', '3', '2020-04-10'),
 	   ('3', '2', '2', '2020-02-28'),
 	   ('2', '1', '3', '2020-07-12');
 
@@ -896,10 +899,12 @@ VALUES ('1', '2', '5000.00', '2020-01-29', 'Donated to help less priviledged chi
 	   ('2', '3' ,'0.00', '2020-04-10', 'Donated to a program that tutors students for free'),
 	   ('1', '1', '6000.00' , '2020-05-20', 'Donated to help people affected by COVID 19');
 
-INSERT INTO Donated_Product (ProductID, DonationID, DPQuantity)
-VALUES ('1', '1', '20'),
-	   ('2', '2', '50'),
-	   ('3', '2', '15');
+INSERT INTO Donated_Product (ProductID, DonationID, ContainerID, DPQuantity)
+VALUES ('1', '1', '1', '20'),
+	   ('2', '2', '2', '50'),
+	   ('3', '2', '2', '15'),
+	   ('2', '1', '1', '15');
+
 
 INSERT INTO Marked_Off_Reason (MODescription)
 VALUES ('Damaged'),
@@ -933,7 +938,6 @@ VALUES('1','4','20','2020-06-10'),
 	   ('1','5','20','2020-06-09'),
 	   ('2','6','35','2020-06-08'),
 	   ('3','4','20','2020-06-09');
-
 
 
 

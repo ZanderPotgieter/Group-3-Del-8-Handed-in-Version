@@ -31,6 +31,7 @@ showRegister: boolean = false;
 showError: boolean = false;
 showInvalidPassword: boolean = false;
 showContainerNotSelected: boolean = false;
+userNull: boolean = false;
 errorMessage: string;
 ConfirmPassword: string;
 password: string;
@@ -81,7 +82,8 @@ reportingEnabled: boolean = false;
       UserName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],  
       UserSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],   
       UserCell: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
-      UserEmail: ['', [Validators.required, Validators.email]],   
+      UserEmail: ['', [Validators.required, Validators.email]], 
+      email:  ['', [Validators.required, Validators.email]],  
       UserPassword: [''], 
       ConfirmPassword: [''],
     }); 
@@ -184,6 +186,12 @@ showRP()
 
 
 saveUser(){
+  if (this.user.UserName == null || this.user.UserSurname ==null || this.user.UserEmail == null )
+    {
+      this.userNull = true;
+    }
+    else
+    {
   this.user.UserPassword = this.password;
 this.api.registerUser(this.user).subscribe((res : any)=>{
   console.log(res);
@@ -207,7 +215,7 @@ this.api.registerUser(this.user).subscribe((res : any)=>{
   this.showGenerateOTP = false;
   this.showInvalidPassword = false;}
 })
-
+    }
 }
 
 Validate() {

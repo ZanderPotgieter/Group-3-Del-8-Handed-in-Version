@@ -38,7 +38,6 @@ export class PlaceOrderComponent implements OnInit {
   cusorderForm: FormGroup;
 
   loadDisplay(){  
-    debugger;  
     this.allCus= this.api.getAllCustomers();  
   
   } 
@@ -167,8 +166,8 @@ ngOnInit(): void {
     this.api.searchCustomer(this.name,this.surname).subscribe( (res:any)=> {
       console.log(res);
       if(res.Message != null){
-      this.responseMessage = res.Message;
-      alert(this.responseMessage)}
+        this.dialogService.openAlertDialog(res.Message);
+      }
       else{
           this.customer.CustomerID = res.CustomerID;
           this.customer.CusName = res.CusName;
@@ -443,13 +442,17 @@ else{
 
   gotoCustomerOrderManagement()
   {
+    this.dialogService.openConfirmDialog('Are you sure you want to cancel the order?')
+    .afterClosed().subscribe(res => {
+      if(res){
     this.api.cancelCustomerOrder(this.customerOrder.CustomerOrderID).subscribe((res: any)=> {
       console.log(res);
       if(res.Message){
-        this.dialogService.openAlertDialog(this.errorMessage);
+        this.dialogService.openAlertDialog("Customer Order Cancelled.");}
     this.router.navigate(["customer-order-management"])
-  }
-} )
+  })
+}
+});
 }
 
 

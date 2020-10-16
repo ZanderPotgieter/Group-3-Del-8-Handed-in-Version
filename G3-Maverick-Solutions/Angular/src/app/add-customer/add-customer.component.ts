@@ -19,6 +19,7 @@ export class AddCustomerComponent implements OnInit {
   cusForm: FormGroup;
    customer : Customer = new Customer();
    responseMessage: string = "Request Not Submitted";
+   customerNull: boolean = false;
   
   
   ngOnInit(): void {
@@ -36,6 +37,12 @@ export class AddCustomerComponent implements OnInit {
   }
 
   addCustomer(){
+    if (this.customer.CusName == null || this.customer.CusSurname ==null || this.customer.CusEmail == null || this.customer.CusCell==null || this.customer.CusStreet==null || this.customer.CusStreetNr==null|| this.customer.CusCode==null || this.customer.CusSuburb==null)
+    {
+      this.customerNull = true;
+    }
+    else
+    {
     this.dialogService.openConfirmDialog('Are you sure you want to add the customer?')
     .afterClosed().subscribe(res => {
       if(res){
@@ -48,7 +55,7 @@ export class AddCustomerComponent implements OnInit {
     }
     });
   }
-
+  }
   
 
   gotoCustomerManagment(){

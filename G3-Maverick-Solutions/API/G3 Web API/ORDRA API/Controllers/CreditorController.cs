@@ -200,7 +200,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                objectCreditor = db.Creditors.Find(id);
+                objectCreditor = db.Creditors.Where(x => x.SupplierID == id).FirstOrDefault() ;
 
                 if (objectCreditor == null)
                 {
@@ -208,7 +208,7 @@ namespace ORDRA_API.Controllers
                 }
                 else
                 {
-                    List<Creditor_Payment> payments = db.Creditor_Payment.Where(x => x.CreditorID == id).ToList();
+                    List<Creditor_Payment> payments = db.Creditor_Payment.Where(x => x.SupplierID == id).ToList();
                     if(payments.Count == 0)
                     {
                         db.Creditors.Remove(objectCreditor);

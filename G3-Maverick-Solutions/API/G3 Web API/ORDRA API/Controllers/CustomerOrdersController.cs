@@ -178,7 +178,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderStatusID == 2).ToList();
+                List<Customer_Order> customerOrders = db.Customer_Order.Include(x => x.Customer).Include(x => x.Container).Include(x => x.Customer_Order_Status).Where(x => x.CustomerOrderStatusID == 2).ToList();
                 if (customerOrders != null)
                 {
                     List<dynamic> orders = new List<dynamic>();
@@ -191,7 +191,8 @@ namespace ORDRA_API.Controllers
                         order.CusSurname = ord.Customer.CusSurname;
                         order.CusOrdNumber = ord.CusOrdNumber;
                         order.CusOrdDate = ordDate.ToString("yyyy-MM-dd");
-                        order.CusOrdStatus = ord.CustomerOrderStatusID;
+                        order.CusOrdContainer = ord.Container.ConName;
+                        order.CusOrdStatus = ord.Customer_Order_Status.CODescription;
                         orders.Add(order);
                     }
                     toReturn = orders;
@@ -509,6 +510,8 @@ namespace ORDRA_API.Controllers
                 Customer_Order customerorder = db.Customer_Order.Where(x => x.CustomerOrderID == customerorderID).FirstOrDefault();
                 if (customerorder != null)
                 {
+                    if (customerorder.CustomerOrderStatusID != null )
+                    {
                     Payment_Type paymentType = db.Payment_Type.Where(x => x.PaymentTypeID == paymentTypeID).FirstOrDefault();
                     if (paymentType != null)
                     {
@@ -527,10 +530,14 @@ namespace ORDRA_API.Controllers
                     {
                         toReturn.Error = "Payment Type Not Found";
                     }
+                }
+                else
+                {
+                toReturn.Error = "Order isn't elgible for payment.";
+                }
 
 
-
-
+            
                 }
                 else
                 {
@@ -563,9 +570,25 @@ namespace ORDRA_API.Controllers
             {
                 objectOrder = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
                 objectP = db.Payments.Where(x => x.CustomerOrderID == id).FirstOrDefault();
+                List<Product_Order_Line> product_Orders = db.Product_Order_Line.Include(x => x.Customer_Order).Include(x => x.Product).Where(x => x.CustomerOrderID == objectOrder.CustomerOrderID).ToList();
+                
                 if (objectP != null)
                 {
-                    if (objectOrder != null && objectOrder.CustomerOrderStatusID == 2)
+                    List<dynamic> products = new List<dynamic>();
+                    foreach (var prod in product_Orders)
+                    {
+                        Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == objectOrder.ContainerID && x.ProductID == prod.ProductID).FirstOrDefault();
+                        if (container_Product.CPQuantity < prod.PLQuantity)
+                        {
+                            toReturn.Message = "Oops. Not enough stock.";
+                        }
+                        else
+                        {
+                            container_Product.CPQuantity = container_Product.CPQuantity - prod.PLQuantity;
+                            db.SaveChanges();
+                        }
+                    }
+                        if (objectOrder.CustomerOrderStatusID == 2)
                     {
                         objectOrder.CustomerOrderStatusID = 3;
                         db.SaveChanges();
@@ -909,7 +932,6 @@ namespace ORDRA_API.Controllers
            try
             {
                 objectOrder = db.Customer_Order.Where(x => x.CustomerOrderID == id).FirstOrDefault();
-                if (objectOrder != null && objectOrder.CustomerOrderStatusID == 1)
                     if (objectOrder != null && objectOrder.CustomerOrderStatusID == 1)
                 {
                     objectOrder.CustomerOrderStatusID = 4;

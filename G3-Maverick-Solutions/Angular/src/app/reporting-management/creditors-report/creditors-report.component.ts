@@ -6,7 +6,7 @@ import { ReportService } from '../report.service';
 //import * as jsPDF from 'jspdf';
 import {jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-//import { Chart } from 'chart.js';
+import { Chart } from 'chart.js';
 //import { ThrowStmt } from '@angular/compiler';
 //import { max } from 'rxjs/operators';
 
@@ -23,6 +23,10 @@ export class CreditorsReportComponent implements OnInit {
   TableData: object;
   totalBalance: any;
   responseMessage: string =  "Request not submitted";
+  ChartData: object;
+  chart: Chart ;
+  showTable: boolean = false;
+  showChart: boolean = false;
 
 
   ngOnInit(): void {
@@ -82,8 +86,93 @@ export class CreditorsReportComponent implements OnInit {
         const sum = totalBal.reduce((a,b) => a+b, 0);
         this.totalBalance = sum || 0;
         console.log(this.totalBalance);
+        this.showTable = true;
+        this.showChart = false;
       } 
     })
+  }
+
+  GenerateGraph()
+  {
+    if (this.chart)
+   {
+      this.chart.destroy();
+   }
+
+    this.showChart = true;
+    this.showTable = false;
+     this.showErrorMessage =false;
+     
+     this.reportService.getCreditorGraphData().subscribe((res) =>
+     {
+       console.log(res);
+       //this.TableData = res['TableData'];
+
+       let keys = res['ChartData'].map((z)=>z.Name);
+       let Vals = res['ChartData'].map((z)=>z.Sum[0]);
+       
+
+        let totalTot = res['ChartData'].map((z) => z.Sum[0]);
+       const sum = totalTot.reduce((a,b) => a+b, 0);
+       this.totalBalance = sum || 0;
+       console.log(this.totalBalance);  
+
+       var ctx = document.getElementById('canvas');
+       this.chart = new Chart(ctx,{
+       type: 'bar',
+       data: {
+         labels: keys,
+         datasets: [
+           {
+           label:'Creditor account balances in Rands (amounts owed to creditors)',
+           data: Vals,
+           fill: false,
+           barPercentage: 0.70,
+           backgroundColor: [
+             'rgba(54, 162, 235, 1)',
+             'rgba(255, 99, 132, 1)',
+             'rgba(255, 206, 86, 1)',
+             'rgba(190, 204, 102, 1)',
+             'rgba(153, 102, 255, 1)',
+             'rgba(255, 159, 64, 1)',
+             'rgba(102, 204, 194, 1)',
+             'rgba(180, 75, 75, 1)'],
+           borderColor: [
+             'rgba(54, 162, 235, 1)',
+             'rgba(255, 99, 132, 1)',
+             'rgba(255, 206, 86, 1)',
+             'rgba(190, 204, 102, 1)',
+             'rgba(153, 102, 255, 1)',
+             'rgba(255, 159, 64, 1)',
+             'rgba(102, 204, 194, 1)',
+             'rgba(180, 75, 75, 1)' ],
+           borderWidth: 1}],
+       options:{
+           legend:{
+             display: false,
+           },
+           title:{
+             text: 'Amount owed to creditor',
+             fontSize: 50,
+             display: true,
+           },
+           scales:{
+             xAxes: [{
+               display: true,
+             }],
+             yAxes:[{
+               display: true,
+               ticks:{
+               beginAtZero: true,
+                 
+               }
+             }],
+           }
+         }
+       }
+
+     })
+   });
   }
 
   cancel()

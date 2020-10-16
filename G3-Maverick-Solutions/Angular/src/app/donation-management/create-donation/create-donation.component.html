@@ -1,4 +1,6 @@
-
+<div class="divright">
+    <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
 <body>
     <h1 *ngIf = "showDonation" >Create Donation</h1>
     <h1 *ngIf="showDonatedProduct">Add Donated Products</h1>
@@ -158,7 +160,7 @@
 
 
    
-        <div *ngIf="showContainer" class="card">
+        <!-- <div *ngIf="showContainer" class="card">
             <div class="divleft">
                 <label class="subheadinglabel" >Select container that donated products:</label>
                 <br>
@@ -166,9 +168,9 @@
                 <select required formControlName="ContainerID" class="form-control" [(ngModel)]="container.ContainerID" name="ContainerID" id="ContainerID" required >
                     <option  *ngFor="let container of containers" value="{{container.ContainerID}}">{{container.ConName}}</option>
               </select>
-                <!-- <select required formControlName="ContainerID" name="ContainerID" [(ngModel)]="container.ContainerID" (ngModelChange)="ContainerSelection($event)">
+                 <select required formControlName="ContainerID" name="ContainerID" [(ngModel)]="container.ContainerID" (ngModelChange)="ContainerSelection($event)">
                     <option *ngFor="let con of containers" [ngValue]="con">{{con.ConName}}</option>
-                </select> -->
+                </select> 
 
                 <button type="submit" (click)="selectContainer(container.ContainerID)" >Select container</button>
                 <button type="button" (click)="cancel()" >Cancel</button>
@@ -180,12 +182,12 @@
                 <label  class="subheadinglabel"> Products donated from Container: {{container.ConName}}</label>
                 <br>
                 <label for="Product">Product: </label>
-                <select formControlName="ProductID" class="form-control" [(ngModel)]="product.ProductID" name="ProductID" id="ProductID" required >
-                    <option  *ngFor="let product of products" value="{{product.ProductID}}">{{product.ProdName}}</option>
+                <select required formControlName="ProductID" class="form-control" [(ngModel)]="location.LocationStatusID" name="LocationStatusID" id="LocationStatusID" required >
+                    <option  *ngFor="let prod of products" value="{{status.LocationStatusID}}">{{status.LSDescription}}</option>
               </select>
-                <!-- <select required formControlName="ProductID" name="ProductID" [(ngModel)]="product.ProductID" (ngModelChange)="addProduct($event)">
+                <select required formControlName="ProductID" name="ProductID" [(ngModel)]="product.ProductID" (ngModelChange)="addProduct($event)">
                     <option *ngFor="let product of products" [ngValue]="product">{{product.Prodname}}</option>
-                </select> -->
+                </select> 
                 <br>
                 <label>Quantity</label>
                 <input type = "number" formControlName="DPQuantity" class="form-control" [(ngModel)]="donatedProduct.DPQuantity" name="DPQuantity" id="DPQuantity"  pattern="[0-9]*" required >
@@ -211,7 +213,7 @@
 
         <button  type="submit" (click)="saveProducts()" >Save products</button>
         
-    </div>
+    </div> -->
         
      </form> 
 

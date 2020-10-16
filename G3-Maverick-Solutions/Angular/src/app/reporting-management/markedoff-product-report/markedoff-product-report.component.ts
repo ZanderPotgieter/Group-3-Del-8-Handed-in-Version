@@ -89,7 +89,6 @@ export class MarkedoffProductReportComponent implements OnInit {
       this.chart.destroy();
    }
 
- 
      this.showErrorMessage =false;
      
      this.reportService.getMarkedOffProductReportData().subscribe((res) =>

@@ -1,9 +1,9 @@
 <h1>Place Order</h1>
+<div class="divright">
+    <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
 <form [formGroup]="cusorderForm">
-        
-           
-       
-        <br>
+
         <div class="card" *ngIf="showInitiate">
 
         <div class="divleft" style="padding: 2px 2px;" >
@@ -134,7 +134,7 @@
                 <div *ngIf="quantyNull" class ="diveleft">
                     <label style="color: red; font-size: 13px; width :1000px">No quantity has been entered. Please enter a quantity for the product. </label>
                 </div>
-                <button style="height: 30px;" (click)="listProducts()">Add</button>
+                <button style="height: 30px;" (click)="listProducts()">Add</button> <button style="height: 30px;" (click)="gotoCustomerOrderManagement()">Cancel Order</button>
          </div>
         </div>
         <br>

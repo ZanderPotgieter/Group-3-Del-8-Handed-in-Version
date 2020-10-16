@@ -1,6 +1,9 @@
 <body>
     <form>
         <h1>Stock Take Form</h1>
+        <div class="divright">
+            <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+    </div>
         <div class = "card">
             <div *ngIf="showButton">
                 <button style="width: 50%" type="submit" (click)="generateForm()">Generate Stock Take Form</button>

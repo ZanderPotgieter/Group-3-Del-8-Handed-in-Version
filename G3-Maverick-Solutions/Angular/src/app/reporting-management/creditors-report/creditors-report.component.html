@@ -1,23 +1,38 @@
 <body>
     <h1>Generate Creditor Report</h1>
+    <div class="divright">
+        <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
     <div id="formDiv">
     
                 
-                <div class="card" >
-                    <button type="submit" id="GenButton" (click)="GenerateReport()" >Generate Report</button>
-                    <!-- <button type="button" id="DownButton" (click)="DownloadPDF()" >Download Report</button> -->
-                    <!-- <button type="button" (click)="PrintReport" >Print Report</button> -->
-                    <button type="button" (click)="cancel()" >Cancel</button>
-                    <br><br>
-                    <!-- <div style="text-align: left;">
-                    <label><span style="white-space: nowrap; text-align: left;">This report shows creditors and details about active creditor accounts</span></label>
-                    </div> -->
-                     
-                </div>
+        <div class="card" >
+            <button type="submit" id="GenButton" (click)="GenerateReport()" >Generate Report</button>
+            <button type="submit" id="GenButton" (click)="GenerateGraph()" >Generate Graph</button>
+            <!-- <button type="button" id="DownButton" (click)="DownloadPDF()" >Download Report</button> -->
+            <!-- <button type="button" (click)="PrintReport" >Print Report</button> -->
+            <button type="button" (click)="cancel()" >Cancel</button>
+            <br><br>
+            <!-- <div style="text-align: left;">
+            <label><span style="white-space: nowrap; text-align: left;">This report shows creditors and details about active creditor accounts</span></label>
+            </div> -->
+        </div>
         
-                <br><br>
+            <br><br>
 
-                <!--To Display Table-->
+        <div class="card" *ngIf = "showChart">
+            <h1>Creditor Chart</h1>
+            <h2><img width="190"  src="https://www.ordra.co.za/image/catalog/info/ORDRAA1%20(2).png"></h2>
+                            
+            <div id="ChartDiv">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+
+
+        
+        <div *ngIf = "showTable">
+        <!--To Display Table-->
                 <div id="TablesDiv">
                     <div class="Creditorstable">
                         <table class="table" id="jsPDFTable">
@@ -51,8 +66,8 @@
 
                         </table>
                     </div>
-                    
                 </div>
+            </div>
     <router-outlet></router-outlet>
 </div>
     

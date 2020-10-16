@@ -151,7 +151,7 @@ handleFileInputCV(file: FileList)
       cv: [''],
       image: [''],
 
-      empShiftsCompleted: ['',[Validators.required]],
+      empShiftsCompleted: ['',[Validators.required, Validators.pattern('[0-9]*')]],
       empStartDate: ['',[Validators.required]],
     }); 
 
@@ -175,45 +175,47 @@ handleFileInputCV(file: FileList)
       this.api.searchEmployee(this.name,this.surname).subscribe( (res:any)=> {
         console.log(res);
         
-          if (res.Message!=null)
+          if (res.Message== "Employee Record Not Found")
           {
-            this.dialogService.openAlertDialog(res.Message);
+               //Get User Details
+               this.user.UserID = res.user.UserID;
+               this.user.UserName = res.user.UserName;
+               this.user.UserSurname = res.user.UserSurname;
+               this.user.UserCell = res.user.UserCell;
+               this.user.UserEmail = res.user.UserEmail;
+       
+               //Get Employee Details
+               if (this.employee== null) //check if employee exist
+               {
+                 this.showButton = true;
+                 /* this.showDate = true;
+                 this.showText = false; */
+               }
+               else //display employee details if record exists
+               { 
+                 //alert(this.dupMessage);
+                 this.employee.EmployeeID = res.employee.EmployeeID;
+                 this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
+                 this.employee.EmpStartDate = res.employee.EmpStartDate;
+                 this.empID = res.employee.EmployeeID;
+       
+                 this.showButton = false;
+               /*  this.showDate = false;
+                 this.showText = true; */
+               }
+              this.showSearch = false;
+             this.showResults = true;
+             this.showNewEmp = true;
+             this.showUpload = false;
+             this.showUploadImg= false;
+             this.showUploadCv = false; 
           }
           else 
           {
-                  //Get User Details
-                this.user.UserID = res.user.UserID;
-                this.user.UserName = res.user.UserName;
-                this.user.UserSurname = res.user.UserSurname;
-                this.user.UserCell = res.user.UserCell;
-                this.user.UserEmail = res.user.UserEmail;
-        
-                //Get Employee Details
-                if (this.employee== null) //check if employee exist
-                {
-                  this.showButton = true;
-                  /* this.showDate = true;
-                  this.showText = false; */
-                }
-                else //display employee details if record exists
-                { 
-                  //alert(this.dupMessage);
-                  this.employee.EmployeeID = res.employee.EmployeeID;
-                  this.employee.EmpShiftsCompleted = res.employee.EmpShiftsCompleted;
-                  this.employee.EmpStartDate = res.employee.EmpStartDate;
-                  this.empID = res.employee.EmployeeID;
-        
-                  this.showButton = false;
-                /*  this.showDate = false;
-                  this.showText = true; */
-                }
-              this.showSearch = false;
-              this.showResults = true;
-              this.showNewEmp = true;
-              this.showUpload = false;
-              this.showUploadImg= false;
-              this.showUploadCv = false; 
+            this.dialogService.openAlertDialog(res.Message);
+            this.router.navigate(["employee-management"]);
           }
+          
         })
     }
 
@@ -227,7 +229,7 @@ handleFileInputCV(file: FileList)
     }
     else
     {
-      this.dialogService.openConfirmDialog('Are you sure you want to add teh employee?')
+      this.dialogService.openConfirmDialog('Are you sure you want to add the employee?')
       .afterClosed().subscribe(res => {
         if (res)
         {
@@ -238,12 +240,13 @@ handleFileInputCV(file: FileList)
           {
 
             this.dialogService.openAlertDialog(res.Message);
-            this.showSearch = false;
+            /* this.showSearch = false;
             this.showResults = true;
             this.showNewEmp = false;
             this.showUpload = true;
             this.showUploadImg= false;
-            this.showUploadCv = false;
+            this.showUploadCv = false; */
+            this.router.navigate(["employee-management"]);
           }
           else 
           {
@@ -262,7 +265,8 @@ handleFileInputCV(file: FileList)
   }
 
   cancel(){
-    this.inputEnabled = false;
+    this.router.navigate(['employee-management']);
+    /* this.inputEnabled = false;
     this.showButtons = true;
     
     this.showSearch = true;
@@ -271,7 +275,7 @@ handleFileInputCV(file: FileList)
     this.showUpload = false;
     
     this.showUploadImg= false;
-    this.showUploadCv = false;
+    this.showUploadCv = false; */
   }
 
   gotoUploadImage()

@@ -1,22 +1,24 @@
 <body>
     <h1>Customer Details</h1>
+    <div class="divright">
+        <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
     <form [formGroup]="cusForm">
         <div class="card" *ngIf = "showSearch">
-            <br>
         <div class="divleft"  >
             <label class="subheadinglabel" >Enter Name and Surname To search </label>
         <br>
             <label for="name">Name:     </label>
                   <input class="searchinput" type="text" formControlName="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" id="name" name="name" pattern="[a-zA-Z ]*" required>
                   <span style="color:red" *ngIf="cusForm.get('name').errors && (cusForm.get('name').touched || cusForm.get('name').dirty)">
-                      <span *ngIf="cusForm.get('name').errors.required">Name is required.<br></span>
+                      <br><span *ngIf="cusForm.get('name').errors.required">Name is required.<br></span>
                       <span *ngIf="cusForm.get('name').errors.pattern">Only text characters.<br></span>
                   </span>
-       
+       <br>
                   <label for="surname">Surname:     </label>
                   <input class="searchinput" type="text" formControlName="surname" [(ngModel)]="surname" [ngModelOptions]="{standalone: true}" id="surname" name="surname" pattern="[a-zA-Z ]*" required>
                   <span style="color:red" *ngIf="cusForm.get('surname').errors && (cusForm.get('surname').touched || cusForm.get('surname').dirty)">
-                      <span *ngIf="cusForm.get('surname').errors.required">Surname is required.<br></span>
+                     <br> <span *ngIf="cusForm.get('surname').errors.required">Surname is required.<br></span>
                       <span *ngIf="cusForm.get('surname').errors.pattern">Only text characters.<br></span>
                   </span>
         </div>

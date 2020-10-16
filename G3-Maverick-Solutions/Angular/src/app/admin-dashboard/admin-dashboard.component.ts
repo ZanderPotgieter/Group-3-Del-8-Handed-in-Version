@@ -99,7 +99,7 @@ export class AdminDashboardComponent {
           labels: keys,
           datasets: [
             {
-              label:'Sales Revenue per container for current day',
+              label:'Sales Revenue (in Rands) per container for current day',
               data: Vals, 
               fill: false,
               barPercentage: 0.70,
@@ -129,7 +129,7 @@ export class AdminDashboardComponent {
               display: false,
             },
             title:{
-              text: 'Sales Revenue per container for current day' ,
+              text: 'Sales Revenue (in Rands) per container for current day' ,
               fontSize: 15, 
               display: true,
             },
@@ -184,7 +184,7 @@ export class AdminDashboardComponent {
           labels: keys,
           datasets: [
             {
-              label:'Sales Revenue per container for current year: ' + year,
+              label:'Sales Revenue (in Rands) per container for current year: ' + year,
               data: Vals, 
               fill: false,
               backgroundColor: [
@@ -213,7 +213,7 @@ export class AdminDashboardComponent {
               position: 'bottom',
               display: true,},
             title:{
-              text: "Sales Revenue per container for current year: " + year,
+              text: "Sales Revenue (in Rands) per container for current year: " + year,
               display: true,
               position: 'top',
               fontSize: 15,},

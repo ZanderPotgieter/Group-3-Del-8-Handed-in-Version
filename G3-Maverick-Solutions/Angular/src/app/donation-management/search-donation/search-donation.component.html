@@ -117,7 +117,7 @@
                 <tr *ngFor= "let don of donations, index as ndx" >
                     <!-- <td>{{don.DonationStatus.DSDescription}}</td> -->
                     <td>{{don.DonationID}}</td>
-                    <td>{{don.DonDate}}</td> 
+                    <td>{{don.DonDate | date }}</td> 
                     <td>{{don.DonDescription}}</td> 
                     <td><button style="height: 30px;"class="btntable" (click)="view(don.DonationID)">View</button></td>
                 </tr>
@@ -131,7 +131,7 @@
         </div>
 </div>
 
-<div class="card">
+<div class="card" *ngIf = "showDonationDet">
 <div  *ngIf = "showDonation">
     <div  id="donation">
         <label > <span style="white-space: nowrap;">Donation Details</span></label>
@@ -150,7 +150,7 @@
                 <br> -->
 
                 <label for="date">Donation Date </label>
-                <input type="text" formControlName="DonDate" class="form-control" [(ngModel)]="donation.DonDate" id="DonDate" name="DonDate" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <input type="text" formControlName="DonDate" class="form-control" [ngModel]="donation.DonDate | date: 'yyyy-MM-dd' "  (ngModelChange)="donation.DonDate=$event" id="DonDate" name="DonDate" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
                 <br>
             </div>
 
@@ -158,11 +158,19 @@
                 <label>Status</label>
             <select required formControlName="DonationStatusID" class="form-control" [(ngModel)]="donation.DonationStatusID" name="DonationStatusID" id="DonationStatusID" >
                 <option  *ngFor="let status of statuses" value="{{status.DonationStatusID}}">{{status.DSDescription}}</option>
-              </select>
+                </select>
+                <br>
+                <span style="color:red" *ngIf="angForm.get('DonationStatusID').errors && (angForm.get('DonationStatusID').touched || angForm.get('DonationStatusID').dirty)">
+                    <span *ngIf="angForm.get('DonationStatusID').errors.required">Status is required.</span>
+                </span> 
               <br>
 
                 <label for="date">Donation Date </label>
                 <input type="date" formControlName="DonDate" class="form-control" [(ngModel)]="donation.DonDate" id="DonDate" name="DonDate" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled">
+                <br>
+                <span style="color:red" *ngIf="angForm.get('DonDate').errors && (angForm.get('DonDate').touched || angForm.get('DonDate').dirty)">
+                    <span *ngIf="angForm.get('DonDate').errors.required">Date is required.</span>
+                </span>
                 <br>
             </div>
 
@@ -170,8 +178,20 @@
                 <label for="Name">Donated Amount in R</label>
                 <input type="number" formControlName="DonAmount" class="form-control" [(ngModel)]="donation.DonAmount" id="DonAmount" name="DonAmount" pattern="[0-9]*" required [readonly] = "this.inputEnabled"> 
                 <br>
+                <span style="color:red" *ngIf="angForm.get('DonAmount').errors && (angForm.get('DonAmount').touched || angForm.get('DonAmount').dirty)">
+                    <span *ngIf="angForm.get('DonAmount').errors.required">Amount is required.</span>
+                    <span *ngIf="angForm.get('DonAmount').errors.pattern">Only numbers</span>
+                </span> 
+                <br>
+
                 <label for="Name">Description</label>
                 <input type="text" formControlName="DonDescription" class="form-control" [(ngModel)]="donation.DonDescription" id="DonDescription" name="DonDescription" pattern="[a-zA-Z ]*" required [readonly] = "this.inputEnabled"> 
+                <br>
+                <span style="color:red" *ngIf="angForm.get('DonDescription').errors && (angForm.get('DonDescription').touched || angForm.get('DonDescription').dirty)">
+                    <span *ngIf="angForm.get('DonDescription').errors.required">Description is required.</span>
+                    <span *ngIf="angForm.get('DonDescription').errors.minlength">Description must be greater than 2 characters</span>
+                    <span *ngIf="angForm.get('DonDescription').errors.pattern">Only text characters.</span>
+                </span>
             </div>
         </div>
     </div>
@@ -180,7 +200,7 @@
 <br>
         <div class="divleft" *ngIf="showButtons">
         <button type="submit" (click)="update()">Update</button>
-        <!-- <button type="submit" >Edit donated products</button> -->
+        <!-- <button type="submit" (click)="getDonatedProducts(donation.DonationID)">Edit donated products</button>  -->
         </div>
 
         <div class="divleft" *ngIf="showSave" >
@@ -188,6 +208,33 @@
             <button type="submit" (click)="cancel()">Cancel</button>
         </div>
 </div>
+
+<!-- <div  *ngIf = "showEditProduct" class="card" id="donation">
+    <label > <span style="white-space: nowrap;">Donated Product Details</span></label>
+    <br>
+    <table>
+        <tr>
+             <th>Status</th> 
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+            <th>Action</th>
+        </tr>
+
+        <tr *ngFor= "let don of donatedProducts, index as ndx" >
+            <td>{{don.ProductID}}</td>
+            <td>{{don.DPQuantity}}</td> 
+            <td><button style="height: 30px;"class="btntable" (click)="view(don.DonationID)">Edit</button></td>
+            <td><button style="height: 30px;"class="btntable" (click)="view(don.DonationID)">Delete</button></td>
+        </tr>
+    
+    </table>
+    
+    
+    <br><br>
+    
+    <button type="submit" (click)="cancel()">Cancel</button>
+</div> -->
 
 
 

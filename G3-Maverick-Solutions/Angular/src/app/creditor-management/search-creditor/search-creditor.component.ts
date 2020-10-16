@@ -52,7 +52,7 @@ export class SearchCreditorComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],  
       CredBank: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],   
       CredBranch: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],
-      CredAccount: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')]],   
+      CredAccount: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z0-9 ]*')]],
       CredType: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25), Validators.pattern('[a-zA-Z ]*')]],      
     }); 
     
@@ -121,7 +121,7 @@ removeCreditor(){
   this.dialogService.openConfirmDialog('Are you sure you want to remove this supplier as creditor?')
   .afterClosed().subscribe(res => {
     if(res){
-  this.api.removeCreditor(this.creditor.CreditorID).subscribe( (res:any)=> {
+  this.api.removeCreditor(this.creditor.SupplierID).subscribe( (res:any)=> {
     console.log(res);
     if(res.Message != null){
       this.dialogService.openAlertDialog(res.Message);

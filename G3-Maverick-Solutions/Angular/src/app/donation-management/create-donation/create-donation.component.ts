@@ -10,6 +10,7 @@ import { ContainerProduct  } from '../container-product';
 import { Product } from '../product';
 import { Container } from '../container'
 import { Observable, from } from 'rxjs';
+import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { DialogService } from '../../shared/dialog.service';
@@ -17,6 +18,7 @@ import { DialogService } from '../../shared/dialog.service';
 @Component({
   selector: 'app-create-donation',
   templateUrl: './create-donation.component.html',
+  providers: [DatePipe],
   styleUrls: ['./create-donation.component.scss']
 })
 export class CreateDonationComponent implements OnInit {
@@ -50,6 +52,7 @@ export class CreateDonationComponent implements OnInit {
 
   name: string;
   surname: string;
+  dateVal = new Date();
 
   inputDisabled:boolean = true;
   showAddProduct: boolean = false;
@@ -105,11 +108,23 @@ export class CreateDonationComponent implements OnInit {
   {
     this.productID = prodID;
     this.dpQuantity = prodQuantity;
-    this.getAddedDonation();
-    console.log(this.productID);
-    console.log(this.containerID);
-    console.log(this.donationID);
-    console.log(this.dpQuantity);
+    //this.getAddedDonation();
+
+    //getting the added donation id 
+    this.donationService.getAddedDonation(this.cell).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if (res.Message != null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+      }
+      else 
+      {
+         //get donation  details  
+        this.donationID = res.donationID;
+      }
+    })
+  
     /* this.donationService.addDonatedProduct(this.productID, this.containerID, this.donationID, this.dpQuantity).subscribe( (res:any)=> 
     {
 
@@ -253,10 +268,9 @@ export class CreateDonationComponent implements OnInit {
     this.donationService.searchDonationRecipientByCell(this.cell).subscribe( (res:any) =>
     {
       console.log(res);
-      if(res.Error != null)
+      if(res.Message != null)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
       }
       else
       {
@@ -343,11 +357,15 @@ export class CreateDonationComponent implements OnInit {
           this.donationService.addDonation(this.donation1).subscribe( (res:any)=> 
           {
             console.log(res);
-            if(res.Message == "Donation Add Successful")
+            if (res.Message)
             {
-              //this.dialogService.openAlertDialog(res.Message);
-              alert(res.Message);
-              this.showContainer = true; 
+              this.dialogService.openAlertDialog(res.Message);
+            }
+            this.router.navigate(["donation-management"])
+            /* if(res.Message == "Donation Add Successful")
+            {
+              this.dialogService.openAlertDialog(res.Message);
+               this.showContainer = true; 
               this.showNameSearch = false;
               this.showSearch = false;
               this.showSave = false;
@@ -358,14 +376,15 @@ export class CreateDonationComponent implements OnInit {
               this.showResults = false;
               this.showAddDon = false;
               this.showDonation = false;
-              this.showDonatedProduct = true;
+              this.showDonatedProduct = false; 
+              this.router.navigate(["donation-management"])
             }
             else 
             {
-              //this.dialogService.openAlertDialog(res.Message);
-              alert(res.Message);
+              this.dialogService.openAlertDialog(res.Message);
+              
               this.router.navigate(["donation-management"])
-            }
+            } */
           })
         }
       })

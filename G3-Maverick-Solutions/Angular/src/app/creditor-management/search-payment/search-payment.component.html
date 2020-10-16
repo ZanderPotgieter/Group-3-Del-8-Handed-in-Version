@@ -1,5 +1,8 @@
 <body>
   <h1>Creditor Payment Details</h1>
+  <div class="divright">
+    <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
   <form>
     <div class="card" *ngIf = "showViewAll">
       <p class="subheadinglabel">Creditor Payments:</p>
@@ -16,7 +19,7 @@
           <tr *ngFor="let pay of allPayments | async">  
             <td>{{pay.PaymentID}}</td>  
             <td>{{pay.CredPaymentAmount}}</td>  
-            <td>{{pay.CredPaymentDate}}</td>   
+            <td>{{pay.CredPaymentDate | date: 'yyyy-MM-dd'}}</td>   
           </tr>  
         </tbody>  
       </table>   

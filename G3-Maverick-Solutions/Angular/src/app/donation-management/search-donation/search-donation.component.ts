@@ -6,17 +6,21 @@ import { DonatedProduct } from '../donated-product';
 import { Donation } from '../donation';
 import { DonationRecipient } from '../donation-recipient';
 import { DonationStatus } from '../donation-status';
-import { Container } from '../container'
+import { Container } from '../container';
+import { DatePipe } from '@angular/common';
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
+
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-search-donation',
   templateUrl: './search-donation.component.html',
+  providers: [DatePipe],
   styleUrls: ['./search-donation.component.scss']
 })
 export class SearchDonationComponent implements OnInit {
-  constructor(private donationService: DonationService, private router: Router, private fb: FormBuilder) { }
+  constructor(private donationService: DonationService, private router: Router, private fb: FormBuilder,  private dialogService: DialogService) { }
 
   angForm: FormGroup;
   donation: Donation = new Donation();
@@ -26,6 +30,8 @@ export class SearchDonationComponent implements OnInit {
   donatedProduct: DonatedProduct = new DonatedProduct();
   responseMessage: string = "Request Not Submitted";
   donationForm: any;
+
+  dateVal = new Date();
 
   donatedProducts: DonatedProduct[];
 
@@ -42,6 +48,9 @@ export class SearchDonationComponent implements OnInit {
   showText: boolean = false;
   showInput: boolean = false;
   inputDisabled:boolean = true;
+  showEditProduct: boolean = false;
+  donationNull: boolean = false;
+  showDonationDet: boolean = false;
 
   cell : string;
   name: string;
@@ -76,6 +85,45 @@ export class SearchDonationComponent implements OnInit {
     })
   }
 
+  editProducts()
+  {
+    
+    this.showCell = false;
+    this.showName = false;
+    this.showSave = false;
+    this.inputEnabled = true;
+    this.showButtons = false;
+    
+    this.showSearch = false;
+    this.showResults = false; 
+    this.showAllDons = false;
+    this.showDonation = false;
+    this.showDonationDet = false;
+    this.showText = false;
+    this.showInput = false;
+    this.showEditProduct = true;
+
+  }
+
+  getDonatedProducts(DonID: any)
+  {
+    this.donationService.getDonatedProducts(DonID).subscribe( (res: any) =>
+    {
+      console.log(res);
+      if (res.Message != null)
+      {
+        this.dialogService.openAlertDialog(res.Message);
+      }
+      else 
+      {
+        this.donatedProducts = res.donatedProducts;
+        this.editProducts();
+      }
+
+    })
+
+  }
+
   showSearchByCell()
   {
     this.showCell = true;
@@ -88,6 +136,7 @@ export class SearchDonationComponent implements OnInit {
     this.showResults = false; 
     this.showAllDons = false;
     this.showDonation = false;
+    this.showDonationDet = false;
     this.showText = false;
     this.showInput = false;
   }
@@ -100,6 +149,7 @@ export class SearchDonationComponent implements OnInit {
     this.inputEnabled = true;
     this.showButtons = false;
     this.showDonation = false;
+    this.showDonationDet = false;
     
     this.showSearch = true;
     this.showResults = false; 
@@ -122,9 +172,7 @@ export class SearchDonationComponent implements OnInit {
       console.log(res);
       if (res.Message != null)
       {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
-
+        this.dialogService.openAlertDialog(res.Message);
       }
       else 
       {
@@ -158,6 +206,7 @@ export class SearchDonationComponent implements OnInit {
         this.showResults = true; 
         this.showAllDons = true;
         this.showDonation = false;
+        this.showDonationDet = false;
         this.showText = false;
         this.showInput = false;
       }
@@ -171,10 +220,9 @@ export class SearchDonationComponent implements OnInit {
     this.donationService.searchDonationsByName(this.name, this.surname).subscribe( (res: any) =>
     {
       console.log(res);
-      if (res.Error != null)
+      if (res.Message != null)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
 
       }
       else 
@@ -191,6 +239,7 @@ export class SearchDonationComponent implements OnInit {
         this.showResults = true; 
         this.showAllDons = true;
         this.showDonation = false;
+        this.showDonationDet = false;
         this.showText = false;
         this.showInput = false;   
       }
@@ -204,11 +253,9 @@ export class SearchDonationComponent implements OnInit {
     this.donationService.searchDonationByID(this.id).subscribe( (res: any) =>
     {
       console.log(res);
-      if (res.Error != null)
+      if (res.Message != null)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
-
+        this.dialogService.openAlertDialog(res.Message);
       }
       else 
       {
@@ -237,6 +284,7 @@ export class SearchDonationComponent implements OnInit {
         this.showButtons = true;
         this.showAllDons = false;
         this.showDonation = true;
+        this.showDonationDet = true;
         this.showText = true;
         this.showInput = false;
 
@@ -258,6 +306,7 @@ export class SearchDonationComponent implements OnInit {
         this.showButtons = false;
         this.showAllDons = false;
         this.showDonation = true;
+        this.showDonationDet = true;
         this.showText = false;
         this.showInput = true;
   }
@@ -271,11 +320,10 @@ export class SearchDonationComponent implements OnInit {
     this.donationService.getDonationStatuses().subscribe( (res: any) =>
     {
       console.log(res);
-      if(res.Error)
+      if(res.Message)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
-      this.router.navigate(["donation-management"])
+        this.dialogService.openAlertDialog(res.Message);
+        this.router.navigate(["donation-management"])
       }
       else 
       {
@@ -287,22 +335,29 @@ export class SearchDonationComponent implements OnInit {
 
   Save(){
 
-    this.donationService.updateDonation(this.donation).subscribe( (res: any) =>
+    if(this.donation.DonAmount ==null || this.donation.DonDate ==null || this.donation.DonDescription ==null || this.donation.DonationStatusID ==null)
     {
-      console.log(res);
-      if (res.Error)
-      {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
-        this.router.navigate(["donation-management"])
-      }
-      else if (res.Message)
-      {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
-        this.router.navigate(["donation-management"])
-      }
-    })
+      this.donationNull = true;
+    }
+    else
+    {
+      this.dialogService.openConfirmDialog('Are you sure you want to update this donation?')
+      .afterClosed().subscribe(res => {
+        if (res)
+        {
+          this.donationService.updateDonation(this.donation).subscribe( (res: any) =>
+          {
+            console.log(res);
+            if (res.Message)
+            {
+              this.dialogService.openAlertDialog(res.Message);
+              
+            }
+            this.router.navigate(["donation-management"])
+          })
+        }
+      })
+    }
   }
 
   removeDonation()
@@ -310,19 +365,11 @@ export class SearchDonationComponent implements OnInit {
     this.donationService.deleteDonation(this.donation.DonationID).subscribe( (res:any) =>
     {
       console.log(res);
-      if (res.Error)
+      if (res.Message)
       {
-        this.responseMessage = res.Error;
-        alert(this.responseMessage)
+        this.dialogService.openAlertDialog(res.Message);
         this.router.navigate(["donation-management"])
       }
-      else if (res.Message)
-      {
-        this.responseMessage = res.Message;
-        alert(this.responseMessage)
-        this.router.navigate(["donation-management"])
-      }
-      
     })
   }
   

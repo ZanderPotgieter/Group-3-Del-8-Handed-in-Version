@@ -1,11 +1,11 @@
 <body>
     <h1>Add Supplier</h1>
+    <div class="divright">
+        <label style="color:orange">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+</div>
     <form [formGroup]="supForm">
-        
-        <br>
         <div class="card">
             <div class = "divleft">
-            <br><br>
             <label class="subheadinglabel">Enter supplier Details:</label>
         <br><br>
         <div class="divleft">
@@ -13,8 +13,7 @@
                   <input type="text" formControlName="SupName" [(ngModel)]="supplier.SupName" id="SupName" name="SupName" pattern="[a-zA-Z ]*" required>
                   <br>
                   <span style="color:red" *ngIf="supForm.get('SupName').errors && (supForm.get('SupName').touched || supForm.get('SupName').dirty)">
-                      <span *ngIf="supForm.get('SupName').errors.required">Name is required.<br></span>
-                      <span *ngIf="supForm.get('SupName').errors.pattern">Only text characters.<br></span>
+                      <span *ngIf="supForm.get('SupName').errors.required">Supplier Name is required.<br></span>
                   </span>
           </div>
 
@@ -88,12 +87,11 @@
                     <span *ngIf="supForm.get('SupSuburb').errors.pattern">Only text characters.<br></span>
                 </span> 
         </div>
-        <br><br>
+        <br>
         <div class="divleft" >
             <button type="submit" (click)="addSupplier()" >Save</button> 
             <button type="submit" (click)="gotoSupplierManagement()">Cancel</button>
          </div>
-         <br><br>
         </div>
     </div>
       

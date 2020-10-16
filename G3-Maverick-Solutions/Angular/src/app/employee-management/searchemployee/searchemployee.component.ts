@@ -243,7 +243,7 @@ export class SearchemployeeComponent implements OnInit {
           {
             this.dialogService.openAlertDialog(res.Message);
           }
-          //this.router.navigate(["employee-management"]);
+          this.router.navigate(["employee-management"]);
         }) 
       }
     })

@@ -188,14 +188,14 @@
         <div  class="card" style="padding: 2px 2px;" *ngIf = "showPay">
             <div class="divleft" >
                 <label for="Product">Payment Method: </label>
-                 <select required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
-                     <option *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
+                 <select [ngModelOptions]="{standalone: true}" required name="paySelection" [(ngModel)]="paySelection" (ngModelChange)="addPayment($event)">
+                     <option [ngModelOptions]="{standalone: true}" *ngFor="let payment of paymentTypes" [ngValue]="payment">{{payment.PTDescription}}</option>
                  </select>
              </div>
       
                 <div class="divleft">
                     <label for="quantity">Amount </label>
-                    <input  style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
+                    <input  [ngModelOptions]="{standalone: true}" style="width:80px;" type="number" min="0" name="amount" [(ngModel)]="amount" id="amount" required>
                     
                   </div>
               <div class="divleft" *ngIf="ShowOustanding">

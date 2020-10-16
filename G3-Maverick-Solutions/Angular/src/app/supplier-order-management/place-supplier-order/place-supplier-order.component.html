@@ -43,13 +43,13 @@
             <th style="padding: 0px">Date</th>
             <th style="padding: 0px">Supplier</th>
             <th style=" padding: 0px">Email</th>
-            <th style=" width: 20%; padding: 0px"></th>
+            <th style=" padding: 0px"></th>
         
         <tr *ngFor="let item of supplierOrders; index as ndx">
             <td>{{item.SODate | date: 'yyyy-MM-dd'}}</td>
             <td>{{item.SupName}}</td>
             <td>{{item.SupEmail}}</td>
-            <td><button style="border-radius: 10px; width: 95%;" (click)="View(ndx)">View</button></td> 
+            <td><button style="border-radius: 5px;" style = "width: 80px;" (click)="View(ndx)">View</button></td> 
         
         </tr>
         

@@ -30,13 +30,14 @@ export class SearchOrderComponent implements OnInit {
 
   cell:string;
   orderNo: string;
+  showName: boolean = false;
   errorMessage: string;
   customer: Customer = new Customer();
   orderDetails: CustomerOrder = new CustomerOrder();
   calculatedValues: OrderDetails = new OrderDetails();
   orderProducts: ProductDetails[] = [];
   responseMessage: string = "Request Not Submitted";
-
+  showChange: boolean = true;
   showTable: boolean = false;
   showList: boolean = false;
   selectOrderNo: boolean = false;
@@ -141,20 +142,27 @@ export class SearchOrderComponent implements OnInit {
   makePayment(){
         
 
-    if(this.calculatedValues.TotalIncVat > this.amount){
-      this.outstandingAmt = this.calculatedValues.TotalIncVat - this.amount;
+        this.showName = false;
+        if( this.amountpaid >= this.calculatedValues.TotalIncVat){
+          this.dialogService.openAlertDialog("Payment Resticted: R"+ this.amountpaid+ " already paid")
+        }
+        else{
+        this.amountpaid = this.amountpaid + this.amount;
+
+    if(this.calculatedValues.TotalIncVat > this.amountpaid){
+      this.outstandingAmt = this.calculatedValues.TotalIncVat - this.amountpaid;
       this.total = this.outstandingAmt;
       this.change = 0;
       this.ShowOustanding = true;
     }
-    else if(this.calculatedValues.TotalIncVat == this.amount){
+    else if(this.calculatedValues.TotalIncVat == this.amountpaid){
       this.total = 0;
       this.change = 0;
       this.outstandingAmt = 0;
       this.ShowOustanding = false;
     }
-    else if ( this.calculatedValues.TotalIncVat < this.amount){
-      this.change = this.amount - this.calculatedValues.TotalIncVat
+    else if ( this.calculatedValues.TotalIncVat < this.amountpaid){
+      this.change = this.amountpaid - this.calculatedValues.TotalIncVat
       this.total = 0;
       this.outstandingAmt = 0;
       this.ShowOustanding = false;
@@ -162,13 +170,14 @@ export class SearchOrderComponent implements OnInit {
     }
 
 
-    this.api.makeOrderPayment(this.orderDetails.CustomerOrderID, this.calculatedValues.TotalIncVat,1).subscribe((res:any) => {
+    this.api.makeOrderPayment(this.orderDetails.CustomerOrderID, this.amount,this.selectedPayment.PaymentTypeID).subscribe((res:any) => {
       console.log(res);
+      this.dialogService.openAlertDialog("Payment Successful.");
       if(res.Error)(
         this.dialogService.openAlertDialog(res.Error)
       )
     })
-  }
+  }}
    
 
   searchByOrderNo(){

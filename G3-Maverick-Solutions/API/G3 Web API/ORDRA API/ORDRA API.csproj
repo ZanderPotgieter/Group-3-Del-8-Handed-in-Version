@@ -432,6 +432,7 @@
     <Content Include="Models\ORDRA.edmx.diagram">
       <DependentUpon>ORDRA.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\ORDRAAPI - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />

@@ -313,7 +313,7 @@ namespace ORDRA_API.Controllers
 
                 if (manager == null)
                 {
-                    toReturn.Message = "Manager ProfileN ot Found";
+                    toReturn.Message = "Manager Profile Not Found";
                     
                 }
                 else
@@ -323,22 +323,23 @@ namespace ORDRA_API.Controllers
 
                     foreach (var con in containers)
                     {
-                        User user = db.Users.Where(x => x.UserID == manager.User.UserID).FirstOrDefault();
-                        //get user type of manager
-                        User_Type usertype = db.User_Type.Where(x => x.UTypeDescription == "Employee").FirstOrDefault();
-
-                        //set usertype to manager
-                        user.UserTypeID = usertype.UserTypeID;
-                        user.User_Type = usertype;
-                        db.SaveChanges();
-
+                       
                         Container container = db.Containers.Where(x => x.ContainerID == con.ContainerID).FirstOrDefault();
                         manager.Containers.Remove(container);
+                        db.SaveChanges();
 
                     }
 
+                    User user = db.Users.Where(x => x.UserID == manager.UserID).FirstOrDefault();
+                    //get user type of employee
+                    User_Type usertype = db.User_Type.Where(x => x.UserTypeID == 2).FirstOrDefault();
 
+
+                    //set usertype to employee
+                    user.UserTypeID = usertype.UserTypeID;
+                    user.User_Type = usertype;
                     db.SaveChanges();
+
 
                     manager = db.Managers.Where(x => x.ManagerID == id).FirstOrDefault();
                     db.Managers.Remove(manager);

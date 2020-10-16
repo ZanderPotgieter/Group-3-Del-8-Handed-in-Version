@@ -135,11 +135,11 @@
             <div *ngIf="showadd" class="divleft">
             <label class="subheadinglabel">Enter New Price Details</label>
             <br>
-            <label for="CPrice">Cost Price(R):</label><input type="number"  formControlName="CPrice" class="form-control" [(ngModel)]="price.CPriceR" id="CPriceR" name="CPrice" pattern="[0-9]+[.,]?[0-9]*" min="1">
+            <label for="CPrice">Cost Price(R):</label><input type="number"  formControlName="CPrice" class="form-control" [(ngModel)]="newPrice.CPriceR" id="CPriceR" name="CPrice" pattern="[0-9]+[.,]?[0-9]*" min="1">
             
             
             <br>
-                <label for="UPrice">Unit Price(R):</label><input type="number"  formControlName="UPrice" class="form-control" [(ngModel)]="price.UPriceR" id="UPrice" name="UPrice" pattern="[0-9]+[.,]?[0-9]*"  min="1">
+                <label for="UPrice">Unit Price(R):</label><input type="number"  formControlName="UPrice" class="form-control" [(ngModel)]="newPrice.UPriceR" id="UPrice" name="UPrice" pattern="[0-9]+[.,]?[0-9]*"  min="1">
             
             
             <br>

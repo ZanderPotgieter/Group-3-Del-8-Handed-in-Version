@@ -125,15 +125,12 @@ Back()
   }
 
   Done(){
-    this.api.updateCustomerOrder(this.supplierOrder.SupplierOrderID,this.supplierOrder.SupplierOrderID).subscribe((res:any)=>{
-      console.log(res);
-      if(res.Message){
-        this.dialogService.openAlertDialog("Supplier Order Details Saved Succesfully")
-        this.showBackOrder = false;
-       this.showDone = false;
-      }
+    this.api.updateCustomerOrder(this.supplierOrder.ContainerID, this.supplierOrder.SupplierOrderID).subscribe((resp:any)=>{
+      console.log(resp);
     })
-    
+
+
+    this.dialogService.openAlertDialog("Stock Successfuly received")
     this.router.navigate(['supplier-order-management'])
       
   }

@@ -250,7 +250,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectProduct != null)
                 {
-                    Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
+                    Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == objectProduct.ProductID).ToList().LastOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
                     toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                     if (cat != null)
@@ -323,14 +323,13 @@ namespace ORDRA_API.Controllers
 
                         foreach (var pri in priceslist)
                         {
-
-                            DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
-                            DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
+                            DateTime startdate = Convert.ToDateTime(pri.PriceStartDate);
+                            DateTime enddate = Convert.ToDateTime(pri.PriceEndDate);
 
                             dynamic Price = new ExpandoObject();
-                            Price.PriceID = price.PriceID;
-                            Price.UPriceR = (double)price.UPriceR;
-                            Price.CPriceR = (double)price.CPriceR;
+                            Price.PriceID = pri.PriceID;
+                            Price.UPriceR = (double)pri.UPriceR;
+                            Price.CPriceR = (double)pri.CPriceR;
                             Price.PriceStartDate = startdate.ToString("yyyy-MM-dd");
                             Price.PriceEndDate = enddate.ToString("yyyy-MM-dd");
 
@@ -412,7 +411,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectProduct != null)
                 {
-                    Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
+                    Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == objectProduct.ProductID).ToList().LastOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
                     toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                     if (cat != null)
@@ -486,13 +485,13 @@ namespace ORDRA_API.Controllers
                         foreach (var pri in priceslist)
                         {
 
-                            DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
-                            DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
+                            DateTime startdate = Convert.ToDateTime(pri.PriceStartDate);
+                            DateTime enddate = Convert.ToDateTime(pri.PriceEndDate);
 
                             dynamic Price = new ExpandoObject();
-                            Price.PriceID = price.PriceID;
-                            Price.UPriceR = (double)price.UPriceR;
-                            Price.CPriceR = (double)price.CPriceR;
+                            Price.PriceID = pri.PriceID;
+                            Price.UPriceR = (double)pri.UPriceR;
+                            Price.CPriceR = (double)pri.CPriceR;
                             Price.PriceStartDate = startdate.ToString("yyyy-MM-dd");
                             Price.PriceEndDate = enddate.ToString("yyyy-MM-dd");
 
@@ -570,7 +569,7 @@ namespace ORDRA_API.Controllers
 
                 if (objectProduct != null)
                 {
-                    Price price = db.Prices.Include(x => x.Product).Where(x => (x.PriceStartDate <= DateTime.Now) && (x.PriceEndDate > DateTime.Now) && (x.ProductID == objectProduct.ProductID)).FirstOrDefault();
+                    Price price = db.Prices.Include(x => x.Product).Where(x => x.PriceStartDate <= DateTime.Now && x.PriceEndDate >= DateTime.Now && x.ProductID == objectProduct.ProductID).ToList().LastOrDefault();
                     Product_Category cat = db.Product_Category.Where(x => x.ProductCategoryID == objectProduct.ProductCategoryID).FirstOrDefault();
                     toReturn.Date = DateTime.Now.ToString("yyyy-MM-dd");
                     if (cat != null)
@@ -646,13 +645,13 @@ namespace ORDRA_API.Controllers
                         foreach (var pri in priceslist)
                         {
 
-                            DateTime startdate = Convert.ToDateTime(price.PriceStartDate);
-                            DateTime enddate = Convert.ToDateTime(price.PriceEndDate);
+                            DateTime startdate = Convert.ToDateTime(pri.PriceStartDate);
+                            DateTime enddate = Convert.ToDateTime(pri.PriceEndDate);
 
                             dynamic Price = new ExpandoObject();
-                            Price.PriceID = price.PriceID;
-                            Price.UPriceR = (double)price.UPriceR;
-                            Price.CPriceR = (double)price.CPriceR;
+                            Price.PriceID = pri.PriceID;
+                            Price.UPriceR = (double)pri.UPriceR;
+                            Price.CPriceR = (double)pri.CPriceR;
                             Price.PriceStartDate = startdate.ToString("yyyy-MM-dd");
                             Price.PriceEndDate = enddate.ToString("yyyy-MM-dd");
 

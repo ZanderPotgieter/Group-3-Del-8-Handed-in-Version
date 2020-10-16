@@ -418,6 +418,7 @@ export class SearchProductComponent implements OnInit {
         if(res.Message)
         {
           this.dialogService.openAlertDialog(res.Message)
+          this.showadd = false;
       }
       });
     }
@@ -425,6 +426,7 @@ export class SearchProductComponent implements OnInit {
       this.dialogService.openAlertDialog("Duplicate Price Start Date Found")
     }
     this.found = false;
+
 
 
   }

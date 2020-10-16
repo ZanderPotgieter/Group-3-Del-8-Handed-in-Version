@@ -565,7 +565,7 @@ namespace ORDRA_API.Controllers
                     
                     if (backordered.Count != 0)
                     {
-                        foreach (Supplier_Order order in supplier_Orders)
+                        foreach (Supplier_Order order in backordered)
                         {
                             //get supplier linked to 
                             Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();

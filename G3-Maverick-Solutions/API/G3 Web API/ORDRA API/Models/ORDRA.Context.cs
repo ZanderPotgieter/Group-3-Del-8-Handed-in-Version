@@ -30,6 +30,7 @@ namespace ORDRA_API.Models
         public virtual DbSet<Area_Status> Area_Status { get; set; }
         public virtual DbSet<Container> Containers { get; set; }
         public virtual DbSet<Container_Product> Container_Product { get; set; }
+        public virtual DbSet<Creditor> Creditors { get; set; }
         public virtual DbSet<Creditor_Payment> Creditor_Payment { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Customer_Order> Customer_Order { get; set; }
@@ -61,6 +62,8 @@ namespace ORDRA_API.Models
         public virtual DbSet<Return_Product> Return_Product { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<Shift> Shifts { get; set; }
+        public virtual DbSet<Stock_Take> Stock_Take { get; set; }
+        public virtual DbSet<Stock_Take_Product> Stock_Take_Product { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Supplier_Order> Supplier_Order { get; set; }
         public virtual DbSet<Supplier_Order_Product> Supplier_Order_Product { get; set; }
@@ -69,8 +72,5 @@ namespace ORDRA_API.Models
         public virtual DbSet<User_Type> User_Type { get; set; }
         public virtual DbSet<User_Type_Access> User_Type_Access { get; set; }
         public virtual DbSet<VAT> VATs { get; set; }
-        public virtual DbSet<Stock_Take> Stock_Take { get; set; }
-        public virtual DbSet<Stock_Take_Product> Stock_Take_Product { get; set; }
-        public virtual DbSet<Creditor> Creditors { get; set; }
     }
 }

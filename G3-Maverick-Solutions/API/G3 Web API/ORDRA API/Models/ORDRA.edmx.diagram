@@ -4,116 +4,116 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e868d17090c14ca695977ddd1cbd0d0a" Name="Diagram1">
-        <EntityTypeShape EntityType="OrdraDBModel.Access" Width="1.5" PointX="9.5" PointY="49.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Area" Width="1.5" PointX="6.75" PointY="41.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Area_Status" Width="1.5" PointX="4.5" PointY="41" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Container" Width="1.5" PointX="6.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Container_Product" Width="1.5" PointX="8.25" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Creditor_Payment" Width="1.5" PointX="5.25" PointY="19" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Customer" Width="1.5" PointX="6.75" PointY="34.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Customer_Order" Width="1.5" PointX="9" PointY="35.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Customer_Order_Status" Width="1.5" PointX="6.75" PointY="38.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Donated_Product" Width="1.5" PointX="8.25" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Donation" Width="1.5" PointX="6" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Donation_Recipient" Width="1.5" PointX="3.75" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Donation_Status" Width="1.5" PointX="3.75" PointY="11.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Employee" Width="1.5" PointX="9" PointY="42.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.EmployeeCV" Width="1.5" PointX="11.25" PointY="39.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.EmployeePicture" Width="1.5" PointX="11.25" PointY="42.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Location" Width="1.5" PointX="9" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Location_Status" Width="1.5" PointX="6.75" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Login" Width="1.5" PointX="9" PointY="31.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Logout" Width="1.5" PointX="9" PointY="28" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Manager" Width="1.5" PointX="14" PointY="17.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Marked_Off" Width="1.5" PointX="8.25" PointY="17.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Marked_Off_Reason" Width="1.5" PointX="6" PointY="25.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.One_Time_Pin" Width="1.5" PointX="9" PointY="46.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Payment" Width="1.5" PointX="14.25" PointY="21.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Payment_Type" Width="1.5" PointX="12" PointY="24" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Price" Width="1.5" PointX="8.25" PointY="22" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Product" Width="1.5" PointX="6" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Product_Backlog" Width="1.5" PointX="8.25" PointY="25.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Product_Category" Width="1.5" PointX="3.75" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Product_Order_Line" Width="1.5" PointX="11.25" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Product_Sale" Width="1.5" PointX="11.25" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Province" Width="1.5" PointX="4.5" PointY="43.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Return_Product" Width="1.5" PointX="11.25" PointY="18" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Sale" Width="1.5" PointX="9" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Shift" Width="1.5" PointX="4.5" PointY="28.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Supplier" Width="1.5" PointX="0.75" PointY="18.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Supplier_Order" Width="1.5" PointX="6" PointY="21.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Supplier_Order_Product" Width="1.5" PointX="11.25" PointY="21" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.Supplier_Order_Status" Width="1.5" PointX="3.75" PointY="22.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.User" Width="1.5" PointX="6.75" PointY="28.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.User_Type" Width="1.5" PointX="4.5" PointY="31.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.User_Type_Access" Width="1.5" PointX="11.75" PointY="31" IsExpanded="true" />
-        <EntityTypeShape EntityType="OrdraDBModel.VAT" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
-        <AssociationConnector Association="OrdraDBModel.FK_Access" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_AAreaStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_AProvince" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_LArea" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_COContainer" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_Container" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_CPContainer" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_LContainer" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_RPContainer" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SContainer" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_CPProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_COCustomer" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_COStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_COUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_PCusOrder" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_POLCustomerOrder" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_DPDonation" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_DPProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_DonRecipient" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_DonStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_EmployeeCV" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_EmployeeImage" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_EmployeeUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_LLocationStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_LoginUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_LogoutUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_ManagerUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_MOProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_MOReason" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_OTPUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_PaymentType" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SalePayment" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_ProductPrice" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_PBLogProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_POLProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_ProdPCat" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_ProdSProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_ProdSup" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_RetProdProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SOPProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_PSSale" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SaleUser" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SOSupplier" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SOPSupplierOrder" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_SOStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_UserType" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.FK_UserTypeAccess" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.Manager_Container" ManuallyRouted="false" />
-        <AssociationConnector Association="OrdraDBModel.User_Shift" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="OrdraDBModel.Stock_Take" Width="1.5" PointX="14" PointY="13.75" />
-        <EntityTypeShape EntityType="OrdraDBModel.Stock_Take_Product" Width="1.5" PointX="16.25" PointY="15" />
-        <AssociationConnector Association="OrdraDBModel.FK_MOContainer" />
-        <AssociationConnector Association="OrdraDBModel.FK_PBContainer" />
-        <AssociationConnector Association="OrdraDBModel.FK_STakeContainer" />
-        <AssociationConnector Association="OrdraDBModel.FK_MOSTake" />
-        <AssociationConnector Association="OrdraDBModel.FK_MOUser" />
-        <AssociationConnector Association="OrdraDBModel.FK_STakeProduct" />
-        <AssociationConnector Association="OrdraDBModel.FK_STake" />
-        <AssociationConnector Association="OrdraDBModel.FK_STUser" />
-        <AssociationConnector Association="OrdraDBModel.FK_SOContainer" />
-        <AssociationConnector Association="OrdraDBModel.FK_CredPayment1" />
-        <EntityTypeShape EntityType="OrdraDBModel.Creditor" Width="1.5" PointX="3" PointY="17.75" />
-        <AssociationConnector Association="OrdraDBModel.FK_CredPaymentC" />
-        <AssociationConnector Association="OrdraDBModel.FK_CredSupplier" />
-        <AssociationConnector Association="OrdraDBModel.FK_DonProdContainer" />
+      <Diagram DiagramId="aceede22b9804f56b6589e974dfaaa48" Name="Diagram1">
+        <EntityTypeShape EntityType="ORDRA.Access" Width="1.5" PointX="6.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Area" Width="1.5" PointX="0.75" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Area_Status" Width="1.5" PointX="1.5" PointY="36.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Container" Width="1.5" PointX="0.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Container_Product" Width="1.5" PointX="3" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Creditor" Width="1.5" PointX="16.25" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Creditor_Payment" Width="1.5" PointX="18.5" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Customer" Width="1.5" PointX="3.75" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Customer_Order" Width="1.5" PointX="6" PointY="28" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Customer_Order_Status" Width="1.5" PointX="3.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Donated_Product" Width="1.5" PointX="3" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Donation" Width="1.5" PointX="0.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Donation_Recipient" Width="1.5" PointX="1.5" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Donation_Status" Width="1.5" PointX="1.5" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Employee" Width="1.5" PointX="11.25" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.EmployeeCV" Width="1.5" PointX="13.5" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.EmployeePicture" Width="1.5" PointX="13.5" PointY="20.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Location" Width="1.5" PointX="3" PointY="31.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Location_Status" Width="1.5" PointX="0.75" PointY="41.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Login" Width="1.5" PointX="11.25" PointY="23.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Logout" Width="1.5" PointX="11.25" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Manager" Width="1.5" PointX="14.25" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Marked_Off" Width="1.5" PointX="11.25" PointY="29.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Marked_Off_Reason" Width="1.5" PointX="9" PointY="36.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.One_Time_Pin" Width="1.5" PointX="11.25" PointY="36.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Payment" Width="1.5" PointX="16.5" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Payment_Type" Width="1.5" PointX="14.25" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Price" Width="1.5" PointX="18.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Product" Width="1.5" PointX="16.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Product_Backlog" Width="1.5" PointX="6" PointY="24.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Product_Category" Width="1.5" PointX="14" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Product_Order_Line" Width="1.5" PointX="8.25" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Product_Sale" Width="1.5" PointX="16.5" PointY="33" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Province" Width="1.5" PointX="1.5" PointY="39" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Return_Product" Width="1.5" PointX="6" PointY="32.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Sale" Width="1.5" PointX="14.25" PointY="29.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Shift" Width="1.5" PointX="6.75" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Stock_Take" Width="1.5" PointX="16.25" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Stock_Take_Product" Width="1.5" PointX="18.5" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Supplier" Width="1.5" PointX="14" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Supplier_Order" Width="1.5" PointX="9" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Supplier_Order_Product" Width="1.5" PointX="11.25" PointY="33.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.Supplier_Order_Status" Width="1.5" PointX="6.75" PointY="36" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.User" Width="1.5" PointX="9" PointY="22.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.User_Type" Width="1.5" PointX="6.75" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.User_Type_Access" Width="1.5" PointX="9" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="ORDRA.VAT" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="ORDRA.FK_Access" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_AAreaStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_AProvince" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_LArea" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_COContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_Container" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_CPContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_DonProdContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_LContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_MOContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_PBContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_RPContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SOContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_STakeContainer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_CPProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_CredPaymentC" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_CredSupplier" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_CredPayment" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_COCustomer" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_COStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_COUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_PCusOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_POLCustomerOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_DPDonation" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_DPProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_DonRecipient" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_DonStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_EmployeeCV" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_EmployeeImage" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_EmployeeUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_LLocationStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_LoginUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_LogoutUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_ManagerUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_MOProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_MOReason" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_MOSTake" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_MOUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_OTPUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_PaymentType" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SalePayment" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_ProductPrice" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_PBLogProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_POLProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_ProdPCat" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_ProdSProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_ProdSup" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_RetProdProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SOPProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_STakeProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_PSSale" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SaleUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_STake" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_STUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SOSupplier" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SOPSupplierOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_SOStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_UserType" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.FK_UserTypeAccess" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.Manager_Container" ManuallyRouted="false" />
+        <AssociationConnector Association="ORDRA.User_Shift" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

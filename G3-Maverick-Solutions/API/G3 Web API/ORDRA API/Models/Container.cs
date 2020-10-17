@@ -20,21 +20,21 @@ namespace ORDRA_API.Models
             this.Customer_Order = new HashSet<Customer_Order>();
             this.Users = new HashSet<User>();
             this.Container_Product = new HashSet<Container_Product>();
+            this.Donated_Product = new HashSet<Donated_Product>();
             this.Locations = new HashSet<Location>();
-            this.Return_Product = new HashSet<Return_Product>();
-            this.Sales = new HashSet<Sale>();
-            this.Managers = new HashSet<Manager>();
             this.Marked_Off = new HashSet<Marked_Off>();
             this.Product_Backlog = new HashSet<Product_Backlog>();
-            this.Stock_Take = new HashSet<Stock_Take>();
+            this.Return_Product = new HashSet<Return_Product>();
+            this.Sales = new HashSet<Sale>();
             this.Supplier_Order = new HashSet<Supplier_Order>();
-            this.Donated_Product = new HashSet<Donated_Product>();
+            this.Stock_Take = new HashSet<Stock_Take>();
+            this.Managers = new HashSet<Manager>();
         }
     
         public int ContainerID { get; set; }
+        public Nullable<bool> InActive { get; set; }
         public string ConName { get; set; }
         public string ConDescription { get; set; }
-        public Nullable<bool> InActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer_Order> Customer_Order { get; set; }
@@ -43,22 +43,22 @@ namespace ORDRA_API.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Container_Product> Container_Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Donated_Product> Donated_Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Location> Locations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Return_Product> Return_Product { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Manager> Managers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Marked_Off> Marked_Off { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product_Backlog> Product_Backlog { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Stock_Take> Stock_Take { get; set; }
+        public virtual ICollection<Return_Product> Return_Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Supplier_Order> Supplier_Order { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Donated_Product> Donated_Product { get; set; }
+        public virtual ICollection<Stock_Take> Stock_Take { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Manager> Managers { get; set; }
     }
 }

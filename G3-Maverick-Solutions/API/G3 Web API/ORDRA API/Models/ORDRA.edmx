@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OrdraDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ORDRA.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Access">
           <Key>
             <PropertyRef Name="AccessID" />
@@ -1241,7 +1241,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="OrdraDBModelStoreContainer">
+        <EntityContainer Name="ORDRAStoreContainer">
           <EntitySet Name="Access" EntityType="Self.Access" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area_Status" EntityType="Self.Area_Status" Schema="dbo" store:Type="Tables" />
@@ -1548,10 +1548,11 @@
             <End Role="User_Shift" EntitySet="User_Shift" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="OrdraDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ORDRA" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Access">
           <Key>
             <PropertyRef Name="AccessID" />
@@ -1586,21 +1587,21 @@
             <PropertyRef Name="ContainerID" />
           </Key>
           <Property Name="ContainerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InActive" Type="Boolean" />
           <Property Name="ConName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="ConDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Customer_Order" Relationship="Self.FK_COContainer" FromRole="Container" ToRole="Customer_Order" />
           <NavigationProperty Name="Users" Relationship="Self.FK_Container" FromRole="Container" ToRole="User" />
           <NavigationProperty Name="Container_Product" Relationship="Self.FK_CPContainer" FromRole="Container" ToRole="Container_Product" />
+          <NavigationProperty Name="Donated_Product" Relationship="Self.FK_DonProdContainer" FromRole="Container" ToRole="Donated_Product" />
           <NavigationProperty Name="Locations" Relationship="Self.FK_LContainer" FromRole="Container" ToRole="Location" />
+          <NavigationProperty Name="Marked_Off" Relationship="Self.FK_MOContainer" FromRole="Container" ToRole="Marked_Off" />
+          <NavigationProperty Name="Product_Backlog" Relationship="Self.FK_PBContainer" FromRole="Container" ToRole="Product_Backlog" />
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RPContainer" FromRole="Container" ToRole="Return_Product" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_SContainer" FromRole="Container" ToRole="Sale" />
+          <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOContainer" FromRole="Container" ToRole="Supplier_Order" />
+          <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STakeContainer" FromRole="Container" ToRole="Stock_Take" />
           <NavigationProperty Name="Managers" Relationship="Self.Manager_Container" FromRole="Container" ToRole="Manager" />
-          <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOContainer" FromRole="Container" ToRole="Marked_Off" />
-          <NavigationProperty Name="Product_Backlog" Relationship="OrdraDBModel.FK_PBContainer" FromRole="Container" ToRole="Product_Backlog" />
-          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STakeContainer" FromRole="Container" ToRole="Stock_Take" />
-          <NavigationProperty Name="Supplier_Order" Relationship="OrdraDBModel.FK_SOContainer" FromRole="Container" ToRole="Supplier_Order" />
-          <Property Name="InActive" Type="Boolean" />
-          <NavigationProperty Name="Donated_Product" Relationship="OrdraDBModel.FK_DonProdContainer" FromRole="Container" ToRole="Donated_Product" />
         </EntityType>
         <EntityType Name="Container_Product">
           <Key>
@@ -1613,17 +1614,31 @@
           <NavigationProperty Name="Container" Relationship="Self.FK_CPContainer" FromRole="Container_Product" ToRole="Container" />
           <NavigationProperty Name="Product" Relationship="Self.FK_CPProduct" FromRole="Container_Product" ToRole="Product" />
         </EntityType>
+        <EntityType Name="Creditor">
+          <Key>
+            <PropertyRef Name="CreditorID" />
+          </Key>
+          <Property Name="CreditorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="CredAccountBalance" Type="Single" />
+          <Property Name="CredBank" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CredBranch" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="CredAccount" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CredType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Creditor_Payment" Relationship="Self.FK_CredPaymentC" FromRole="Creditor" ToRole="Creditor_Payment" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_CredSupplier" FromRole="Creditor" ToRole="Supplier" />
+        </EntityType>
         <EntityType Name="Creditor_Payment">
           <Key>
             <PropertyRef Name="PaymentID" />
           </Key>
           <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierID" Type="Int32" />
           <Property Name="CreditorID" Type="Int32" />
           <Property Name="CredPaymentDate" Type="DateTime" Precision="0" />
           <Property Name="CredPaymentAmount" Type="Single" />
-          <Property Name="SupplierID" Type="Int32" />
-          <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredPayment1" FromRole="Creditor_Payment" ToRole="Supplier" />
-          <NavigationProperty Name="Creditor" Relationship="OrdraDBModel.FK_CredPaymentC" FromRole="Creditor_Payment" ToRole="Creditor" />
+          <NavigationProperty Name="Creditor" Relationship="Self.FK_CredPaymentC" FromRole="Creditor_Payment" ToRole="Creditor" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_CredPayment" FromRole="Creditor_Payment" ToRole="Supplier" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -1673,11 +1688,11 @@
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="DonationID" Type="Int32" Nullable="false" />
+          <Property Name="ContainerID" Type="Int32" />
           <Property Name="DPQuantity" Type="Int32" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_DonProdContainer" FromRole="Donated_Product" ToRole="Container" />
           <NavigationProperty Name="Donation" Relationship="Self.FK_DPDonation" FromRole="Donated_Product" ToRole="Donation" />
           <NavigationProperty Name="Product" Relationship="Self.FK_DPProduct" FromRole="Donated_Product" ToRole="Product" />
-          <Property Name="ContainerID" Type="Int32" />
-          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_DonProdContainer" FromRole="Donated_Product" ToRole="Container" />
         </EntityType>
         <EntityType Name="Donation">
           <Key>
@@ -1810,16 +1825,16 @@
           <Property Name="MarkedOffID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="Int32" />
           <Property Name="ReasonID" Type="Int32" />
-          <Property Name="MoQuantity" Type="Int32" />
-          <Property Name="MoDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_MOProduct" FromRole="Marked_Off" ToRole="Product" />
-          <NavigationProperty Name="Marked_Off_Reason" Relationship="Self.FK_MOReason" FromRole="Marked_Off" ToRole="Marked_Off_Reason" />
           <Property Name="ContainerID" Type="Int32" />
           <Property Name="UserID" Type="Int32" />
           <Property Name="StockTakeID" Type="Int32" />
-          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_MOContainer" FromRole="Marked_Off" ToRole="Container" />
-          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_MOSTake" FromRole="Marked_Off" ToRole="Stock_Take" />
-          <NavigationProperty Name="User" Relationship="OrdraDBModel.FK_MOUser" FromRole="Marked_Off" ToRole="User" />
+          <Property Name="MoQuantity" Type="Int32" />
+          <Property Name="MoDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_MOContainer" FromRole="Marked_Off" ToRole="Container" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_MOProduct" FromRole="Marked_Off" ToRole="Product" />
+          <NavigationProperty Name="Marked_Off_Reason" Relationship="Self.FK_MOReason" FromRole="Marked_Off" ToRole="Marked_Off_Reason" />
+          <NavigationProperty Name="Stock_Take" Relationship="Self.FK_MOSTake" FromRole="Marked_Off" ToRole="Stock_Take" />
+          <NavigationProperty Name="User" Relationship="Self.FK_MOUser" FromRole="Marked_Off" ToRole="User" />
         </EntityType>
         <EntityType Name="Marked_Off_Reason">
           <Key>
@@ -1896,19 +1911,19 @@
           <NavigationProperty Name="Supplier" Relationship="Self.FK_ProdSup" FromRole="Product" ToRole="Supplier" />
           <NavigationProperty Name="Return_Product" Relationship="Self.FK_RetProdProduct" FromRole="Product" ToRole="Return_Product" />
           <NavigationProperty Name="Supplier_Order_Product" Relationship="Self.FK_SOPProduct" FromRole="Product" ToRole="Supplier_Order_Product" />
-          <NavigationProperty Name="Stock_Take_Product" Relationship="OrdraDBModel.FK_STakeProduct" FromRole="Product" ToRole="Stock_Take_Product" />
+          <NavigationProperty Name="Stock_Take_Product" Relationship="Self.FK_STakeProduct" FromRole="Product" ToRole="Stock_Take_Product" />
         </EntityType>
         <EntityType Name="Product_Backlog">
           <Key>
             <PropertyRef Name="ProductBackLogID" />
           </Key>
           <Property Name="ProductBackLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContainerID" Type="Int32" />
           <Property Name="ProductID" Type="Int32" />
           <Property Name="QuantityToOrder" Type="Int32" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_PBContainer" FromRole="Product_Backlog" ToRole="Container" />
           <NavigationProperty Name="Product" Relationship="Self.FK_PBLogProduct" FromRole="Product_Backlog" ToRole="Product" />
-          <Property Name="ContainerID" Type="Int32" />
-          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_PBContainer" FromRole="Product_Backlog" ToRole="Container" />
         </EntityType>
         <EntityType Name="Product_Category">
           <Key>
@@ -1983,6 +1998,31 @@
           <Property Name="ShiEnd" Type="Time" Precision="7" />
           <NavigationProperty Name="Users" Relationship="Self.User_Shift" FromRole="Shift" ToRole="User" />
         </EntityType>
+        <EntityType Name="Stock_Take">
+          <Key>
+            <PropertyRef Name="StockTakeID" />
+          </Key>
+          <Property Name="StockTakeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="ContainerID" Type="Int32" />
+          <Property Name="STakeDate" Type="DateTime" Precision="0" />
+          <Property Name="isCompleted" Type="Boolean" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_STakeContainer" FromRole="Stock_Take" ToRole="Container" />
+          <NavigationProperty Name="Marked_Off" Relationship="Self.FK_MOSTake" FromRole="Stock_Take" ToRole="Marked_Off" />
+          <NavigationProperty Name="Stock_Take_Product" Relationship="Self.FK_STake" FromRole="Stock_Take" ToRole="Stock_Take_Product" />
+          <NavigationProperty Name="User" Relationship="Self.FK_STUser" FromRole="Stock_Take" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Stock_Take_Product">
+          <Key>
+            <PropertyRef Name="StockTakeProductID" />
+          </Key>
+          <Property Name="StockTakeProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StockTakeID" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
+          <Property Name="STProductCount" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_STakeProduct" FromRole="Stock_Take_Product" ToRole="Product" />
+          <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STake" FromRole="Stock_Take_Product" ToRole="Stock_Take" />
+        </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="SupplierID" />
@@ -1995,10 +2035,10 @@
           <Property Name="SupStreet" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="SupSuburb" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="SupCode" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Creditors" Relationship="Self.FK_CredSupplier" FromRole="Supplier" ToRole="Creditor" />
+          <NavigationProperty Name="Creditor_Payment" Relationship="Self.FK_CredPayment" FromRole="Supplier" ToRole="Creditor_Payment" />
           <NavigationProperty Name="Products" Relationship="Self.FK_ProdSup" FromRole="Supplier" ToRole="Product" />
           <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOSupplier" FromRole="Supplier" ToRole="Supplier_Order" />
-          <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPayment1" FromRole="Supplier" ToRole="Creditor_Payment" />
-          <NavigationProperty Name="Creditors" Relationship="OrdraDBModel.FK_CredSupplier" FromRole="Supplier" ToRole="Creditor" />
         </EntityType>
         <EntityType Name="Supplier_Order">
           <Key>
@@ -2006,13 +2046,13 @@
           </Key>
           <Property Name="SupplierOrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SupplierID" Type="Int32" />
+          <Property Name="ContainerID" Type="Int32" />
           <Property Name="SupplierOrderStatusID" Type="Int32" />
           <Property Name="SODate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_SOContainer" FromRole="Supplier_Order" ToRole="Container" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_SOSupplier" FromRole="Supplier_Order" ToRole="Supplier" />
           <NavigationProperty Name="Supplier_Order_Product" Relationship="Self.FK_SOPSupplierOrder" FromRole="Supplier_Order" ToRole="Supplier_Order_Product" />
           <NavigationProperty Name="Supplier_Order_Status" Relationship="Self.FK_SOStatus" FromRole="Supplier_Order" ToRole="Supplier_Order_Status" />
-          <Property Name="ContainerID" Type="Int32" />
-          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_SOContainer" FromRole="Supplier_Order" ToRole="Container" />
         </EntityType>
         <EntityType Name="Supplier_Order_Product">
           <Key>
@@ -2021,10 +2061,10 @@
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="SupplierOrderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_SOPProduct" FromRole="Supplier_Order_Product" ToRole="Product" />
-          <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOPSupplierOrder" FromRole="Supplier_Order_Product" ToRole="Supplier_Order" />
           <Property Name="SOPQuantityOrdered" Type="Int32" />
           <Property Name="SOPQuantityRecieved" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_SOPProduct" FromRole="Supplier_Order_Product" ToRole="Product" />
+          <NavigationProperty Name="Supplier_Order" Relationship="Self.FK_SOPSupplierOrder" FromRole="Supplier_Order_Product" ToRole="Supplier_Order" />
         </EntityType>
         <EntityType Name="Supplier_Order_Status">
           <Key>
@@ -2053,12 +2093,12 @@
           <NavigationProperty Name="Logins" Relationship="Self.FK_LoginUser" FromRole="User" ToRole="Login" />
           <NavigationProperty Name="Logouts" Relationship="Self.FK_LogoutUser" FromRole="User" ToRole="Logout" />
           <NavigationProperty Name="Managers" Relationship="Self.FK_ManagerUser" FromRole="User" ToRole="Manager" />
+          <NavigationProperty Name="Marked_Off" Relationship="Self.FK_MOUser" FromRole="User" ToRole="Marked_Off" />
           <NavigationProperty Name="One_Time_Pin" Relationship="Self.FK_OTPUser" FromRole="User" ToRole="One_Time_Pin" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_SaleUser" FromRole="User" ToRole="Sale" />
+          <NavigationProperty Name="Stock_Take" Relationship="Self.FK_STUser" FromRole="User" ToRole="Stock_Take" />
           <NavigationProperty Name="User_Type" Relationship="Self.FK_UserType" FromRole="User" ToRole="User_Type" />
           <NavigationProperty Name="Shifts" Relationship="Self.User_Shift" FromRole="User" ToRole="Shift" />
-          <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOUser" FromRole="User" ToRole="Marked_Off" />
-          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STUser" FromRole="User" ToRole="Stock_Take" />
         </EntityType>
         <EntityType Name="User_Type">
           <Key>
@@ -2173,6 +2213,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DonProdContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Donated_Product" Type="Self.Donated_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Donated_Product">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_LContainer">
           <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
           <End Role="Location" Type="Self.Location" Multiplicity="*" />
@@ -2181,6 +2233,30 @@
               <PropertyRef Name="ContainerID" />
             </Principal>
             <Dependent Role="Location">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MOContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PBContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Product_Backlog" Type="Self.Product_Backlog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Product_Backlog">
               <PropertyRef Name="ContainerID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2209,6 +2285,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SOContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Supplier_Order" Type="Self.Supplier_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Supplier_Order">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STakeContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="ContainerID" />
+            </Principal>
+            <Dependent Role="Stock_Take">
+              <PropertyRef Name="ContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CPProduct">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Container_Product" Type="Self.Container_Product" Multiplicity="*" />
@@ -2218,6 +2318,42 @@
             </Principal>
             <Dependent Role="Container_Product">
               <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CredPaymentC">
+          <End Role="Creditor" Type="Self.Creditor" Multiplicity="0..1" />
+          <End Role="Creditor_Payment" Type="Self.Creditor_Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Creditor">
+              <PropertyRef Name="CreditorID" />
+            </Principal>
+            <Dependent Role="Creditor_Payment">
+              <PropertyRef Name="CreditorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CredSupplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Creditor" Type="Self.Creditor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="Creditor">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CredPayment">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Creditor_Payment" Type="Self.Creditor_Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="Creditor_Payment">
+              <PropertyRef Name="SupplierID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2437,6 +2573,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MOSTake">
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="0..1" />
+          <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock_Take">
+              <PropertyRef Name="StockTakeID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="StockTakeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MOUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Marked_Off" Type="Self.Marked_Off" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Marked_Off">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OTPUser">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="One_Time_Pin" Type="Self.One_Time_Pin" Multiplicity="*" />
@@ -2569,6 +2729,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_STakeProduct">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Stock_Take_Product" Type="Self.Stock_Take_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Stock_Take_Product">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PSSale">
           <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
           <End Role="Product_Sale" Type="Self.Product_Sale" Multiplicity="*" />
@@ -2589,6 +2761,30 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="Sale">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STake">
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="0..1" />
+          <End Role="Stock_Take_Product" Type="Self.Stock_Take_Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock_Take">
+              <PropertyRef Name="StockTakeID" />
+            </Principal>
+            <Dependent Role="Stock_Take_Product">
+              <PropertyRef Name="StockTakeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Stock_Take" Type="Self.Stock_Take" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Stock_Take">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2667,6 +2863,7 @@
           <EntitySet Name="Area_Status" EntityType="Self.Area_Status" />
           <EntitySet Name="Containers" EntityType="Self.Container" />
           <EntitySet Name="Container_Product" EntityType="Self.Container_Product" />
+          <EntitySet Name="Creditors" EntityType="Self.Creditor" />
           <EntitySet Name="Creditor_Payment" EntityType="Self.Creditor_Payment" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="Customer_Order" EntityType="Self.Customer_Order" />
@@ -2698,6 +2895,8 @@
           <EntitySet Name="Return_Product" EntityType="Self.Return_Product" />
           <EntitySet Name="Sales" EntityType="Self.Sale" />
           <EntitySet Name="Shifts" EntityType="Self.Shift" />
+          <EntitySet Name="Stock_Take" EntityType="Self.Stock_Take" />
+          <EntitySet Name="Stock_Take_Product" EntityType="Self.Stock_Take_Product" />
           <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
           <EntitySet Name="Supplier_Order" EntityType="Self.Supplier_Order" />
           <EntitySet Name="Supplier_Order_Product" EntityType="Self.Supplier_Order_Product" />
@@ -2734,9 +2933,21 @@
             <End Role="Container" EntitySet="Containers" />
             <End Role="Container_Product" EntitySet="Container_Product" />
           </AssociationSet>
+          <AssociationSet Name="FK_DonProdContainer" Association="Self.FK_DonProdContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Donated_Product" EntitySet="Donated_Product" />
+          </AssociationSet>
           <AssociationSet Name="FK_LContainer" Association="Self.FK_LContainer">
             <End Role="Container" EntitySet="Containers" />
             <End Role="Location" EntitySet="Locations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MOContainer" Association="Self.FK_MOContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PBContainer" Association="Self.FK_PBContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Product_Backlog" EntitySet="Product_Backlog" />
           </AssociationSet>
           <AssociationSet Name="FK_RPContainer" Association="Self.FK_RPContainer">
             <End Role="Container" EntitySet="Containers" />
@@ -2746,9 +2957,29 @@
             <End Role="Container" EntitySet="Containers" />
             <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
+          <AssociationSet Name="FK_SOContainer" Association="Self.FK_SOContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Supplier_Order" EntitySet="Supplier_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STakeContainer" Association="Self.FK_STakeContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+          </AssociationSet>
           <AssociationSet Name="FK_CPProduct" Association="Self.FK_CPProduct">
             <End Role="Product" EntitySet="Products" />
             <End Role="Container_Product" EntitySet="Container_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CredPaymentC" Association="Self.FK_CredPaymentC">
+            <End Role="Creditor" EntitySet="Creditors" />
+            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CredSupplier" Association="Self.FK_CredSupplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Creditor" EntitySet="Creditors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CredPayment" Association="Self.FK_CredPayment">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
           </AssociationSet>
           <AssociationSet Name="FK_COCustomer" Association="Self.FK_COCustomer">
             <End Role="Customer" EntitySet="Customers" />
@@ -2822,6 +3053,14 @@
             <End Role="Marked_Off_Reason" EntitySet="Marked_Off_Reason" />
             <End Role="Marked_Off" EntitySet="Marked_Off" />
           </AssociationSet>
+          <AssociationSet Name="FK_MOSTake" Association="Self.FK_MOSTake">
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MOUser" Association="Self.FK_MOUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Marked_Off" EntitySet="Marked_Off" />
+          </AssociationSet>
           <AssociationSet Name="FK_OTPUser" Association="Self.FK_OTPUser">
             <End Role="User" EntitySet="Users" />
             <End Role="One_Time_Pin" EntitySet="One_Time_Pin" />
@@ -2866,6 +3105,10 @@
             <End Role="Product" EntitySet="Products" />
             <End Role="Supplier_Order_Product" EntitySet="Supplier_Order_Product" />
           </AssociationSet>
+          <AssociationSet Name="FK_STakeProduct" Association="Self.FK_STakeProduct">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
+          </AssociationSet>
           <AssociationSet Name="FK_PSSale" Association="Self.FK_PSSale">
             <End Role="Sale" EntitySet="Sales" />
             <End Role="Product_Sale" EntitySet="Product_Sale" />
@@ -2873,6 +3116,14 @@
           <AssociationSet Name="FK_SaleUser" Association="Self.FK_SaleUser">
             <End Role="User" EntitySet="Users" />
             <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STake" Association="Self.FK_STake">
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
+            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUser" Association="Self.FK_STUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Stock_Take" EntitySet="Stock_Take" />
           </AssociationSet>
           <AssociationSet Name="FK_SOSupplier" Association="Self.FK_SOSupplier">
             <End Role="Supplier" EntitySet="Suppliers" />
@@ -2902,265 +3153,15 @@
             <End Role="Shift" EntitySet="Shifts" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <EntitySet Name="Stock_Take" EntityType="OrdraDBModel.Stock_Take" />
-          <EntitySet Name="Stock_Take_Product" EntityType="OrdraDBModel.Stock_Take_Product" />
-          <AssociationSet Name="FK_MOContainer" Association="OrdraDBModel.FK_MOContainer">
-            <End Role="Container" EntitySet="Containers" />
-            <End Role="Marked_Off" EntitySet="Marked_Off" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PBContainer" Association="OrdraDBModel.FK_PBContainer">
-            <End Role="Container" EntitySet="Containers" />
-            <End Role="Product_Backlog" EntitySet="Product_Backlog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_STakeContainer" Association="OrdraDBModel.FK_STakeContainer">
-            <End Role="Container" EntitySet="Containers" />
-            <End Role="Stock_Take" EntitySet="Stock_Take" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MOSTake" Association="OrdraDBModel.FK_MOSTake">
-            <End Role="Stock_Take" EntitySet="Stock_Take" />
-            <End Role="Marked_Off" EntitySet="Marked_Off" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MOUser" Association="OrdraDBModel.FK_MOUser">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Marked_Off" EntitySet="Marked_Off" />
-          </AssociationSet>
-          <AssociationSet Name="FK_STakeProduct" Association="OrdraDBModel.FK_STakeProduct">
-            <End Role="Product" EntitySet="Products" />
-            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
-          </AssociationSet>
-          <AssociationSet Name="FK_STake" Association="OrdraDBModel.FK_STake">
-            <End Role="Stock_Take" EntitySet="Stock_Take" />
-            <End Role="Stock_Take_Product" EntitySet="Stock_Take_Product" />
-          </AssociationSet>
-          <AssociationSet Name="FK_STUser" Association="OrdraDBModel.FK_STUser">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Stock_Take" EntitySet="Stock_Take" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SOContainer" Association="OrdraDBModel.FK_SOContainer">
-            <End Role="Container" EntitySet="Containers" />
-            <End Role="Supplier_Order" EntitySet="Supplier_Order" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CredPayment1" Association="OrdraDBModel.FK_CredPayment1">
-            <End Role="Supplier" EntitySet="Suppliers" />
-            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
-          </AssociationSet>
-          <EntitySet Name="Creditors" EntityType="OrdraDBModel.Creditor" />
-          <AssociationSet Name="FK_CredPaymentC" Association="OrdraDBModel.FK_CredPaymentC">
-            <End Role="Creditor" EntitySet="Creditors" />
-            <End Role="Creditor_Payment" EntitySet="Creditor_Payment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CredSupplier" Association="OrdraDBModel.FK_CredSupplier">
-            <End Role="Supplier" EntitySet="Suppliers" />
-            <End Role="Creditor" EntitySet="Creditors" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DonProdContainer" Association="OrdraDBModel.FK_DonProdContainer">
-            <End Role="Container" EntitySet="Containers" />
-            <End Role="Donated_Product" EntitySet="Donated_Product" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Stock_Take">
-          <Key>
-            <PropertyRef Name="StockTakeID" />
-          </Key>
-          <Property Name="StockTakeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="ContainerID" Type="Int32" />
-          <Property Name="STakeDate" Type="DateTime" Precision="0" />
-          <Property Name="isCompleted" Type="Boolean" />
-          <NavigationProperty Name="Container" Relationship="OrdraDBModel.FK_STakeContainer" FromRole="Stock_Take" ToRole="Container" />
-          <NavigationProperty Name="Marked_Off" Relationship="OrdraDBModel.FK_MOSTake" FromRole="Stock_Take" ToRole="Marked_Off" />
-          <NavigationProperty Name="Stock_Take_Product" Relationship="OrdraDBModel.FK_STake" FromRole="Stock_Take" ToRole="Stock_Take_Product" />
-          <NavigationProperty Name="User" Relationship="OrdraDBModel.FK_STUser" FromRole="Stock_Take" ToRole="User" />
-        </EntityType>
-        <EntityType Name="Stock_Take_Product">
-          <Key>
-            <PropertyRef Name="StockTakeProductID" />
-          </Key>
-          <Property Name="StockTakeProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StockTakeID" Type="Int32" />
-          <Property Name="ProductID" Type="Int32" />
-          <Property Name="STProductCount" Type="Int32" />
-          <NavigationProperty Name="Product" Relationship="OrdraDBModel.FK_STakeProduct" FromRole="Stock_Take_Product" ToRole="Product" />
-          <NavigationProperty Name="Stock_Take" Relationship="OrdraDBModel.FK_STake" FromRole="Stock_Take_Product" ToRole="Stock_Take" />
-        </EntityType>
-        <Association Name="FK_MOContainer">
-          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Marked_Off" Role="Marked_Off" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Container">
-              <PropertyRef Name="ContainerID" />
-            </Principal>
-            <Dependent Role="Marked_Off">
-              <PropertyRef Name="ContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PBContainer">
-          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Product_Backlog" Role="Product_Backlog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Container">
-              <PropertyRef Name="ContainerID" />
-            </Principal>
-            <Dependent Role="Product_Backlog">
-              <PropertyRef Name="ContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_STakeContainer">
-          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Container">
-              <PropertyRef Name="ContainerID" />
-            </Principal>
-            <Dependent Role="Stock_Take">
-              <PropertyRef Name="ContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MOSTake">
-          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Marked_Off" Role="Marked_Off" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Stock_Take">
-              <PropertyRef Name="StockTakeID" />
-            </Principal>
-            <Dependent Role="Marked_Off">
-              <PropertyRef Name="StockTakeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MOUser">
-          <End Type="OrdraDBModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Marked_Off" Role="Marked_Off" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="Marked_Off">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_STakeProduct">
-          <End Type="OrdraDBModel.Product" Role="Product" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Stock_Take_Product" Role="Stock_Take_Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="Stock_Take_Product">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_STake">
-          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Stock_Take_Product" Role="Stock_Take_Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Stock_Take">
-              <PropertyRef Name="StockTakeID" />
-            </Principal>
-            <Dependent Role="Stock_Take_Product">
-              <PropertyRef Name="StockTakeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_STUser">
-          <End Type="OrdraDBModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Stock_Take" Role="Stock_Take" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="Stock_Take">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SOContainer">
-          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Supplier_Order" Role="Supplier_Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Container">
-              <PropertyRef Name="ContainerID" />
-            </Principal>
-            <Dependent Role="Supplier_Order">
-              <PropertyRef Name="ContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CredPayment1">
-          <End Type="OrdraDBModel.Supplier" Role="Supplier" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Creditor_Payment" Role="Creditor_Payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Supplier">
-              <PropertyRef Name="SupplierID" />
-            </Principal>
-            <Dependent Role="Creditor_Payment">
-              <PropertyRef Name="SupplierID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Creditor">
-          <Key>
-            <PropertyRef Name="CreditorID" />
-          </Key>
-          <Property Name="CreditorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="CredAccountBalance" Type="Single" />
-          <Property Name="CredBank" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CredBranch" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="CredType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Creditor_Payment" Relationship="OrdraDBModel.FK_CredPaymentC" FromRole="Creditor" ToRole="Creditor_Payment" />
-          <NavigationProperty Name="Supplier" Relationship="OrdraDBModel.FK_CredSupplier" FromRole="Creditor" ToRole="Supplier" />
-          <Property Name="CredAccount" Type="String" Unicode="false" FixedLength="false" MaxLength="15" />
-        </EntityType>
-        <Association Name="FK_CredPaymentC">
-          <End Type="OrdraDBModel.Creditor" Role="Creditor" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Creditor_Payment" Role="Creditor_Payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Creditor">
-              <PropertyRef Name="CreditorID" />
-            </Principal>
-            <Dependent Role="Creditor_Payment">
-              <PropertyRef Name="CreditorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CredSupplier">
-          <End Type="OrdraDBModel.Supplier" Role="Supplier" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Creditor" Role="Creditor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Supplier">
-              <PropertyRef Name="SupplierID" />
-            </Principal>
-            <Dependent Role="Creditor">
-              <PropertyRef Name="SupplierID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DonProdContainer">
-          <End Type="OrdraDBModel.Container" Role="Container" Multiplicity="0..1" />
-          <End Type="OrdraDBModel.Donated_Product" Role="Donated_Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Container">
-              <PropertyRef Name="ContainerID" />
-            </Principal>
-            <Dependent Role="Donated_Product">
-              <PropertyRef Name="ContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="OrdraDBModelStoreContainer" CdmEntityContainer="OrdraDBEntities">
+        <EntityContainerMapping StorageEntityContainer="ORDRAStoreContainer" CdmEntityContainer="OrdraDBEntities">
           <EntitySetMapping Name="Accesses">
-            <EntityTypeMapping TypeName="OrdraDBModel.Access">
+            <EntityTypeMapping TypeName="ORDRA.Access">
               <MappingFragment StoreEntitySet="Access">
                 <ScalarProperty Name="AccessID" ColumnName="AccessID" />
                 <ScalarProperty Name="AccessDescription" ColumnName="AccessDescription" />
@@ -3168,7 +3169,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Areas">
-            <EntityTypeMapping TypeName="OrdraDBModel.Area">
+            <EntityTypeMapping TypeName="ORDRA.Area">
               <MappingFragment StoreEntitySet="Area">
                 <ScalarProperty Name="AreaID" ColumnName="AreaID" />
                 <ScalarProperty Name="AreaStatusID" ColumnName="AreaStatusID" />
@@ -3179,7 +3180,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Area_Status">
-            <EntityTypeMapping TypeName="OrdraDBModel.Area_Status">
+            <EntityTypeMapping TypeName="ORDRA.Area_Status">
               <MappingFragment StoreEntitySet="Area_Status">
                 <ScalarProperty Name="AreaStatusID" ColumnName="AreaStatusID" />
                 <ScalarProperty Name="ASDescription" ColumnName="ASDescription" />
@@ -3187,17 +3188,17 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Containers">
-            <EntityTypeMapping TypeName="OrdraDBModel.Container">
+            <EntityTypeMapping TypeName="ORDRA.Container">
               <MappingFragment StoreEntitySet="Container">
-                <ScalarProperty Name="InActive" ColumnName="InActive" />
                 <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
+                <ScalarProperty Name="InActive" ColumnName="InActive" />
                 <ScalarProperty Name="ConName" ColumnName="ConName" />
                 <ScalarProperty Name="ConDescription" ColumnName="ConDescription" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Container_Product">
-            <EntityTypeMapping TypeName="OrdraDBModel.Container_Product">
+            <EntityTypeMapping TypeName="ORDRA.Container_Product">
               <MappingFragment StoreEntitySet="Container_Product">
                 <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
@@ -3205,11 +3206,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Creditor_Payment">
-            <EntityTypeMapping TypeName="OrdraDBModel.Creditor_Payment">
-              <MappingFragment StoreEntitySet="Creditor_Payment">
+          <EntitySetMapping Name="Creditors">
+            <EntityTypeMapping TypeName="ORDRA.Creditor">
+              <MappingFragment StoreEntitySet="Creditor">
+                <ScalarProperty Name="CreditorID" ColumnName="CreditorID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="CredAccountBalance" ColumnName="CredAccountBalance" />
+                <ScalarProperty Name="CredBank" ColumnName="CredBank" />
+                <ScalarProperty Name="CredBranch" ColumnName="CredBranch" />
+                <ScalarProperty Name="CredAccount" ColumnName="CredAccount" />
+                <ScalarProperty Name="CredType" ColumnName="CredType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Creditor_Payment">
+            <EntityTypeMapping TypeName="ORDRA.Creditor_Payment">
+              <MappingFragment StoreEntitySet="Creditor_Payment">
                 <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="CreditorID" ColumnName="CreditorID" />
                 <ScalarProperty Name="CredPaymentDate" ColumnName="CredPaymentDate" />
                 <ScalarProperty Name="CredPaymentAmount" ColumnName="CredPaymentAmount" />
@@ -3217,7 +3231,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="OrdraDBModel.Customer">
+            <EntityTypeMapping TypeName="ORDRA.Customer">
               <MappingFragment StoreEntitySet="Customer">
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="CusName" ColumnName="CusName" />
@@ -3232,7 +3246,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customer_Order">
-            <EntityTypeMapping TypeName="OrdraDBModel.Customer_Order">
+            <EntityTypeMapping TypeName="ORDRA.Customer_Order">
               <MappingFragment StoreEntitySet="Customer_Order">
                 <ScalarProperty Name="CustomerOrderID" ColumnName="CustomerOrderID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
@@ -3245,7 +3259,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customer_Order_Status">
-            <EntityTypeMapping TypeName="OrdraDBModel.Customer_Order_Status">
+            <EntityTypeMapping TypeName="ORDRA.Customer_Order_Status">
               <MappingFragment StoreEntitySet="Customer_Order_Status">
                 <ScalarProperty Name="CustomerOrderStatusID" ColumnName="CustomerOrderStatusID" />
                 <ScalarProperty Name="CODescription" ColumnName="CODescription" />
@@ -3253,17 +3267,17 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Donated_Product">
-            <EntityTypeMapping TypeName="OrdraDBModel.Donated_Product">
+            <EntityTypeMapping TypeName="ORDRA.Donated_Product">
               <MappingFragment StoreEntitySet="Donated_Product">
-                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="DonationID" ColumnName="DonationID" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="DPQuantity" ColumnName="DPQuantity" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Donations">
-            <EntityTypeMapping TypeName="OrdraDBModel.Donation">
+            <EntityTypeMapping TypeName="ORDRA.Donation">
               <MappingFragment StoreEntitySet="Donation">
                 <ScalarProperty Name="DonationID" ColumnName="DonationID" />
                 <ScalarProperty Name="DonationStatusID" ColumnName="DonationStatusID" />
@@ -3275,7 +3289,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Donation_Recipient">
-            <EntityTypeMapping TypeName="OrdraDBModel.Donation_Recipient">
+            <EntityTypeMapping TypeName="ORDRA.Donation_Recipient">
               <MappingFragment StoreEntitySet="Donation_Recipient">
                 <ScalarProperty Name="RecipientID" ColumnName="RecipientID" />
                 <ScalarProperty Name="DrName" ColumnName="DrName" />
@@ -3290,7 +3304,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Donation_Status">
-            <EntityTypeMapping TypeName="OrdraDBModel.Donation_Status">
+            <EntityTypeMapping TypeName="ORDRA.Donation_Status">
               <MappingFragment StoreEntitySet="Donation_Status">
                 <ScalarProperty Name="DonationStatusID" ColumnName="DonationStatusID" />
                 <ScalarProperty Name="DSDescription" ColumnName="DSDescription" />
@@ -3298,7 +3312,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="OrdraDBModel.Employee">
+            <EntityTypeMapping TypeName="ORDRA.Employee">
               <MappingFragment StoreEntitySet="Employee">
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -3308,7 +3322,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="EmployeeCVs">
-            <EntityTypeMapping TypeName="OrdraDBModel.EmployeeCV">
+            <EntityTypeMapping TypeName="ORDRA.EmployeeCV">
               <MappingFragment StoreEntitySet="EmployeeCV">
                 <ScalarProperty Name="CVID" ColumnName="CVID" />
                 <ScalarProperty Name="CVCaption" ColumnName="CVCaption" />
@@ -3318,7 +3332,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="EmployeePictures">
-            <EntityTypeMapping TypeName="OrdraDBModel.EmployeePicture">
+            <EntityTypeMapping TypeName="ORDRA.EmployeePicture">
               <MappingFragment StoreEntitySet="EmployeePicture">
                 <ScalarProperty Name="ImgID" ColumnName="ImgID" />
                 <ScalarProperty Name="ImgCaption" ColumnName="ImgCaption" />
@@ -3328,7 +3342,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Locations">
-            <EntityTypeMapping TypeName="OrdraDBModel.Location">
+            <EntityTypeMapping TypeName="ORDRA.Location">
               <MappingFragment StoreEntitySet="Location">
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
@@ -3339,7 +3353,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Location_Status">
-            <EntityTypeMapping TypeName="OrdraDBModel.Location_Status">
+            <EntityTypeMapping TypeName="ORDRA.Location_Status">
               <MappingFragment StoreEntitySet="Location_Status">
                 <ScalarProperty Name="LocationStatusID" ColumnName="LocationStatusID" />
                 <ScalarProperty Name="LSDescription" ColumnName="LSDescription" />
@@ -3347,7 +3361,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Logins">
-            <EntityTypeMapping TypeName="OrdraDBModel.Login">
+            <EntityTypeMapping TypeName="ORDRA.Login">
               <MappingFragment StoreEntitySet="Login">
                 <ScalarProperty Name="LoginID" ColumnName="LoginID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -3357,7 +3371,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Logouts">
-            <EntityTypeMapping TypeName="OrdraDBModel.Logout">
+            <EntityTypeMapping TypeName="ORDRA.Logout">
               <MappingFragment StoreEntitySet="Logout">
                 <ScalarProperty Name="LogoutID" ColumnName="LogoutID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -3367,7 +3381,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Managers">
-            <EntityTypeMapping TypeName="OrdraDBModel.Manager">
+            <EntityTypeMapping TypeName="ORDRA.Manager">
               <MappingFragment StoreEntitySet="Manager">
                 <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -3380,21 +3394,21 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Marked_Off">
-            <EntityTypeMapping TypeName="OrdraDBModel.Marked_Off">
+            <EntityTypeMapping TypeName="ORDRA.Marked_Off">
               <MappingFragment StoreEntitySet="Marked_Off">
-                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="MarkedOffID" ColumnName="MarkedOffID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
                 <ScalarProperty Name="MoQuantity" ColumnName="MoQuantity" />
                 <ScalarProperty Name="MoDate" ColumnName="MoDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Marked_Off_Reason">
-            <EntityTypeMapping TypeName="OrdraDBModel.Marked_Off_Reason">
+            <EntityTypeMapping TypeName="ORDRA.Marked_Off_Reason">
               <MappingFragment StoreEntitySet="Marked_Off_Reason">
                 <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
                 <ScalarProperty Name="MODescription" ColumnName="MODescription" />
@@ -3402,7 +3416,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="One_Time_Pin">
-            <EntityTypeMapping TypeName="OrdraDBModel.One_Time_Pin">
+            <EntityTypeMapping TypeName="ORDRA.One_Time_Pin">
               <MappingFragment StoreEntitySet="One_Time_Pin">
                 <ScalarProperty Name="OTPID" ColumnName="OTPID" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
@@ -3413,7 +3427,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="OrdraDBModel.Payment">
+            <EntityTypeMapping TypeName="ORDRA.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
                 <ScalarProperty Name="PaymentTypeID" ColumnName="PaymentTypeID" />
@@ -3425,7 +3439,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payment_Type">
-            <EntityTypeMapping TypeName="OrdraDBModel.Payment_Type">
+            <EntityTypeMapping TypeName="ORDRA.Payment_Type">
               <MappingFragment StoreEntitySet="Payment_Type">
                 <ScalarProperty Name="PaymentTypeID" ColumnName="PaymentTypeID" />
                 <ScalarProperty Name="PTDescription" ColumnName="PTDescription" />
@@ -3433,7 +3447,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Prices">
-            <EntityTypeMapping TypeName="OrdraDBModel.Price">
+            <EntityTypeMapping TypeName="ORDRA.Price">
               <MappingFragment StoreEntitySet="Price">
                 <ScalarProperty Name="PriceID" ColumnName="PriceID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
@@ -3445,7 +3459,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="OrdraDBModel.Product">
+            <EntityTypeMapping TypeName="ORDRA.Product">
               <MappingFragment StoreEntitySet="Product">
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductCategoryID" ColumnName="ProductCategoryID" />
@@ -3458,10 +3472,10 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Product_Backlog">
-            <EntityTypeMapping TypeName="OrdraDBModel.Product_Backlog">
+            <EntityTypeMapping TypeName="ORDRA.Product_Backlog">
               <MappingFragment StoreEntitySet="Product_Backlog">
-                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductBackLogID" ColumnName="ProductBackLogID" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="QuantityToOrder" ColumnName="QuantityToOrder" />
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
@@ -3469,7 +3483,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Product_Category">
-            <EntityTypeMapping TypeName="OrdraDBModel.Product_Category">
+            <EntityTypeMapping TypeName="ORDRA.Product_Category">
               <MappingFragment StoreEntitySet="Product_Category">
                 <ScalarProperty Name="ProductCategoryID" ColumnName="ProductCategoryID" />
                 <ScalarProperty Name="PCatName" ColumnName="PCatName" />
@@ -3478,7 +3492,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Product_Order_Line">
-            <EntityTypeMapping TypeName="OrdraDBModel.Product_Order_Line">
+            <EntityTypeMapping TypeName="ORDRA.Product_Order_Line">
               <MappingFragment StoreEntitySet="Product_Order_Line">
                 <ScalarProperty Name="CustomerOrderID" ColumnName="CustomerOrderID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
@@ -3487,7 +3501,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Product_Sale">
-            <EntityTypeMapping TypeName="OrdraDBModel.Product_Sale">
+            <EntityTypeMapping TypeName="ORDRA.Product_Sale">
               <MappingFragment StoreEntitySet="Product_Sale">
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="SaleID" ColumnName="SaleID" />
@@ -3496,7 +3510,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Provinces">
-            <EntityTypeMapping TypeName="OrdraDBModel.Province">
+            <EntityTypeMapping TypeName="ORDRA.Province">
               <MappingFragment StoreEntitySet="Province">
                 <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
                 <ScalarProperty Name="ProvName" ColumnName="ProvName" />
@@ -3504,7 +3518,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Return_Product">
-            <EntityTypeMapping TypeName="OrdraDBModel.Return_Product">
+            <EntityTypeMapping TypeName="ORDRA.Return_Product">
               <MappingFragment StoreEntitySet="Return_Product">
                 <ScalarProperty Name="ReturnProductID" ColumnName="ReturnProductID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
@@ -3514,7 +3528,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Sales">
-            <EntityTypeMapping TypeName="OrdraDBModel.Sale">
+            <EntityTypeMapping TypeName="ORDRA.Sale">
               <MappingFragment StoreEntitySet="Sale">
                 <ScalarProperty Name="SaleID" ColumnName="SaleID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -3524,7 +3538,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Shifts">
-            <EntityTypeMapping TypeName="OrdraDBModel.Shift">
+            <EntityTypeMapping TypeName="ORDRA.Shift">
               <MappingFragment StoreEntitySet="Shift">
                 <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -3533,8 +3547,29 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Stock_Take">
+            <EntityTypeMapping TypeName="ORDRA.Stock_Take">
+              <MappingFragment StoreEntitySet="Stock_Take">
+                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
+                <ScalarProperty Name="STakeDate" ColumnName="STakeDate" />
+                <ScalarProperty Name="isCompleted" ColumnName="isCompleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock_Take_Product">
+            <EntityTypeMapping TypeName="ORDRA.Stock_Take_Product">
+              <MappingFragment StoreEntitySet="Stock_Take_Product">
+                <ScalarProperty Name="StockTakeProductID" ColumnName="StockTakeProductID" />
+                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="STProductCount" ColumnName="STProductCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Suppliers">
-            <EntityTypeMapping TypeName="OrdraDBModel.Supplier">
+            <EntityTypeMapping TypeName="ORDRA.Supplier">
               <MappingFragment StoreEntitySet="Supplier">
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="SupName" ColumnName="SupName" />
@@ -3548,28 +3583,28 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Supplier_Order">
-            <EntityTypeMapping TypeName="OrdraDBModel.Supplier_Order">
+            <EntityTypeMapping TypeName="ORDRA.Supplier_Order">
               <MappingFragment StoreEntitySet="Supplier_Order">
-                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="SupplierOrderID" ColumnName="SupplierOrderID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
                 <ScalarProperty Name="SupplierOrderStatusID" ColumnName="SupplierOrderStatusID" />
                 <ScalarProperty Name="SODate" ColumnName="SODate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Supplier_Order_Product">
-            <EntityTypeMapping TypeName="OrdraDBModel.Supplier_Order_Product">
+            <EntityTypeMapping TypeName="ORDRA.Supplier_Order_Product">
               <MappingFragment StoreEntitySet="Supplier_Order_Product">
-                <ScalarProperty Name="SOPQuantityRecieved" ColumnName="SOPQuantityRecieved" />
-                <ScalarProperty Name="SOPQuantityOrdered" ColumnName="SOPQuantityOrdered" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="SupplierOrderID" ColumnName="SupplierOrderID" />
+                <ScalarProperty Name="SOPQuantityOrdered" ColumnName="SOPQuantityOrdered" />
+                <ScalarProperty Name="SOPQuantityRecieved" ColumnName="SOPQuantityRecieved" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Supplier_Order_Status">
-            <EntityTypeMapping TypeName="OrdraDBModel.Supplier_Order_Status">
+            <EntityTypeMapping TypeName="ORDRA.Supplier_Order_Status">
               <MappingFragment StoreEntitySet="Supplier_Order_Status">
                 <ScalarProperty Name="SupplierOrderStatusID" ColumnName="SupplierOrderStatusID" />
                 <ScalarProperty Name="SOSDescription" ColumnName="SOSDescription" />
@@ -3577,7 +3612,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="OrdraDBModel.User">
+            <EntityTypeMapping TypeName="ORDRA.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
@@ -3592,7 +3627,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User_Type">
-            <EntityTypeMapping TypeName="OrdraDBModel.User_Type">
+            <EntityTypeMapping TypeName="ORDRA.User_Type">
               <MappingFragment StoreEntitySet="User_Type">
                 <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
                 <ScalarProperty Name="UTypeDescription" ColumnName="UTypeDescription" />
@@ -3600,7 +3635,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User_Type_Access">
-            <EntityTypeMapping TypeName="OrdraDBModel.User_Type_Access">
+            <EntityTypeMapping TypeName="ORDRA.User_Type_Access">
               <MappingFragment StoreEntitySet="User_Type_Access">
                 <ScalarProperty Name="UserAccessID" ColumnName="UserAccessID" />
                 <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
@@ -3610,7 +3645,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="VATs">
-            <EntityTypeMapping TypeName="OrdraDBModel.VAT">
+            <EntityTypeMapping TypeName="ORDRA.VAT">
               <MappingFragment StoreEntitySet="VAT">
                 <ScalarProperty Name="VATID" ColumnName="VATID" />
                 <ScalarProperty Name="VATPerc" ColumnName="VATPerc" />
@@ -3619,7 +3654,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Manager_Container" TypeName="OrdraDBModel.Manager_Container" StoreEntitySet="Manager_Container">
+          <AssociationSetMapping Name="Manager_Container" TypeName="ORDRA.Manager_Container" StoreEntitySet="Manager_Container">
             <EndProperty Name="Container">
               <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
             </EndProperty>
@@ -3627,7 +3662,7 @@
               <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
             </EndProperty>
           </AssociationSetMapping>
-          <AssociationSetMapping Name="User_Shift" TypeName="OrdraDBModel.User_Shift" StoreEntitySet="User_Shift">
+          <AssociationSetMapping Name="User_Shift" TypeName="ORDRA.User_Shift" StoreEntitySet="User_Shift">
             <EndProperty Name="Shift">
               <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
             </EndProperty>
@@ -3635,40 +3670,6 @@
               <ScalarProperty Name="UserID" ColumnName="UserID" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Stock_Take">
-            <EntityTypeMapping TypeName="OrdraDBModel.Stock_Take">
-              <MappingFragment StoreEntitySet="Stock_Take">
-                <ScalarProperty Name="isCompleted" ColumnName="isCompleted" />
-                <ScalarProperty Name="STakeDate" ColumnName="STakeDate" />
-                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Stock_Take_Product">
-            <EntityTypeMapping TypeName="OrdraDBModel.Stock_Take_Product">
-              <MappingFragment StoreEntitySet="Stock_Take_Product">
-                <ScalarProperty Name="STProductCount" ColumnName="STProductCount" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="StockTakeID" ColumnName="StockTakeID" />
-                <ScalarProperty Name="StockTakeProductID" ColumnName="StockTakeProductID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Creditors">
-            <EntityTypeMapping TypeName="OrdraDBModel.Creditor">
-              <MappingFragment StoreEntitySet="Creditor">
-                <ScalarProperty Name="CredAccount" ColumnName="CredAccount" />
-                <ScalarProperty Name="CredType" ColumnName="CredType" />
-                <ScalarProperty Name="CredBranch" ColumnName="CredBranch" />
-                <ScalarProperty Name="CredBank" ColumnName="CredBank" />
-                <ScalarProperty Name="CredAccountBalance" ColumnName="CredAccountBalance" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="CreditorID" ColumnName="CreditorID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -17,15 +17,15 @@ namespace ORDRA_API.Models
         public int MarkedOffID { get; set; }
         public Nullable<int> ProductID { get; set; }
         public Nullable<int> ReasonID { get; set; }
-        public Nullable<int> MoQuantity { get; set; }
-        public Nullable<System.DateTime> MoDate { get; set; }
         public Nullable<int> ContainerID { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<int> StockTakeID { get; set; }
+        public Nullable<int> MoQuantity { get; set; }
+        public Nullable<System.DateTime> MoDate { get; set; }
     
+        public virtual Container Container { get; set; }
         public virtual Product Product { get; set; }
         public virtual Marked_Off_Reason Marked_Off_Reason { get; set; }
-        public virtual Container Container { get; set; }
         public virtual Stock_Take Stock_Take { get; set; }
         public virtual User User { get; set; }
     }

@@ -22,14 +22,14 @@ namespace ORDRA_API.Models
     
         public int SupplierOrderID { get; set; }
         public Nullable<int> SupplierID { get; set; }
+        public Nullable<int> ContainerID { get; set; }
         public Nullable<int> SupplierOrderStatusID { get; set; }
         public Nullable<System.DateTime> SODate { get; set; }
-        public Nullable<int> ContainerID { get; set; }
     
+        public virtual Container Container { get; set; }
         public virtual Supplier Supplier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Supplier_Order_Product> Supplier_Order_Product { get; set; }
         public virtual Supplier_Order_Status Supplier_Order_Status { get; set; }
-        public virtual Container Container { get; set; }
     }
 }

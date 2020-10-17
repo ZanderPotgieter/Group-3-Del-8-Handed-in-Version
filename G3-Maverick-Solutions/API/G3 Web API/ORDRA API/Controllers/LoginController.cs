@@ -214,7 +214,8 @@ namespace ORDRA_API.Controllers
             return toReturn;
         }
 
-
+        [Route("getAllContainers")]
+        [HttpGet]
         public object getAllContainers()
         {
 

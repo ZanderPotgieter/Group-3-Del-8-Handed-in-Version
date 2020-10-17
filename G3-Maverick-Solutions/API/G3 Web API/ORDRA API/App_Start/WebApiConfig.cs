@@ -12,7 +12,9 @@ namespace ORDRA_API
         {
             //Enable CORS
             config.EnableCors(new EnableCorsAttribute("http://localhost:4200", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://localhost:8000", headers: "*", methods: "*"));
             config.EnableCors(new EnableCorsAttribute("https://ordra-7d050.web.app", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("*", headers: "*", methods: "*"));
             // Web API configuration and services
 
             // Web API routes

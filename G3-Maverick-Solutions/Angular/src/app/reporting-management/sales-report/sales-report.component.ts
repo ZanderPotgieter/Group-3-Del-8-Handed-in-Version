@@ -35,6 +35,10 @@ export class SalesReportComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GenerateSalesReport.html")
+  }
+
   DownloadPDF()
   {
     this.reportService.getSaleReportData().subscribe ((res) =>

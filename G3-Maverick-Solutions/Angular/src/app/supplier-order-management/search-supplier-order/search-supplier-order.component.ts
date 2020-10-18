@@ -49,6 +49,10 @@ export class SearchSupplierOrderComponent implements OnInit {
 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchSupplierOrder.html")
+  }
+
   getAll(){
     this.api.getAllSupplierOrders().subscribe((res:any) =>{
       console.log(res);

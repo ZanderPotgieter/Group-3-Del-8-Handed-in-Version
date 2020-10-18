@@ -66,6 +66,10 @@ export class CreateLocationComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreateLocation.html")
+  }
+
   addLocation(){
     if (this.location.AreaID == null || this.location.ContainerID ==null || this.location.LocName == null || this.location.LocationStatusID==null)
     {

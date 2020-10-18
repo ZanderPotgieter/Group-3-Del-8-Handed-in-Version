@@ -13,6 +13,10 @@ export class ManagerManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/ManagerProfileManagementScreen.html")
+  }
+
   gotoCreateManager(){
     this.router.navigate(['create-manager']);
   }

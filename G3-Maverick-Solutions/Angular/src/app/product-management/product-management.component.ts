@@ -18,6 +18,10 @@ export class ProductManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/ProductManagementScreen1.html")
+  }
+
   showProduct(){
     this.showProd = true;
     this.showProdCat = false;

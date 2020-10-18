@@ -50,6 +50,10 @@ export class SearchPaymentComponent implements OnInit {
 
   }  
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchPayment.html")
+  }
+
   gotoCreditorManagment(){
     this.router.navigate(['creditor-management']);
   }

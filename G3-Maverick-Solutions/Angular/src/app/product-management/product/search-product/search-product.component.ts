@@ -149,6 +149,10 @@ export class SearchProductComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchProduct.html")
+  }
+
   enableInputs(){
     this.inputEnabled = false;
     this.allButton = false;

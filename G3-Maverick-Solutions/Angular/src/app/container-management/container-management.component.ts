@@ -13,6 +13,10 @@ export class ContainerManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/ContainerManagementScreen.html")
+  }
+
   gotoCreateContainer(){
     this.router.navigate(['create-container']);
   }

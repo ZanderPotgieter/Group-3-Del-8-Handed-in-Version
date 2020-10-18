@@ -67,6 +67,10 @@ export class StockTakeFormComponent implements OnInit {
    
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/DoStockTake.html")
+  }
+
   generateForm(){
     if(!localStorage.getItem("accessToken")){
       this.router.navigate([""]);

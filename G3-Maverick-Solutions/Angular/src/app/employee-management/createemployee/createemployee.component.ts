@@ -102,6 +102,10 @@ handleFileInputCV(file: FileList)
   reader.readAsDataURL(this.fileToUpload);
 }
 
+openHelp(){
+  window.open("https://ghelp.z1.web.core.windows.net/CreateEmployee.html")
+}
+
  OnSubmit(Caption, Image,EmployeeID)
  {
   this.searchEmployee();

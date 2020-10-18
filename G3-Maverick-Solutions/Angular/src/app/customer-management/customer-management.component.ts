@@ -17,6 +17,10 @@ export class CustomerManagementComponent implements OnInit {
     this.router.navigate(['add-customer']);
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CustomerManagementScreen.html")
+  }
+
   gotoViewCustomer(){
     this.router.navigate(['view-customer']);
 

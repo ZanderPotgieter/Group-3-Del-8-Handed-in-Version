@@ -13,6 +13,10 @@ export class SupplierManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SupplierManagementScreen.html")
+  }
+
   gotoAddSupplier(){
     this.router.navigate(['add-supplier']);
   }

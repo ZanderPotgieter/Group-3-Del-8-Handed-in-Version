@@ -55,6 +55,10 @@ export class ViewCustomerComponent implements OnInit {
     this.router.navigate(['place-order']);
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchCustomer.html")
+  }
+
   ngOnInit(): void {
     this.loadDisplay();  
     this.cusForm= this.bf.group({  

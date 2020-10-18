@@ -12,6 +12,10 @@ export class UpdateDonationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/UpdateDonation.html")
+  }
+
   clickMethod(name: string) {
     if (name == 'confirmCancel')
     {

@@ -85,6 +85,10 @@ export class SearchDonationComponent implements OnInit {
     })
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchDonation.html")
+  }
+
   editProducts()
   {
     

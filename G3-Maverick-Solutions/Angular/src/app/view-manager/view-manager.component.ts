@@ -83,6 +83,10 @@ export class SearchManagerComponent implements OnInit {
    
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchManagerProfile.html")
+  }
+
   viewAll(){
     this.showSearch = false;
     this.showViewAll = true;

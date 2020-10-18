@@ -104,6 +104,10 @@ export class CreateDonationComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreateDonation.html")
+  }
+
   addProduct(prodID: any, prodQuantity: any)
   {
     this.productID = prodID;

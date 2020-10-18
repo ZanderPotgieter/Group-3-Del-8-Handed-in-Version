@@ -39,6 +39,10 @@ containerNull : boolean = false;
     }); 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchContainer.html")
+  }
+
   All(){
     this.allContainers = this.api.getAllContainers();
     this.showAll = true;

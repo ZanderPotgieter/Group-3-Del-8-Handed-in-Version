@@ -77,6 +77,10 @@ export class SearchProductCategoryComponent implements OnInit {
   }
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchProductCategory.html")
+  }
+
   Cancel(){
     this.router.navigate(["product-management"]);
   }

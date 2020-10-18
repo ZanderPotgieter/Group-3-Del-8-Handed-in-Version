@@ -36,6 +36,10 @@ export class AddVatComponent implements OnInit {
       this.todaysdate = res.Date;
       })
   }
+
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/AddVAT.html")
+  }
   
 
   Save(){

@@ -12,4 +12,8 @@ export class CreditorManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreditorManagementScreen.html")
+  }
+
 }

@@ -40,6 +40,10 @@ export class SearchProvinceComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchProvince.html")
+  }
+
   showSearchDiv()
   {
     this.showOptions = false;

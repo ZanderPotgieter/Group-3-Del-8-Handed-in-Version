@@ -38,6 +38,10 @@ lowStock(){
   this.router.navigate(['lowstock'])
 }
 
+openHelp(){
+  window.open("https://ghelp.z1.web.core.windows.net/StockManagementScreen.html")
+}
+
 stockTakeForm(){
   this.router.navigate(['stock-take-form'])
 }

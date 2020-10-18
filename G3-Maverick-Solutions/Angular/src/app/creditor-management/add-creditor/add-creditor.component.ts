@@ -63,6 +63,9 @@ addSupplier(val : Supplier){
   this.selectedSupplier = val;
 }
 
+openHelp(){
+  window.open("https://ghelp.z1.web.core.windows.net/CreateCreditor.html")
+}
 
 
   gotoCreditorManagement()

@@ -28,6 +28,10 @@ export class CreateContainerComponent implements OnInit {
     });  
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreateContainer.html")
+  }
+
   Save()
   {
     if(this.container.ConName == null || this.container.ConDescription == null)

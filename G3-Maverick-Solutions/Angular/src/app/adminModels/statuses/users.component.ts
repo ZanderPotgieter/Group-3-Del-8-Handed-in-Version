@@ -40,6 +40,10 @@ export class UsersComponent implements OnInit {
    
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/UserTypeAccessManagement.html")
+  }
+
   search(){
     return this.api.getAllUserTypes().subscribe((res: any) =>{
       console.log(res);

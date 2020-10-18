@@ -50,6 +50,10 @@ export class CreateareaComponent implements OnInit {
 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/AddArea.html")
+  }
+
   addArea(){
     if (this.area.ProvinceID == null || this.area.AreaStatusID ==null || this.area.ArName == null || this.area.ArPostalCode==null)
     {

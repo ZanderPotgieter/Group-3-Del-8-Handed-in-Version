@@ -86,6 +86,10 @@ export class SearchOrderComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchOrder.html")
+  }
+
   showPayment(){
     this.showPay = true;
   }

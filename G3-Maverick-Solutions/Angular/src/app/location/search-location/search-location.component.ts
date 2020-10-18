@@ -82,6 +82,10 @@ export class SearchLocationComponent implements OnInit {
     this.showResults = false;
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchLocation.html")
+  }
+
   gotoGPSManagement() {
  this.router.navigate(['gps-management']);
   }

@@ -66,6 +66,10 @@ export class ProductReportComponent implements OnInit {
     })
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GenerateProductReport.html")
+  }
+
   GenerateReport()
   {
     this.reportService.getProductReportData().subscribe((res:any) =>{

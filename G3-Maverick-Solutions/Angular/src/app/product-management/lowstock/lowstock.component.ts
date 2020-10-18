@@ -46,6 +46,10 @@ export class LowstockComponent implements OnInit {
       })
     }
   }
+
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GenerateLowStockNotification.html")
+  }
      
 
       Cancel(){

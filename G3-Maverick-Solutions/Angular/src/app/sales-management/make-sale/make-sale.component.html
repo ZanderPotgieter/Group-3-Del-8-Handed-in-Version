@@ -3,7 +3,7 @@
   <div *ngIf="showMenu">
     <h1>Sale Management</h1>
     <div class="divright">
-      <label style="color:orange"  onclick="window.location.href='https://ghelp.z1.web.core.windows.net/SaleManagementScreen.html'">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+      <label style="color:orange"  (click)="openHelp1()">Help <i style="color:orange" class="tiny material-icons">help</i></label>
 </div>
   <div class="card" id="salemanagement">
     <br>        
@@ -18,7 +18,7 @@
 <div *ngIf="showSale">
   <h1>Make Sale</h1>
   <div class="divright">
-    <label style="color:orange"  onclick="window.location.href='https://ghelp.z1.web.core.windows.net/MakeSales.html'">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+    <label style="color:orange"  (click)="openHelp2()">Help <i style="color:orange" class="tiny material-icons">help</i></label>
 </div>
   <form >
     <div *ngIf="showProd" class="card"> 

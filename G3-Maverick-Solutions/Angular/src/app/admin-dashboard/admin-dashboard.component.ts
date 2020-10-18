@@ -62,6 +62,9 @@ export class AdminDashboardComponent {
     this.GeneratePieChart();
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/Dashboard.html")
+  }
 
   GenerateReport()
   {

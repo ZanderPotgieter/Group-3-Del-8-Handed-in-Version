@@ -42,7 +42,13 @@ export class UpdateVatComponent implements OnInit {
     this.vat.VATPerc = this.list[ndx].VATPerc;
     this.vat.VATStartDate = this.list[ndx].VATStartDate;
     this.vat.VATEndDate = this.list[ndx].VATEndDate;
-    this.saveupdate( this.vat);
+    if(this.list[ndx].VATPerc == 15){
+      this.dialogService.openAlertDialog("Update Retricted For Selected VAT ")
+    }
+    else{
+      this.saveupdate( this.vat);
+    }
+    
 
   }
 

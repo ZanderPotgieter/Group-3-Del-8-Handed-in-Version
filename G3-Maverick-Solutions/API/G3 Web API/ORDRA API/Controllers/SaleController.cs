@@ -143,6 +143,15 @@ namespace ORDRA_API.Controllers
                         Container_Product container_Product = db.Container_Product.Where(x => x.ContainerID == sale.ContainerID && x.ProductID == product.ProductID).FirstOrDefault();
                         if (container_Product != null)
                         {
+                            if(quantity > container_Product.CPQuantity)
+                            {
+                                toReturn.Error = "Only " + container_Product.CPQuantity + "Of " + product.ProdName + "In Stock";
+                                return toReturn;
+                            }
+                            else
+                            {
+
+                            
                             container_Product.CPQuantity = (container_Product.CPQuantity - quantity);
                             db.SaveChanges();
 
@@ -167,6 +176,7 @@ namespace ORDRA_API.Controllers
                                 db.SaveChanges();
 
                                 toReturn.Product_Sale = product_Sale;
+                            }
                             }
                         }
                         else
@@ -366,7 +376,7 @@ namespace ORDRA_API.Controllers
 
 
                     //get list of products in Sale
-                    List<Product_Sale> product_Sales = newSale.Product_Sale.ToList();
+                    List<Product_Sale> product_Sales = db.Product_Sale.Where(x => x.SaleID == newSale.SaleID).ToList();
 
                     if (container != null)
                     {
@@ -399,24 +409,27 @@ namespace ORDRA_API.Controllers
                                     toReturn.Error = "Product Not Found";
                                 }
 
-
-                            }
-                            //get list of payment
-                            List<Payment> payments = db.Payments.Where(x => x.SaleID == newSale.SaleID).ToList();
-                            if (payments.Count != 0)
-                            {
-                                foreach (Payment payment in payments)
+                                //get list of payment
+                                List<Payment> payments = db.Payments.Where(x => x.SaleID == newSale.SaleID).ToList();
+                                if (payments.Count != 0)
                                 {
-                                    db.Payments.Remove(payment);
-                                    db.SaveChanges();
+                                    foreach (Payment payment in payments)
+                                    {
+                                        db.Payments.Remove(payment);
+                                        db.SaveChanges();
+                                    }
                                 }
+
+                                toReturn.Message = "Sale Cancelled";
                             }
-
-
-
-                            toReturn.Message = "Sale Cancelled";
+                            
+                            
                         }
-                       
+                        else
+                        {
+                            toReturn.Message = "Cancelling Sale Failed";
+                        }
+
                     }
                     else
                     {

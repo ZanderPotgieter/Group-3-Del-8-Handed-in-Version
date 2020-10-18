@@ -360,6 +360,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RequireHttpsAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\EmailTemplates\SupplierBackOrder.html" />

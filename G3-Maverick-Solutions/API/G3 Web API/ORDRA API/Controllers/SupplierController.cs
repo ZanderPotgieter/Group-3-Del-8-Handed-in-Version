@@ -162,10 +162,8 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                foundSupplier = searchSupplier(newSupplier.SupName);
+                //foundSupplier = searchSupplier(newSupplier.SupName);
 
-                if ( foundSupplier.Message == "Record Not Found")
-                {
                     Supplier newSuppliertoAdd = new Supplier();
                     newSuppliertoAdd.SupName = newSupplier.SupName;
                     newSuppliertoAdd.SupCell = newSupplier.SupCell;
@@ -177,12 +175,9 @@ namespace ORDRA_API.Controllers
                     db.Suppliers.Add(newSuppliertoAdd);
                     db.SaveChangesAsync();
                     toReturn.Message = "Supplier Add Successful";
-                }
+                
                           
-                else
-                {
-                    toReturn.Message = "Duplicate Record Found";
-                }
+               
             }
                 catch (Exception)
                 {

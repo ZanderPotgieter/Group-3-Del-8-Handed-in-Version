@@ -927,6 +927,19 @@ namespace ORDRA_API.Controllers
                     db.SaveChanges();
 
                     toReturn.Message = "Price Added To Product Successfuly";
+
+                    Price price = db.Prices.Where(x => x.ProductID == newPrice.ProductID).ToList().LastOrDefault();
+                    if(price != null)
+                    {
+                        dynamic Price = new ExpandoObject();
+                        Price.PriceID = price.PriceID;
+                        Price.UPriceR = (double)price.UPriceR;
+                        Price.CPriceR = (double)price.CPriceR;
+                        Price.PriceStartDate = Convert.ToDateTime(price.PriceStartDate).ToString("yyyy-MM-dd");
+                        Price.PriceEndDate = Convert.ToDateTime(price.PriceEndDate).ToString("yyyy-MM-dd");
+                        toReturn.price = Price;
+                    }
+                    
                 }
 
             }

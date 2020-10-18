@@ -77,6 +77,7 @@ export class MakeSaleComponent implements OnInit {
   payments: Payment[] = [];
   paymentTypes: PaymentType[] =[];
   user : User = new User();
+  temp: number = 0;
 
 
   session : any;
@@ -189,7 +190,8 @@ export class MakeSaleComponent implements OnInit {
           if (prod.ProdBarcode == this.prodBarcode){
             this.selectedProduct = prod;
             this.barcodeFound = true;
-            if (this.selectedProduct.Quantity >= this.selectedProduct.CPQuantity){
+            this.temp = this.quantity - 1;
+            if (this.temp >= this.selectedProduct.CPQuantity || this.selectedProduct.Quantity >= this.selectedProduct.CPQuantity){
               this.dialogService.openAlertDialog("Only " + this.selectedProduct.CPQuantity + " of " + this.selectedProduct.Prodname +" in stock");
             }
             else{
@@ -366,7 +368,8 @@ export class MakeSaleComponent implements OnInit {
         this.removeQuantity = this.saleProducts[index].Quantity;
 
 
-        if(this.saleProducts.length != 1){
+        //if(this.saleProducts.length != 1){
+          if(this.total != 0){
         this.total = this.total - this.saleProducts[index].Subtotal;
         this.TotalIncVat = this.total;
         this.Vat = ((this.vatPerc/(this.vatPerc + 100)) * this.TotalIncVat);
@@ -376,7 +379,9 @@ export class MakeSaleComponent implements OnInit {
         this.saleDetails.Vat  = this.Vat;
         this.saleDetails.TotalExcVat = this.TotalExcVat;
       
+        this.saleProducts[index].Quantity = 0;
         this.saleProducts.splice(index,1);
+       
         
       
         this.displayTotal = this.TotalIncVat.toFixed(2);
@@ -435,7 +440,7 @@ export class MakeSaleComponent implements OnInit {
 
       completeSale()
         {
-          if ( this.outstandingAmt == 0){
+          if ( this.amountpaid >= this.TotalIncVat){
             this.api.checkStock(this.sale.ContainerID).subscribe((res: any)=>{
               console.log(res);
               this.lowStock = res;
@@ -455,7 +460,7 @@ export class MakeSaleComponent implements OnInit {
   
           }
           else{
-            this.dialogService.openAlertDialog("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
+            this.dialogService.openAlertDialog("Sale Incomplete: Full Payment Not Made")
             //alert("Sale Incomplete R" + this.outstandingAmt+" Oustanding")
           }
 
@@ -478,6 +483,7 @@ export class MakeSaleComponent implements OnInit {
             this.dialogService.openAlertDialog(res.Message);
             this.showSale = false;
             this.showMenu = true;
+            this.router.navigate(['/user']);
             
           }
         } )

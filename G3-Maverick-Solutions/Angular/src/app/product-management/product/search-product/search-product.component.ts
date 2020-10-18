@@ -419,6 +419,10 @@ export class SearchProductComponent implements OnInit {
         {
           this.dialogService.openAlertDialog(res.Message)
           this.showadd = false;
+          if(res.price){
+            this.pricelist.push(res.price);
+          }
+          
       }
       });
     }

@@ -33,6 +33,10 @@ export class AddDonationRecipientComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreateDonationRecipient.html")
+  }
+
   Save(){
     if(this.donationRecipient.DrName == null || this.donationRecipient.DrCell == null || this.donationRecipient.DrEmail == null || this.donationRecipient.DrStreetNr == null || this.donationRecipient.DrStreet == null || this.donationRecipient.DrArea == null || this.donationRecipient.DrCode == null )
     {

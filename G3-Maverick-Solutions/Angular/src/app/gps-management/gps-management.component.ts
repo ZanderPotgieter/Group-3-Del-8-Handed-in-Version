@@ -17,6 +17,10 @@ export class GPSManagementComponent implements OnInit {
 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GPSManagementScreen.html")
+  }
+
   location(){
     this.showlocation = true;
     this.showarea = false;

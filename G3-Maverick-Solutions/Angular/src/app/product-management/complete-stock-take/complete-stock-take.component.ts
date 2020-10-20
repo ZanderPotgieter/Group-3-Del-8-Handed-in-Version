@@ -100,6 +100,10 @@ export class CompleteStockTakeComponent implements OnInit {
     this.index = ndx;
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CompleteStockTake.html")
+  }
+
   Complete(){
     this.productService.completeStockTake( this.stocktakeID).subscribe((res:any)=>{
       if(res.Error){

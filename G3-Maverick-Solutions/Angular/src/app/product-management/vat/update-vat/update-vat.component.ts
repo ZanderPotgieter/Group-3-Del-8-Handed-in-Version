@@ -33,6 +33,10 @@ export class UpdateVatComponent implements OnInit {
       })
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/UpdateVAT.html")
+  }
+
   trackByndx(ndx: number, item:any): any{
     return ndx;
   }

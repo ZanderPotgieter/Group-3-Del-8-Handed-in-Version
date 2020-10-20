@@ -63,6 +63,10 @@ export class ViewSupplierComponent implements OnInit {
     this.router.navigate(['supplier-management']);
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchSupplier.html")
+  }
+
   view(ndx: number){
     this.search(this.suppliers[ndx].SupName)
 

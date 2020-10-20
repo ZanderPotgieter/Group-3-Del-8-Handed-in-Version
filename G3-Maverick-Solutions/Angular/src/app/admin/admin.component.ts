@@ -17,6 +17,10 @@ export class AdminComponent implements OnInit {
     this.router.navigate(['admin-dashboard']);
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/Administration.html")
+  }
+
   gotoUserAccess(){
     this.router.navigate(['user-access']);
   }

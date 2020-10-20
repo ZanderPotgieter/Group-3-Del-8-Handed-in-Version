@@ -26,6 +26,10 @@ export class AddProductCategoryComponent implements OnInit {
     });  
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/AddProductCategory.html")
+  }
+
   Save() {
     if(this.productCategory.PCatName == null || this.productCategory.PCatDescription == null)
     {

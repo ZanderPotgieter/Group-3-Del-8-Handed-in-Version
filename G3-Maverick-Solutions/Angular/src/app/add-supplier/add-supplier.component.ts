@@ -45,6 +45,10 @@ export class AddSupplierComponent implements OnInit {
 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/AddSupplier.html")
+  }
+
   addSupplier(){
     if (this.supplier.SupName == null || this.supplier.SupCode ==null || this.supplier.SupEmail == null || this.supplier.SupCell==null || this.supplier.SupStreet==null || this.supplier.SupStreetNr==null || this.supplier.SupSuburb==null)
     {

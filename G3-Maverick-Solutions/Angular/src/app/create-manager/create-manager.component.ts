@@ -167,6 +167,10 @@ export class CreateManagerComponent implements OnInit {
     this.showTable = true;
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreateManagerProfile.html")
+  }
+
   cancel(){
     this.inputEnabled = false;
     this.showButtons = true;

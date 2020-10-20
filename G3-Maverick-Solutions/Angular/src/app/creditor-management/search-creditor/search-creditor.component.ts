@@ -116,6 +116,9 @@ export class SearchCreditorComponent implements OnInit {
 });
 }}
 
+openHelp(){
+  window.open("https://ghelp.z1.web.core.windows.net/SearchCreditor.html")
+}
 
 removeCreditor(){
   this.dialogService.openConfirmDialog('Are you sure you want to remove this supplier as creditor?')

@@ -109,7 +109,15 @@ export class MakeSaleComponent implements OnInit {
 
 
   }
+
+  openHelp1(){
+    window.open("https://ghelp.z1.web.core.windows.net/SaleManagementScreen.html")
+  }
   
+  openHelp2(){
+    window.open("https://ghelp.z1.web.core.windows.net/MakeSales.html")
+  }
+
   showMakeSale(){
     if(!localStorage.getItem("accessToken")){
       this.router.navigate([""]);

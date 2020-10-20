@@ -12,4 +12,8 @@ export class SalesManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CardMachineHelp.html")
+  }
+
 }

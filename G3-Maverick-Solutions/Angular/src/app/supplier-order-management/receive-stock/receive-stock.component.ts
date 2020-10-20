@@ -65,6 +65,10 @@ export class ReceiveStockComponent implements OnInit {
     
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/ReceiveStock.html")
+  }
+
   View(ndx: number){
     
     this.index = ndx

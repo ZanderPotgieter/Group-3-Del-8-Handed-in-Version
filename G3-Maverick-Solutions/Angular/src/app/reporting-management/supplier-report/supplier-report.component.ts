@@ -91,6 +91,10 @@ export class SupplierReportComponent implements OnInit {
     this.router.navigate(["reporting-management"])
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GenerateSupplierReport.html")
+  }
+
   PrintReport()
   {
 

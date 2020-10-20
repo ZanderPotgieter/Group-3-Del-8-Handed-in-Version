@@ -35,6 +35,9 @@ export class CreditorsReportComponent implements OnInit {
   constructor( private reportService: ReportService, private router: Router, ) { }
 
 
+  openHelp(){
+    window.open("hhttps://ghelp.z1.web.core.windows.net/GenerateCreditorsSuppliersReport.html")
+  }
 
   DownloadPDF()
   {

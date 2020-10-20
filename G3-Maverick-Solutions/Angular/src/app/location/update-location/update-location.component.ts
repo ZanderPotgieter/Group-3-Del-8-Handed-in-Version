@@ -65,6 +65,9 @@ export class UpdateLocationComponent implements OnInit {
     });
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/UpdateLocation.html")
+  }
 
   searchLocationEdit(){
     this.api.searchLocation(this.name).subscribe( (res:any)=> {

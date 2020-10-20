@@ -139,6 +139,10 @@ ngOnInit(): void {
 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/PlaceOrder.html")
+  }
+
   sendOrderEmail(){
     this.api.sendOrderEmail(this.email).subscribe((res : any)=>{
       console.log(res);

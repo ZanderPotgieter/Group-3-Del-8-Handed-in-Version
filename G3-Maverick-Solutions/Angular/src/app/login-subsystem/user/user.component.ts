@@ -29,6 +29,10 @@ export class UserComponent implements OnInit {
     window.location.href='https://u17107459.wixsite.com/mysite';
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/Introduction.html")
+  }
+
   getWeatherData(){
     fetch('https://api.openweathermap.org/data/2.5/weather?q=Pretoria&appid=d5d542a5b8d5fc3194d24db5d26529f9')
     .then(response=>response.json())

@@ -36,6 +36,10 @@ export class AddCustomerComponent implements OnInit {
     }); 
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CreateCustomer.html")
+  }
+
   addCustomer(){
     if (this.customer.CusName == null || this.customer.CusSurname ==null || this.customer.CusEmail == null || this.customer.CusCell==null || this.customer.CusStreet==null || this.customer.CusStreetNr==null|| this.customer.CusCode==null || this.customer.CusSuburb==null)
     {

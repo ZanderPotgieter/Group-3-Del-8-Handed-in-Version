@@ -40,6 +40,10 @@ export class SearchStockTakeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchStockTake.html")
+  }
+
   getAll(){
     this.showContainer = false;
     this.productService.getAllStockTakes().subscribe((res: any) =>

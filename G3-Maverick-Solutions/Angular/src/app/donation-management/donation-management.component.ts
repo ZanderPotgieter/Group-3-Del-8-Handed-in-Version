@@ -17,6 +17,10 @@ export class DonationManagementComponent implements OnInit {
     this.router.navigate(['add-donation-recipient']);
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/DonationManagementScreen.html")
+  }
+
   gotoSearchDonationRecipient(){
     this.router.navigate(['search-donation-recipient']);
   }

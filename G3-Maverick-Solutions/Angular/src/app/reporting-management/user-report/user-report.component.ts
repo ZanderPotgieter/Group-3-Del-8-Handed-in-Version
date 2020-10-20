@@ -87,6 +87,10 @@ export class UserReportComponent implements OnInit {
     })
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GenerateUserReport.html")
+  }
+
   cancel()
   {
     this.router.navigate(["reporting-management"])

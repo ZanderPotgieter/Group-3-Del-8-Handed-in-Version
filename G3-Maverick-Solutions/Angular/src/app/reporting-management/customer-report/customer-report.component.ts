@@ -87,6 +87,10 @@ export class CustomerReportComponent implements OnInit {
     })
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/GenerateCustomerOrderReport.html")
+  }
+
   GenerateReport()
   {
     if (this.selectedOption == undefined){

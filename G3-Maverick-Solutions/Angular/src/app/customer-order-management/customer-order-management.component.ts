@@ -17,6 +17,9 @@ export class CustomerOrderManagementComponent implements OnInit {
     this.router.navigate(['place-order']);
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/CustomerOrderManagementScreen.html")
+  }
 
   gotoSearchOrder(){
     this.router.navigate(['search-order']);

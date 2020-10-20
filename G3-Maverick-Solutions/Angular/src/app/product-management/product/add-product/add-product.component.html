@@ -1,7 +1,7 @@
 <body>
   <h1>Add Product</h1>
   <div class="divright">
-    <label style="color:orange" onclick="window.location.href='https://ghelp.z1.web.core.windows.net/AddProduct.html'">Help <i style="color:orange" class="tiny material-icons">help</i></label>
+    <label style="color:orange" (click)="openHelp()">Help <i style="color:orange" class="tiny material-icons">help</i></label>
 </div>
   <form>
     <div class="card" *ngIf="showmain" > 
@@ -124,7 +124,7 @@
                 </span>
               <br>
             
-              <label style="width: 300px" for="ProductCategoryID">Container:</label><select  required formControlName="SelectCon" name="SelectCon" (ngModelChange)="setContainer($event)">
+              <label for="ProductCategoryID">Container:</label><select  required formControlName="SelectCon" name="SelectCon" (ngModelChange)="setContainer($event)">
                          
                 <option  *ngFor="let container of containers" [ngValue]="container" >{{container.ConName}}</option>
                </select>

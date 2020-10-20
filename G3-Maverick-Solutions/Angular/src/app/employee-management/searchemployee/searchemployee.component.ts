@@ -257,7 +257,9 @@ export class SearchemployeeComponent implements OnInit {
   }
 
   
-
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchEmployee.html")
+  }
    
 
   gotoEmployeeManagement(){

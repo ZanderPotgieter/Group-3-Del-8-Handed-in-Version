@@ -97,6 +97,10 @@ export class AddProductComponent implements OnInit {
     
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/AddProduct.html")
+  }
+
   AddToSystem(){
     this.addToSystem = true;
     this.linkToContainer = false;

@@ -84,7 +84,9 @@ export class SearchSaleComponent implements OnInit {
       })
   }
 
-  
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchSales.html")
+  }
 
   selectedDate(){
     this.selectDate = true;

@@ -79,6 +79,10 @@ export class SearchareaComponent implements OnInit {
     this.showResults = false;
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchArea.html")
+  }
+
   gotoGPSManagement() {
     this.router.navigate(['gps-management']);
      }

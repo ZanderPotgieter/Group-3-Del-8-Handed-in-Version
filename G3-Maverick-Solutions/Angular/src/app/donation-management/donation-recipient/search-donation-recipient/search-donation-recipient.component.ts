@@ -55,6 +55,10 @@ export class SearchDonationRecipientComponent implements OnInit {
     this.showOptions = true;
   }
 
+  openHelp(){
+    window.open("https://ghelp.z1.web.core.windows.net/SearchDonationRecipient.html")
+  }
+
   Input(){
     this.showSearch = true;
     this.showAll = false;

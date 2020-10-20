@@ -535,7 +535,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Supplier_Order> supplier_Orders = db.Supplier_Order.Where(x => x.SupplierOrderStatusID == 1 && x.ContainerID == containerID).ToList();
+                List<Supplier_Order> supplier_Orders = db.Supplier_Order.Where(x => x.SupplierOrderStatusID == 1 || x.SupplierOrderStatusID == 4 && x.ContainerID == containerID).ToList();
                 List<object> orders = new List<object>();
                 if (supplier_Orders.Count != 0)
                 {
@@ -561,31 +561,31 @@ namespace ORDRA_API.Controllers
 
                     }
 
-                    List<Supplier_Order> backordered = db.Supplier_Order.Where(x => x.SupplierOrderStatusID == 4 && x.ContainerID == containerID).ToList();
+                    //List<Supplier_Order> backordered = db.Supplier_Order.Where(x => x.SupplierOrderStatusID == 4 && x.ContainerID == containerID).ToList();
                     
-                    if (backordered.Count != 0)
-                    {
-                        foreach (Supplier_Order order in backordered)
-                        {
-                            //get supplier linked to 
-                            Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
-                            Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
-                            List<Supplier_Order_Product> prods = db.Supplier_Order_Product.Where(x => x.SupplierOrderID == order.SupplierOrderID).ToList();
-                            if (prods.Count != 0)
-                            {
-                                //set dynamic object to display in list
-                                dynamic Order = new ExpandoObject();
-                                Order.SupplierOrderID = order.SupplierOrderID;
-                                Order.SupplierID = order.SupplierID;
-                                Order.ContainerID = order.ContainerID;
-                                Order.SupEmail = supplier.SupEmail;
-                                Order.SupName = supplier.SupName;
-                                Order.Status = status.SOSDescription;
-                                Order.SODate = order.SODate;
-                                orders.Add(Order);
-                            }
-                        }
-                    }
+                  //if (backordered.Count != 0)
+                    //{
+                    //    foreach (Supplier_Order order in backordered)
+                    //    {
+                    //        //get supplier linked to 
+                    //        Supplier supplier = db.Suppliers.Where(x => x.SupplierID == order.SupplierID).FirstOrDefault();
+                    //        Supplier_Order_Status status = db.Supplier_Order_Status.Where(x => x.SupplierOrderStatusID == order.SupplierOrderStatusID).FirstOrDefault();
+                    //        List<Supplier_Order_Product> prods = db.Supplier_Order_Product.Where(x => x.SupplierOrderID == order.SupplierOrderID).ToList();
+                    //        if (prods.Count != 0)
+                    //        {
+                    //            //set dynamic object to display in list
+                    //            dynamic Order = new ExpandoObject();
+                    //            Order.SupplierOrderID = order.SupplierOrderID;
+                    //            Order.SupplierID = order.SupplierID;
+                    //            Order.ContainerID = order.ContainerID;
+                    //            Order.SupEmail = supplier.SupEmail;
+                    //            Order.SupName = supplier.SupName;
+                    //            Order.Status = status.SOSDescription;
+                    //            Order.SODate = order.SODate;
+                    //            orders.Add(Order);
+                    //        }
+                    //    }
+                    //}
 
 
 
@@ -879,7 +879,7 @@ namespace ORDRA_API.Controllers
 
                         if (prod != null)
                         {
-                            prod.SOPQuantityRecieved = quantity;
+                            prod.SOPQuantityRecieved = prod.SOPQuantityRecieved + quantity;
                             db.SaveChanges();
 
 
@@ -1116,7 +1116,7 @@ namespace ORDRA_API.Controllers
                     }
                 }
 
-                toReturn.Message = "Stock Received And Recorded Successfuly";
+                toReturn.Message = "Stock Received And Recorded Successfuly. Please check customer orders for new fulfilled orders.";
             }
             catch
             {

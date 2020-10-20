@@ -70,7 +70,7 @@ namespace ORDRA_API.Controllers
 
             try
             {
-                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x => x.CPQuantity > 0 && x.ContainerID == containerID).ToList();
+                List<Container_Product> conProd = db.Container_Product.Include(x => x.Product).Where(x => x.ContainerID == containerID).ToList();
                 if (conProd != null)
                 {
                     //Get List Of products with current price

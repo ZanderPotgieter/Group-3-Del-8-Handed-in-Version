@@ -14,6 +14,13 @@ namespace ORDRA_API
             config.EnableCors(new EnableCorsAttribute("http://localhost:4200", headers: "*", methods: "*"));
             config.EnableCors(new EnableCorsAttribute("http://localhost:8000", headers: "*", methods: "*"));
             config.EnableCors(new EnableCorsAttribute("http://group-3-a9e36.web.app", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://10.0.2.2:8000", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://192.168.8.12:8000", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://127.0.0.1:8000", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://localhost:5554", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://10.0.2.2:5554", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://192.168.8.12:5554", headers: "*", methods: "*"));
+            config.EnableCors(new EnableCorsAttribute("http://127.0.0.1:5554", headers: "*", methods: "*"));
             config.EnableCors(new EnableCorsAttribute("*", headers: "*", methods: "*"));
 
             config.Filters.Add(new RequireHttpsAttribute());
